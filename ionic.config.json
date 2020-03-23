@@ -1,7 +1,0 @@
-{
-  "name": "confess-app",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}
