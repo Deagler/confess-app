@@ -16,6 +16,7 @@ import {
   IonTextarea,
 } from '@ionic/react';
 import React, { useState } from 'react';
+import './SubmitPage.css';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -24,7 +25,14 @@ const channelInterfaceOptions = {
 };
 
 // TODO: Replace with apollo hooks useQuery once back-end is setup
-const channels = ['Engineering', 'Commerce', 'Science', 'Law', 'Arts'];
+const channels = [
+  'Engineering',
+  'Commerce',
+  'Science',
+  'Law',
+  'Arts',
+  'Very long name to demonstrate that text wrapping is working',
+];
 
 const SubmitPage: React.FC<{}> = () => {
   const [selectedChannel, setSelectedChannel] = useState<string>();
@@ -42,7 +50,7 @@ const SubmitPage: React.FC<{}> = () => {
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText && author)}
-              href="/"
+              href="/page/feed"
             >
               Post
             </IonButton>
