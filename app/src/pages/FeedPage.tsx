@@ -7,6 +7,8 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
+  IonFooter,
+  IonButton,
 } from '@ionic/react';
 
 import Post, { PostProps } from '../components/Post';
@@ -53,6 +55,10 @@ const FeedPage: React.FC = () => {
           <Post key={i} {...post} />
         ))}
       </IonContent>
+
+      <IonFooter>
+        <IonButton expand="block">New Confession</IonButton>
+      </IonFooter>
     </IonPage>
   );
 };
