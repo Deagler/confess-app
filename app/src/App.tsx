@@ -1,5 +1,6 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
+import FeedPage from './pages/FeedPage';
 import React, { useState } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu selectedPage={selectedPage} />
           <IonRouterOutlet id="main">
+            <Route path="/page/feed" render={() => <FeedPage />} exact={true} />
             <Route
               path="/page/:name"
               render={(props) => {
