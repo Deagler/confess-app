@@ -5,6 +5,7 @@ import {
   IonList,
   IonButton,
   IonToolbar,
+  IonListHeader,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './Menu.css';
@@ -13,7 +14,7 @@ export const SignIn: React.FC = () => {
 
   return (
     <IonList>
-      <IonLabel>University</IonLabel>
+      <IonListHeader>University</IonListHeader>
       <IonSelect
         placeholder="Select University"
         onIonChange={(e) => setUni(e.detail.value)}
