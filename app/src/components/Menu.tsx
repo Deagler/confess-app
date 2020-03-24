@@ -11,7 +11,21 @@ import {
 } from '@ionic/react';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import {
+  archiveOutline,
+  archiveSharp,
+  bookmarkOutline,
+  heartOutline,
+  heartSharp,
+  mailOutline,
+  mailSharp,
+  paperPlaneOutline,
+  paperPlaneSharp,
+  trashOutline,
+  trashSharp,
+  warningOutline,
+  warningSharp,
+} from 'ionicons/icons';
 import './Menu.css';
 
 interface MenuProps extends RouteComponentProps {
@@ -30,44 +44,43 @@ const appPages: AppPage[] = [
     title: 'Inbox',
     url: '/page/Inbox',
     iosIcon: mailOutline,
-    mdIcon: mailSharp
+    mdIcon: mailSharp,
   },
   {
     title: 'Outbox',
     url: '/page/Outbox',
     iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    mdIcon: paperPlaneSharp,
   },
   {
     title: 'Favorites',
     url: '/page/Favorites',
     iosIcon: heartOutline,
-    mdIcon: heartSharp
+    mdIcon: heartSharp,
   },
   {
     title: 'Archived',
     url: '/page/Archived',
     iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    mdIcon: archiveSharp,
   },
   {
     title: 'Trash',
     url: '/page/Trash',
     iosIcon: trashOutline,
-    mdIcon: trashSharp
+    mdIcon: trashSharp,
   },
   {
     title: 'Spam',
     url: '/page/Spam',
     iosIcon: warningOutline,
-    mdIcon: warningSharp
-  }
+    mdIcon: warningSharp,
+  },
 ];
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
 const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
-
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
@@ -77,7 +90,13 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={selectedPage === appPage.title ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                <IonItem
+                  className={selectedPage === appPage.title ? 'selected' : ''}
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
                   <IonIcon slot="start" icon={appPage.iosIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
