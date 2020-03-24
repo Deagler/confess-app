@@ -9,10 +9,10 @@ import {
   IonContent,
 } from '@ionic/react';
 
-import Post from '../components/Post';
+import Post, { PostProps } from '../components/Post';
 
 const FeedPage: React.FC = () => {
-  const testPosts = [
+  const testPosts: PostProps[] = [
     {
       id: 1,
       title: 'This is the title',
@@ -32,7 +32,6 @@ const FeedPage: React.FC = () => {
       title: 'This is the title',
       date: new Date(),
       content: 'This is the content',
-      author: 'This is the author',
     },
   ];
 
@@ -50,7 +49,7 @@ const FeedPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {posts.map((post, i) => (
+        {posts.map((post: PostProps, i: number) => (
           <Post key={i} {...post} />
         ))}
       </IonContent>

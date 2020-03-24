@@ -18,7 +18,7 @@ import moment from 'moment';
 
 import './Post.css';
 
-interface PostProps {
+export interface PostProps {
   id: number;
   title: string;
   date: Date;

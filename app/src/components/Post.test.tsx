@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Post from './Post';
+import Post, { PostProps } from './Post';
 
-const props = {
+const props: PostProps = {
   id: 10,
   title: 'this is the title',
   date: new Date(),
