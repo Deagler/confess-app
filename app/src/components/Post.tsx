@@ -14,29 +14,31 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
+import moment from 'moment';
 
 import './Post.css';
 
-const Post: React.FC = () => {
+interface PostProps {
+  id: number;
+  title: string;
+  date: Date;
+  content: string;
+  author?: string;
+}
+
+const Post: React.FC<PostProps> = (props: PostProps) => {
+  const { id, title, date, content, author } = props;
+
   return (
     <IonCard>
       <IonCardHeader>
-        <IonCardSubtitle>#21</IonCardSubtitle>
-        <IonCardTitle>Corona Virus</IonCardTitle>
-        <IonCardSubtitle>6m ago</IonCardSubtitle>
+        <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+        <IonCardTitle>{title}</IonCardTitle>
+        <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
       </IonCardHeader>
 
-      <IonCardContent>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </IonCardContent>
-
-      <IonCardContent>Depressed Engineer</IonCardContent>
+      <IonCardContent>{content}</IonCardContent>
+      <IonCardContent>{author || 'Anonymous'}</IonCardContent>
 
       <IonItemDivider />
 
