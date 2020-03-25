@@ -35,6 +35,8 @@ const channels = [
 ];
 
 const SubmitPage: React.FC<{}> = () => {
+  // TODO: Add form handling, can be done with state or libraries such as Formik
+  // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
