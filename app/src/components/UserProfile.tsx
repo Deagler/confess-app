@@ -9,12 +9,17 @@ import {
   IonHeader,
 } from '@ionic/react';
 import React, { useState } from 'react';
-import './SignIn.css';
+import './SideBar.css';
 interface UniversityOption {
   title: string;
   id: string;
 }
-export const SignIn: React.FC = (selectUniversity) => {
+const customPopoverOptions = {
+  header: 'University',
+  subHeader: 'Select your university',
+  message: 'Only select the university you currently enrol',
+};
+export const UserProfile: React.FC = (selectUniversity) => {
   const [university, setUniversity] = useState<string>();
   const [showPopover, setShowPopover] = useState(false);
   const universities: UniversityOption[] = [
@@ -56,7 +61,7 @@ export const SignIn: React.FC = (selectUniversity) => {
     <IonList>
       <IonHeader>Confess</IonHeader>
       <IonSelect
-        className=""
+        interfaceOptions={customPopoverOptions}
         interface="popover"
         placeholder="Select University"
         onIonChange={(e) => setUniversity(e.detail.value)}

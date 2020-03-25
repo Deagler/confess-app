@@ -20,7 +20,7 @@ import {
   colorPaletteSharp,
 } from 'ionicons/icons';
 import './Menu.css';
-import { SignIn } from './SignIn';
+import { UserProfile } from './UserProfile';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
@@ -64,7 +64,7 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
-        <SignIn />
+        <UserProfile />
         <IonList id="inbox-list" className="ion-no-border">
           {appPages.map((appPage, index) => {
             return (
