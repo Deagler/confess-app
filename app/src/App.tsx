@@ -24,6 +24,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import SubmitPage from './pages/SubmitPage';
 
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState('');
@@ -35,6 +36,11 @@ const App: React.FC = () => {
           <Menu selectedPage={selectedPage} />
           <IonRouterOutlet id="main">
             <Route path="/page/feed" render={() => <FeedPage />} exact={true} />
+            <Route
+              path="/page/submit"
+              render={() => <SubmitPage />}
+              exact={true}
+            />
             <Route
               path="/page/:name"
               render={(props) => {
