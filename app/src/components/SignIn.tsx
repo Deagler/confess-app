@@ -10,13 +10,12 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SignIn.css';
-import { logIn } from 'ionicons/icons';
 interface UniversityOption {
   title: string;
   id: string;
 }
-export const SignIn: React.FC = (selectedUni) => {
-  const [university, setUni] = useState<string>();
+export const SignIn: React.FC = (selectUniversity) => {
+  const [university, setUniversity] = useState<string>();
   const [showPopover, setShowPopover] = useState(false);
   const universities: UniversityOption[] = [
     {
@@ -60,7 +59,7 @@ export const SignIn: React.FC = (selectedUni) => {
         className=""
         interface="popover"
         placeholder="Select University"
-        onIonChange={(e) => setUni(e.detail.value)}
+        onIonChange={(e) => setUniversity(e.detail.value)}
       >
         {universities.map((uni, index) => {
           return (

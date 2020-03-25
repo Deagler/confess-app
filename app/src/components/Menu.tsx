@@ -20,7 +20,6 @@ import {
   colorPaletteSharp,
 } from 'ionicons/icons';
 import './Menu.css';
-import './SignIn';
 import { SignIn } from './SignIn';
 
 interface MenuProps extends RouteComponentProps {
