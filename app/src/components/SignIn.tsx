@@ -5,8 +5,8 @@ import {
   IonButton,
   IonLabel,
   IonRow,
-  IonItem,
-  IonInput,
+  IonPopover,
+  IonHeader,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SignIn.css';
@@ -17,6 +17,7 @@ interface UniversityOption {
 }
 export const SignIn: React.FC = (selectedUni) => {
   const [university, setUni] = useState<string>();
+  const [showPopover, setShowPopover] = useState(false);
   const universities: UniversityOption[] = [
     {
       title: 'UoA',
@@ -51,13 +52,13 @@ export const SignIn: React.FC = (selectedUni) => {
       id: '8',
     },
   ];
-  const LoginForm = () => {
-    const [email, setEmail] = useState('');
-    // TODO: send email, confirm email then display email on the page
-  };
+
   return (
     <IonList>
+      <IonHeader>Confess</IonHeader>
       <IonSelect
+        className=""
+        interface="popover"
         placeholder="Select University"
         onIonChange={(e) => setUni(e.detail.value)}
       >
@@ -70,7 +71,14 @@ export const SignIn: React.FC = (selectedUni) => {
         })}
       </IonSelect>
       <IonRow className="ion-float-left ion-padding-start">
-        <IonButton expand="block" onClick={() => LoginForm()}>
+        <IonPopover
+          isOpen={showPopover}
+          onDidDismiss={(e) => setShowPopover(false)}
+        >
+          {' '}
+          <p>show log in form</p>
+        </IonPopover>
+        <IonButton expand="block" onClick={() => setShowPopover(true)}>
           LogIn
         </IonButton>
         <IonButton expand="block">SignUp</IonButton>
