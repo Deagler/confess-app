@@ -7,6 +7,7 @@ import {
   IonRow,
   IonPopover,
   IonHeader,
+  IonItemDivider,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SideBar.css';
@@ -60,6 +61,7 @@ export const UserProfile: React.FC = (selectUniversity) => {
   return (
     <IonList>
       <IonHeader>Confess</IonHeader>
+      <IonItemDivider />
       <IonSelect
         interfaceOptions={customPopoverOptions}
         interface="popover"
