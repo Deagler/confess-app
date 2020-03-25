@@ -51,7 +51,7 @@ const SubmitPage: React.FC<{}> = () => {
           </IonButtons>
           <IonButtons slot="primary">
             <IonButton
-              disabled={!(selectedChannel && title && confessionText && author)}
+              disabled={!(selectedChannel && title && confessionText)}
               href="/page/feed"
             >
               Post
