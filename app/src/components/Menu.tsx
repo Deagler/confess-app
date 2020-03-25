@@ -10,14 +10,14 @@ import {
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  archiveOutline,
-  archiveSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
+  globeOutline,
+  globeSharp,
+  hammerOutline,
+  hammerSharp,
+  cardOutline,
+  cardSharp,
+  colorPaletteOutline,
+  colorPaletteSharp,
 } from 'ionicons/icons';
 import './Menu.css';
 import './SignIn';
@@ -38,26 +38,26 @@ const appPages: AppPage[] = [
   {
     title: 'Feed',
     url: '/page/Feed',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    iosIcon: globeOutline,
+    mdIcon: globeSharp,
   },
   {
     title: 'Engineering',
     url: '/page/Engineering',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    iosIcon: hammerOutline,
+    mdIcon: hammerSharp,
   },
   {
     title: 'Commerce',
     url: '/page/Commerce',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    iosIcon: cardOutline,
+    mdIcon: cardSharp,
   },
   {
     title: 'Arts',
     url: '/page/Arts',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
+    iosIcon: colorPaletteOutline,
+    mdIcon: colorPaletteSharp,
   },
 ];
 
@@ -66,7 +66,7 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <SignIn />
-        <IonList id="inbox-list">
+        <IonList id="inbox-list" className="ion-no-border">
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
