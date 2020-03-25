@@ -1,0 +1,42 @@
+name: confess-ci
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/app/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: NPM Install
+        working-directory: ./app
+        run: npm ci
+      - name: NPM Test
+        working-directory: ./app
+        run: npm test --passWithNoTests
+        env:
+          CI: true
+      - name: NPM Build
+        working-directory: ./app
+        run: npm run build
+      - name: Upload Build
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: confess-app
+          path: ./app/build/
