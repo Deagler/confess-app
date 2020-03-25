@@ -53,7 +53,7 @@ export const SignIn: React.FC = (selectedUni) => {
   ];
   const LoginForm = () => {
     const [email, setEmail] = useState('');
-    // TODO: send email
+    // TODO: send email, confirm email then display email on the page
   };
   return (
     <IonList>
