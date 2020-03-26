@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   IonContent,
   IonIcon,
@@ -6,8 +7,13 @@ import {
   IonList,
   IonMenu,
   IonMenuToggle,
+  IonHeader,
+  IonTitle,
+  IonSelect,
+  IonSelectOption,
+  IonToolbar,
+  IonButton,
 } from '@ionic/react';
-import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   globeOutline,
@@ -19,11 +25,16 @@ import {
   colorPaletteOutline,
   colorPaletteSharp,
 } from 'ionicons/icons';
+
 import './Menu.css';
-import UserProfile from './UserProfile';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
+}
+
+interface UniversityOption {
+  title: string;
+  id: string;
 }
 
 interface AppPage {
@@ -60,13 +71,69 @@ const appPages: AppPage[] = [
   },
 ];
 
+// TODO: get from api
+const universities: UniversityOption[] = [
+  {
+    title: 'UoA',
+    id: '1', // placeholder for now
+  },
+  {
+    title: 'AUT',
+    id: '2',
+  },
+  {
+    title: 'Lincoln University',
+    id: '3',
+  },
+  {
+    title: 'Massey University',
+    id: '4',
+  },
+  {
+    title: 'University of Canterbury',
+    id: '5',
+  },
+  {
+    title: 'University of Waikato',
+    id: '6',
+  },
+];
+
 const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
+  const [university, setUniversity] = useState<string>();
+
+  const customPopoverOptions = {
+    header: 'University',
+    message: "Which university's confessions would you like to see?",
+  };
+
   return (
     <IonMenu contentId="main" type="overlay">
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Confess</IonTitle>
+        </IonToolbar>
+        <IonSelect
+          interfaceOptions={customPopoverOptions}
+          interface="popover"
+          placeholder="Select University"
+          onIonChange={(e) => setUniversity(e.detail.value)}
+          value={university}
+        >
+          {universities.map((uni: UniversityOption, index: number) => (
+            <IonSelectOption key={index}>
+              <IonLabel className="ion-text-wrap">{uni.title}</IonLabel>
+            </IonSelectOption>
+          ))}
+        </IonSelect>
+
+        <IonButton expand="block">LogIn</IonButton>
+        <IonButton expand="block">SignUp</IonButton>
+      </IonHeader>
+
       <IonContent>
-        <UserProfile />
         <IonList id="inbox-list" className="ion-no-border">
-          {appPages.map((appPage, index) => (
+          {appPages.map((appPage: AppPage, index: number) => (
             <IonMenuToggle key={index} autoHide={false}>
               <IonItem
                 className={selectedPage === appPage.title ? 'selected' : ''}
