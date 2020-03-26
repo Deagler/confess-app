@@ -20,7 +20,7 @@ import {
   colorPaletteSharp,
 } from 'ionicons/icons';
 import './Menu.css';
-import { UserProfile } from './UserProfile';
+import UserProfile from './UserProfile';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
@@ -60,28 +60,26 @@ const appPages: AppPage[] = [
   },
 ];
 
-const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
+const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <UserProfile />
         <IonList id="inbox-list" className="ion-no-border">
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem
-                  className={selectedPage === appPage.title ? 'selected' : ''}
-                  routerLink={appPage.url}
-                  routerDirection="none"
-                  lines="none"
-                  detail={false}
-                >
-                  <IonIcon slot="start" icon={appPage.iosIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
+          {appPages.map((appPage, index) => (
+            <IonMenuToggle key={index} autoHide={false}>
+              <IonItem
+                className={selectedPage === appPage.title ? 'selected' : ''}
+                routerLink={appPage.url}
+                routerDirection="none"
+                lines="none"
+                detail={false}
+              >
+                <IonIcon slot="start" icon={appPage.iosIcon} />
+                <IonLabel>{appPage.title}</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ))}
         </IonList>
       </IonContent>
     </IonMenu>

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   IonSelectOption,
   IonSelect,
@@ -6,23 +7,25 @@ import {
   IonLabel,
   IonRow,
   IonPopover,
-  IonHeader,
   IonItemDivider,
+  IonTitle,
 } from '@ionic/react';
-import React, { useState } from 'react';
-import './SideBar.css';
+import './UserProfile.css';
+
 interface UniversityOption {
   title: string;
   id: string;
 }
-const customPopoverOptions = {
-  header: 'University',
-  subHeader: 'Select your university',
-  message: 'Only select the university you currently enrol',
-};
-export const UserProfile: React.FC = (selectUniversity) => {
+
+const UserProfile: React.FC<{}> = () => {
   const [university, setUniversity] = useState<string>();
-  const [showPopover, setShowPopover] = useState(false);
+  const [showPopover, setShowPopover] = useState<boolean>(false);
+
+  const customPopoverOptions = {
+    header: 'University',
+    message: "Which university's confessions would you like to see?",
+  };
+
   const universities: UniversityOption[] = [
     {
       title: 'UoA',
@@ -60,28 +63,25 @@ export const UserProfile: React.FC = (selectUniversity) => {
 
   return (
     <IonList>
-      <IonHeader>Confess</IonHeader>
-      <IonItemDivider />
+      <IonTitle>Confess</IonTitle>
       <IonSelect
         interfaceOptions={customPopoverOptions}
         interface="popover"
         placeholder="Select University"
         onIonChange={(e) => setUniversity(e.detail.value)}
+        value={university}
       >
-        {universities.map((uni, index) => {
-          return (
-            <IonSelectOption key={index}>
-              <IonLabel className="ion-text-nowrap">{uni.title}</IonLabel>
-            </IonSelectOption>
-          );
-        })}
+        {universities.map((uni: UniversityOption, index: number) => (
+          <IonSelectOption key={index}>
+            <IonLabel className="ion-text-nowrap">{uni.title}</IonLabel>
+          </IonSelectOption>
+        ))}
       </IonSelect>
       <IonRow className="ion-float-left ion-padding-start">
         <IonPopover
           isOpen={showPopover}
-          onDidDismiss={(e) => setShowPopover(false)}
+          onDidDismiss={() => setShowPopover(false)}
         >
-          {' '}
           <p>show log in form</p>
         </IonPopover>
         <IonButton expand="block" onClick={() => setShowPopover(true)}>
@@ -89,6 +89,10 @@ export const UserProfile: React.FC = (selectUniversity) => {
         </IonButton>
         <IonButton expand="block">SignUp</IonButton>
       </IonRow>
+
+      <IonItemDivider />
     </IonList>
   );
 };
+
+export default UserProfile;
