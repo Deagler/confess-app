@@ -40,10 +40,12 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol>
-            <IonButton expand="block">Approve</IonButton>
+            <IonButton color="primary" fill="outline" expand="block">
+              Approve
+            </IonButton>
           </IonCol>
           <IonCol>
-            <IonButton color="danger" expand="block">
+            <IonButton color="danger" fill="outline" expand="block">
               Deny
             </IonButton>
           </IonCol>
