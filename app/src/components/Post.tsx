@@ -32,15 +32,15 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
 
   return (
     <IonCard>
-      <IonCardHeader>
-        <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
-        <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
-      </IonCardHeader>
-
-      <IonCardContent>{content}</IonCardContent>
-      <IonCardContent>{author || 'Anonymous'}</IonCardContent>
-
+      <Link to="/pages/posts/${id}" style={{ textDecoration: 'none' }}>
+        <IonCardHeader>
+          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+          <IonCardTitle>{title}</IonCardTitle>
+          <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent>{author || 'Anonymous'}</IonCardContent>
+      </Link>
       <IonItemDivider />
 
       <IonGrid>
