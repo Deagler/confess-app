@@ -7,15 +7,11 @@ import {
   IonButtons,
   IonTitle,
   IonBackButton,
-  IonRow,
 } from '@ionic/react';
-
+import Comment, { CommentProps } from '../components/Comment';
 import Post, { PostProps } from '../components/Post';
-import { useParams, Route, useHistory } from 'react-router-dom';
 
 const Postpage: React.FC = () => {
-  const { id } = useParams();
-  const history = useHistory();
   const testPosts: PostProps[] = [
     {
       id: 1,
@@ -26,7 +22,7 @@ const Postpage: React.FC = () => {
     },
   ];
 
-  const [posts, setPosts] = useState(testPosts);
+  const [posts] = useState(testPosts);
   return (
     <IonPage>
       <IonHeader>
@@ -36,10 +32,13 @@ const Postpage: React.FC = () => {
           </IonButtons>
           <IonTitle className="ion-text-start">Post</IonTitle>
         </IonToolbar>
-      </IonHeader>{' '}
+      </IonHeader>
       <IonContent>
         {posts.map((post: PostProps, i: number) => (
           <Post key={i} {...post} />
+        ))}
+        {testComments.map((comment: CommentProps, i: number) => (
+          <Comment key={i} {...comment} />
         ))}
       </IonContent>
     </IonPage>
@@ -47,3 +46,24 @@ const Postpage: React.FC = () => {
 };
 
 export default Postpage;
+
+const testComments: CommentProps[] = [
+  {
+    date: new Date(),
+    content: 'Comment content',
+    author: 'abcd123',
+    university: 'UoA',
+  },
+  {
+    date: new Date(),
+    content: 'Comment content',
+    author: 'abcd123',
+    university: 'UoA',
+  },
+  {
+    date: new Date(),
+    content: 'Comment content',
+    author: 'abcd123',
+    university: 'UoA',
+  },
+];
