@@ -27,12 +27,12 @@ export interface PostProps {
   author?: string;
 }
 
-const Post: React.FC<PostProps> = (props: PostProps) => {
+const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
   const { id, title, date, content, author } = props;
 
   return (
     <IonCard>
-      <Link to="/pages/posts/${id}" style={{ textDecoration: 'none' }}>
+      <Link to={`/pages/posts/{$id}`} style={{ textDecoration: 'none' }}>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
@@ -56,7 +56,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               fill="clear"
               expand="full"
               color="primary"
-              href="/pages/posts/${id}"
+              href={`/pages/posts/{$id}`}
             >
               <IonIcon icon={chatbox} />
               <IonLabel>23</IonLabel>
