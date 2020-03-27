@@ -12,17 +12,6 @@ import Comment, { CommentProps } from '../components/Comment';
 import Post, { PostProps } from '../components/Post';
 
 const Postpage: React.FC = () => {
-  const testPosts: PostProps[] = [
-    {
-      id: 1,
-      title: 'This is the title',
-      date: new Date(),
-      content: 'This is the content',
-      author: 'This is the author',
-    },
-  ];
-
-  const [posts] = useState(testPosts);
   return (
     <IonPage>
       <IonHeader>
@@ -34,9 +23,7 @@ const Postpage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {posts.map((post: PostProps, i: number) => (
-          <Post key={i} {...post} />
-        ))}
+        <Post {...testPost} />
         {testComments.map((comment: CommentProps, i: number) => (
           <Comment key={i} {...comment} />
         ))}
@@ -46,6 +33,14 @@ const Postpage: React.FC = () => {
 };
 
 export default Postpage;
+
+const testPost: PostProps = {
+  id: 1,
+  title: 'This is the title',
+  date: new Date(),
+  content: 'This is the content',
+  author: 'This is the author',
+};
 
 const testComments: CommentProps[] = [
   {
