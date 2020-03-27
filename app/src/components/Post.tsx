@@ -56,7 +56,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
               fill="clear"
               expand="full"
               color="primary"
-              href={`/pages/posts/${id}`}
+              routerLink={`/pages/posts/${id}`}
             >
               <IonIcon icon={chatbox} />
               <IonLabel>23</IonLabel>

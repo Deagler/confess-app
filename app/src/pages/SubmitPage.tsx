@@ -52,7 +52,7 @@ const SubmitPage: React.FC<{}> = () => {
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
-              href="/page/posts"
+              routerLink="/page/posts"
             >
               Post
             </IonButton>

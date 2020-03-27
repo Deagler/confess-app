@@ -57,7 +57,11 @@ const FeedPage: React.FC = () => {
       </IonContent>
 
       <IonFooter>
-        <IonButton expand="block" href="/page/submit" routerDirection="forward">
+        <IonButton
+          expand="block"
+          routerLink="/page/submit"
+          routerDirection="forward"
+        >
           New Confession
         </IonButton>
       </IonFooter>
