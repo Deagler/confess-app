@@ -7,8 +7,6 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
-  IonFooter,
-  IonButton,
 } from '@ionic/react';
 
 import PostRequest, { PostRequestProps } from '../components/PostRequest';
@@ -55,12 +53,6 @@ const FeedPage: React.FC = () => {
           <PostRequest key={i} {...post} />
         ))}
       </IonContent>
-
-      <IonFooter>
-        <IonButton expand="block" href="/page/submit" routerDirection="forward">
-          New Confession
-        </IonButton>
-      </IonFooter>
     </IonPage>
   );
 };
