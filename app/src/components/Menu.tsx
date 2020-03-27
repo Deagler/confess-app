@@ -47,7 +47,7 @@ interface AppPage {
 const appPages: AppPage[] = [
   {
     title: 'Feed',
-    url: '/page/Feed',
+    url: '/page/posts',
     iosIcon: globeOutline,
     mdIcon: globeSharp,
   },

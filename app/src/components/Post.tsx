@@ -17,6 +17,7 @@ import { heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 
 import './Post.css';
+import { Link } from 'react-router-dom';
 
 export interface PostProps {
   id: number;
@@ -51,7 +52,12 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </IonButton>
           </IonCol>
           <IonCol>
-            <IonButton fill="clear" expand="full" color="primary">
+            <IonButton
+              fill="clear"
+              expand="full"
+              color="primary"
+              href="/pages/posts/${id}"
+            >
               <IonIcon icon={chatbox} />
               <IonLabel>23</IonLabel>
             </IonButton>
