@@ -6,8 +6,7 @@ import {
   IonToolbar,
   IonButtons,
   IonTitle,
-  IonMenuButton,
-  IonButton,
+  IonBackButton,
   IonRow,
 } from '@ionic/react';
 
@@ -31,13 +30,11 @@ const Postpage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="ion-justify-content-center">
-          <IonRow>
-            <IonButton className="ion-margin" onClick={() => history.goBack()}>
-              Back
-            </IonButton>
-            <IonTitle>Post</IonTitle>
-          </IonRow>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/page/posts" text="Back" />
+          </IonButtons>
+          <IonTitle className="ion-text-start">Post</IonTitle>
         </IonToolbar>
       </IonHeader>{' '}
       <IonContent>
