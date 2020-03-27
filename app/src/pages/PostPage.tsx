@@ -12,10 +12,11 @@ import {
 } from '@ionic/react';
 
 import Post, { PostProps } from '../components/Post';
-import { useParams, Route } from 'react-router-dom';
+import { useParams, Route, useHistory } from 'react-router-dom';
 
 const Postpage: React.FC = () => {
   const { id } = useParams();
+  const history = useHistory();
   const testPosts: PostProps[] = [
     {
       id: 1,
@@ -32,7 +33,9 @@ const Postpage: React.FC = () => {
       <IonHeader>
         <IonToolbar className="ion-justify-content-center">
           <IonRow>
-            <IonButton className="ion-margin">Back</IonButton>
+            <IonButton className="ion-margin" onClick={() => history.goBack()}>
+              Back
+            </IonButton>
             <IonTitle>Post</IonTitle>
           </IonRow>
         </IonToolbar>
