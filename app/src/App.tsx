@@ -66,7 +66,7 @@ const App: React.FC = () => {
               exact={true}
             />
             <Route
-              path="/pages/posts/${id}"
+              path="/pages/posts/:id"
               render={() => <Postpage />}
               exact={true}
             />
