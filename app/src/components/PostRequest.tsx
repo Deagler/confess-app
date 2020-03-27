@@ -13,8 +13,6 @@ import {
 } from '@ionic/react';
 import moment from 'moment';
 
-import './Post.css';
-
 export interface PostRequestProps {
   id: number;
   title: string;
