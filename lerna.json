@@ -1,0 +1,5 @@
+{
+  "packages": ["app", "api/functions"],
+  "npmClient": "npm",
+  "version": "independent"
+}
