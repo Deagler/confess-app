@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import urljoin from 'url-join';
+console.log(urljoin(process.env.REACT_APP_ENDPOINT_URL!, 'graph'));
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
