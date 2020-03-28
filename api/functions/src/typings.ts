@@ -14,6 +14,12 @@ export interface Post {
   comments: Comment[];
 }
 
+export interface Community {
+  id: string;
+  title: string;
+  abbreviation: string;
+}
+
 export interface Comment {
   id: string;
   creationTimestamp: number;

@@ -15,10 +15,18 @@ const typeDefs = gql`
     likedByIds: [String]!
   }
 
+  type Community {
+    id: ID!
+    name: String!
+    abbreviation: String!
+    posts: [Post]!
+  }
+
   type Post {
     id: ID!
     creationTimestamp: Int!
     authorId: String!
+    authorName: String!
     title: String!
     content: String!
     approvalInfo: ApprovalInfo
@@ -29,7 +37,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    post(id: ID!): Post
+    post(communityId: ID!, postId: ID!): Post
+    community(id: ID!): Community
   }
 
   interface MutationResponse {
