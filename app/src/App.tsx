@@ -39,7 +39,7 @@ const App: React.FC = () => {
           <IonRouterOutlet id="main">
             <Route
               path="/page/posts"
-              render={() => <FeedPage />}
+              render={(props) => <FeedPage {...props} />}
               exact={true}
             />
             <Route

@@ -24,18 +24,19 @@ export interface PostProps {
   title: string;
   date: Date;
   content: string;
+  onCommentClick?: () => void;
   author?: string;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
-  const { id, title, date, content, author } = props;
+  const { id, title, date, content, author, onCommentClick } = props;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
   return (
     <IonCard>
       <Link
         to={`/pages/posts/${id}`}
         style={{ textDecoration: 'none' }}
-        onClick={() => setIsExpanded(true)}
       >
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
@@ -59,11 +60,10 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
           </IonCol>
           <IonCol>
             <IonButton
-              onClick={() => setIsExpanded(true)}
+              onClick={() => onCommentClick!()}
               fill="clear"
               expand="full"
               color="primary"
-              routerLink={`/pages/posts/${id}`}
             >
               <IonIcon icon={chatbox} />
               <IonLabel>23</IonLabel>

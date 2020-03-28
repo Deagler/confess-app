@@ -30,6 +30,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
           onIonChange={(e) => {
             setText(e.detail.value!);
           }}
+          autofocus
           ref={inputRef}
         />
       </IonCardContent>
