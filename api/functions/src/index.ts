@@ -1,3 +1,4 @@
+require("dotenv").config();
 import * as functions from 'firebase-functions';
 import {ConstructGraphQLServer} from './graphql/server';
 
