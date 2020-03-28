@@ -15,7 +15,7 @@ const props: PostProps = {
 test('renders without crashing', () => {
   const { baseElement } = render(
     <MemoryRouter>
-      <Post {...props} />{' '}
+      <Post {...props} />
     </MemoryRouter>
   );
   expect(baseElement).toBeDefined();
@@ -24,7 +24,7 @@ test('renders without crashing', () => {
 test('displays content properly', async () => {
   const { findByText } = render(
     <MemoryRouter>
-      <Post {...props} />{' '}
+      <Post {...props} />
     </MemoryRouter>
   );
   await findByText('#10');

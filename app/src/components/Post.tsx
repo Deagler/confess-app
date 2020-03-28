@@ -68,7 +68,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
           </IonCol>
           <IonCol>
             <IonButton
-              onClick={() => onCommentClick()}
+              onClick={onCommentClick}
               fill="clear"
               expand="full"
               color="primary"
