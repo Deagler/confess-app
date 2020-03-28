@@ -11,11 +11,11 @@ import {
   IonButton,
 } from '@ionic/react';
 
-import Post, { PostProps } from '../components/Post';
+import Post, { PostProps, PostData } from '../components/Post';
 import { RouteComponentProps } from 'react-router';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const testPosts: PostProps[] = [
+  const testPosts: PostData[] = [
     {
       id: 1,
       title: 'This is the title',
@@ -55,7 +55,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
-        {posts.map((post: PostProps, i: number) => (
+        {posts.map((post: PostData, i: number) => (
           <Post
             key={i}
             {...post}

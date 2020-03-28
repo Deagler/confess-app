@@ -11,7 +11,7 @@ import {
   IonList,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
-import Post, { PostProps } from '../components/Post';
+import Post, { PostProps, PostData } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 import './PostPage.css';
 const Postpage: React.FC = () => {
@@ -71,7 +71,7 @@ const Postpage: React.FC = () => {
 
 export default Postpage;
 
-const testPost: PostProps = {
+const testPost: PostData = {
   id: 1,
   title: 'This is the title',
   date: new Date(),

@@ -19,25 +19,33 @@ import moment from 'moment';
 import './Post.css';
 import { Link } from 'react-router-dom';
 
-export interface PostProps {
+export interface PostData {
   id: number;
   title: string;
   date: Date;
   content: string;
-  isExpanded?: boolean;
-  onCommentClick?: () => void;
   author?: string;
 }
 
+export interface PostProps extends PostData {
+  onCommentClick: () => void;
+  isExpanded?: boolean;
+}
+
 const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
-  const { id, title, date, content, author, isExpanded, onCommentClick } = props;
+  const {
+    id,
+    title,
+    date,
+    content,
+    author,
+    isExpanded,
+    onCommentClick,
+  } = props;
 
   return (
     <IonCard>
-      <Link
-        to={`/pages/posts/${id}`}
-        style={{ textDecoration: 'none' }}
-      >
+      <Link to={`/pages/posts/${id}`} style={{ textDecoration: 'none' }}>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
@@ -60,7 +68,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
           </IonCol>
           <IonCol>
             <IonButton
-              onClick={() => onCommentClick!()}
+              onClick={() => onCommentClick()}
               fill="clear"
               expand="full"
               color="primary"
