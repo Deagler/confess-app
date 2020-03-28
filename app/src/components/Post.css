@@ -2,3 +2,14 @@ ion-icon,
 ion-label {
   margin: 0.2em;
 }
+
+.showText {
+  height: 100%;
+  overflow: unset;
+}
+
+.hideText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

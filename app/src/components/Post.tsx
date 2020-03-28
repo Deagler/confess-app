@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -29,16 +29,22 @@ export interface PostProps {
 
 const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
   const { id, title, date, content, author } = props;
-
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   return (
     <IonCard>
-      <Link to={`/pages/posts/${id}`} style={{ textDecoration: 'none' }}>
+      <Link
+        to={`/pages/posts/${id}`}
+        style={{ textDecoration: 'none' }}
+        onClick={() => setIsExpanded(true)}
+      >
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
           <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
+          {content}
+        </IonCardContent>
         <IonCardContent>{author || 'Anonymous'}</IonCardContent>
       </Link>
       <IonItemDivider />
@@ -53,6 +59,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
           </IonCol>
           <IonCol>
             <IonButton
+              onClick={() => setIsExpanded(true)}
               fill="clear"
               expand="full"
               color="primary"
