@@ -2,6 +2,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitReturns": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true,
