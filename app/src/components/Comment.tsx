@@ -36,13 +36,17 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     <IonItem>
       <IonGrid>
         <IonRow>
-          <IonCol>
+          <IonCol size="12" size-sm="6">
             <IonItem lines="none">
               <IonLabel slot="start">
                 <h6>
                   {author} - {university}
                 </h6>
               </IonLabel>
+            </IonItem>
+          </IonCol>
+          <IonCol size="12" size-sm="6">
+            <IonItem lines="none">
               <IonIcon color="medium" icon={timeOutline} size="medium" />
               <IonLabel color="medium">
                 <h6>{moment(date).fromNow()} </h6>
