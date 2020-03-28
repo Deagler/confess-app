@@ -1,3 +1,7 @@
 ion-content ion-toolbar {
   --background: transparent;
 }
+
+.Link {
+  text-decoration: none;
+}

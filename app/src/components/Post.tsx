@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
 
   return (
     <IonCard>
-      <Link to={`/pages/posts/${id}`} style={{ textDecoration: 'none' }}>
+      <Link to={`/pages/posts/${id}`} className="Link">
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>

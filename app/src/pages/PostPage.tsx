@@ -11,7 +11,7 @@ import {
   IonList,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
-import Post, { PostProps, PostData } from '../components/Post';
+import Post, { PostData } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 import './PostPage.css';
 const Postpage: React.FC = () => {
@@ -50,7 +50,7 @@ const Postpage: React.FC = () => {
           <Post
             {...testPost}
             onCommentClick={() => newCommentElement.current!.setFocus()}
-            isExpanded
+            isExpanded={true}
           />
         </div>
         <NewCommentInput
