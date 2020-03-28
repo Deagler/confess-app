@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonPage,
   IonContent,
@@ -7,6 +7,8 @@ import {
   IonButtons,
   IonTitle,
   IonBackButton,
+  IonCard,
+  IonList,
 } from '@ionic/react';
 import Comment, { CommentProps } from '../components/Comment';
 import Post, { PostProps } from '../components/Post';
@@ -26,9 +28,13 @@ const Postpage: React.FC = () => {
       <IonContent>
         <Post {...testPost} />
         <NewCommentInput />
-        {testComments.map((comment: CommentProps, i: number) => (
-          <Comment key={i} {...comment} />
-        ))}
+        <IonCard>
+          <IonList>
+            {testComments.map((comment: CommentProps, i: number) => (
+              <Comment key={i} {...comment} />
+            ))}
+          </IonList>
+        </IonCard>
       </IonContent>
     </IonPage>
   );
