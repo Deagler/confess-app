@@ -13,7 +13,7 @@ import {
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostProps } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
-
+import './PostPage.css';
 const Postpage: React.FC = () => {
   const [comments, setComments] = useState<CommentData[]>(testComments);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
@@ -46,7 +46,7 @@ const Postpage: React.FC = () => {
           <IonTitle className="ion-text-start">Post</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="PostReadOnly">
         <Post {...testPost} />
         <NewCommentInput
           onSubmitComment={handleSubmitComment}
