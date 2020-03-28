@@ -25,6 +25,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { apolloClient } from './services/api/apolloClient';
 
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState('');
@@ -34,32 +36,38 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonSplitPane contentId="main">
           <Menu selectedPage={selectedPage} />
-          <IonRouterOutlet id="main">
-            <Route path="/page/feed" render={() => <FeedPage />} exact={true} />
-            <Route
-              path="/page/admin"
-              render={() => <AdminPage />}
-              exact={true}
-            />
-            <Route
-              path="/page/submit"
-              render={() => <SubmitPage />}
-              exact={true}
-            />
-            <Route
-              path="/page/:name"
-              render={(props) => {
-                setSelectedPage(props.match.params.name);
-                return <Page {...props} />;
-              }}
-              exact={true}
-            />
-            <Route
-              path="/"
-              render={() => <Redirect to="/page/Inbox" />}
-              exact={true}
-            />
-          </IonRouterOutlet>
+          <ApolloProvider client={apolloClient}>
+            <IonRouterOutlet id="main">
+              <Route
+                path="/page/feed"
+                render={() => <FeedPage />}
+                exact={true}
+              />
+              <Route
+                path="/page/admin"
+                render={() => <AdminPage />}
+                exact={true}
+              />
+              <Route
+                path="/page/submit"
+                render={() => <SubmitPage />}
+                exact={true}
+              />
+              <Route
+                path="/page/:name"
+                render={(props) => {
+                  setSelectedPage(props.match.params.name);
+                  return <Page {...props} />;
+                }}
+                exact={true}
+              />
+              <Route
+                path="/"
+                render={() => <Redirect to="/page/Inbox" />}
+                exact={true}
+              />
+            </IonRouterOutlet>
+          </ApolloProvider>
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

@@ -21,24 +21,25 @@ import './Post.css';
 export interface PostProps {
   id: number;
   title: string;
-  date: Date;
+  creationTimestamp: number;
   content: string;
-  author?: string;
+  authorName?: string;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
-  const { id, title, date, content, author } = props;
+  const { id, title, creationTimestamp, content, authorName } = props;
 
   return (
     <IonCard>
       <IonCardHeader>
-        <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
         <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
+        <IonCardSubtitle>
+          {moment.unix(creationTimestamp).fromNow()}
+        </IonCardSubtitle>
       </IonCardHeader>
 
       <IonCardContent>{content}</IonCardContent>
-      <IonCardContent>{author || 'Anonymous'}</IonCardContent>
+      <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
 
       <IonItemDivider />
 
