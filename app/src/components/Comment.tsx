@@ -8,22 +8,25 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonText,
 } from '@ionic/react';
 import React from 'react';
 import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 
-export interface CommentProps {
+export interface CommentData {
   date: Date;
   content: string;
   author: string;
   university: string;
 }
 
+export interface CommentProps extends CommentData {
+  onReply: (author: string) => void;
+}
+
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
-  const { date, content, author, university } = props;
+  const { date, content, author, university, onReply } = props;
 
   return (
     <IonItem>
@@ -55,7 +58,12 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <IonIcon color="medium" icon={heart} />
                 <IonLabel>11</IonLabel>
               </IonButton>
-              <IonButton fill="clear" expand="full" color="medium">
+              <IonButton
+                fill="clear"
+                expand="full"
+                color="medium"
+                onClick={() => onReply(author)}
+              >
                 <IonIcon color="medium" icon={chatbox} />
               </IonButton>
               <IonButton fill="clear" expand="full" color="medium">

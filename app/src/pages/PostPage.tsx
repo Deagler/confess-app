@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   IonPage,
   IonContent,
@@ -10,17 +10,18 @@ import {
   IonCard,
   IonList,
 } from '@ionic/react';
-import Comment, { CommentProps } from '../components/Comment';
+import Comment, { CommentData } from '../components/Comment';
 import Post, { PostProps } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 
 const Postpage: React.FC = () => {
-  const [comments, setComments] = useState<CommentProps[]>(testComments);
+  const [comments, setComments] = useState<CommentData[]>(testComments);
+  const newCommentElement = useRef<HTMLIonTextareaElement>(null);
 
   const handleSubmitComment = (newCommentContent: string) => {
     // TODO: Add comment mutation and get the author details from the user context
 
-    const newCommentProp: CommentProps = {
+    const newCommentProp: CommentData = {
       date: new Date(),
       content: newCommentContent,
       author: 'efgh456',
@@ -28,6 +29,11 @@ const Postpage: React.FC = () => {
     };
 
     setComments((oldComments) => [newCommentProp, ...oldComments]);
+  };
+
+  const handleReply = (author: string) => {
+    newCommentElement.current!.setFocus();
+    newCommentElement.current!.value = `@${author} `;
   };
 
   return (
@@ -42,11 +48,14 @@ const Postpage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <Post {...testPost} />
-        <NewCommentInput onSubmitComment={handleSubmitComment} />
+        <NewCommentInput
+          onSubmitComment={handleSubmitComment}
+          inputRef={newCommentElement}
+        />
         <IonCard>
           <IonList>
-            {comments.map((comment: CommentProps, i: number) => (
-              <Comment key={i} {...comment} />
+            {comments.map((comment: CommentData, i: number) => (
+              <Comment key={i} {...comment} onReply={handleReply} />
             ))}
           </IonList>
         </IonCard>
@@ -65,7 +74,7 @@ const testPost: PostProps = {
   author: 'This is the author',
 };
 
-const testComments: CommentProps[] = [
+const testComments: CommentData[] = [
   {
     date: new Date(),
     content: 'Comment content',

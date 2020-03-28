@@ -1,12 +1,14 @@
 import { IonCard, IonTextarea, IonCardContent } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useState, RefObject } from 'react';
 
 export interface NewCommentInputProps {
   onSubmitComment: (newCommentContent: string) => void;
+  inputRef: RefObject<HTMLIonTextareaElement>;
 }
 
 const NewCommentInput: React.FC<NewCommentInputProps> = ({
   onSubmitComment,
+  inputRef,
 }) => {
   const [text, setText] = useState<string>();
 
@@ -28,6 +30,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
           onIonChange={(e) => {
             setText(e.detail.value!);
           }}
+          ref={inputRef}
         />
       </IonCardContent>
     </IonCard>
