@@ -9,7 +9,7 @@ import {
   IonRow,
   IonCol,
 } from '@ionic/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
@@ -27,6 +27,10 @@ export interface CommentProps extends CommentData {
 
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const { date, content, author, university, onReply } = props;
+
+  // TODO: Add liking mutation, and fetch liked status
+  const [liked, setLiked] = useState<boolean>(false);
+  const likedButtonColor: string = liked ? 'primary' : 'medium';
 
   return (
     <IonItem>
@@ -54,9 +58,15 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
         <IonRow>
           <IonCol>
             <IonItem lines="none">
-              <IonButton fill="clear" expand="full" color="medium">
-                <IonIcon color="medium" icon={heart} />
-                <IonLabel>11</IonLabel>
+              <IonButton
+                fill="clear"
+                expand="full"
+                color={likedButtonColor}
+                onClick={() => setLiked(!liked)}
+              >
+                <IonIcon color={likedButtonColor} icon={heart} />
+                {/* TODO: Will need to add actual data here lmao */}
+                <IonLabel>{liked ? '12' : '11'}</IonLabel>
               </IonButton>
               <IonButton
                 fill="clear"
