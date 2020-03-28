@@ -15,6 +15,21 @@ import Post, { PostProps } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 
 const Postpage: React.FC = () => {
+  const [comments, setComments] = useState<CommentProps[]>(testComments);
+
+  const handleSubmitComment = (newCommentContent: string) => {
+    // TODO: Add comment mutation and get the author details from the user context
+
+    const newCommentProp: CommentProps = {
+      date: new Date(),
+      content: newCommentContent,
+      author: 'efgh456',
+      university: 'UoA',
+    };
+
+    setComments((oldComments) => [newCommentProp, ...oldComments]);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -27,10 +42,10 @@ const Postpage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <Post {...testPost} />
-        <NewCommentInput />
+        <NewCommentInput onSubmitComment={handleSubmitComment} />
         <IonCard>
           <IonList>
-            {testComments.map((comment: CommentProps, i: number) => (
+            {comments.map((comment: CommentProps, i: number) => (
               <Comment key={i} {...comment} />
             ))}
           </IonList>

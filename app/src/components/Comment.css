@@ -1,4 +1,5 @@
 p {
   margin-left: 20px;
   font-size: 10;
+  white-space: pre-line;
 }
