@@ -42,7 +42,7 @@ const typeDefs = gql`
     code: String!
     success: Boolean!
     message: String!
-    post: User
+    post: Post
   }
 
   type Mutation {

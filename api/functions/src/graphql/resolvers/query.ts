@@ -1,9 +1,9 @@
-import admin from "firebase-admin";
 import { Post } from "../../typings";
 import { addIdToDoc } from "./utils";
 import { ApolloError } from "apollo-server-express";
+import { firebaseApp } from "../../firebase";
 
-const firestore = admin.firestore();
+const firestore = firebaseApp.firestore();
 
 export const queryResolvers = {
   async post(_: null, args: { id: string }) {
