@@ -5,9 +5,9 @@ import Post, { PostProps } from './Post';
 const props: PostProps = {
   id: 10,
   title: 'this is the title',
-  date: new Date(),
+  creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
-  author: 'this is the author',
+  authorName: 'this is the author',
 };
 
 test('renders without crashing', () => {
@@ -17,13 +17,12 @@ test('renders without crashing', () => {
 
 test('displays content properly', async () => {
   const { findByText } = render(<Post {...props} />);
-  await findByText('#10');
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');
 });
 
 test('displays author as anonymous if omitted', async () => {
-  const { findByText } = render(<Post {...props} author={undefined} />);
+  const { findByText } = render(<Post {...props} authorName={undefined} />);
   await findByText('Anonymous');
 });
