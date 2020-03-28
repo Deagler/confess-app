@@ -24,13 +24,13 @@ export interface PostProps {
   title: string;
   date: Date;
   content: string;
+  isExpanded?: boolean;
   onCommentClick?: () => void;
   author?: string;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
-  const { id, title, date, content, author, onCommentClick } = props;
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const { id, title, date, content, author, isExpanded, onCommentClick } = props;
 
   return (
     <IonCard>
