@@ -4,6 +4,7 @@
   "rules": {
     "prettier": "true",
     "no-var-requires": false,
+    "interface-name": false,
     "object-literal-sort-keys": false,
     "adjacent-overload-signatures": true,
     "ban-comma-operator": true,

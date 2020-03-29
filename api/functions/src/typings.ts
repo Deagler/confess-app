@@ -2,6 +2,8 @@ export interface Post {
   id: string;
   creationTimestamp: number;
   authorId: string;
+  authorName?: string;
+  channel: string;
   title: string;
   content: string;
   approvalInfo?: {

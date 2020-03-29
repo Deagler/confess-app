@@ -27,6 +27,7 @@ const typeDefs = gql`
     creationTimestamp: Int!
     authorId: String!
     authorName: String!
+    channel: String!
     title: String!
     content: String!
     approvalInfo: ApprovalInfo
@@ -55,10 +56,12 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createPost(
-      authorId: String!
+    submitPostForApproval(
+      communityId: String!
+      channel: String!
       title: String!
       content: String!
+      authorName: String
     ): CreatePostResponse
   }
 `;
