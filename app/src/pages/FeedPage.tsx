@@ -46,7 +46,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <Post
               key={i}
               {...post}
-              onCommentClick={() => history.push(`/pages/posts/${post.id}`)}
+              onCommentClick={() => history.push(`/page/posts/${post.id}`)}
             />
           ))
         )}

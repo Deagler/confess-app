@@ -20,6 +20,7 @@ import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { GlobalAppUtils } from '../App';
+import { RouteComponentProps } from 'react-router';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -37,7 +38,7 @@ const channels = [
   'Very long name to demonstrate that text wrapping is working',
 ];
 
-const SubmitPage: React.FC<{}> = () => {
+const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // TODO: Add form handling, can be done with state or libraries such as Formik
   // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
@@ -62,10 +63,21 @@ const SubmitPage: React.FC<{}> = () => {
 
     if (!data.submitPostForApproval.success) {
       console.error(data);
+      GlobalAppUtils.showToast(
+        'Failed to create post. Our team has been notified.'
+      );
+      history.replace(`/page/posts`);
       return;
     }
-
     console.log(data);
+
+    GlobalAppUtils.showToast(data.submitPostForApproval.message);
+    setConfessionText(undefined);
+    setAuthor(undefined);
+    setTitle(undefined);
+    setSelectedChannel(undefined);
+
+    history.replace(`/page/posts`);
   };
 
   return (
