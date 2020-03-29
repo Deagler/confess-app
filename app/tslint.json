@@ -5,6 +5,7 @@
     "prettier": true,
     "jsx-no-lambda": false,
     "no-console": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "no-empty": false
   }
 }

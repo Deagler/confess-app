@@ -17,6 +17,9 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SubmitPage.css';
+import { useMutation } from '@apollo/react-hooks';
+import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
+import { GlobalAppUtils } from '../App';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -42,6 +45,29 @@ const SubmitPage: React.FC<{}> = () => {
   const [confessionText, setConfessionText] = useState<string>();
   const [author, setAuthor] = useState<string>();
 
+  const [submitPostForApproval] = useMutation(SUBMIT_POST_FOR_APPROVAL);
+
+  const handleSubmit = async (channel, postTitle, content, authorName) => {
+    GlobalAppUtils.showLoading();
+    const { data } = await submitPostForApproval({
+      variables: {
+        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        channel,
+        title: postTitle,
+        content,
+        authorName,
+      },
+    });
+    GlobalAppUtils.hideLoading();
+
+    if (!data.submitPostForApproval.success) {
+      console.error(data);
+      return;
+    }
+
+    console.log(data);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -52,7 +78,9 @@ const SubmitPage: React.FC<{}> = () => {
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
-              routerLink="/page/posts"
+              onClick={() =>
+                handleSubmit(selectedChannel, title, confessionText, author)
+              }
             >
               Post
             </IonButton>
