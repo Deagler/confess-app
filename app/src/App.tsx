@@ -25,6 +25,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
+import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
 
@@ -39,8 +40,8 @@ const App: React.FC = () => {
           <ApolloProvider client={apolloClient}>
             <IonRouterOutlet id="main">
               <Route
-                path="/page/feed"
-                render={() => <FeedPage />}
+                path="/page/posts"
+                render={(props) => <FeedPage {...props} />}
                 exact={true}
               />
               <Route
@@ -64,6 +65,11 @@ const App: React.FC = () => {
               <Route
                 path="/"
                 render={() => <Redirect to="/page/Inbox" />}
+                exact={true}
+              />
+              <Route
+                path="/pages/posts/:id"
+                render={() => <Postpage />}
                 exact={true}
               />
             </IonRouterOutlet>

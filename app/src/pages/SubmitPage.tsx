@@ -47,12 +47,12 @@ const SubmitPage: React.FC<{}> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/page/feed" text="Cancel" />
+            <IonBackButton defaultHref="/page/posts" text="Cancel" />
           </IonButtons>
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
-              href="/page/feed"
+              routerLink="/page/posts"
             >
               Post
             </IonButton>

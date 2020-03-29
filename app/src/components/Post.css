@@ -2,3 +2,18 @@ ion-icon,
 ion-label {
   margin: 0.2em;
 }
+
+ion-card-content {
+  white-space: pre-line;
+}
+
+.showText {
+  height: 100%;
+  overflow: unset;
+}
+
+.hideText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

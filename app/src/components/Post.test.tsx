@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Post, { PostProps } from './Post';
+import { MemoryRouter } from 'react-router-dom';
 
 const props: PostProps = {
   id: 10,
@@ -8,21 +9,34 @@ const props: PostProps = {
   creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
   authorName: 'this is the author',
+  onCommentClick: () => null,
 };
 
 test('renders without crashing', () => {
-  const { baseElement } = render(<Post {...props} />);
+  const { baseElement } = render(
+    <MemoryRouter>
+      <Post {...props} />
+    </MemoryRouter>
+  );
   expect(baseElement).toBeDefined();
 });
 
 test('displays content properly', async () => {
-  const { findByText } = render(<Post {...props} />);
+  const { findByText } = render(
+    <MemoryRouter>
+      <Post {...props} />
+    </MemoryRouter>
+  );
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');
 });
 
 test('displays author as anonymous if omitted', async () => {
-  const { findByText } = render(<Post {...props} authorName={undefined} />);
+  const { findByText } = render(
+    <MemoryRouter>
+      <Post {...props} authorName={undefined} />
+    </MemoryRouter>
+  );
   await findByText('Anonymous');
 });

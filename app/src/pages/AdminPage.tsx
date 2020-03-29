@@ -11,7 +11,7 @@ import {
 
 import PostRequest, { PostRequestProps } from '../components/PostRequest';
 
-const FeedPage: React.FC = () => {
+const AdminPage: React.FC = () => {
   const testPosts: PostRequestProps[] = [
     {
       id: 1,
@@ -57,4 +57,4 @@ const FeedPage: React.FC = () => {
   );
 };
 
-export default FeedPage;
+export default AdminPage;

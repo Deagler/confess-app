@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -17,8 +17,9 @@ import { heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 
 import './Post.css';
+import { Link } from 'react-router-dom';
 
-export interface PostProps {
+export interface PostData {
   id: number;
   title: string;
   creationTimestamp: number;
@@ -26,21 +27,37 @@ export interface PostProps {
   authorName?: string;
 }
 
-const Post: React.FC<PostProps> = (props: PostProps) => {
-  const { id, title, creationTimestamp, content, authorName } = props;
+export interface PostProps extends PostData {
+  onCommentClick: () => void;
+  isExpanded?: boolean;
+}
+
+const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
+  const {
+    id,
+    title,
+    creationTimestamp,
+    content,
+    authorName,
+    isExpanded,
+    onCommentClick,
+  } = props;
 
   return (
     <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>
-          {moment.unix(creationTimestamp).fromNow()}
-        </IonCardSubtitle>
-      </IonCardHeader>
-
-      <IonCardContent>{content}</IonCardContent>
-      <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
-
+      <Link to={`/pages/posts/${id}`} className="Link">
+        <IonCardHeader>
+          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+          <IonCardTitle>{title}</IonCardTitle>
+          <IonCardSubtitle>
+            {moment.unix(creationTimestamp).fromNow()}
+          </IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
+          {content}
+        </IonCardContent>
+        <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
+      </Link>
       <IonItemDivider />
 
       <IonGrid>
@@ -52,7 +69,12 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </IonButton>
           </IonCol>
           <IonCol>
-            <IonButton fill="clear" expand="full" color="primary">
+            <IonButton
+              onClick={onCommentClick}
+              fill="clear"
+              expand="full"
+              color="primary"
+            >
               <IonIcon icon={chatbox} />
               <IonLabel>23</IonLabel>
             </IonButton>
