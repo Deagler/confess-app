@@ -1,9 +1,4 @@
-import {
-  IonCard,
-  IonTextarea,
-  IonCardContent,
-  IonItem,
-} from '@ionic/react';
+import { IonCard, IonTextarea, IonCardContent, IonItem } from '@ionic/react';
 import React, { useState, RefObject } from 'react';
 
 export interface NewCommentInputProps {
@@ -36,7 +31,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
             onIonChange={(e) => {
               setText(e.detail.value!);
             }}
-            autofocus
+            autofocus={true}
             ref={inputRef}
           />
         </IonItem>

@@ -6,9 +6,9 @@ import { MemoryRouter } from 'react-router-dom';
 const props: PostProps = {
   id: 10,
   title: 'this is the title',
-  date: new Date(),
+  creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
-  author: 'this is the author',
+  authorName: 'this is the author',
   onCommentClick: () => null,
 };
 
@@ -27,7 +27,6 @@ test('displays content properly', async () => {
       <Post {...props} />
     </MemoryRouter>
   );
-  await findByText('#10');
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');
@@ -36,7 +35,7 @@ test('displays content properly', async () => {
 test('displays author as anonymous if omitted', async () => {
   const { findByText } = render(
     <MemoryRouter>
-      <Post {...props} author={undefined} />
+      <Post {...props} authorName={undefined} />
     </MemoryRouter>
   );
   await findByText('Anonymous');

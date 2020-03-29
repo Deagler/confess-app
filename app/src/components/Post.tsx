@@ -22,9 +22,9 @@ import { Link } from 'react-router-dom';
 export interface PostData {
   id: number;
   title: string;
-  date: Date;
+  creationTimestamp: number;
   content: string;
-  author?: string;
+  authorName?: string;
 }
 
 export interface PostProps extends PostData {
@@ -36,9 +36,9 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
   const {
     id,
     title,
-    date,
+    creationTimestamp,
     content,
-    author,
+    authorName,
     isExpanded,
     onCommentClick,
   } = props;
@@ -49,12 +49,14 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
-          <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
+          <IonCardSubtitle>
+            {moment.unix(creationTimestamp).fromNow()}
+          </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
           {content}
         </IonCardContent>
-        <IonCardContent>{author || 'Anonymous'}</IonCardContent>
+        <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
       </Link>
       <IonItemDivider />
 

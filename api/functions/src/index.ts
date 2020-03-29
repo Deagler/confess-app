@@ -1,8 +1,8 @@
+require('dotenv').config();
 import * as functions from 'firebase-functions';
+import { ConstructGraphQLServer } from './graphql/server';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const USCentralRegion = functions.SUPPORTED_REGIONS[0];
+exports.graph = functions
+  .region(USCentralRegion)
+  .https.onRequest(ConstructGraphQLServer());
