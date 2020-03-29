@@ -1,3 +1,3 @@
 export const postMutations = {
-  createPost: async (parent: any, args) => {}
+  createPost: async (parent: any, args) => {},
 };

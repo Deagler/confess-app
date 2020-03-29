@@ -1,7 +1,7 @@
-import { Post } from "../../typings";
-import { addIdToDoc } from "./utils";
-import { ApolloError } from "apollo-server-express";
-import { firebaseApp } from "../../firebase";
+import { ApolloError } from 'apollo-server-express';
+import { firebaseApp } from '../../firebase';
+import { Post } from '../../typings';
+import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
 
@@ -18,5 +18,5 @@ export const communityResolvers = {
     } catch (error) {
       throw new ApolloError(error);
     }
-  }
+  },
 };

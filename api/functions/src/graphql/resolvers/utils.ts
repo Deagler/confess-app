@@ -1,4 +1,4 @@
-export const addIdToDoc = firestoreDoc => {
+export const addIdToDoc = (firestoreDoc) => {
   const data = firestoreDoc.data();
   if (!data) {
     return {};

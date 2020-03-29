@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   type ApprovalInfo {
@@ -55,7 +55,11 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createPost(authorId: String!, title: String!, content: String!): CreatePostResponse
+    createPost(
+      authorId: String!
+      title: String!
+      content: String!
+    ): CreatePostResponse
   }
 `;
 
