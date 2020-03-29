@@ -88,6 +88,7 @@ const App: React.FC = () => {
           />
           <Menu selectedPage={selectedPage} />
           <ApolloProvider client={apolloClient}>
+            <Menu selectedPage={selectedPage} />
             <IonRouterOutlet id="main">
               <Route
                 path="/page/posts"

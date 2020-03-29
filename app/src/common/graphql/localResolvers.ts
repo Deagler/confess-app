@@ -12,8 +12,8 @@ interface ResolverMap {
 }
 
 interface AppResolvers extends Resolvers {
-  // Once retrieving local state becomes more complex we will
-  // have to write resolvers for those queries in here 
+  // Once retrieving/updating local state becomes more complex 
+  // write resolvers for those queries/mutations in here 
 }
 
 export const resolvers = {};
