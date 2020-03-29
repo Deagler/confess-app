@@ -26,6 +26,8 @@ async function submitPostForApproval(
     content,
     channel,
     authorName,
+    isApproved: false,
+    approvalInfo: null,
     totalComments: 0,
     totalLikes: 0,
     likedByIds: [],

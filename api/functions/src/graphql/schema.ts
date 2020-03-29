@@ -19,7 +19,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     abbreviation: String!
-    posts: [Post]!
+    feed: [Post]!
   }
 
   type Post {
@@ -27,10 +27,14 @@ const typeDefs = gql`
     creationTimestamp: Int!
     authorId: String!
     authorName: String!
+
     channel: String!
     title: String!
     content: String!
+
+    isApproved: Boolean!
     approvalInfo: ApprovalInfo
+
     totalLikes: Int!
     likedByIds: [String]!
     totalComments: Int!

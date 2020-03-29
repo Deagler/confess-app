@@ -1,3 +1,8 @@
+interface ApprovalInfo {
+  approverId: string;
+  approvalTimestamp: number;
+}
+
 export interface Post {
   id: string;
   creationTimestamp: number;
@@ -6,10 +11,8 @@ export interface Post {
   channel: string;
   title: string;
   content: string;
-  approvalInfo?: {
-    approverId: string;
-    approvalTimestamp: number;
-  };
+  isApproved: boolean;
+  approvalInfo: ApprovalInfo | null;
   totalLikes: number;
   likedByIds: string[];
   totalComments: number;
