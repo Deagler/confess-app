@@ -1,6 +1,7 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
 import FeedPage from './pages/FeedPage';
+import PostPage from './pages/PostPage';
 import React, { useState } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -25,6 +26,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
+import Postpage from './pages/PostPage';
 
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState('');
@@ -35,7 +37,11 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu selectedPage={selectedPage} />
           <IonRouterOutlet id="main">
-            <Route path="/page/feed" render={() => <FeedPage />} exact={true} />
+            <Route
+              path="/page/posts"
+              render={(props) => <FeedPage {...props} />}
+              exact={true}
+            />
             <Route
               path="/page/admin"
               render={() => <AdminPage />}
@@ -57,6 +63,11 @@ const App: React.FC = () => {
             <Route
               path="/"
               render={() => <Redirect to="/page/Inbox" />}
+              exact={true}
+            />
+            <Route
+              path="/pages/posts/:id"
+              render={() => <Postpage />}
               exact={true}
             />
           </IonRouterOutlet>
