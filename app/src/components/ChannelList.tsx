@@ -23,22 +23,38 @@ const ChannelList: React.FC<ChannelListProps> = (props: ChannelListProps) => {
       {loading ? (
         <IonItem>...Loading</IonItem>
       ) : (
-        channels &&
-        channels.map((channel: string, index: number) => (
-          <IonMenuToggle key={index} autoHide={false}>
+        <>
+          <IonMenuToggle autoHide={false}>
             <IonItem
-              className={selectedChannel === channel ? 'selected' : ''}
-              routerLink={`/page/posts?community=${channel}`}
+              className={selectedChannel === 'all' ? 'selected' : ''}
+              routerLink={`/page/posts`}
               routerDirection="none"
               lines="none"
               detail={false}
-              onClick={() => setSelectedChannel(channel)}
+              onClick={() => setSelectedChannel('all')}
             >
               <IonIcon slot="start" icon={airplaneOutline} />
-              <IonLabel>{channel}</IonLabel>
+              <IonLabel>All</IonLabel>
             </IonItem>
           </IonMenuToggle>
-        ))
+
+          {channels &&
+            channels.map((channel: string, index: number) => (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={selectedChannel === channel ? 'selected' : ''}
+                  routerLink={`/page/posts?community=${channel}`}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                  onClick={() => setSelectedChannel(channel)}
+                >
+                  <IonIcon slot="start" icon={airplaneOutline} />
+                  <IonLabel>{channel}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            ))}
+        </>
       )}
     </IonList>
   );
