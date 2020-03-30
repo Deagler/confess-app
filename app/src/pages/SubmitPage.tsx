@@ -21,6 +21,10 @@ import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { GlobalAppUtils } from '../App';
 import { RouteComponentProps } from 'react-router';
+import {
+  SubmitPostForApproval,
+  SubmitPostForApprovalVariables,
+} from '../types/SubmitPostForApproval';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -46,7 +50,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
 
-  const [submitPostForApproval] = useMutation(SUBMIT_POST_FOR_APPROVAL);
+  const [submitPostForApproval] = useMutation<
+    SubmitPostForApproval,
+    SubmitPostForApprovalVariables
+  >(SUBMIT_POST_FOR_APPROVAL);
 
   const handleSubmit = async (
     channel: string,
@@ -66,7 +73,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     });
     GlobalAppUtils.hideLoading();
 
-    if (!data.submitPostForApproval.success) {
+    // TODO: add error handling and remove non-null assertion operator
+    if (!data!.submitPostForApproval!.success) {
       console.error(data);
       GlobalAppUtils.showToast(
         'Failed to create post. Our team has been notified.'
@@ -76,7 +84,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
     console.log(data);
 
-    GlobalAppUtils.showToast(data.submitPostForApproval.message);
+    GlobalAppUtils.showToast(data!.submitPostForApproval!.message); // TODO: remove non-null assertion operator
     setConfessionText(undefined);
     setAuthorAlias(undefined);
     setTitle(undefined);
