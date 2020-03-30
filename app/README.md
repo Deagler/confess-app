@@ -1,7 +1,7 @@
 ## Getting started
 
 1. Setup your `.env` with `REACT_APP_ENDPOINT_URL` to point to the graphql endpoint.
-2. Run `ionic serve`
+2. Run `npm start`
 
 ### Local State Management
 

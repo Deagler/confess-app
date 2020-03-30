@@ -30,7 +30,7 @@ import './Menu.css';
 import gql from 'graphql-tag';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { SelectChangeEventDetail } from '@ionic/core';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/queries/localState';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
