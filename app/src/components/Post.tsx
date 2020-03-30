@@ -20,11 +20,11 @@ import './Post.css';
 import { Link } from 'react-router-dom';
 
 export interface PostData {
-  id: number;
+  id: string;
   title: string;
   creationTimestamp: number;
   content: string;
-  authorName?: string;
+  authorAlias?: string;
 }
 
 export interface PostProps extends PostData {
@@ -32,20 +32,20 @@ export interface PostProps extends PostData {
   isExpanded?: boolean;
 }
 
-const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
+const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
     title,
     creationTimestamp,
     content,
-    authorName,
+    authorAlias,
     isExpanded,
     onCommentClick,
   } = props;
 
   return (
     <IonCard>
-      <Link to={`/pages/posts/${id}`} className="Link">
+      <Link to={`/page/posts/${id}`} className="Link">
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
@@ -56,7 +56,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
         <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
           {content}
         </IonCardContent>
-        <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
+        <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>
       <IonItemDivider />
 

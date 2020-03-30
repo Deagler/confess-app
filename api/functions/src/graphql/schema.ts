@@ -2,17 +2,25 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   type ApprovalInfo {
-    approverId: String!
+    approver: User!
     approvalTimestamp: Int!
+  }
+
+  type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    communityUsername: String!
+    community: Community!
   }
 
   type Comment {
     id: ID!
     creationTimestamp: Int!
-    authorId: String!
+    author: User!
     content: String!
     totalLikes: Int!
-    likedByIds: [String]!
+    likes: [User]!
   }
 
   type Community {
@@ -25,8 +33,8 @@ const typeDefs = gql`
   type Post {
     id: ID!
     creationTimestamp: Int!
-    authorId: String!
-    authorName: String!
+    author: User!
+    authorAlias: String
 
     channel: String!
     title: String!
@@ -36,7 +44,7 @@ const typeDefs = gql`
     approvalInfo: ApprovalInfo
 
     totalLikes: Int!
-    likedByIds: [String]!
+    likes: [User]!
     totalComments: Int!
     comments: [Comment]!
   }
@@ -65,7 +73,7 @@ const typeDefs = gql`
       channel: String!
       title: String!
       content: String!
-      authorName: String
+      authorAlias: String
     ): CreatePostResponse
   }
 `;

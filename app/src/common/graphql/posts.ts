@@ -5,7 +5,7 @@ export const GET_POST_BY_ID = gql`
     post(id: $id) {
       id
       creationTimestamp
-      authorId
+      authorAlias
       title
       content
       totalLikes
@@ -20,14 +20,14 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
     $channel: String!
     $title: String!
     $content: String!
-    $authorName: String!
+    $authorAlias: String!
   ) {
     submitPostForApproval(
       communityId: $communityId
       channel: $channel
       title: $title
       content: $content
-      authorName: $authorName
+      authorAlias: $authorAlias
     ) {
       code
       success
@@ -36,10 +36,9 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
         id
         title
         content
-        authorName
+        authorAlias
         isApproved
         creationTimestamp
-        authorId
       }
     }
   }
@@ -52,10 +51,12 @@ export const GET_COMMUNITY_POSTS = gql`
       feed {
         id
         title
-        authorName
+        authorAlias
         creationTimestamp
         approvalInfo {
-          approverId
+          approver {
+            id
+          }
           approvalTimestamp
         }
         content

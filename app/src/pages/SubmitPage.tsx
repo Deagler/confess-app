@@ -21,6 +21,10 @@ import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { GlobalAppUtils } from '../App';
 import { RouteComponentProps } from 'react-router';
+import {
+  SubmitPostForApproval,
+  SubmitPostForApprovalVariables,
+} from '../types/SubmitPostForApproval';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -44,11 +48,20 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
-  const [author, setAuthor] = useState<string>();
+  const [authorAlias, setAuthorAlias] = useState<string>();
 
-  const [submitPostForApproval] = useMutation(SUBMIT_POST_FOR_APPROVAL);
+  const [submitPostForApproval] = useMutation<
+    SubmitPostForApproval,
+    SubmitPostForApprovalVariables
+  >(SUBMIT_POST_FOR_APPROVAL);
 
-  const handleSubmit = async (channel, postTitle, content, authorName) => {
+  const handleSubmit = async (
+    channel: string,
+    postTitle: string,
+    content: string,
+    authorAliasInput?: string
+  ) => {
+    // TODO: add input validation
     GlobalAppUtils.showLoading();
     const { data } = await submitPostForApproval({
       variables: {
@@ -56,12 +69,13 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         channel,
         title: postTitle,
         content,
-        authorName: authorName || '',
+        authorAlias: authorAliasInput || '',
       },
     });
     GlobalAppUtils.hideLoading();
 
-    if (!data.submitPostForApproval.success) {
+    // TODO: add error handling and remove non-null assertion operator
+    if (!data!.submitPostForApproval!.success) {
       console.error(data);
       GlobalAppUtils.showToast(
         'Failed to create post. Our team has been notified.'
@@ -71,9 +85,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
     console.log(data);
 
-    GlobalAppUtils.showToast(data.submitPostForApproval.message);
+    GlobalAppUtils.showToast(data!.submitPostForApproval!.message); // TODO: remove non-null assertion operator
     setConfessionText(undefined);
-    setAuthor(undefined);
+    setAuthorAlias(undefined);
     setTitle(undefined);
     setSelectedChannel(undefined);
 
@@ -91,7 +105,12 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
               onClick={() =>
-                handleSubmit(selectedChannel, title, confessionText, author)
+                handleSubmit(
+                  selectedChannel!,
+                  title!,
+                  confessionText!,
+                  authorAlias
+                )
               }
             >
               Post
@@ -152,8 +171,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               maxlength={255}
               minlength={2}
               placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
-              onIonChange={(e) => setAuthor(e.detail.value!)}
-              value={author}
+              onIonChange={(e) => setAuthorAlias(e.detail.value!)}
+              value={authorAlias}
             />
           </IonItem>
         </IonList>
