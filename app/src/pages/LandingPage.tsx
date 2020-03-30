@@ -34,146 +34,167 @@ import {
   IonRadioGroup,
   IonListHeader,
   IonRadio,
+  IonSlides,
+  IonSlide,
 } from '@ionic/react';
+import './LandingPage.css';
 import Post, { PostProps, PostData } from '../components/Post';
-const LandingPage: React.FC = (hi) => {
-  const [selected, setSelected] = useState<string>('1');
+export interface LandingPageData {
+  email: string;
+}
+
+const LandingPage: React.FC = () => {
   const { loading, data, called } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {
       id: 'HW6lY4kJOpqSpL39hbUV',
     },
   });
-
   const [text, setText] = useState<string>();
+  const [secondText, setSecondText] = useState<string>();
+  const [thirdText, setThirdText] = useState<string>();
+  const slideOpts = {
+    initialSlide: 0,
+    direction: 'horizontal', // or vertical
+    // speed: 000, //0.3s transition
+    autoplay: 300,
+  };
+
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="">
+        <IonGrid className="ConfessHeader">
           <IonRow>
-            <IonItem>
-              <IonIcon icon={chatbox} />
-              <IonTitle>Confess</IonTitle>
-            </IonItem>
-            <IonCol className="ion-margin-start" />
-            <IonInput
-              value={text}
-              placeholder="Enter Your University Email"
-              onIonChange={(e) => setText(e.detail.value!)}
-              clearInput={true}
-            />
-            <IonButton>Get Started</IonButton>
-          </IonRow>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonRow>
-          <IonCol>
-            <IonTitle>Confess Title</IonTitle>
-            <IonInput
-              value={text}
-              placeholder="Your vniversity email here"
-              onIonChange={(e) => setText(e.detail.value!)}
-              clearInput={true}
-            />
-            <IonButton>Get Started</IonButton>
-            <IonRow>
-              {' '}
-              <IonText>Or check out some confessions as a guest</IonText>{' '}
-            </IonRow>
-            <IonRow>
-              <IonCard>
-                <IonCardContent>
-                  <IonIcon icon={school} />
-                  <IonText>University of Auckland</IonText>
-                </IonCardContent>
-              </IonCard>
-            </IonRow>
-            <IonRow>
-              <IonCard>
-                <IonCardContent>
-                  <IonIcon icon={school} />
-                  <IonText>More universities comming soon ..</IonText>
-                </IonCardContent>
-              </IonCard>
-            </IonRow>
-            <IonRow>
-              <IonChip>
-                <IonIcon icon={checkbox} />
-                <IonLabel>Default</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonIcon icon={checkbox} />
-                <IonLabel>Default</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonIcon icon={checkbox} />
-                <IonLabel>Default</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonIcon icon={checkbox} />
-                <IonLabel>Default</IonLabel>
-              </IonChip>
-            </IonRow>
-          </IonCol>
-        </IonRow>
-        <IonRow className="Description">
-          <IonCol>
-            <IonCard>
-              <IonCardContent>
-                <IonCardTitle>Completely anonymous confessions</IonCardTitle>
-                <IonCardSubtitle>
-                  We care about your privacy. Share your feelings and your memes
-                  with your peers safely and anonymously
-                </IonCardSubtitle>
+            <IonCol>
+              <IonItem lines="none">
+                <IonIcon icon={chatbox} />
+                <IonTitle>Confess</IonTitle>
+              </IonItem>
+            </IonCol>
+            <IonCol>
+              <IonItem lines="none">
                 <IonInput
+                  inputmode="email"
                   value={text}
-                  placeholder="Your vniversity email here"
+                  placeholder="Enter Your University Email"
                   onIonChange={(e) => setText(e.detail.value!)}
                   clearInput={true}
                 />
-                <IonButton>Get Started</IonButton>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-          <IonCol>
-            <IonCard>
-              <IonCardHeader>
-                {' '}
-                <IonIcon icon={chatboxEllipsesOutline} />{' '}
-              </IonCardHeader>
-              <IonContent>
-                {loading ? (
-                  <IonCard>
-                    <IonSkeletonText
-                      animated={true}
-                      style={{ height: '200px' }}
-                    />
-                  </IonCard>
-                ) : (
-                  <IonCard>
-                    <IonCardHeader />
-                  </IonCard>
-                )}
-              </IonContent>
-              <IonList>
-                <IonRadioGroup
-                  className="RadioGroup"
-                  value={selected}
-                  onIonChange={(e) => setSelected(e.detail.value)}
-                >
-                  <IonItem>
-                    <IonRadio value="1" />
+                <IonButton className="ion-margin-end">Get Started</IonButton>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonHeader>
 
-                    <IonRadio value="2" />
-                    <IonRadio value="3" />
-                    <IonRadio value="4" />
-                    <IonRadio value="5" />
-                  </IonItem>
-                </IonRadioGroup>
-              </IonList>
-            </IonCard>
-          </IonCol>
-        </IonRow>
+      <IonContent>
+        <IonGrid className="ion-margin-vertical">
+          <IonRow className="Introduction">
+            <IonCol size="12">
+              <IonTitle>Confess Title</IonTitle>
+              <IonInput
+                className="ion-margin-vertical"
+                inputmode="email"
+                value={secondText}
+                placeholder="Your vniversity email here"
+                onIonChange={(e) => setSecondText(e.detail.value!)}
+                clearInput={true}
+              />
+              <IonButton>Get Started</IonButton>
+              <IonRow>
+                {' '}
+                <IonLabel className="ion-margin-vertical">
+                  Or check out some confessions as a guest
+                </IonLabel>{' '}
+              </IonRow>
+              <IonRow>
+                <IonCard>
+                  <IonCardContent>
+                    <IonIcon icon={school} className="ion-margin-end" />
+                    <IonText>University of Auckland</IonText>
+                  </IonCardContent>
+                </IonCard>
+              </IonRow>
+              <IonRow>
+                <IonCard>
+                  <IonCardContent>
+                    <IonText>More universities comming soon</IonText>
+                  </IonCardContent>
+                </IonCard>
+              </IonRow>
+              <IonRow className="ion-margin-vertical">
+                <IonChip>
+                  <IonIcon icon={checkbox} />
+                  <IonLabel>Confessions</IonLabel>
+                </IonChip>
+                <IonChip>
+                  <IonIcon icon={checkbox} />
+                  <IonLabel>Memes</IonLabel>
+                </IonChip>
+                <IonChip>
+                  <IonIcon icon={checkbox} />
+                  <IonLabel>Emotions</IonLabel>
+                </IonChip>
+                <IonChip>
+                  <IonIcon icon={checkbox} />
+                  <IonLabel>All In One Place</IonLabel>
+                </IonChip>
+              </IonRow>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="6">
+              <IonCard className="ion-justify-content-center">
+                <IonCardContent className="SubIntroduction">
+                  <IonCardTitle className="ion-margin-vertical">
+                    Completely anonymous confessions
+                  </IonCardTitle>
+                  <IonCardSubtitle>
+                    We care about your privacy. Share your feelings and your
+                    memes with your peers safely and anonymously
+                  </IonCardSubtitle>
+                  <IonInput
+                    className="ion-margin-vertical"
+                    inputmode="email"
+                    value={thirdText}
+                    placeholder="Your vniversity email here"
+                    onIonChange={(e) => setThirdText(e.detail.value!)}
+                    clearInput={true}
+                  />
+                  <IonButton className="ion-margin-bottom">
+                    Get Started
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="6">
+              <IonCard>
+                <IonSlides options={slideOpts} pager={true}>
+                  <IonSlide>
+                    <IonCardHeader>
+                      <IonCardSubtitle>{'id'}</IonCardSubtitle>
+                      <IonCardTitle>{'title'}</IonCardTitle>
+                      <IonCardSubtitle>{'date'}</IonCardSubtitle>
+                    </IonCardHeader>
+                    <IonCardContent>{'content'}</IonCardContent>
+                    <IonCardContent>{'Anonymous'}</IonCardContent>
+                  </IonSlide>
+                  <IonSlide>
+                    <IonCardHeader>
+                      <IonCardSubtitle>{'id'}</IonCardSubtitle>
+                      <IonCardTitle>{'title'}</IonCardTitle>
+                      <IonCardSubtitle>{'date'}</IonCardSubtitle>
+                    </IonCardHeader>
+                    <IonCardContent>{'content'}</IonCardContent>
+                    <IonCardContent>{'Anonymous'}</IonCardContent>
+                  </IonSlide>
+                </IonSlides>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
