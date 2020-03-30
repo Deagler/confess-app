@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonContent,
   IonIcon,
@@ -9,8 +9,6 @@ import {
   IonMenuToggle,
   IonHeader,
   IonTitle,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
   IonButton,
 } from '@ionic/react';
@@ -25,12 +23,11 @@ import {
   colorPaletteOutline,
   colorPaletteSharp,
 } from 'ionicons/icons';
-
 import './Menu.css';
-import gql from 'graphql-tag';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import CommunitySelect from '../components/CommunitySelect';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
@@ -103,11 +100,6 @@ const universities: UniversityOption[] = [
   },
 ];
 
-const customPopoverOptions = {
-  header: 'University',
-  message: "Which university's confessions would you like to see?",
-};
-
 const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   const { data } = useQuery(GET_SELECTED_COMMUNITY);
   const client = useApolloClient();
@@ -128,20 +120,12 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
         <IonToolbar>
           <IonTitle>Confess</IonTitle>
         </IonToolbar>
-        <IonSelect
-          interfaceOptions={customPopoverOptions}
-          interface="popover"
-          placeholder="Select University"
-          onIonChange={handleCommunityChange}
-          value={selectedCommunity}
-        >
-          {universities.map((uni: UniversityOption, index: number) => (
-            <IonSelectOption key={index}>
-              <IonLabel className="ion-text-wrap">{uni.title}</IonLabel>
-            </IonSelectOption>
-          ))}
-        </IonSelect>
-
+        <CommunitySelect
+          selectedCommunity={selectedCommunity}
+          communityNames={universities.map((e) => e.title)}
+          loading={false}
+          onCommunityChange={handleCommunityChange}
+        />
         <IonButton expand="block">LogIn</IonButton>
         <IonButton expand="block">SignUp</IonButton>
       </IonHeader>
