@@ -17,6 +17,10 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SubmitPage.css';
+import { useMutation } from '@apollo/react-hooks';
+import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
+import { GlobalAppUtils } from '../App';
+import { RouteComponentProps } from 'react-router';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -34,13 +38,47 @@ const channels = [
   'Very long name to demonstrate that text wrapping is working',
 ];
 
-const SubmitPage: React.FC<{}> = () => {
+const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // TODO: Add form handling, can be done with state or libraries such as Formik
   // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
   const [author, setAuthor] = useState<string>();
+
+  const [submitPostForApproval] = useMutation(SUBMIT_POST_FOR_APPROVAL);
+
+  const handleSubmit = async (channel, postTitle, content, authorName) => {
+    GlobalAppUtils.showLoading();
+    const { data } = await submitPostForApproval({
+      variables: {
+        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        channel,
+        title: postTitle,
+        content,
+        authorName: authorName || '',
+      },
+    });
+    GlobalAppUtils.hideLoading();
+
+    if (!data.submitPostForApproval.success) {
+      console.error(data);
+      GlobalAppUtils.showToast(
+        'Failed to create post. Our team has been notified.'
+      );
+      history.replace(`/page/posts`);
+      return;
+    }
+    console.log(data);
+
+    GlobalAppUtils.showToast(data.submitPostForApproval.message);
+    setConfessionText(undefined);
+    setAuthor(undefined);
+    setTitle(undefined);
+    setSelectedChannel(undefined);
+
+    history.replace(`/page/posts`);
+  };
 
   return (
     <IonPage>
@@ -52,7 +90,9 @@ const SubmitPage: React.FC<{}> = () => {
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
-              routerLink="/page/posts"
+              onClick={() =>
+                handleSubmit(selectedChannel, title, confessionText, author)
+              }
             >
               Post
             </IonButton>

@@ -6,10 +6,11 @@ import { addIdToDoc } from './utils';
 const firestore = firebaseApp.firestore();
 
 export const communityResolvers = {
-  async posts(parent: any, args) {
+  async feed(parent: any, args) {
     try {
       const postQuery = await firestore
         .collection(`communities/${parent.id}/posts`)
+        .where('isApproved', '==', true)
         .get();
 
       const posts: Post[] = postQuery.docs.map(addIdToDoc);

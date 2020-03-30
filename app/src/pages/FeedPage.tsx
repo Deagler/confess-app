@@ -42,11 +42,11 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <IonSkeletonText animated={true} style={{ height: '200px' }} />
           </IonCard>
         ) : (
-          data.community.posts.map((post: PostProps, i: number) => (
+          data.community.feed.map((post: PostProps, i: number) => (
             <Post
               key={i}
               {...post}
-              onCommentClick={() => history.push(`/pages/posts/${post.id}`)}
+              onCommentClick={() => history.push(`/page/posts/${post.id}`)}
             />
           ))
         )}

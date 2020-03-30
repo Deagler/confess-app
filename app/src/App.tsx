@@ -2,7 +2,13 @@ import Menu from './components/Menu';
 import Page from './pages/Page';
 import FeedPage from './pages/FeedPage';
 import React, { useState } from 'react';
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import {
+  IonApp,
+  IonRouterOutlet,
+  IonSplitPane,
+  IonLoading,
+  IonToast,
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 
@@ -29,13 +35,57 @@ import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
 
+export const GlobalAppUtils = {
+  showLoading: (msg?) => {},
+  hideLoading: () => {},
+  showToast: (msg, duration?) => {},
+  hideToast: () => {},
+};
+
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState('');
+
+  const [toastInfo, setToastInfo] = useState({
+    show: false,
+    message: '',
+    duration: 2000,
+  });
+
+  GlobalAppUtils.showLoading = (msg = 'Please Wait...') => {
+    setLoading(true);
+    setLoadingMsg(msg);
+  };
+
+  GlobalAppUtils.hideLoading = () => {
+    setLoading(false);
+    setLoadingMsg('');
+  };
+
+  GlobalAppUtils.showToast = (msg, duration = 2000) => {
+    setToastInfo({ show: true, message: msg, duration });
+  };
+
+  GlobalAppUtils.hideToast = () => {
+    setToastInfo({ show: false, message: '', duration: 2000 });
+  };
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
+          <IonLoading
+            isOpen={loading}
+            onDidDismiss={() => GlobalAppUtils.hideLoading()}
+            message={loadingMsg}
+          />
+          <IonToast
+            isOpen={toastInfo.show}
+            onDidDismiss={() => GlobalAppUtils.hideToast()}
+            message={toastInfo.message}
+            duration={toastInfo.duration}
+          />
           <Menu selectedPage={selectedPage} />
           <ApolloProvider client={apolloClient}>
             <IonRouterOutlet id="main">
@@ -51,7 +101,7 @@ const App: React.FC = () => {
               />
               <Route
                 path="/page/submit"
-                render={() => <SubmitPage />}
+                render={(props) => <SubmitPage {...props} />}
                 exact={true}
               />
               <Route
