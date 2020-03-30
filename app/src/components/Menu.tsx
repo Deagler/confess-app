@@ -28,6 +28,7 @@ import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import CommunitySelect from '../components/CommunitySelect';
+import ChannelList from '../components/ChannelList';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
@@ -131,22 +132,7 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
       </IonHeader>
 
       <IonContent>
-        <IonList id="inbox-list" className="ion-no-border">
-          {appPages.map((appPage: AppPage, index: number) => (
-            <IonMenuToggle key={index} autoHide={false}>
-              <IonItem
-                className={selectedPage === appPage.title ? 'selected' : ''}
-                routerLink={appPage.url}
-                routerDirection="none"
-                lines="none"
-                detail={false}
-              >
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            </IonMenuToggle>
-          ))}
-        </IonList>
+        <ChannelList channels={appPages.map((e) => e.title)} loading={false} />
       </IonContent>
     </IonMenu>
   );
