@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
 
   return (
     <IonCard>
-      <Link to={`/pages/posts/${id}`} className="Link">
+      <Link to={`/page/posts/${id}`} className="Link">
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
