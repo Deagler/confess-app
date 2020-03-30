@@ -56,7 +56,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         channel,
         title: postTitle,
         content,
-        authorName,
+        authorName: authorName || '',
       },
     });
     GlobalAppUtils.hideLoading();
