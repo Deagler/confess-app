@@ -8,7 +8,7 @@ const props: PostProps = {
   title: 'this is the title',
   creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
-  authorName: 'this is the author',
+  authorAlias: 'this is the author',
   onCommentClick: () => null,
 };
 
@@ -35,7 +35,7 @@ test('displays content properly', async () => {
 test('displays author as anonymous if omitted', async () => {
   const { findByText } = render(
     <MemoryRouter>
-      <Post {...props} authorName={undefined} />
+      <Post {...props} authorAlias={undefined} />
     </MemoryRouter>
   );
   await findByText('Anonymous');

@@ -8,7 +8,7 @@ const communitiesCollection = firestore.collection('communities');
 
 async function submitPostForApproval(
   _: any,
-  { communityId, channel, title, content, authorName }
+  { communityId, channel, title, content, authorAlias }
 ) {
   // TODO:
   // Pull AuthorId from context.req
@@ -21,16 +21,15 @@ async function submitPostForApproval(
 
   const newPost: Partial<Post> = {
     creationTimestamp: moment().unix(),
-    authorId: '<unknown>', // 2 be added once auth exists.
     title,
     content,
     channel,
-    authorName,
+    authorAlias,
     isApproved: false,
     approvalInfo: null,
     totalComments: 0,
     totalLikes: 0,
-    likedByIds: [],
+    likes: [],
     comments: [],
   };
   const newPostRef = communityPosts.doc();

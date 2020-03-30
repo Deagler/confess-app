@@ -44,11 +44,16 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
-  const [author, setAuthor] = useState<string>();
+  const [authorAlias, setAuthorAlias] = useState<string>();
 
   const [submitPostForApproval] = useMutation(SUBMIT_POST_FOR_APPROVAL);
 
-  const handleSubmit = async (channel, postTitle, content, authorName) => {
+  const handleSubmit = async (
+    channel: string,
+    postTitle: string,
+    content: string,
+    authorAliasInput: string
+  ) => {
     GlobalAppUtils.showLoading();
     const { data } = await submitPostForApproval({
       variables: {
@@ -56,7 +61,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         channel,
         title: postTitle,
         content,
-        authorName: authorName || '',
+        authorAlias: authorAliasInput || '',
       },
     });
     GlobalAppUtils.hideLoading();
@@ -73,7 +78,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     GlobalAppUtils.showToast(data.submitPostForApproval.message);
     setConfessionText(undefined);
-    setAuthor(undefined);
+    setAuthorAlias(undefined);
     setTitle(undefined);
     setSelectedChannel(undefined);
 
@@ -91,7 +96,12 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
               onClick={() =>
-                handleSubmit(selectedChannel, title, confessionText, author)
+                handleSubmit(
+                  selectedChannel,
+                  title,
+                  confessionText,
+                  authorAlias
+                )
               }
             >
               Post
@@ -152,8 +162,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               maxlength={255}
               minlength={2}
               placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
-              onIonChange={(e) => setAuthor(e.detail.value!)}
-              value={author}
+              onIonChange={(e) => setAuthorAlias(e.detail.value!)}
+              value={authorAlias}
             />
           </IonItem>
         </IonList>

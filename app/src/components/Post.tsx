@@ -24,7 +24,7 @@ export interface PostData {
   title: string;
   creationTimestamp: number;
   content: string;
-  authorName?: string;
+  authorAlias?: string;
 }
 
 export interface PostProps extends PostData {
@@ -32,13 +32,13 @@ export interface PostProps extends PostData {
   isExpanded?: boolean;
 }
 
-const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
+const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
     title,
     creationTimestamp,
     content,
-    authorName,
+    authorAlias,
     isExpanded,
     onCommentClick,
   } = props;
@@ -56,7 +56,7 @@ const Post: React.FC<PostProps> = (props: PostProps, selectedPost) => {
         <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
           {content}
         </IonCardContent>
-        <IonCardContent>{authorName || 'Anonymous'}</IonCardContent>
+        <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>
       <IonItemDivider />
 
