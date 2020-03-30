@@ -33,6 +33,7 @@ import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
+import LandingPage from './pages/LandingPage';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -87,6 +88,11 @@ const App: React.FC = () => {
           <ApolloProvider client={apolloClient}>
             <Menu />
             <IonRouterOutlet id="main">
+              <Route
+                path="/landing"
+                render={() => <LandingPage />}
+                exact={true}
+              />
               <Route
                 path="/page/posts"
                 render={(props) => <FeedPage {...props} />}
