@@ -1,3 +1,23 @@
 .RadioGroup ion-item ion-radio {
   padding-right: 10px;
 }
+
+.ConfessHeader ion-row ion-col {
+  display: inline-block;
+}
+
+.Introduction {
+  text-align: center;
+}
+
+.Introduction ion-col ion-row {
+  justify-content: center;
+}
+
+.SubIntroduction {
+  text-align: center;
+}
+
+.ConfessHeader ion-row ion-col {
+  display: inline;
+}
