@@ -27,6 +27,10 @@ import {
 } from 'ionicons/icons';
 
 import './Menu.css';
+import gql from 'graphql-tag';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { SelectChangeEventDetail } from '@ionic/core';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
@@ -99,12 +103,23 @@ const universities: UniversityOption[] = [
   },
 ];
 
-const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
-  const [university, setUniversity] = useState<string>();
+const customPopoverOptions = {
+  header: 'University',
+  message: "Which university's confessions would you like to see?",
+};
 
-  const customPopoverOptions = {
-    header: 'University',
-    message: "Which university's confessions would you like to see?",
+const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
+  const { data } = useQuery(GET_SELECTED_COMMUNITY);
+  const client = useApolloClient();
+
+  const selectedCommunity: string = data ? data.selectedCommunity : '';
+
+  const handleCommunityChange = (
+    event: CustomEvent<SelectChangeEventDetail>
+  ) => {
+    const community: string = event.detail.value!;
+    localStorage.setItem('selectedCommunity', community);
+    client.writeData({ data: { selectedCommunity: community } });
   };
 
   return (
@@ -117,8 +132,8 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
           interfaceOptions={customPopoverOptions}
           interface="popover"
           placeholder="Select University"
-          onIonChange={(e) => setUniversity(e.detail.value)}
-          value={university}
+          onIonChange={handleCommunityChange}
+          value={selectedCommunity}
         >
           {universities.map((uni: UniversityOption, index: number) => (
             <IonSelectOption key={index}>

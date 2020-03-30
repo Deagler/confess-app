@@ -86,8 +86,9 @@ const App: React.FC = () => {
             message={toastInfo.message}
             duration={toastInfo.duration}
           />
-          <Menu selectedPage={selectedPage} />
           <ApolloProvider client={apolloClient}>
+            <Menu selectedPage={selectedPage} />
+            <Menu selectedPage={selectedPage} />
             <IonRouterOutlet id="main">
               <Route
                 path="/page/posts"
