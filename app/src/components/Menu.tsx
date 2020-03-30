@@ -6,6 +6,7 @@ import {
   IonTitle,
   IonToolbar,
   IonButton,
+  IonToast,
 } from '@ionic/react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
@@ -83,26 +84,31 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   };
 
   return (
-    <IonMenu contentId="main" type="overlay">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
-        </IonToolbar>
-        <CommunitySelect
-          selectedCommunity={selectedCommunity}
-          communityNames={data && data.communities.map((e) => e.name)}
-          loading={loading}
-          error={error}
-          onCommunityChange={handleCommunityChange}
-        />
-        <IonButton expand="block">LogIn</IonButton>
-        <IonButton expand="block">SignUp</IonButton>
-      </IonHeader>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonMenu contentId="main" type="overlay">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Confess</IonTitle>
+          </IonToolbar>
+          <CommunitySelect
+            selectedCommunity={selectedCommunity}
+            communityNames={data && data.communities.map((e) => e.name)}
+            loading={loading}
+            onCommunityChange={handleCommunityChange}
+          />
+          <IonButton expand="block">LogIn</IonButton>
+          <IonButton expand="block">SignUp</IonButton>
+        </IonHeader>
 
-      <IonContent>
-        <ChannelList channels={appPages.map((e) => e.title)} loading={false} />
-      </IonContent>
-    </IonMenu>
+        <IonContent>
+          <ChannelList
+            channels={appPages.map((e) => e.title)}
+            loading={false}
+          />
+        </IonContent>
+      </IonMenu>
+    </>
   );
 };
 

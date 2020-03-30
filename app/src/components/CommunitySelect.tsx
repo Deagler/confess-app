@@ -1,14 +1,12 @@
 import React from 'react';
-import { IonSelect, IonSelectOption, IonLabel, IonToast } from '@ionic/react';
+import { IonSelect, IonSelectOption, IonLabel } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
-import { ApolloError } from 'apollo-boost';
 
 export interface CommunitySelectProps {
   onCommunityChange(e: CustomEvent<SelectChangeEventDetail>): void;
-  communityNames: string[];
+  communityNames?: string[];
   selectedCommunity?: string;
   loading: boolean;
-  error?: ApolloError;
 }
 
 const CommunitySelect: React.FC<CommunitySelectProps> = (
@@ -16,7 +14,6 @@ const CommunitySelect: React.FC<CommunitySelectProps> = (
 ) => {
   const {
     loading,
-    error,
     communityNames,
     onCommunityChange,
     selectedCommunity,
@@ -28,29 +25,26 @@ const CommunitySelect: React.FC<CommunitySelectProps> = (
   };
 
   return (
-    <>
-      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonSelect
-        interfaceOptions={popoverOptions}
-        interface="popover"
-        placeholder="Select University"
-        onIonChange={onCommunityChange}
-        value={selectedCommunity}
-      >
-        {loading ? (
-          <IonSelectOption disabled={true}>
-            <IonLabel>Loading...</IonLabel>
+    <IonSelect
+      interfaceOptions={popoverOptions}
+      interface="popover"
+      placeholder="Select University"
+      onIonChange={onCommunityChange}
+      value={selectedCommunity}
+    >
+      {loading ? (
+        <IonSelectOption disabled={true}>
+          <IonLabel>Loading...</IonLabel>
+        </IonSelectOption>
+      ) : (
+        communityNames &&
+        communityNames.map((name: string, index: number) => (
+          <IonSelectOption key={index}>
+            <IonLabel>{name}</IonLabel>
           </IonSelectOption>
-        ) : (
-          !error &&
-          communityNames.map((name: string, index: number) => (
-            <IonSelectOption key={index}>
-              <IonLabel>{name}</IonLabel>
-            </IonSelectOption>
-          ))
-        )}
-      </IonSelect>
-    </>
+        ))
+      )}
+    </IonSelect>
   );
 };
 
