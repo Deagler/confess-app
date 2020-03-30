@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router';
 import {
   IonContent,
   IonIcon,
@@ -113,7 +114,7 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   const client = useApolloClient();
 
   const selectedCommunity: string = data ? data.selectedCommunity : '';
-
+  const location = useLocation();
   const handleCommunityChange = (
     event: CustomEvent<SelectChangeEventDetail>
   ) => {
@@ -122,50 +123,54 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
     client.writeData({ data: { selectedCommunity: community } });
   };
 
-  return (
-    <IonMenu contentId="main" type="overlay">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
-        </IonToolbar>
-        <IonSelect
-          interfaceOptions={customPopoverOptions}
-          interface="popover"
-          placeholder="Select University"
-          onIonChange={handleCommunityChange}
-          value={selectedCommunity}
-        >
-          {universities.map((uni: UniversityOption, index: number) => (
-            <IonSelectOption key={index}>
-              <IonLabel className="ion-text-wrap">{uni.title}</IonLabel>
-            </IonSelectOption>
-          ))}
-        </IonSelect>
+  if (location.pathname === '/landing') {
+    return null;
+  } else {
+    return (
+      <IonMenu contentId="main" type="overlay">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Confess</IonTitle>
+          </IonToolbar>
+          <IonSelect
+            interfaceOptions={customPopoverOptions}
+            interface="popover"
+            placeholder="Select University"
+            onIonChange={handleCommunityChange}
+            value={selectedCommunity}
+          >
+            {universities.map((uni: UniversityOption, index: number) => (
+              <IonSelectOption key={index}>
+                <IonLabel className="ion-text-wrap">{uni.title}</IonLabel>
+              </IonSelectOption>
+            ))}
+          </IonSelect>
 
-        <IonButton expand="block">LogIn</IonButton>
-        <IonButton expand="block">SignUp</IonButton>
-      </IonHeader>
+          <IonButton expand="block">LogIn</IonButton>
+          <IonButton expand="block">SignUp</IonButton>
+        </IonHeader>
 
-      <IonContent>
-        <IonList id="inbox-list" className="ion-no-border">
-          {appPages.map((appPage: AppPage, index: number) => (
-            <IonMenuToggle key={index} autoHide={false}>
-              <IonItem
-                className={selectedPage === appPage.title ? 'selected' : ''}
-                routerLink={appPage.url}
-                routerDirection="none"
-                lines="none"
-                detail={false}
-              >
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            </IonMenuToggle>
-          ))}
-        </IonList>
-      </IonContent>
-    </IonMenu>
-  );
+        <IonContent>
+          <IonList id="inbox-list" className="ion-no-border">
+            {appPages.map((appPage: AppPage, index: number) => (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={selectedPage === appPage.title ? 'selected' : ''}
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon slot="start" icon={appPage.iosIcon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            ))}
+          </IonList>
+        </IonContent>
+      </IonMenu>
+    );
+  }
 };
 
 export default withRouter(Menu);
