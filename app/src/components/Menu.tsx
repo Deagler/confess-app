@@ -8,64 +8,19 @@ import {
   IonButton,
   IonToast,
 } from '@ionic/react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {
-  globeOutline,
-  globeSharp,
-  hammerOutline,
-  hammerSharp,
-  cardOutline,
-  cardSharp,
-  colorPaletteOutline,
-  colorPaletteSharp,
-} from 'ionicons/icons';
-import './Menu.css';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { SelectChangeEventDetail } from '@ionic/core';
+import { withRouter } from 'react-router-dom';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
+
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
+
 import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
 
-interface MenuProps extends RouteComponentProps {
-  selectedPage: string;
-}
+import './Menu.css';
 
-interface AppPage {
-  url: string;
-  iosIcon: string;
-  mdIcon: string;
-  title: string;
-}
-
-const appPages: AppPage[] = [
-  {
-    title: 'Feed',
-    url: '/page/posts',
-    iosIcon: globeOutline,
-    mdIcon: globeSharp,
-  },
-  {
-    title: 'Engineering',
-    url: '/page/Engineering',
-    iosIcon: hammerOutline,
-    mdIcon: hammerSharp,
-  },
-  {
-    title: 'Commerce',
-    url: '/page/Commerce',
-    iosIcon: cardOutline,
-    mdIcon: cardSharp,
-  },
-  {
-    title: 'Arts',
-    url: '/page/Arts',
-    iosIcon: colorPaletteOutline,
-    mdIcon: colorPaletteSharp,
-  },
-];
-
-const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
+const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
 
@@ -73,6 +28,14 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
   const selectedCommunity: string =
     selectedCommunityQuery.data?.selectedCommunity || '';
+
+  let channels: string[] = [];
+  if (data) {
+    // TODO: streamline this, possibly set community object/id instead of name
+    channels = data.communities
+      .find((e) => e.name === selectedCommunity)
+      .channels.map((e) => e.name);
+  }
 
   const client = useApolloClient();
   const handleCommunityChange = (
@@ -102,10 +65,7 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
         </IonHeader>
 
         <IonContent>
-          <ChannelList
-            channels={appPages.map((e) => e.title)}
-            loading={false}
-          />
+          <ChannelList channels={channels} loading={false} />
         </IonContent>
       </IonMenu>
     </>

@@ -9,7 +9,7 @@ import {
 import { airplaneOutline } from 'ionicons/icons';
 
 export interface ChannelListProps {
-  channels: string[];
+  channels?: string[];
   loading: boolean;
 }
 
@@ -23,6 +23,7 @@ const ChannelList: React.FC<ChannelListProps> = (props: ChannelListProps) => {
       {loading ? (
         <IonItem>...Loading</IonItem>
       ) : (
+        channels &&
         channels.map((channel: string, index: number) => (
           <IonMenuToggle key={index} autoHide={false}>
             <IonItem

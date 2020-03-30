@@ -18,6 +18,8 @@ import Post, { PostProps } from '../components/Post';
 import { RouteComponentProps } from 'react-router';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
 
+import './Page.css';
+
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {

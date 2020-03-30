@@ -13,7 +13,10 @@ import {
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
+
+import './Page.css';
 import './PostPage.css';
+
 const Postpage: React.FC = () => {
   const [comments, setComments] = useState<CommentData[]>(testComments);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
