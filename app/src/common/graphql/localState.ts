@@ -1,7 +1,7 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export const GET_SELECTED_COMMUNITY = gql`
-  query {
+  query GetSelectedCommunity {
     selectedCommunity @client
   }
 `;
