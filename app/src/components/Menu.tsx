@@ -1,12 +1,7 @@
 import React from 'react';
 import {
   IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonMenu,
-  IonMenuToggle,
   IonHeader,
   IonTitle,
   IonToolbar,
@@ -27,16 +22,12 @@ import './Menu.css';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import { GET_COMMUNITIES } from '../common/graphql/communities';
 import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
 
 interface MenuProps extends RouteComponentProps {
   selectedPage: string;
-}
-
-interface UniversityOption {
-  title: string;
-  id: string;
 }
 
 interface AppPage {
@@ -73,40 +64,16 @@ const appPages: AppPage[] = [
   },
 ];
 
-// TODO: get from api
-const universities: UniversityOption[] = [
-  {
-    title: 'UoA',
-    id: '1', // placeholder for now
-  },
-  {
-    title: 'AUT',
-    id: '2',
-  },
-  {
-    title: 'Lincoln University',
-    id: '3',
-  },
-  {
-    title: 'Massey University',
-    id: '4',
-  },
-  {
-    title: 'University of Canterbury',
-    id: '5',
-  },
-  {
-    title: 'University of Waikato',
-    id: '6',
-  },
-];
-
 const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
-  const { data } = useQuery(GET_SELECTED_COMMUNITY);
+  // get communities and channels
+  const { loading, data, error } = useQuery(GET_COMMUNITIES);
+
+  // restore selected community from local storage
+  const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
+  const selectedCommunity: string =
+    selectedCommunityQuery.data?.selectedCommunity || '';
+
   const client = useApolloClient();
-
-  const selectedCommunity: string = data ? data.selectedCommunity : '';
-
   const handleCommunityChange = (
     event: CustomEvent<SelectChangeEventDetail>
   ) => {
@@ -123,8 +90,9 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
         </IonToolbar>
         <CommunitySelect
           selectedCommunity={selectedCommunity}
-          communityNames={universities.map((e) => e.title)}
-          loading={false}
+          communityNames={data && data.communities.map((e) => e.name)}
+          loading={loading}
+          error={error}
           onCommunityChange={handleCommunityChange}
         />
         <IonButton expand="block">LogIn</IonButton>
