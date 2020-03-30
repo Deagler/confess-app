@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_POST_BY_ID, GET_COMMUNITY_POSTS } from '../common/graphql/posts';
-import {
-  chatbox,
-  school,
-  checkbox,
-  person,
-  chatboxEllipsesOutline,
-} from 'ionicons/icons';
+import { chatbox, school, checkbox, person } from 'ionicons/icons';
 import {
   IonPage,
   IonIcon,
-  IonToolbar,
   IonHeader,
   IonInput,
   IonContent,
@@ -28,12 +21,7 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonGrid,
-  IonCardHeader,
   IonSkeletonText,
-  IonList,
-  IonRadioGroup,
-  IonListHeader,
-  IonRadio,
   IonSlides,
   IonSlide,
 } from '@ionic/react';
@@ -54,8 +42,8 @@ const LandingPage: React.FC = () => {
   const [thirdText, setThirdText] = useState<string>();
   const slideOpts = {
     initialSlide: 0,
-    direction: 'horizontal', // or vertical
-    // speed: 000, //0.3s transition
+    direction: 'horizontal',
+    speed: 1000, // 0.3s transition
     autoplay: 300,
   };
 
@@ -70,17 +58,15 @@ const LandingPage: React.FC = () => {
                 <IonTitle>Confess</IonTitle>
               </IonItem>
             </IonCol>
-            <IonCol>
-              <IonItem lines="none">
-                <IonInput
-                  inputmode="email"
-                  value={text}
-                  placeholder="Enter Your University Email"
-                  onIonChange={(e) => setText(e.detail.value!)}
-                  clearInput={true}
-                />
-                <IonButton className="ion-margin-end">Get Started</IonButton>
-              </IonItem>
+            <IonCol className="GetStartedHeader">
+              <IonInput
+                inputmode="email"
+                value={text}
+                placeholder="Enter Your University Email"
+                onIonChange={(e) => setText(e.detail.value!)}
+                clearInput={true}
+              />
+              <IonButton className="ion-margin-end">Get Started</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -144,7 +130,7 @@ const LandingPage: React.FC = () => {
         </IonGrid>
 
         <IonGrid>
-          <IonRow className="ion-justify-content-center">
+          <IonRow>
             <IonCol size="6">
               <IonCard className="ion-justify-content-center">
                 <IonCardContent className="SubIntroduction">
@@ -156,7 +142,7 @@ const LandingPage: React.FC = () => {
                     memes with your peers safely and anonymously
                   </IonCardSubtitle>
                   <IonInput
-                    className="ion-margin-vertical"
+                    className="ion-margin-end"
                     inputmode="email"
                     value={thirdText}
                     placeholder="Your vniversity email here"
@@ -172,24 +158,24 @@ const LandingPage: React.FC = () => {
             <IonCol size="6">
               <IonCard>
                 <IonSlides options={slideOpts} pager={true}>
-                  <IonSlide>
-                    <IonCardHeader>
-                      <IonCardSubtitle>{'id'}</IonCardSubtitle>
-                      <IonCardTitle>{'title'}</IonCardTitle>
-                      <IonCardSubtitle>{'date'}</IonCardSubtitle>
-                    </IonCardHeader>
-                    <IonCardContent>{'content'}</IonCardContent>
-                    <IonCardContent>{'Anonymous'}</IonCardContent>
-                  </IonSlide>
-                  <IonSlide>
-                    <IonCardHeader>
-                      <IonCardSubtitle>{'id'}</IonCardSubtitle>
-                      <IonCardTitle>{'title'}</IonCardTitle>
-                      <IonCardSubtitle>{'date'}</IonCardSubtitle>
-                    </IonCardHeader>
-                    <IonCardContent>{'content'}</IonCardContent>
-                    <IonCardContent>{'Anonymous'}</IonCardContent>
-                  </IonSlide>
+                  {loading ? (
+                    <IonSlide>
+                      <IonCard className="CardInSlide">
+                        <IonSkeletonText
+                          animated={true}
+                          style={{ height: '200px' }}
+                        />
+                      </IonCard>
+                    </IonSlide>
+                  ) : (
+                    data.community.feed
+                      .slice(0, 2)
+                      .map((post: PostProps, i: number) => (
+                        <IonSlide className="Post" key={i}>
+                          <Post key={i} {...post} isExample={true} />
+                        </IonSlide>
+                      ))
+                  )}
                 </IonSlides>
               </IonCard>
             </IonCol>

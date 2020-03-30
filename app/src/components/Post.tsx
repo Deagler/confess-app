@@ -30,6 +30,7 @@ export interface PostData {
 export interface PostProps extends PostData {
   onCommentClick: () => void;
   isExpanded?: boolean;
+  isExample?: boolean;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
@@ -40,6 +41,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     content,
     authorAlias,
     isExpanded,
+    isExample,
     onCommentClick,
   } = props;
 
@@ -60,7 +62,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       </Link>
       <IonItemDivider />
 
-      <IonGrid>
+      <IonGrid hidden={isExample}>
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton fill="clear" expand="full" color="primary">
