@@ -28,6 +28,13 @@ const typeDefs = gql`
     name: String!
     abbreviation: String!
     feed: [Post]!
+    channels: [Channel]!
+  }
+
+  type Channel {
+    id: ID!
+    name: String!
+    icon: String
   }
 
   type Post {
@@ -52,6 +59,7 @@ const typeDefs = gql`
   type Query {
     post(communityId: ID!, postId: ID!): Post
     community(id: ID!): Community
+    communities: [Community]!
   }
 
   interface MutationResponse {
