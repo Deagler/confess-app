@@ -1,12 +1,20 @@
 interface ApprovalInfo {
-  approver: any;
+  approver: User;
   approvalTimestamp: number;
+}
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  communityUsername: string;
+  community: Community;
 }
 
 export interface Post {
   id: string;
   creationTimestamp: number;
-  author: any;
+  author: User;
   authorAlias?: string;
   channel: string;
   title: string;
@@ -14,7 +22,7 @@ export interface Post {
   isApproved: boolean;
   approvalInfo: ApprovalInfo | null;
   totalLikes: number;
-  likes: any[];
+  likes: User[];
   totalComments: number;
   comments: Comment[];
 }
@@ -28,8 +36,8 @@ export interface Community {
 export interface Comment {
   id: string;
   creationTimestamp: number;
-  author: any;
+  author: User;
   content: string;
   totalLikes: number;
-  likes: any[];
+  likes: User[];
 }
