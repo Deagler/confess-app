@@ -20,7 +20,7 @@ import './Post.css';
 import { Link } from 'react-router-dom';
 
 export interface PostData {
-  id: number;
+  id: string;
   title: string;
   creationTimestamp: number;
   content: string;
