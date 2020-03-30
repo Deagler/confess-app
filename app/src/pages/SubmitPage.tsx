@@ -59,8 +59,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     channel: string,
     postTitle: string,
     content: string,
-    authorAliasInput: string
+    authorAliasInput?: string
   ) => {
+    // TODO: add input validation
     GlobalAppUtils.showLoading();
     const { data } = await submitPostForApproval({
       variables: {
@@ -105,9 +106,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               disabled={!(selectedChannel && title && confessionText)}
               onClick={() =>
                 handleSubmit(
-                  selectedChannel,
-                  title,
-                  confessionText,
+                  selectedChannel!,
+                  title!,
+                  confessionText!,
                   authorAlias
                 )
               }

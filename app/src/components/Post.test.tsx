@@ -4,7 +4,7 @@ import Post, { PostProps } from './Post';
 import { MemoryRouter } from 'react-router-dom';
 
 const props: PostProps = {
-  id: 10,
+  id: 'id',
   title: 'this is the title',
   creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
@@ -27,6 +27,7 @@ test('displays content properly', async () => {
       <Post {...props} />
     </MemoryRouter>
   );
+  await findByText('#id');
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');

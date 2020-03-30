@@ -72,7 +72,7 @@ const Postpage: React.FC = () => {
 export default Postpage;
 
 const testPost: PostData = {
-  id: 1,
+  id: 'abc',
   title: 'This is the title',
   creationTimestamp: Math.round(new Date().getTime() / 1000),
   content:
