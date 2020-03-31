@@ -9,6 +9,8 @@ const props: PostProps = {
   creationTimestamp: Math.round(new Date().getTime() / 1000), // unix timestamp
   content: 'this is the content',
   authorAlias: 'this is the author',
+  totalLikes: 7,
+  totalComments: 56,
   onCommentClick: () => null,
 };
 
@@ -31,6 +33,8 @@ test('displays content properly', async () => {
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');
+  await findByText('7');
+  await findByText('56');
 });
 
 test('displays author as anonymous if omitted', async () => {
