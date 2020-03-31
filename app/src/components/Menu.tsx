@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as firebase from 'firebase/app';
 import {
   IonContent,
   IonMenu,
@@ -21,11 +22,11 @@ import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
 
 import './Menu.css';
+import { LoginInput } from './LoginInput';
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
-  const [loginEmail, setLoginEmail] = useState<string>();
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -49,37 +50,26 @@ const Menu: React.FC<{}> = () => {
     client.writeData({ data: { selectedCommunity: community } });
   };
 
-  const handleLogin = () => {};
-
   return (
-    <>
+    <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonMenu contentId="main" type="overlay">
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Confess</IonTitle>
-          </IonToolbar>
+        <IonToolbar>
+          <IonTitle>Confess</IonTitle>
+        </IonToolbar>
+        <IonContent>
           <CommunitySelect
             selectedCommunity={selectedCommunity}
             communityNames={data && data.communities.map((e) => e.name)}
             loading={loading}
             onCommunityChange={handleCommunityChange}
           />
-          <IonRow>
-            <IonInput
-              value={loginEmail}
-              placeholder="Enter your university e-mail"
-              onIonChange={(e) => setLoginEmail(e.detail.value!)}
-            />
-            <IonButton onClick={handleLogin}>Login</IonButton>
-          </IonRow>
-        </IonHeader>
+          <LoginInput />
 
-        <IonContent>
           <ChannelList channels={channels} loading={false} />
         </IonContent>
       </IonMenu>
-    </>
+    </React.Fragment>
   );
 };
 

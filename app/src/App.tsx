@@ -33,6 +33,7 @@ import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
+import AuthCallbackPage from './pages/AuthCallbackPage';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -105,6 +106,11 @@ const App: React.FC = () => {
               <Route
                 path="/"
                 render={() => <Redirect to="/page/Inbox" />}
+                exact={true}
+              />
+              <Route
+                path="/callback"
+                render={(props) => <AuthCallbackPage {...props} />}
                 exact={true}
               />
               <Route
