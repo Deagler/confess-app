@@ -30,7 +30,7 @@ const Menu: React.FC<{}> = () => {
     selectedCommunityQuery.data?.selectedCommunity || '';
 
   let channels: string[] = [];
-  if (data) {
+  if (data && selectedCommunity) {
     // TODO: streamline this, possibly set community object/id instead of name
     channels = data.communities
       .find((e) => e.name === selectedCommunity)
