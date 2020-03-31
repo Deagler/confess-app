@@ -1,5 +1,4 @@
 import Menu from './components/Menu';
-import Page from './pages/Page';
 import FeedPage from './pages/FeedPage';
 import React, { useState } from 'react';
 import {
@@ -43,7 +42,6 @@ export const GlobalAppUtils = {
 };
 
 const App: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('');
 
@@ -87,8 +85,7 @@ const App: React.FC = () => {
             duration={toastInfo.duration}
           />
           <ApolloProvider client={apolloClient}>
-            <Menu selectedPage={selectedPage} />
-            <Menu selectedPage={selectedPage} />
+            <Menu />
             <IonRouterOutlet id="main">
               <Route
                 path="/page/posts"
@@ -103,14 +100,6 @@ const App: React.FC = () => {
               <Route
                 path="/page/submit"
                 render={(props) => <SubmitPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/page/:name"
-                render={(props) => {
-                  setSelectedPage(props.match.params.name);
-                  return <Page {...props} />;
-                }}
                 exact={true}
               />
               <Route

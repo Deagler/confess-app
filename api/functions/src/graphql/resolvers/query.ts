@@ -26,4 +26,15 @@ export const queryResolvers = {
       throw new ApolloError(error);
     }
   },
+  async communities() {
+    try {
+      const communityQuery = await firestore.collection(`communities`).get();
+
+      const communities: Community[] = communityQuery.docs.map(addIdToDoc);
+
+      return communities;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
+  },
 };

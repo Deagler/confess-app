@@ -1,119 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonMenu,
-  IonMenuToggle,
   IonHeader,
   IonTitle,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
   IonButton,
+  IonToast,
 } from '@ionic/react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {
-  globeOutline,
-  globeSharp,
-  hammerOutline,
-  hammerSharp,
-  cardOutline,
-  cardSharp,
-  colorPaletteOutline,
-  colorPaletteSharp,
-} from 'ionicons/icons';
+import { SelectChangeEventDetail } from '@ionic/core';
+import { withRouter } from 'react-router-dom';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
+
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import { GET_COMMUNITIES } from '../common/graphql/communities';
+
+import CommunitySelect from '../components/CommunitySelect';
+import ChannelList from '../components/ChannelList';
 
 import './Menu.css';
-import gql from 'graphql-tag';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
-import { SelectChangeEventDetail } from '@ionic/core';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
-interface MenuProps extends RouteComponentProps {
-  selectedPage: string;
-}
+const Menu: React.FC<{}> = () => {
+  // get communities and channels
+  const { loading, data, error } = useQuery(GET_COMMUNITIES);
 
-interface UniversityOption {
-  title: string;
-  id: string;
-}
+  // restore selected community from local storage
+  const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
+  const selectedCommunity: string =
+    selectedCommunityQuery.data?.selectedCommunity || '';
 
-interface AppPage {
-  url: string;
-  iosIcon: string;
-  mdIcon: string;
-  title: string;
-}
+  let channels: string[] = [];
+  if (data) {
+    // TODO: streamline this, possibly set community object/id instead of name
+    channels = data.communities
+      .find((e) => e.name === selectedCommunity)
+      .channels.map((e) => e.name);
+  }
 
-const appPages: AppPage[] = [
-  {
-    title: 'Feed',
-    url: '/page/posts',
-    iosIcon: globeOutline,
-    mdIcon: globeSharp,
-  },
-  {
-    title: 'Engineering',
-    url: '/page/Engineering',
-    iosIcon: hammerOutline,
-    mdIcon: hammerSharp,
-  },
-  {
-    title: 'Commerce',
-    url: '/page/Commerce',
-    iosIcon: cardOutline,
-    mdIcon: cardSharp,
-  },
-  {
-    title: 'Arts',
-    url: '/page/Arts',
-    iosIcon: colorPaletteOutline,
-    mdIcon: colorPaletteSharp,
-  },
-];
-
-// TODO: get from api
-const universities: UniversityOption[] = [
-  {
-    title: 'UoA',
-    id: '1', // placeholder for now
-  },
-  {
-    title: 'AUT',
-    id: '2',
-  },
-  {
-    title: 'Lincoln University',
-    id: '3',
-  },
-  {
-    title: 'Massey University',
-    id: '4',
-  },
-  {
-    title: 'University of Canterbury',
-    id: '5',
-  },
-  {
-    title: 'University of Waikato',
-    id: '6',
-  },
-];
-
-const customPopoverOptions = {
-  header: 'University',
-  message: "Which university's confessions would you like to see?",
-};
-
-const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
-  const { data } = useQuery(GET_SELECTED_COMMUNITY);
   const client = useApolloClient();
-
-  const selectedCommunity: string = data ? data.selectedCommunity : '';
-
   const handleCommunityChange = (
     event: CustomEvent<SelectChangeEventDetail>
   ) => {
@@ -123,48 +47,28 @@ const Menu: React.FC<MenuProps> = ({ selectedPage }) => {
   };
 
   return (
-    <IonMenu contentId="main" type="overlay">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
-        </IonToolbar>
-        <IonSelect
-          interfaceOptions={customPopoverOptions}
-          interface="popover"
-          placeholder="Select University"
-          onIonChange={handleCommunityChange}
-          value={selectedCommunity}
-        >
-          {universities.map((uni: UniversityOption, index: number) => (
-            <IonSelectOption key={index}>
-              <IonLabel className="ion-text-wrap">{uni.title}</IonLabel>
-            </IonSelectOption>
-          ))}
-        </IonSelect>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonMenu contentId="main" type="overlay">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Confess</IonTitle>
+          </IonToolbar>
+          <CommunitySelect
+            selectedCommunity={selectedCommunity}
+            communityNames={data && data.communities.map((e) => e.name)}
+            loading={loading}
+            onCommunityChange={handleCommunityChange}
+          />
+          <IonButton expand="block">LogIn</IonButton>
+          <IonButton expand="block">SignUp</IonButton>
+        </IonHeader>
 
-        <IonButton expand="block">LogIn</IonButton>
-        <IonButton expand="block">SignUp</IonButton>
-      </IonHeader>
-
-      <IonContent>
-        <IonList id="inbox-list" className="ion-no-border">
-          {appPages.map((appPage: AppPage, index: number) => (
-            <IonMenuToggle key={index} autoHide={false}>
-              <IonItem
-                className={selectedPage === appPage.title ? 'selected' : ''}
-                routerLink={appPage.url}
-                routerDirection="none"
-                lines="none"
-                detail={false}
-              >
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            </IonMenuToggle>
-          ))}
-        </IonList>
-      </IonContent>
-    </IonMenu>
+        <IonContent>
+          <ChannelList channels={channels} loading={false} />
+        </IonContent>
+      </IonMenu>
+    </>
   );
 };
 
