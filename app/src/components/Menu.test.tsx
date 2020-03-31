@@ -2,27 +2,50 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Menu from './Menu';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { apolloClient } from '../services/api/apolloClient';
+import { MockedProvider } from '@apollo/react-testing';
+import { GET_COMMUNITIES } from '../common/graphql/communities';
+
+const mocks = [
+  {
+    request: {
+      query: GET_COMMUNITIES,
+    },
+    result: {
+      data: {
+        communities: {
+          id: '123',
+          name: 'university',
+          abbreviation: 'uni',
+          channels: [
+            {
+              id: '456',
+              name: 'my channel',
+            },
+          ],
+        },
+      },
+    },
+  },
+];
 
 test('renders without crashing', () => {
   const { baseElement } = render(
-    <ApolloProvider client={apolloClient}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <MemoryRouter>
-        <Menu selectedPage="feed" />
+        <Menu />
       </MemoryRouter>
-    </ApolloProvider>
+    </MockedProvider>
   );
   expect(baseElement).toBeDefined();
 });
 
 test('displays content properly', async () => {
   const { findByText } = render(
-    <ApolloProvider client={apolloClient}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <MemoryRouter>
-        <Menu selectedPage="feed" />
+        <Menu />
       </MemoryRouter>
-    </ApolloProvider>
+    </MockedProvider>
   );
   await findByText('Confess');
   await findByText('LogIn');
