@@ -26,6 +26,8 @@ export interface GetCommunityPosts_community_feed {
   creationTimestamp: number;
   approvalInfo: GetCommunityPosts_community_feed_approvalInfo | null;
   content: string;
+  totalLikes: number;
+  totalComments: number;
 }
 
 export interface GetCommunityPosts_community {
