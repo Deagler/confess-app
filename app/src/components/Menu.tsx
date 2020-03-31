@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonContent,
   IonMenu,
@@ -6,6 +6,8 @@ import {
   IonTitle,
   IonToolbar,
   IonButton,
+  IonInput,
+  IonRow,
   IonToast,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
@@ -23,6 +25,7 @@ import './Menu.css';
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
+  const [loginEmail, setLoginEmail] = useState<string>();
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -46,6 +49,8 @@ const Menu: React.FC<{}> = () => {
     client.writeData({ data: { selectedCommunity: community } });
   };
 
+  const handleLogin = () => {};
+
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -60,8 +65,14 @@ const Menu: React.FC<{}> = () => {
             loading={loading}
             onCommunityChange={handleCommunityChange}
           />
-          <IonButton expand="block">LogIn</IonButton>
-          <IonButton expand="block">SignUp</IonButton>
+          <IonRow>
+            <IonInput
+              value={loginEmail}
+              placeholder="Enter your university e-mail"
+              onIonChange={(e) => setLoginEmail(e.detail.value!)}
+            />
+            <IonButton onClick={handleLogin}>Login</IonButton>
+          </IonRow>
         </IonHeader>
 
         <IonContent>

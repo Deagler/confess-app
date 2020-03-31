@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Ionic App</title>
+    <title>Confess</title>
 
     <base href="/" />
 
@@ -23,11 +23,35 @@
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Ionic App" />
+    <meta name="apple-mobile-web-app-title" content="Confess" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   </head>
 
   <body>
     <div id="root"></div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: 'AIzaSyDHHKY6qm3nAznBa8hj3XDqJGZXowu6rxU',
+        authDomain: 'confess-api.firebaseapp.com',
+        databaseURL: 'https://confess-api.firebaseio.com',
+        projectId: 'confess-api',
+        storageBucket: 'confess-api.appspot.com',
+        messagingSenderId: '59473781138',
+        appId: '1:59473781138:web:9351bf9cc86686186c614b',
+        measurementId: 'G-8ZGSY3QL4B',
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
   </body>
 </html>
