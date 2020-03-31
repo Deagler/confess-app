@@ -24,6 +24,8 @@ export interface PostData {
   title: string;
   creationTimestamp: number;
   content: string;
+  totalLikes: number;
+  totalComments: number;
   authorAlias?: string;
 }
 
@@ -40,6 +42,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     content,
     authorAlias,
     isExpanded,
+    totalLikes,
+    totalComments,
     onCommentClick,
   } = props;
 
@@ -65,7 +69,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           <IonCol>
             <IonButton fill="clear" expand="full" color="primary">
               <IonIcon icon={heart} />
-              <IonLabel>11</IonLabel>
+              <IonLabel>{totalLikes}</IonLabel>
             </IonButton>
           </IonCol>
           <IonCol>
@@ -76,7 +80,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               color="primary"
             >
               <IonIcon icon={chatbox} />
-              <IonLabel>23</IonLabel>
+              <IonLabel>{totalComments}</IonLabel>
             </IonButton>
           </IonCol>
           <IonCol>

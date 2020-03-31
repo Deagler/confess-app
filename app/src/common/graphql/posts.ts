@@ -60,6 +60,8 @@ export const GET_COMMUNITY_POSTS = gql`
           approvalTimestamp
         }
         content
+        totalLikes
+        totalComments
       }
     }
   }
