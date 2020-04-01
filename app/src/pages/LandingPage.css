@@ -24,15 +24,7 @@ body {
 }
 
 .SubIntroduction ion-card-content ion-card-title {
-  font-size: 3.6vw;
-}
-
-.SubIntroduction ion-card-content ion-card-title.ios {
-  font-size: 20px;
-}
-
-.SubIntroduction ion-card-content ion-card-title.md {
-  font-size: 20px;
+  font-size: 3.2em;
 }
 
 .ConfessHeader ion-row ion-col {

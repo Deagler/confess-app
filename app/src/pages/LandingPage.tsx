@@ -14,7 +14,6 @@ import {
   IonCol,
   IonItem,
   IonCardContent,
-  IonCard,
   IonLabel,
   IonChip,
   IonCardTitle,
@@ -25,7 +24,6 @@ import {
   IonSlide,
   IonItemGroup,
   IonModal,
-  IonImg,
 } from '@ionic/react';
 import './LandingPage.css';
 import image from '../theme/IconImage/uoa.svg';
@@ -54,8 +52,14 @@ const LandingPage: React.FC = () => {
     autoplay: 300,
   };
 
+  const [slides, setSlides] = useState([
+    { id: '1', text: 'Slide 1' },
+    { id: '2', text: 'Slide 2' },
+    { id: '3', text: 'Slide 3' },
+    { id: '4', text: 'Slide 4' },
+    { id: '5', text: 'Slide 5' },
+  ]);
   const [showModal, setShowModal] = useState(false);
-
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -179,7 +183,7 @@ const LandingPage: React.FC = () => {
                   <IonCardTitle className="ion-margin-vertical">
                     Completely anonymous confessions
                   </IonCardTitle>
-                  <IonCardSubtitle style={{ fontSize: '4vm' }}>
+                  <IonCardSubtitle style={{ fontSize: '15px' }}>
                     We care about your privacy. Share your feelings and your
                     memes with your peers safely and anonymously
                   </IonCardSubtitle>
@@ -205,25 +209,18 @@ const LandingPage: React.FC = () => {
             <IonCol
               size="6"
               style={{ height: '300px' }}
-              className="ion-margin-start"
+              className="ion-margin-horizontal ion-text-nowrap"
             >
               {loading ? (
-                <IonSlides options={slideOpts} pager={true}>
-                  <IonSlide hidden={!loading}>
-                    <IonCard className="CardInSlide">
-                      <IonSkeletonText
-                        animated={true}
-                        style={{ height: '200px' }}
-                      />
-                    </IonCard>
-                  </IonSlide>
-                </IonSlides>
+                <IonSlide />
               ) : (
-                data.community.feed
-                  .slice(0, 1)
-                  .map((post: PostProps, i: number) => (
-                    <LandingPost key={i} {...post} />
-                  ))
+                <IonSlides pager={true} options={slideOpts}>
+                  {data.community.feed.map((slide) => (
+                    <IonSlide key={slide.id} className="ion-text-left">
+                      <LandingPost {...slide} />
+                    </IonSlide>
+                  ))}
+                </IonSlides>
               )}
             </IonCol>
           </IonRow>

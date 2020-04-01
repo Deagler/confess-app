@@ -34,21 +34,21 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <IonSlide className="ion-text-left ion-margin-vertical">
-      <IonContent>
-        <IonCardSubtitle>
-          <IonLabel>{id}</IonLabel>
-        </IonCardSubtitle>
-        <IonCardTitle className="ion-margin-vertical">
-          <IonLabel>{title}</IonLabel>
-        </IonCardTitle>
-        <IonCardContent>{content}</IonCardContent>
+    <h1>
+      <IonCard className="ion-margin-vertical">
         <IonCardContent>
-          <IonIcon icon={person} />
-          {'Anonymous'}
+          <IonCardHeader>
+            <IonCardSubtitle>{id}</IonCardSubtitle>
+            <IonCardTitle>{title}</IonCardTitle>
+            <IonCardSubtitle>
+              {moment.unix(creationTimestamp).fromNow()}
+            </IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>{content}</IonCardContent>
+          <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
         </IonCardContent>
-      </IonContent>
-    </IonSlide>
+      </IonCard>
+    </h1>
   );
 };
 

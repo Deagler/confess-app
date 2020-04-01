@@ -10,7 +10,6 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 /* Basic CSS for apps built with Ionic */
@@ -86,7 +85,7 @@ const App: React.FC = () => {
             duration={toastInfo.duration}
           />
           <ApolloProvider client={apolloClient}>
-            <Menu />
+            {window.location.pathname !== '/landing' && <Menu />}
             <IonRouterOutlet id="main">
               <Route
                 path="/landing"
