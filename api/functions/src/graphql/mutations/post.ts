@@ -16,7 +16,6 @@ async function submitPostForApproval(
   // validate channel for the community
 
   const communityDoc = communitiesCollection.doc(communityId);
-
   const communityPosts = communityDoc.collection('posts');
 
   const newPost: Partial<Post> = {
@@ -33,13 +32,7 @@ async function submitPostForApproval(
     comments: [],
   };
   const newPostRef = communityPosts.doc();
-
-  const batch = firestore.batch();
-  batch.set(newPostRef, newPost);
-  batch.update(communityDoc, {
-    unapprovedPosts: admin.firestore.FieldValue.arrayUnion(newPostRef),
-  });
-  await batch.commit();
+  await newPostRef.set(newPost);
 
   newPost.id = newPostRef.id;
   return {
