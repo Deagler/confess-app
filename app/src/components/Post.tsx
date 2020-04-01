@@ -32,6 +32,7 @@ export interface PostData {
 export interface PostProps extends PostData {
   onCommentClick: () => void;
   isExpanded?: boolean;
+  isExample?: boolean;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps) => {

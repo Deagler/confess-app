@@ -21,3 +21,15 @@
 .ConfessHeader ion-row ion-col {
   display: inline;
 }
+
+.CardInSlide {
+  width: inherit;
+}
+
+.Post * {
+  width: inherit;
+}
+
+.GetStartedHeader {
+  display: inline-flex;
+}
