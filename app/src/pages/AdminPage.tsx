@@ -9,6 +9,7 @@ import {
   IonContent,
   IonCard,
   IonSkeletonText,
+  IonToast,
 } from '@ionic/react';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -23,31 +24,35 @@ const AdminPage: React.FC = () => {
   });
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Admin</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Admin</IonTitle>
+          </IonToolbar>
+        </IonHeader>
 
-      <IonContent>
-        {loading ? (
-          <IonCard>
-            <IonSkeletonText animated={true} style={{ height: '200px' }} />
-          </IonCard>
-        ) : (
-          data &&
-          data.community.unapprovedPosts.map(
-            (post: PostRequestProps, i: number) => (
-              <PostRequest key={i} {...post} />
+        <IonContent>
+          {loading ? (
+            <IonCard>
+              <IonSkeletonText animated={true} style={{ height: '200px' }} />
+            </IonCard>
+          ) : (
+            !error &&
+            data &&
+            data.community.unapprovedPosts.map(
+              (post: PostRequestProps, i: number) => (
+                <PostRequest key={i} {...post} />
+              )
             )
-          )
-        )}
-      </IonContent>
-    </IonPage>
+          )}
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 
