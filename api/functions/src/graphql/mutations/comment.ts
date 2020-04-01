@@ -32,7 +32,7 @@ async function submitComment(_: any, { communityId, postId, content }) {
   // Transaction: Adding comment and updating comment count must be atomic
   const newCommentRef = await firestore.runTransaction((t) =>
     t.get(postRef).then((postDoc) => {
-      const newTotalComments = postDoc.data()?.totalComments + 1;
+      const newTotalComments = (postDoc.data()?.totalComments || 0) + 1;
       const addedCommentRef = commentsRef.add(newComment);
       t.update(postRef, { totalComments: newTotalComments });
       return Promise.resolve(addedCommentRef);
