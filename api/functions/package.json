@@ -6,7 +6,7 @@
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "start": "npm run serve",
+    "start": "tsc && concurrently --kill-others 'firebase emulators:start --only functions' 'tsc --watch'",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -35,6 +35,7 @@
     "typescript": "^3.2.2"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "firebase-functions-test": "^0.1.6",
     "lint-staged": "^10.0.9",
     "prettier": "^2.0.2",
