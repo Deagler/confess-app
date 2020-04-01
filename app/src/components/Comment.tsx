@@ -1,9 +1,7 @@
 import {
-  IonCard,
   IonItem,
   IonLabel,
   IonIcon,
-  IonCardContent,
   IonButton,
   IonGrid,
   IonRow,

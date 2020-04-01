@@ -36,7 +36,8 @@ export interface Community {
 export interface Comment {
   id: string;
   creationTimestamp: number;
-  author: User;
+  // TODO: Create separate types for API types and database types
+  author: User | string;
   content: string;
   totalLikes: number;
   likes: User[];
