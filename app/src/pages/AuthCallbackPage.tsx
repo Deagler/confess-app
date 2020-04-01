@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { IonPage } from '@ionic/react';
+import {
+  IonPage,
+  IonCard,
+  IonCardTitle,
+  IonCardContent,
+  IonSpinner,
+} from '@ionic/react';
 
 import { RouteComponentProps } from 'react-router';
 
@@ -34,7 +40,18 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
         // Common errors could be invalid email and invalid or expired OTPs.
       });
   }
-  return <IonPage></IonPage>;
+  return (
+    <IonPage>
+      <IonCard>
+        <IonCardContent>
+          <IonCardTitle>Logging in...</IonCardTitle>
+        </IonCardContent>
+        <IonCardContent>
+          <IonSpinner/>
+        </IonCardContent>
+      </IonCard>
+    </IonPage>
+  );
 };
 
 export default AuthCallbackPage;

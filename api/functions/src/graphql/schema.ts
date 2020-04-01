@@ -76,6 +76,18 @@ const typeDefs = gql`
     post: Post
   }
 
+  type SignupPayload {
+    firstName: String
+    lastName: String
+  }
+
+  type AttemptSignupResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    user: User
+  }
+
   type CreateCommentResponse implements MutationResponse {
     code: String!
     success: Boolean!
@@ -91,6 +103,7 @@ const typeDefs = gql`
       content: String!
       authorAlias: String
     ): CreatePostResponse
+    attemptSignUp(signupPayload: SignupPayload): AttemptSignupResponse
     submitComment(
       communityId: String!
       postId: String!

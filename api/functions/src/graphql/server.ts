@@ -3,13 +3,14 @@ import cors from 'cors';
 import express from 'express';
 import resolvers from './resolvers';
 import typeDefs from './schema';
+import { validateFirebaseIdToken } from '../utils/auth';
 
 export function ConstructGraphQLServer() {
   const app = express();
   app.use(cors());
   app.options('*');
 
-  // app.use(validateFirebaseIdToken);
+  app.use(validateFirebaseIdToken);
 
   const apolloServer = new ApolloServer({
     typeDefs,
