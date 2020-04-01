@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_POST_BY_ID, GET_COMMUNITY_POSTS } from '../common/graphql/posts';
-import { chatbox, school, checkbox, person } from 'ionicons/icons';
+import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,
   IonIcon,
@@ -13,7 +13,6 @@ import {
   IonRow,
   IonCol,
   IonItem,
-  IonText,
   IonCardContent,
   IonCard,
   IonLabel,
@@ -24,13 +23,21 @@ import {
   IonSkeletonText,
   IonSlides,
   IonSlide,
+  IonItemGroup,
+  IonModal,
+  IonImg,
 } from '@ionic/react';
 import './LandingPage.css';
-import Post, { PostProps, PostData } from '../components/Post';
-export interface LandingPageData {
+import image from '../theme/IconImage/uoa.svg';
+import LandingPost, { PostProps } from '../components/LandingPost';
+const input = {
+  width: '3vm',
+  maxidth: '300px',
+  minWidth: '120px',
+};
+export interface LandingPageProps {
   email: string;
 }
-
 const LandingPage: React.FC = () => {
   const { loading, data, called } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {
@@ -40,34 +47,61 @@ const LandingPage: React.FC = () => {
   const [text, setText] = useState<string>();
   const [secondText, setSecondText] = useState<string>();
   const [thirdText, setThirdText] = useState<string>();
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const slideOpts = {
-    initialSlide: 0,
     direction: 'horizontal',
     speed: 1000, // 0.3s transition
     autoplay: 300,
   };
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonGrid className="ConfessHeader">
-          <IonRow>
-            <IonCol>
-              <IonItem lines="none">
-                <IonIcon icon={chatbox} />
+      <IonHeader className="ion-no-border">
+        <IonGrid>
+          <IonRow className="ion-nowrap ion-align-items-center">
+            <IonGrid>
+              <IonRow className="ion-nowrap">
+                <IonIcon className="ChipIcon" icon={chatbox} size="large" />
                 <IonTitle>Confess</IonTitle>
-              </IonItem>
-            </IonCol>
-            <IonCol className="GetStartedHeader">
-              <IonInput
-                inputmode="email"
-                value={text}
-                placeholder="Enter Your University Email"
-                onIonChange={(e) => setText(e.detail.value!)}
-                clearInput={true}
-              />
-              <IonButton className="ion-margin-end">Get Started</IonButton>
-            </IonCol>
+              </IonRow>
+            </IonGrid>
+            <IonGrid>
+              <IonCol className="ion-align-items-stretch" />
+            </IonGrid>
+            <IonGrid>
+              <IonCol className="GetStartedHeader">
+                <IonGrid>
+                  <IonRow className="ion-nowrap">
+                    <IonInput
+                      className="EmailInput"
+                      id="InputHeader"
+                      inputmode="email"
+                      value={text}
+                      placeholder="Enter Your University Email"
+                      onIonChange={(e) => setText(e.detail.value!)}
+                      clearInput={true}
+                    />
+                    <IonModal isOpen={showModal} swipeToClose={true}>
+                      <IonInput />
+                      <IonButton onClick={() => setShowModal(false)}>
+                        Close Modal
+                      </IonButton>
+                    </IonModal>
+                    <IonButton
+                      disabled={text?.trim() === ''}
+                      id="ButtonHeader"
+                      fill="clear"
+                      className="landingButton"
+                      onClick={() => setShowModal(true)}
+                    >
+                      Log In
+                    </IonButton>
+                  </IonRow>
+                </IonGrid>
+              </IonCol>
+            </IonGrid>
           </IonRow>
         </IonGrid>
       </IonHeader>
@@ -75,17 +109,29 @@ const LandingPage: React.FC = () => {
       <IonContent>
         <IonGrid className="ion-margin-vertical">
           <IonRow className="Introduction">
-            <IonCol size="12">
-              <IonTitle>Confess Title</IonTitle>
-              <IonInput
-                className="ion-margin-vertical"
-                inputmode="email"
-                value={secondText}
-                placeholder="Your vniversity email here"
-                onIonChange={(e) => setSecondText(e.detail.value!)}
-                clearInput={true}
-              />
-              <IonButton>Get Started</IonButton>
+            <IonCol size="12" className="IntroductionCol">
+              <IonLabel className="Slogon">
+                Confess anonymously to your peers
+              </IonLabel>
+              <IonGrid style={{}}>
+                <IonCol>
+                  <IonInput
+                    required={true}
+                    inputmode="email"
+                    value={secondText}
+                    placeholder="Your vniversity email here"
+                    onIonChange={(e) => setSecondText(e.detail.value!)}
+                    clearInput={true}
+                  />
+                </IonCol>
+              </IonGrid>
+              <IonButton
+                disabled={secondText?.trim() === ''}
+                fill="clear"
+                className="landingButton"
+              >
+                Log In
+              </IonButton>
               <IonRow>
                 {' '}
                 <IonLabel className="ion-margin-vertical">
@@ -93,36 +139,32 @@ const LandingPage: React.FC = () => {
                 </IonLabel>{' '}
               </IonRow>
               <IonRow>
-                <IonCard>
-                  <IonCardContent>
-                    <IonIcon icon={school} className="ion-margin-end" />
-                    <IonText>University of Auckland</IonText>
-                  </IonCardContent>
-                </IonCard>
-              </IonRow>
-              <IonRow>
-                <IonCard>
-                  <IonCardContent>
-                    <IonText>More universities comming soon</IonText>
-                  </IonCardContent>
-                </IonCard>
+                <IonItemGroup>
+                  <IonItem lines="none" className="UniversityList">
+                    <IonIcon slot="start" src={image} />
+                    <IonLabel>University of Auckland</IonLabel>
+                  </IonItem>
+                  <IonItem lines="none" className="UniversityList">
+                    <IonIcon slot="start" icon={school} />
+                    <IonLabel>More university coming soon</IonLabel>
+                  </IonItem>
+                </IonItemGroup>
               </IonRow>
               <IonRow className="ion-margin-vertical">
-                <IonChip>
-                  <IonIcon icon={checkbox} />
+                <IonChip className="Chip">
+                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
                   <IonLabel>Confessions</IonLabel>
                 </IonChip>
-                <IonChip>
-                  <IonIcon icon={checkbox} />
+                <IonChip className="Chip">
+                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
                   <IonLabel>Memes</IonLabel>
                 </IonChip>
-                <IonChip>
-                  <IonIcon icon={checkbox} />
+                <IonChip className="Chip">
+                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
                   <IonLabel>Emotions</IonLabel>
                 </IonChip>
-                <IonChip>
-                  <IonIcon icon={checkbox} />
-                  <IonLabel>All In One Place</IonLabel>
+                <IonChip className="Chip">
+                  <IonLabel>All in place</IonLabel>
                 </IonChip>
               </IonRow>
             </IonCol>
@@ -131,53 +173,58 @@ const LandingPage: React.FC = () => {
 
         <IonGrid>
           <IonRow>
-            <IonCol size="6">
-              <IonCard className="ion-justify-content-center">
-                <IonCardContent className="SubIntroduction">
+            <IonCol>
+              <IonGrid className="SubIntroduction">
+                <IonCardContent>
                   <IonCardTitle className="ion-margin-vertical">
                     Completely anonymous confessions
                   </IonCardTitle>
-                  <IonCardSubtitle>
+                  <IonCardSubtitle style={{ fontSize: '4vm' }}>
                     We care about your privacy. Share your feelings and your
                     memes with your peers safely and anonymously
                   </IonCardSubtitle>
                   <IonInput
-                    className="ion-margin-end"
+                    style={{}}
+                    className="ion-margin-vertical"
                     inputmode="email"
                     value={thirdText}
                     placeholder="Your vniversity email here"
                     onIonChange={(e) => setThirdText(e.detail.value!)}
                     clearInput={true}
                   />
-                  <IonButton className="ion-margin-bottom">
-                    Get Started
+                  <IonButton
+                    disabled={thirdText?.trim() === ''}
+                    fill="clear"
+                    className="landingButton"
+                  >
+                    Log In
                   </IonButton>
                 </IonCardContent>
-              </IonCard>
+              </IonGrid>
             </IonCol>
-            <IonCol size="6">
-              <IonCard>
+            <IonCol
+              size="6"
+              style={{ height: '300px' }}
+              className="ion-margin-start"
+            >
+              {loading ? (
                 <IonSlides options={slideOpts} pager={true}>
-                  {loading ? (
-                    <IonSlide>
-                      <IonCard className="CardInSlide">
-                        <IonSkeletonText
-                          animated={true}
-                          style={{ height: '200px' }}
-                        />
-                      </IonCard>
-                    </IonSlide>
-                  ) : (
-                    data.community.feed
-                      .slice(0, 2)
-                      .map((post: PostProps, i: number) => (
-                        <IonSlide className="Post" key={i}>
-                          <Post key={i} {...post} isExample={true} />
-                        </IonSlide>
-                      ))
-                  )}
+                  <IonSlide hidden={!loading}>
+                    <IonCard className="CardInSlide">
+                      <IonSkeletonText
+                        animated={true}
+                        style={{ height: '200px' }}
+                      />
+                    </IonCard>
+                  </IonSlide>
                 </IonSlides>
-              </IonCard>
+              ) : (
+                data.community.feed
+                  .slice(0, 1)
+                  .map((post: PostProps, i: number) => (
+                    <LandingPost key={i} {...post} />
+                  ))
+              )}
             </IonCol>
           </IonRow>
         </IonGrid>

@@ -32,7 +32,6 @@ export interface PostData {
 export interface PostProps extends PostData {
   onCommentClick: () => void;
   isExpanded?: boolean;
-  isExample?: boolean;
 }
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
@@ -43,8 +42,11 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     content,
     authorAlias,
     isExpanded,
+<<<<<<< HEAD
     totalLikes,
     totalComments,
+=======
+>>>>>>> Fix precommit failure
     onCommentClick,
   } = props;
 
