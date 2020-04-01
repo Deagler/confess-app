@@ -1,4 +1,3 @@
-import admin from 'firebase-admin';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Post } from '../../typings';
