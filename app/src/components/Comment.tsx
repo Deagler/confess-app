@@ -1,9 +1,7 @@
 import {
-  IonCard,
   IonItem,
   IonLabel,
   IonIcon,
-  IonCardContent,
   IonButton,
   IonGrid,
   IonRow,
@@ -14,11 +12,18 @@ import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 
+export interface UserData {
+  firstName: string;
+  lastName: string;
+  communityUsername: string;
+}
+
 export interface CommentData {
-  date: Date;
+  creationTimestamp: number;
+  author: UserData | null;
   content: string;
-  author: string;
-  university: string;
+  totalLikes: number;
+  likes: (UserData | null)[];
 }
 
 export interface CommentProps extends CommentData {
@@ -26,7 +31,10 @@ export interface CommentProps extends CommentData {
 }
 
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
-  const { date, content, author, university, onReply } = props;
+  const { content, author, onReply, creationTimestamp, totalLikes } = props;
+  const authorDisplayName = author
+    ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
+    : 'unknown';
 
   // TODO: Add liking mutation, and fetch liked status
   const [liked, setLiked] = useState<boolean>(false);
@@ -39,9 +47,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           <IonCol size="12" size-sm="6">
             <IonItem lines="none">
               <IonLabel slot="start">
-                <h6>
-                  {author} - {university}
-                </h6>
+                <h6>{authorDisplayName}</h6>
               </IonLabel>
             </IonItem>
           </IonCol>
@@ -49,7 +55,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
             <IonItem lines="none">
               <IonIcon color="medium" icon={timeOutline} size="medium" />
               <IonLabel color="medium">
-                <h6>{moment(date).fromNow()} </h6>
+                <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
               </IonLabel>
             </IonItem>
           </IonCol>
@@ -69,14 +75,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 onClick={() => setLiked(!liked)}
               >
                 <IonIcon color={likedButtonColor} icon={heart} />
-                {/* TODO: Will need to add actual data here lmao */}
-                <IonLabel>{liked ? '12' : '11'}</IonLabel>
+                <IonLabel>{totalLikes}</IonLabel>
               </IonButton>
               <IonButton
                 fill="clear"
                 expand="full"
                 color="medium"
-                onClick={() => onReply(author)}
+                onClick={() => onReply(authorDisplayName)}
               >
                 <IonIcon color="medium" icon={chatbox} />
               </IonButton>

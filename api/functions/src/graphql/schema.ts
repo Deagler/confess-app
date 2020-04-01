@@ -76,6 +76,13 @@ const typeDefs = gql`
     post: Post
   }
 
+  type CreateCommentResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    comment: Comment
+  }
+
   type Mutation {
     submitPostForApproval(
       communityId: String!
@@ -84,6 +91,11 @@ const typeDefs = gql`
       content: String!
       authorAlias: String
     ): CreatePostResponse
+    submitComment(
+      communityId: String!
+      postId: String!
+      content: String!
+    ): CreateCommentResponse
   }
 `;
 
