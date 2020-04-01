@@ -16,20 +16,14 @@ import NewCommentInput from '../components/NewCommentInput';
 
 import './Page.css';
 import './PostPage.css';
+import { useParams } from 'react-router';
 
 const Postpage: React.FC = () => {
-  const [comments, setComments] = useState<CommentData[]>(testComments);
+  const [comments, setComments] = useState<CommentData[]>([]);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
+  const { id: postId } = useParams();
 
-  const handleSubmitComment = (newCommentContent: string) => {
-    // TODO: Add comment mutation and get the author details from the user context
-    const newCommentProp: CommentData = {
-      date: new Date(),
-      content: newCommentContent,
-      author: 'efgh456',
-      university: 'UoA',
-    };
-
+  const handleCommentCreated = (newCommentProp: CommentData) => {
     setComments((oldComments) => [newCommentProp, ...oldComments]);
   };
 
@@ -57,8 +51,9 @@ const Postpage: React.FC = () => {
           />
         </div>
         <NewCommentInput
-          onSubmitComment={handleSubmitComment}
+          onCommentCreated={handleCommentCreated}
           inputRef={newCommentElement}
+          postId={postId}
         />
         <IonCard>
           <IonList>
@@ -86,24 +81,3 @@ const testPost: PostData = {
   totalLikes: 11,
   totalComments: 23,
 };
-
-const testComments: CommentData[] = [
-  {
-    date: new Date(),
-    content: 'Comment content',
-    author: 'abcd123',
-    university: 'UoA',
-  },
-  {
-    date: new Date(),
-    content: 'Comment content',
-    author: 'abcd123',
-    university: 'UoA',
-  },
-  {
-    date: new Date(),
-    content: 'Comment content',
-    author: 'abcd123',
-    university: 'UoA',
-  },
-];
