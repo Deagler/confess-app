@@ -55,13 +55,15 @@ const Postpage: React.FC = () => {
           inputRef={newCommentElement}
           postId={postId}
         />
-        <IonCard>
-          <IonList>
-            {comments.map((comment: CommentData, i: number) => (
-              <Comment key={i} {...comment} onReply={handleReply} />
-            ))}
-          </IonList>
-        </IonCard>
+        {comments.length !== 0 && (
+          <IonCard>
+            <IonList>
+              {comments.map((comment: CommentData, i: number) => (
+                <Comment key={i} {...comment} onReply={handleReply} />
+              ))}
+            </IonList>
+          </IonCard>
+        )}
       </IonContent>
     </IonPage>
   );

@@ -55,7 +55,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
             <IonItem lines="none">
               <IonIcon color="medium" icon={timeOutline} size="medium" />
               <IonLabel color="medium">
-                <h6>{moment(creationTimestamp).fromNow()} </h6>
+                <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
               </IonLabel>
             </IonItem>
           </IonCol>
