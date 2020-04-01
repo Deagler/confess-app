@@ -28,6 +28,7 @@ const typeDefs = gql`
     name: String!
     abbreviation: String!
     feed: [Post]!
+    unapprovedPosts: [Post]!
     channels: [Channel]!
   }
 
