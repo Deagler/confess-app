@@ -9,6 +9,7 @@ import {
   IonSpinner,
   IonIcon,
   IonCol,
+  IonToast,
 } from '@ionic/react';
 import React, { useState, RefObject } from 'react';
 import { send } from 'ionicons/icons';
@@ -45,7 +46,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     });
 
     const createdComment = data?.submitComment?.comment;
-    if (data?.submitComment?.success && createdComment) {
+    if (data?.submitComment?.success && createdComment && !error) {
       setContent('');
       onCommentCreated(createdComment);
     } else {
@@ -61,49 +62,52 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
   };
 
   return (
-    <IonCard>
-      <IonCardContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="12">
-              <IonItem>
-                <IonTextarea
-                  placeholder="Write a comment..."
-                  value={content}
-                  onKeyDown={handleKeyDown}
-                  onIonChange={(e) => {
-                    setContent(e.detail.value!);
-                  }}
-                  autofocus={true}
-                  rows={5}
-                  ref={inputRef}
-                />
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol
-              className="ion-text-end"
-              style={{ padding: '0px' }}
-              size="12"
-            >
-              <IonButton
-                size="small"
-                disabled={!content || !postId}
-                onClick={handleSubmit}
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonCard>
+        <IonCardContent>
+          <IonGrid>
+            <IonRow>
+              <IonCol size="12">
+                <IonItem>
+                  <IonTextarea
+                    placeholder="Write a comment..."
+                    value={content}
+                    onKeyDown={handleKeyDown}
+                    onIonChange={(e) => {
+                      setContent(e.detail.value!);
+                    }}
+                    autofocus={true}
+                    rows={5}
+                    ref={inputRef}
+                  />
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol
+                className="ion-text-end"
+                style={{ padding: '0px' }}
+                size="12"
               >
-                {(loading && <IonSpinner />) || (
-                  <>
-                    Submit
-                    <IonIcon size="small" slot="icon-only" icon={send} />
-                  </>
-                )}
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonCardContent>
-    </IonCard>
+                <IonButton
+                  size="small"
+                  disabled={!content || !postId}
+                  onClick={handleSubmit}
+                >
+                  {(loading && <IonSpinner />) || (
+                    <>
+                      Submit
+                      <IonIcon size="small" slot="icon-only" icon={send} />
+                    </>
+                  )}
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCardContent>
+      </IonCard>
+    </>
   );
 };
 
