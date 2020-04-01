@@ -27,14 +27,10 @@ import {
 } from '@ionic/react';
 import './LandingPage.css';
 import image from '../theme/IconImage/uoa.svg';
-import LandingPost, { PostProps } from '../components/LandingPost';
-const input = {
-  width: '3vm',
-  maxidth: '300px',
-  minWidth: '120px',
-};
+import LandingPost from '../components/LandingPost';
+
 export interface LandingPageProps {
-  email: string;
+  email: string; // TODO: three input fields, logIn button click event
 }
 const LandingPage: React.FC = () => {
   const { loading, data, called } = useQuery(GET_COMMUNITY_POSTS, {
@@ -51,15 +47,8 @@ const LandingPage: React.FC = () => {
     speed: 1000, // 0.3s transition
     autoplay: 300,
   };
-
-  const [slides, setSlides] = useState([
-    { id: '1', text: 'Slide 1' },
-    { id: '2', text: 'Slide 2' },
-    { id: '3', text: 'Slide 3' },
-    { id: '4', text: 'Slide 4' },
-    { id: '5', text: 'Slide 5' },
-  ]);
   const [showModal, setShowModal] = useState(false);
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
