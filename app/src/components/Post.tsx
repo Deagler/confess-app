@@ -42,11 +42,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     content,
     authorAlias,
     isExpanded,
-<<<<<<< HEAD
     totalLikes,
     totalComments,
-=======
->>>>>>> Fix precommit failure
     onCommentClick,
   } = props;
 
