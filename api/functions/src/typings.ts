@@ -37,7 +37,9 @@ export interface Comment {
   id: string;
   creationTimestamp: number;
   // TODO: Create separate types for API types and database types
-  author: User | string;
+  author:
+    | User
+    | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
   content: string;
   totalLikes: number;
   likes: User[];

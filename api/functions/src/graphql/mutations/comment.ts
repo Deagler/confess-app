@@ -17,7 +17,7 @@ async function submitComment(_: any, { communityId, postId, content }) {
 
   const newComment: Partial<Comment> = {
     creationTimestamp: moment().unix(),
-    author: authorRef.path,
+    author: authorRef,
     content,
     totalLikes: 0,
     likes: [],
