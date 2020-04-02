@@ -9,6 +9,7 @@ export type FirestoreDocRef = FirebaseFirestore.DocumentReference<
 
 export interface User {
   id: string;
+  communityUsername: string;
   firstName: string;
   lastName: string;
   email: string;

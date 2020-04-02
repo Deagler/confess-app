@@ -8,6 +8,7 @@ const typeDefs = gql`
 
   type User {
     id: ID!
+    communityUsername: String!
     firstName: String!
     lastName: String!
     community: Community

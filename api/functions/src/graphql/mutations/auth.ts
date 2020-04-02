@@ -18,13 +18,16 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
     return { code: 400, success: false, message: 'Account already exists.' };
   }
 
-  const emailDomain = userRecord.email.split('@')[1];
+  const communityInfo = userRecord.email.split('@');
+  const communityUsername = communityInfo[0];
+  const emailDomain = communityInfo[1];
 
   const communityDoc = await communitiesCollection
     .where('domains', 'array-contains', emailDomain)
     .get();
 
   const newUserData: Partial<User> = {
+    communityUsername,
     firstName,
     lastName,
     email: userRecord.email,
