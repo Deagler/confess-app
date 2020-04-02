@@ -1,5 +1,4 @@
 import { ApolloError } from 'apollo-server-express';
-import { firebaseApp } from '../../firebase';
 import { Community, User } from '../../typings';
 import { addIdToDoc } from './utils';
 

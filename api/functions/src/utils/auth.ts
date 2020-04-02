@@ -2,13 +2,44 @@
 
 import { firebaseApp } from '../firebase';
 
+let mockCachedToken;
+
+async function getMockIdToken(uid) {
+  if (!uid) {
+    console.error('No UID Specified - have you set LOCAL_MOCK_USER?');
+    return undefined;
+  }
+
+  if (!mockCachedToken) {
+    const user = await firebaseApp.auth().getUser(uid);
+
+    mockCachedToken = {
+      iss: 'https://securetoken.google.com/confess-api',
+      aud: 'confess-api',
+      auth_time: -1,
+      user_id: user.uid,
+      sub: user.uid,
+      iat: -1,
+      exp: -1,
+      email: user.email,
+      email_verified: user.emailVerified,
+      firebase: user.providerData,
+      uid: user.uid,
+    };
+  }
+
+  return mockCachedToken;
+}
+
 // injects firebase user information into express request param
 export const attachFirebaseIdToken = async (req, res, next) => {
-  console.log(process.env.NODE_ENV);
-
   if (process.env.NODE_ENV == 'development') {
-    console.log('Access Token Added');
-    req.headers.authorization = `Bearer ${process.env.LOCAL_ACCESS_TOKEN}`;
+    // Add Mock token in dev environment
+    const mockIdtoken = await getMockIdToken(process.env.LOCAL_MOCK_USER);
+    console.log(`Return Mock Id Token for user ${mockIdtoken?.email}`);
+    req.user = mockIdtoken;
+    next();
+    return;
   }
 
   let idToken;
@@ -16,7 +47,7 @@ export const attachFirebaseIdToken = async (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer ')
   ) {
-    //read token from auth header
+    // read token from auth header
     idToken = req.headers.authorization.split('Bearer ')[1];
   } else if (req.cookies) {
     // Read the ID Token from cookie.
@@ -37,8 +68,9 @@ export const attachFirebaseIdToken = async (req, res, next) => {
     res.status(403).send({
       code: 401,
       success: false,
-      message: 'Failed to authorise user. Our team has been notified. '+error.code,
-    })
+      message:
+        'Failed to authorise user. Our team has been notified. ' + error.code,
+    });
     return;
   }
 };
