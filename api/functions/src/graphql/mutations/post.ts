@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-server-express';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Post } from '../../typings';
@@ -46,15 +47,17 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
   // verify approver
   const approverRef = firestore.doc(`/users/${approverId}`);
   const approver = await approverRef.get();
-  if (!approver.data()) {
-    throw new Error(`user with id ${approverId} doesn't exist`);
+  if (!approver.exists) {
+    throw new ApolloError(`user with id ${approverId} doesn't exist`);
   }
 
   // verify post
   const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
   const post = await postRef.get();
-  if (!post.data()) {
-    throw new Error(`post ${postId} does't exist in community ${communityId}`);
+  if (!post.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
   }
 
   // update post
