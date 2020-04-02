@@ -5,3 +5,9 @@ export const GET_SELECTED_COMMUNITY = gql`
     selectedCommunity @client
   }
 `;
+
+export const GET_AUTH_STATE = gql`
+  query GetSelectedCommunity {
+    authState @client
+  }
+`;

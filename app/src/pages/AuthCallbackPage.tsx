@@ -52,7 +52,8 @@ const EmailInputCardContent: React.FC<any> = ({
 
 export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
   mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
-    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink) @client {
+    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
+      @client {
       code
       success
       message
@@ -62,42 +63,31 @@ export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
 
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [loginSuccess, setLoginSuccess] = useState(false);
-  const [attemptLogin, attemptLoginInfo] = useMutation(
+  const [attemptLoginMutation, attemptLoginInfo] = useMutation(
     ATTEMPT_LOGIN_WITH_EMAIL_LINK
   );
 
   const [loginError, setLoginError] = useState<string>();
-  const [userEmail, setUserEmail] = useState(
-    localStorage.getItem('emailForSignIn')
-  );
+  const [userEmail, setUserEmail] = useState<string>();
 
-  useEffect(() => {
+  const attemptLogin = () => {
     const emailLink = window.location.href;
-    if (!firebaseApp.auth().isSignInWithEmailLink(emailLink)) {
-      setLoginError("Login URL Invalid. Let's redirect you back to Confess!");
-      return;
-    }
 
-    if (!userEmail) {
-      return;
-    }
-
-    attemptLogin({
+    attemptLoginMutation({
       variables: {
         userEmail,
         emailLink,
       },
     });
-  }, [true]);
-
-  const reattemptLogin = () => {
-    attemptLogin({
-      variables: {
-        userEmail,
-        emailLink: window.location.href,
-      },
-    });
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem('emailForSignIn')) {
+      return;
+    }
+
+    attemptLogin();
+  }, []);
 
   return (
     <IonPage>
@@ -107,7 +97,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
             email={userEmail}
             setEmail={setUserEmail}
             loading={attemptLoginInfo.loading}
-            submit={reattemptLogin}
+            submit={attemptLogin}
           />
         ) : (
           <LoggingInCardContent />

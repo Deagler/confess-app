@@ -2,8 +2,13 @@ import gql from 'graphql-tag';
 // Define types in local state here
 
 export const typeDefs = gql`
+  type AuthState {
+    accessToken: String!
+  }
+
   extend type Query {
     isLoggedIn: Boolean!
+    authState: AuthState
     selectedCommunity: String!
   }
 
@@ -17,6 +22,7 @@ export const typeDefs = gql`
     code: String!
     success: Boolean!
     message: String!
+    authState: AuthState
   }
 
   extend type Mutation {
