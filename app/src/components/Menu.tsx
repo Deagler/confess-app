@@ -65,7 +65,6 @@ const Menu: React.FC<{}> = () => {
             onCommunityChange={handleCommunityChange}
           />
           <LoginInput />
-
           <ChannelList channels={channels} loading={false} />
         </IonContent>
       </IonMenu>

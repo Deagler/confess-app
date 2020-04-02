@@ -10,10 +10,10 @@ import {
   IonLabel,
 } from '@ionic/react';
 import React from 'react';
-import { IsValidEmailFormat } from '../utils';
 import { Checkmark } from 'react-checkmark';
+import { SubmittableEmailInput } from './SubmittableEmailInput';
 
-enum LOGIN_STATUS {
+export enum LOGIN_STATUS {
   NONE,
   PENDING,
   SUCCESS,
@@ -65,32 +65,16 @@ export const LoginInput: React.FC<{}> = () => {
   return loginStatus == LOGIN_STATUS.SUCCESS ? (
     <LoginSuccess />
   ) : (
-    <IonRow>
+    <React.Fragment>
       <IonToast isOpen={!!loginError} message={loginError} duration={2000} />
-      <IonCol size-md="9" size-sm="12">
-        <IonInput
-          value={loginEmail}
-          style={{ width: '100%' }}
-          placeholder="Enter your university e-mail"
-          onIonChange={(e) => setLoginEmail(e.detail.value!)}
-        />
-      </IonCol>
-      <IonCol
-        size-sm="12"
-        size-md="3"
-        className="ion-text-center ion-align-self-end ion-justify-self-end"
-      >
-        <IonButton
-          disabled={
-            !loginEmail ||
-            !IsValidEmailFormat(loginEmail) ||
-            loginStatus == LOGIN_STATUS.PENDING
-          }
-          onClick={() => handleLogin(loginEmail)}
-        >
-          {loginStatus == LOGIN_STATUS.PENDING ? <IonSpinner /> : 'Login'}
-        </IonButton>
-      </IonCol>
-    </IonRow>
+      <SubmittableEmailInput
+        email={loginEmail}
+        setEmail={setLoginEmail}
+        placeholderText="Enter your university e-mail"
+        loading={loginStatus == LOGIN_STATUS.PENDING}
+        submit={handleLogin}
+        submitText="Login"
+      />
+    </React.Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   IonPage,
@@ -6,52 +6,112 @@ import {
   IonCardTitle,
   IonCardContent,
   IonSpinner,
+  IonRow,
+  IonCol,
+  IonInput,
+  IonButton,
 } from '@ionic/react';
 
 import { RouteComponentProps } from 'react-router';
 
 import './Page.css';
 import { firebaseApp } from '../services/firebase';
+import { IsValidEmailFormat } from '../utils';
+import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+
+const LoggingInCardContent: React.FC = () => {
+  return (
+    <IonCardContent>
+      <IonCardTitle>Logging in...</IonCardTitle>
+      <IonSpinner />
+    </IonCardContent>
+  );
+};
+
+const EmailInputCardContent: React.FC<any> = ({
+  email,
+  setEmail,
+  loading,
+  submit,
+}) => {
+  return (
+    <IonCardContent>
+      <SubmittableEmailInput
+        email={email}
+        setEmail={setEmail}
+        placeholderText="Enter your university e-mail again."
+        submitText="Login"
+        submit={submit}
+        loading={loading}
+      />
+    </IonCardContent>
+  );
+};
+
+export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
+  mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
+    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink) @client {
+      code
+      success
+      message
+    }
+  }
+`;
 
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
-  if (firebaseApp.auth().isSignInWithEmailLink(window.location.href)) {
-    let email = localStorage.getItem('emailForSignIn');
-    if (!email) {
-      // User opened the link on a different device. To prevent session fixation
-      // attacks, ask the user to provide the associated email again. For example:
-      email = window.prompt('Please provide your email for confirmation');
-    }
-    // The client SDK will parse the code from the link for you.
-    firebaseApp
-      .auth()
-      .signInWithEmailLink(email!, window.location.href)
-      .then(async function (result) {
-        // Clear email from storage.
-        window.localStorage.removeItem('emailForSignIn');
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [attemptLogin, attemptLoginInfo] = useMutation(
+    ATTEMPT_LOGIN_WITH_EMAIL_LINK
+  );
 
-        const idToken = await firebaseApp.auth().currentUser?.getIdToken();
-        console.log('user access token', idToken);
-        // You can access the new user via result.user
-        // Additional user info profile not available via:
-        // result.additionalUserInfo.profile == null
-        // You can check if the user is new or existing:
-        // result.additionalUserInfo.isNewUser
-        console.log(result);
-      })
-      .catch(function (error) {
-        // Some error occurred, you can inspect the code: error.code
-        // Common errors could be invalid email and invalid or expired OTPs.
-      });
-  }
+  const [loginError, setLoginError] = useState<string>();
+  const [userEmail, setUserEmail] = useState(
+    localStorage.getItem('emailForSignIn')
+  );
+
+  useEffect(() => {
+    const emailLink = window.location.href;
+    if (!firebaseApp.auth().isSignInWithEmailLink(emailLink)) {
+      setLoginError("Login URL Invalid. Let's redirect you back to Confess!");
+      return;
+    }
+
+    if (!userEmail) {
+      return;
+    }
+
+    attemptLogin({
+      variables: {
+        userEmail,
+        emailLink,
+      },
+    });
+  }, [true]);
+
+  const reattemptLogin = () => {
+    attemptLogin({
+      variables: {
+        userEmail,
+        emailLink: window.location.href,
+      },
+    });
+  };
+
   return (
     <IonPage>
       <IonCard>
-        <IonCardContent>
-          <IonCardTitle>Logging in...</IonCardTitle>
-        </IonCardContent>
-        <IonCardContent>
-          <IonSpinner />
-        </IonCardContent>
+        {!localStorage.getItem('emailForSignIn') ? (
+          <EmailInputCardContent
+            email={userEmail}
+            setEmail={setUserEmail}
+            loading={attemptLoginInfo.loading}
+            submit={reattemptLogin}
+          />
+        ) : (
+          <LoggingInCardContent />
+        )}
       </IonCard>
     </IonPage>
   );
