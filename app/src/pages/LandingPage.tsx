@@ -172,7 +172,7 @@ const LandingPage: React.FC = () => {
                   className="ion-margin-vertical"
                   inputmode="email"
                   value={thirdText}
-                  placeholder="Your vniversity email here"
+                  placeholder="Your university email here"
                   onIonChange={(e) => setThirdText(e.detail.value!)}
                   clearInput={true}
                   onFocus={() => handleInput(thirdText)}
