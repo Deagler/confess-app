@@ -9,6 +9,7 @@ const props: PostRequestProps = {
   date: new Date(),
   content: 'this is the content',
   author: 'this is the author',
+  onApprove: () => {},
 };
 
 test('renders without crashing', () => {

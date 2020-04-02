@@ -25,10 +25,11 @@ export interface PostRequestProps {
   date: Date;
   content: string;
   author?: string;
+  onApprove(): void;
 }
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
-  const { id, title, date, content, author } = props;
+  const { id, title, date, content, author, onApprove } = props;
 
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,
@@ -43,6 +44,10 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         approverId: 'aVyC8BFy1f5qGzXVwGSu',
       },
     });
+
+    if (!error) {
+      onApprove();
+    }
   };
 
   return (

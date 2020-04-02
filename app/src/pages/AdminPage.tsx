@@ -17,11 +17,14 @@ import PostRequest, { PostRequestProps } from '../components/PostRequest';
 import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
 
 const AdminPage: React.FC = () => {
-  const { loading, data, error } = useQuery(GET_COMMUNITY_UNAPPROVED_POSTS, {
-    variables: {
-      id: 'HW6lY4kJOpqSpL39hbUV',
-    },
-  });
+  const { loading, data, error, refetch } = useQuery(
+    GET_COMMUNITY_UNAPPROVED_POSTS,
+    {
+      variables: {
+        id: 'HW6lY4kJOpqSpL39hbUV',
+      },
+    }
+  );
 
   return (
     <>
@@ -46,7 +49,7 @@ const AdminPage: React.FC = () => {
             data &&
             data.community.unapprovedPosts.map(
               (post: PostRequestProps, i: number) => (
-                <PostRequest key={i} {...post} />
+                <PostRequest key={i} {...post} onApprove={() => refetch()} />
               )
             )
           )}
