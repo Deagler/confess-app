@@ -45,24 +45,21 @@ const LandingPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader
-        className="ion-no-border ion-align-self-center"
-        style={{ maxWidth: '1000px' }}
-      >
-        <IonToolbar>
-          <IonItem slot="start" lines="none">
-            <IonIcon icon={chatbox} color="primary" />
-            <IonLabel>Confess</IonLabel>
-          </IonItem>
-          <IonButton slot="end">Log In</IonButton>
-        </IonToolbar>
-      </IonHeader>
-
       <IonContent>
         <div
           className="ion-align-self-center"
-          style={{ maxWidth: '1000px', margin: 'auto', padding: '20' }}
+          style={{ maxWidth: '1000px', margin: 'auto', padding: '20px' }}
         >
+          <IonToolbar>
+            <IonItem slot="start" lines="none">
+              <IonIcon icon={chatbox} color="primary" />
+              <IonLabel>Confess</IonLabel>
+            </IonItem>
+            <IonButton slot="end" fill="clear">
+              Log In
+            </IonButton>
+          </IonToolbar>
+
           <IonGrid className="ion-margin-vertical ion-text-center">
             <IonRow className="ion-justify-content-center">
               <IonCol size="12" className="IntroductionCol">
