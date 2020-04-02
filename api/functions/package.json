@@ -6,7 +6,7 @@
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "start": "tsc && concurrently --kill-others 'firebase emulators:start --only functions' 'tsc --watch'",
+    "start": "tsc && concurrently --kill-others \"firebase emulators:start --only functions\" \"tsc --watch\"",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },

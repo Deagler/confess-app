@@ -25,9 +25,12 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     firebaseApp
       .auth()
       .signInWithEmailLink(email!, window.location.href)
-      .then(function (result) {
+      .then(async function (result) {
         // Clear email from storage.
         window.localStorage.removeItem('emailForSignIn');
+
+        const idToken = await firebaseApp.auth().currentUser?.getIdToken();
+        console.log('user access token', idToken);
         // You can access the new user via result.user
         // Additional user info profile not available via:
         // result.additionalUserInfo.profile == null
@@ -47,7 +50,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           <IonCardTitle>Logging in...</IonCardTitle>
         </IonCardContent>
         <IonCardContent>
-          <IonSpinner/>
+          <IonSpinner />
         </IonCardContent>
       </IonCard>
     </IonPage>

@@ -3,21 +3,12 @@
 import { firebaseApp } from '../firebase';
 
 // injects firebase user information into express request param
-export const validateFirebaseIdToken = async (req, res, next) => {
-  if (
-    (!req.headers.authorization ||
-      !req.headers.authorization.startsWith('Bearer ')) &&
-    !(req.cookies && req.cookies.__session)
-  ) {
-    console.log('Authorization: ' + req.headers.authorization);
-    console.error(
-      'No Firebase ID token was passed as a Bearer token in the Authorization header.',
-      'Make sure you authorize your request by providing the following HTTP header:',
-      'Authorization: Bearer <Firebase ID Token>',
-      'or by passing a "__session" cookie.'
-    );
-    res.status(403).send('Unauthorized');
-    return;
+export const attachFirebaseIdToken = async (req, res, next) => {
+  console.log(process.env.NODE_ENV);
+
+  if (process.env.NODE_ENV == 'development') {
+    console.log('Access Token Added');
+    req.headers.authorization = `Bearer ${process.env.LOCAL_ACCESS_TOKEN}`;
   }
 
   let idToken;
@@ -31,8 +22,8 @@ export const validateFirebaseIdToken = async (req, res, next) => {
     // Read the ID Token from cookie.
     idToken = req.cookies.__session;
   } else {
-    console.log('catch');
-    res.status(403).send('Unauthorized');
+    console.log('No token attached');
+    next();
     return;
   }
 
@@ -42,8 +33,12 @@ export const validateFirebaseIdToken = async (req, res, next) => {
     next();
     return;
   } catch (error) {
-    console.error('Error while verifying Firebase ID token', error);
-    res.status(403).send('Unauthorized');
+    console.error('Error while verifying attached Firebase ID token', error);
+    res.status(403).send({
+      code: 401,
+      success: false,
+      message: 'Failed to authorise user. Our team has been notified. '+error.code,
+    })
     return;
   }
 };

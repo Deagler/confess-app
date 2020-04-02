@@ -3,12 +3,18 @@ interface ApprovalInfo {
   approvalTimestamp: number;
 }
 
+export type FirestoreDocRef<T> =
+  | T
+  | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
+
+export type NullableField<T> = T | null;
+
 export interface User {
   id: string;
   firstName: string;
   lastName: string;
-  communityUsername: string;
-  community: Community;
+  email: string;
+  community: NullableField<FirestoreDocRef<Community>>;
 }
 
 export interface Post {
@@ -20,7 +26,7 @@ export interface Post {
   title: string;
   content: string;
   isApproved: boolean;
-  approvalInfo: ApprovalInfo | null;
+  approvalInfo: NullableField<ApprovalInfo>;
   totalLikes: number;
   likes: User[];
   totalComments: number;
@@ -37,9 +43,7 @@ export interface Comment {
   id: string;
   creationTimestamp: number;
   // TODO: Create separate types for API types and database types
-  author:
-    | User
-    | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
+  author: NullableField<FirestoreDocRef<User>>;
   content: string;
   totalLikes: number;
   likes: User[];
