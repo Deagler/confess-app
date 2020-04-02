@@ -36,8 +36,10 @@ const LandingPage: React.FC = () => {
       id: 'HW6lY4kJOpqSpL39hbUV',
     },
   });
+
   const [secondText, setSecondText] = useState<string>();
   const [thirdText, setThirdText] = useState<string>();
+
   const slideOpts = {
     direction: 'horizontal',
     autoplay: true,
@@ -140,9 +142,8 @@ const LandingPage: React.FC = () => {
         </IonGrid>
 
         <IonGrid>
-          <IonRow>
-            <IonCol size-xs="0" size-sm="0" size-md="1" />
-            <IonCol size="8" size-xs="12" size-sm="12" size-md="7">
+          <IonRow className="ion-align-items-center ion-justify-content-center">
+            <IonCol size="5">
               <IonGrid className="SubIntroduction">
                 <IonCardTitle>Completely anonymous confessions</IonCardTitle>
                 <IonCardSubtitle style={{ fontSize: '15px' }}>
@@ -150,7 +151,6 @@ const LandingPage: React.FC = () => {
                   with your peers safely and anonymously
                 </IonCardSubtitle>
                 <IonInput
-                  style={{}}
                   className="ion-margin-vertical"
                   inputmode="email"
                   value={thirdText}
@@ -163,28 +163,12 @@ const LandingPage: React.FC = () => {
                 </IonButton>
               </IonGrid>
             </IonCol>
-          </IonRow>
-          <IonRow
-            style={{ height: '300px' }}
-            className="ion-margin-horizontal ion-text-nowrap"
-          >
-            <IonCol
-              size="12"
-              size-xs="12"
-              size-sm="6"
-              size-md="12"
-              className="ion-margin-top"
-            >
+
+            <IonCol size="5">
               {loading ? (
-                <IonSlide>
-                  <IonSpinner />
-                </IonSlide>
+                <IonSpinner />
               ) : (
-                <IonSlides
-                  className="ion-padding-horizontal"
-                  pager={true}
-                  options={slideOpts}
-                >
+                <IonSlides pager={true} options={slideOpts}>
                   {data.community.feed.slice(0, 4).map((slide) => (
                     <IonSlide key={slide.id} className="ion-text-left">
                       <LandingPost {...slide} />

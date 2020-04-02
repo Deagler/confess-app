@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonCardHeader,
   IonCardTitle,
@@ -6,6 +6,7 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import moment from 'moment';
+
 import './Post.css';
 
 export interface PostProps {
@@ -20,7 +21,7 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <h1 style={{ width: 'inherit' }}>
+    <h1>
       <IonCardContent>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
