@@ -15,8 +15,6 @@ import {
   IonItem,
   IonLabel,
   IonChip,
-  IonCardTitle,
-  IonCardSubtitle,
   IonGrid,
   IonSlides,
   IonSlide,
@@ -79,9 +77,7 @@ const LandingPage: React.FC = () => {
           <IonGrid className="ion-margin-vertical ion-text-center">
             <IonRow className="ion-justify-content-center">
               <IonCol size="12" className="IntroductionCol">
-                <IonLabel className="Slogon">
-                  Confess anonymously to your peers
-                </IonLabel>
+                <h1>Confess anonymously to your peers.</h1>
               </IonCol>
             </IonRow>
 
@@ -109,9 +105,7 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <IonLabel className="ion-margin-vertical">
-                  Or check out some confessions as a guest
-                </IonLabel>
+                <p>Or check out some confessions as a guest.</p>
               </IonCol>
             </IonRow>
 
@@ -120,11 +114,11 @@ const LandingPage: React.FC = () => {
                 <IonItemGroup>
                   <IonItem lines="none" className="UniversityList">
                     <IonIcon slot="start" src={image} />
-                    <IonLabel>University of Auckland</IonLabel>
+                    <IonLabel>The University of Auckland</IonLabel>
                   </IonItem>
                   <IonItem lines="none" className="UniversityList">
                     <IonIcon slot="start" icon={school} />
-                    <IonLabel>More universities coming soon</IonLabel>
+                    <IonLabel>More universities coming soon.</IonLabel>
                   </IonItem>
                 </IonItemGroup>
               </IonCol>
@@ -144,12 +138,16 @@ const LandingPage: React.FC = () => {
                 <IonLabel>Emotions</IonLabel>
               </IonChip>
               <IonChip className="Chip">
-                <IonLabel>All in one place</IonLabel>
+                <IonLabel style={{ fontWeight: 'bold' }}>
+                  All in one place.
+                </IonLabel>
               </IonChip>
             </IonRow>
           </IonGrid>
 
           <IonItemDivider />
+          <h2>Fresh confessions.</h2>
+          <p>Curated each day just for you.</p>
 
           {loading ? (
             <IonSpinner />
@@ -166,11 +164,11 @@ const LandingPage: React.FC = () => {
           <IonItemDivider />
 
           <IonGrid className="SubIntroduction">
-            <IonCardTitle>Completely anonymous confessions</IonCardTitle>
-            <IonCardSubtitle style={{ fontSize: '15px' }}>
-              We care about your privacy. Share your feelings and your memes
-              with your peers safely and anonymously
-            </IonCardSubtitle>
+            <h2>Completely anonymous.</h2>
+            <p>
+              We care about your privacy. Share your feelings and memes with
+              your peers safely and anonymously.
+            </p>
             <IonInput
               className="ion-margin-vertical"
               inputmode="email"
