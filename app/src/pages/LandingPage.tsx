@@ -140,11 +140,12 @@ const LandingPage: React.FC = () => {
             <IonSkeletonText animated={true} style={{ height: '200px' }} />
           ) : (
             <IonSlides pager={true} options={slideOpts}>
-              {data.community.feed.slice(0, 4).map((slide) => (
-                <IonSlide key={slide.id} className="ion-text-left">
-                  <LandingPost {...slide} />
-                </IonSlide>
-              ))}
+              {data &&
+                data.community.feed.slice(0, 4).map((slide) => (
+                  <IonSlide key={slide.id} className="ion-text-left">
+                    <LandingPost {...slide} />
+                  </IonSlide>
+                ))}
             </IonSlides>
           )}
 
