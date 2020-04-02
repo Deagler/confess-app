@@ -24,7 +24,8 @@ body {
 }
 
 .SubIntroduction ion-card-title {
-  font-size: 3.2em;
+  font-size: 30px;
+  margin-bottom: 15px;
 }
 
 .ConfessHeader ion-row ion-col {
@@ -41,29 +42,30 @@ body {
   font: inherit;
   overflow: visible;
   text-transform: none;
-  -webkit-appearance: button;
-  display: inline-block;
   margin: 0;
   box-sizing: border-box;
-  line-height: 1;
   text-align: center;
   cursor: pointer;
   transition: all 0.25s;
   font-size: 0.8706em;
-  min-height: 20px;
   border: none;
   color: white;
-  font-weight: 40;
+  font-weight: 50;
+  min-height: 45px;
   background: #4f8ef7;
-  width: 150px;
   border-radius: 4px;
+  height: 50px;
+  text-align: center;
+  width: 100%;
+  max-width: 150px;
 }
 
-@media only screen and (max-width: 1026px) {
+@media only screen and (min-width: 500px) {
   .landingButton {
-    width: inherit;
+    width: 60%;
   }
 }
+
 .ReadOnlyText {
   width: 400px;
 }
@@ -89,6 +91,7 @@ ion-input:focus-within {
 .UniversityList {
   border-radius: 5px 5px 5px 5px;
   border: solid 1px;
+  border-color: #4f8ef7;
   margin-top: 5px;
   box-shadow: none;
 }
@@ -119,7 +122,9 @@ ion-input:focus-within {
 }
 
 .Description {
-  white-space: wrap;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
   margin: 0.67em 0;
   font-weight: 700;
@@ -128,5 +133,8 @@ ion-input:focus-within {
   font-size: 2rem;
   margin-bottom: 1rem;
   margin-top: 0;
-  color: var(--theme-text);
+}
+
+.MainInput {
+  text-align: -webkit-center;
 }
