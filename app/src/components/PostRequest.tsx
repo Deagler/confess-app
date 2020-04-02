@@ -37,16 +37,19 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
   >(APPROVE_POST);
 
   const approveHandler = async () => {
-    await approvePost({
-      variables: {
-        postId: id,
-        communityId: 'HW6lY4kJOpqSpL39hbUV',
-        approverId: 'aVyC8BFy1f5qGzXVwGSu',
-      },
-    });
+    try {
+      await approvePost({
+        variables: {
+          postId: id,
+          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          approverId: 'aVyC8BFy1f5qGzXVwGSu',
+        },
+      });
 
-    if (!error) {
+      // callback
       onApprove();
+    } catch (error) {
+      console.error(error);
     }
   };
 
