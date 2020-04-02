@@ -9,7 +9,6 @@ import {
   IonHeader,
   IonInput,
   IonContent,
-  IonTitle,
   IonButton,
   IonRow,
   IonCol,
@@ -20,7 +19,7 @@ import {
   IonSlides,
   IonSlide,
   IonItemGroup,
-  IonSpinner,
+  IonSkeletonText,
   IonItemDivider,
 } from '@ionic/react';
 
@@ -140,7 +139,7 @@ const LandingPage: React.FC = () => {
           <p>Curated each day just for you.</p>
 
           {loading ? (
-            <IonSpinner />
+            <IonSkeletonText animated={true} style={{ height: '200px' }} />
           ) : (
             <IonSlides pager={true} options={slideOpts}>
               {data.community.feed.slice(0, 4).map((slide) => (
