@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-express';
 import { firebaseApp } from '../../firebase';
-import { Community, Post } from '../../typings';
+import { Community, Post, User } from '../../typings';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -13,6 +13,15 @@ export const queryResolvers = {
         .get();
 
       return addIdToDoc(post) as Post | undefined;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
+  },
+  async user(_: null, args: { id: string }) {
+    try {
+      const user = await firestore.doc(`users/${args.id}`).get();
+
+      return addIdToDoc(user) as User | undefined;
     } catch (error) {
       throw new ApolloError(error);
     }

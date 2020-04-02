@@ -28,11 +28,11 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
     firstName,
     lastName,
     email: userRecord.email,
-    community: null,
+    communityRef: null,
   };
 
   if (!communityDoc.empty) {
-    newUserData.community = communityDoc.docs[0].ref;
+    newUserData.communityRef = communityDoc.docs[0].ref;
   }
 
   try {
