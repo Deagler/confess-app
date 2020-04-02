@@ -12,7 +12,7 @@ import {
   IonButton,
 } from '@ionic/react';
 
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Redirect } from 'react-router';
 
 import './Page.css';
 import { firebaseApp } from '../services/firebase';
@@ -20,12 +20,30 @@ import { IsValidEmailFormat } from '../utils';
 import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
+import { Checkmark } from 'react-checkmark';
 
 const LoggingInCardContent: React.FC = () => {
   return (
     <IonCardContent>
       <IonCardTitle>Logging in...</IonCardTitle>
       <IonSpinner />
+    </IonCardContent>
+  );
+};
+
+const LoginSuccessCard: React.FC = () => {
+  return (
+    <IonCardContent>
+      <Checkmark size="medium" />
+      <IonCardTitle>Logged in! Taking you to Confess.</IonCardTitle>
+    </IonCardContent>
+  );
+};
+
+const LoginErrorCard: React.FC = () => {
+  return (
+    <IonCardContent>
+      <IonCardTitle>Failed to login :( Taking you to Confess.</IonCardTitle>
     </IonCardContent>
   );
 };
@@ -68,7 +86,9 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   );
 
   const [loginError, setLoginError] = useState<string>();
-  const [userEmail, setUserEmail] = useState<string>();
+  const [userEmail, setUserEmail] = useState<string>(
+    localStorage.getItem('emailForSignIn')!
+  );
 
   const attemptLogin = () => {
     const emailLink = window.location.href;
@@ -89,20 +109,49 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     attemptLogin();
   }, []);
 
+  const renderAppropriateLoginCard = () => {
+    if (attemptLoginInfo.called) {
+      if (attemptLoginInfo.loading) {
+        return <LoggingInCardContent />;
+      }
+
+      if (attemptLoginInfo.data && attemptLoginInfo.data.success) {
+        return (
+          <React.Fragment>
+            <Redirect to="/page/posts" />
+            <LoginSuccessCard />
+          </React.Fragment>
+        );
+      }
+
+      if (
+        attemptLoginInfo.error ||
+        (attemptLoginInfo.data && !attemptLoginInfo.data.success)
+      ) {
+        return (
+          <React.Fragment>
+            <Redirect to="/page/posts" />
+            <LoginErrorCard />
+          </React.Fragment>
+        );
+      }
+    }
+
+    return !localStorage.getItem('emailForSignIn') ? (
+      <EmailInputCardContent
+        email={userEmail}
+        setEmail={setUserEmail}
+        loading={attemptLoginInfo.loading}
+        submit={attemptLogin}
+      />
+    ) : (
+      <LoggingInCardContent />
+    );
+  };
+
   return (
     <IonPage>
-      <IonCard>
-        {!localStorage.getItem('emailForSignIn') ? (
-          <EmailInputCardContent
-            email={userEmail}
-            setEmail={setUserEmail}
-            loading={attemptLoginInfo.loading}
-            submit={attemptLogin}
-          />
-        ) : (
-          <LoggingInCardContent />
-        )}
-      </IonCard>
+      <IonCard>{renderAppropriateLoginCard()}</IonCard>
     </IonPage>
   );
 };

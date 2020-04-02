@@ -1,3 +1,5 @@
+import { firebaseApp } from '../../../services/firebase';
+
 export const authResolvers = {
   attemptLoginWithEmailLink: async (_, { userEmail, emailLink }, { cache }) => {
     localStorage.removeItem('emailForSignIn');
