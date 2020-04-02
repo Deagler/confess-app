@@ -1,140 +1,42 @@
-.RadioGroup ion-item ion-radio {
-  padding-right: 10px;
-}
-
-.ConfessHeader ion-row ion-col {
-  display: inline-block;
-  height: 60px;
-}
 body {
-  --ion-background-color: #f8f8f8;
-  --ion-background-color-rgb: 248, 248, 248;
+  --ion-background-color: rgb(245, 245, 245);
 }
 
-.Introduction {
-  justify-content: center;
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
 }
 
-.IntroductionCol {
-  text-align: -webkit-center;
-}
-
-.Introduction ion-col ion-row {
-  justify-content: center;
-}
-
-.SubIntroduction ion-card-title {
-  font-size: 30px;
-  margin-bottom: 15px;
-}
-
-.ConfessHeader ion-row ion-col {
-  display: inline;
-}
-
-.CardInSlide {
-  width: inherit;
-}
-
-.landingButton {
-  direction: ltr;
-  -webkit-font-smoothing: subpixel-antialiased;
-  font: inherit;
-  overflow: visible;
-  text-transform: none;
-  margin: 0;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.25s;
-  font-size: 0.8706em;
-  border: none;
-  color: white;
-  font-weight: 50;
-  min-height: 45px;
-  background: #4f8ef7;
-  border-radius: 4px;
-  height: 50px;
-  text-align: center;
-  width: 100%;
-  max-width: 150px;
-}
-
-@media only screen and (min-width: 500px) {
-  .landingButton {
-    width: 60%;
-  }
-}
-
-.ReadOnlyText {
-  width: 400px;
-}
-
-.Chip {
+ion-chip {
   background-color: transparent;
 }
-.ChipIcon {
-  color: #4f8ef7;
+
+ion-chip ion-icon {
+  color: #4f83f7;
 }
 
 ion-input {
-  border-radius: 5px 5px 5px 5px;
   border: solid 1px;
-  max-width: 300px;
-  min-width: 0;
 }
 
 ion-input:focus-within {
   border: solid 1px #4f8ef7;
 }
 
-.UniversityList {
-  border-radius: 5px 5px 5px 5px;
-  border: solid 1px;
-  border-color: #4f8ef7;
-  margin-top: 5px;
-  box-shadow: none;
+ion-button {
+  color: white;
+  background: #4f83f7;
 }
 
-#InputHeader {
-  align-items: flex-end;
-  margin-right: 15px;
-  text-overflow: ellipsis;
+h1 {
+  font-size: 48px;
 }
 
-@media only screen and (max-width: 1026px) {
-  #InputHeader {
-    display: none;
-  }
+h2 {
+  font-size: 30px;
 }
 
-.Slogon {
-  font-size: 36px;
-  line-height: 44px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  text-align: center;
-  white-space: wrap;
-}
-
-#ButtonHeader {
-  align-content: flex-end;
-}
-
-.Description {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  margin: 0.67em 0;
-  font-weight: 700;
-  line-height: 1.1875;
-  letter-spacing: -0.8px;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  margin-top: 0;
-}
-
-.MainInput {
-  text-align: -webkit-center;
+ion-col p {
+  margin-left: 0px;
 }

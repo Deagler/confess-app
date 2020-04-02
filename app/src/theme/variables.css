@@ -225,11 +225,4 @@ http://ionicframework.com/docs/theming/ */
   ion-title.title-large {
     --color: white;
   }
-
-  ion-button.landingButton {
-    box-shadow: none !important;
-  }
-  ion-button.landingButton :host(.button-solid) {
-    --transition: none !important;
-  }
 }

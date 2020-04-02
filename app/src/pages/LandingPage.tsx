@@ -6,11 +6,12 @@ import {
   IonPage,
   IonIcon,
   IonToolbar,
-  IonHeader,
   IonInput,
+  IonList,
   IonContent,
   IonButton,
   IonRow,
+  IonAvatar,
   IonCol,
   IonItem,
   IonLabel,
@@ -18,12 +19,11 @@ import {
   IonGrid,
   IonSlides,
   IonSlide,
-  IonItemGroup,
   IonSkeletonText,
   IonItemDivider,
 } from '@ionic/react';
 
-import image from '../theme/IconImage/uoa.svg';
+import uoa from '../assets/uoa.svg';
 import LandingPost from '../components/LandingPost';
 
 import './LandingPage.css';
@@ -40,35 +40,34 @@ const LandingPage: React.FC = () => {
 
   const slideOpts = {
     direction: 'horizontal',
-    autoplay: true,
+    autoplay: {
+      delay: 4000,
+    },
   };
 
   return (
     <IonPage>
       <IonContent>
-        <div
-          className="ion-align-self-center"
-          style={{ maxWidth: '1000px', margin: 'auto', padding: '20px' }}
-        >
+        <div className="container ion-align-self-center">
           <IonToolbar>
             <IonItem slot="start" lines="none">
-              <IonIcon icon={chatbox} color="primary" />
-              <IonLabel>Confess</IonLabel>
+              <IonIcon icon={chatbox} color="primary" size="large" />
+              <IonLabel style={{ fontSize: '24px' }}>Confess</IonLabel>
             </IonItem>
-            <IonButton slot="end" fill="clear">
+            <IonButton slot="end" fill="clear" color="white">
               Log In
             </IonButton>
           </IonToolbar>
 
           <IonGrid className="ion-margin-vertical ion-text-center">
             <IonRow className="ion-justify-content-center">
-              <IonCol size="12" className="IntroductionCol">
+              <IonCol size="12">
                 <h1>Confess anonymously to your peers.</h1>
               </IonCol>
             </IonRow>
 
             <IonRow className="ion-justify-content-center">
-              <IonCol size="5" size-xs="12" size-md="4" className="MainInput">
+              <IonCol size="5" size-xs="12" size-md="4">
                 <IonInput
                   className="ion-margin-vertical"
                   required={true}
@@ -83,9 +82,7 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size-xs="12" size-sm="6" size-md="4">
-                <IonButton fill="clear" className="landingButton">
-                  Log In
-                </IonButton>
+                <IonButton fill="clear">Log In</IonButton>
               </IonCol>
             </IonRow>
 
@@ -97,33 +94,37 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <IonItemGroup>
-                  <IonItem lines="none" className="UniversityList">
-                    <IonIcon slot="start" src={image} />
+                <IonList>
+                  <IonItem>
+                    <IonAvatar slot="start">
+                      <img src={uoa} />
+                    </IonAvatar>
                     <IonLabel>The University of Auckland</IonLabel>
                   </IonItem>
-                  <IonItem lines="none" className="UniversityList">
-                    <IonIcon slot="start" icon={school} />
+                  <IonItem>
+                    <IonAvatar slot="start">
+                      <img src={school} />
+                    </IonAvatar>
                     <IonLabel>More universities coming soon.</IonLabel>
                   </IonItem>
-                </IonItemGroup>
+                </IonList>
               </IonCol>
             </IonRow>
 
             <IonRow className="ion-margin-top ion-justify-content-center">
-              <IonChip className="Chip">
-                <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonChip>
+                <IonIcon icon={checkmarkCircleSharp} />
                 <IonLabel>Confessions</IonLabel>
               </IonChip>
-              <IonChip className="Chip">
-                <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonChip>
+                <IonIcon icon={checkmarkCircleSharp} />
                 <IonLabel>Memes</IonLabel>
               </IonChip>
-              <IonChip className="Chip">
-                <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonChip>
+                <IonIcon icon={checkmarkCircleSharp} />
                 <IonLabel>Emotions</IonLabel>
               </IonChip>
-              <IonChip className="Chip">
+              <IonChip>
                 <IonLabel style={{ fontWeight: 'bold' }}>
                   All in one place.
                 </IonLabel>
@@ -149,23 +150,31 @@ const LandingPage: React.FC = () => {
 
           <IonItemDivider />
 
-          <IonGrid className="SubIntroduction">
-            <h2>Completely anonymous.</h2>
-            <p>
-              We care about your privacy. Share your feelings and memes with
-              your peers safely and anonymously.
-            </p>
-            <IonInput
-              className="ion-margin-vertical"
-              inputmode="email"
-              value={thirdText}
-              placeholder="Your university email here"
-              onIonChange={(e) => setThirdText(e.detail.value!)}
-              clearInput={true}
-            />
-            <IonButton fill="clear" className="landingButton">
-              Log In
-            </IonButton>
+          <IonGrid>
+            <IonRow>
+              <h2>Completely anonymous.</h2>
+              <p>
+                We care about your privacy. Share your feelings and memes with
+                your peers safely and anonymously.
+              </p>
+            </IonRow>
+            <IonRow className="ion-align-items-center">
+              <IonCol size="5">
+                <IonInput
+                  className="ion-margin-vertical"
+                  inputmode="email"
+                  value={thirdText}
+                  placeholder="Your university email here"
+                  onIonChange={(e) => setThirdText(e.detail.value!)}
+                  clearInput={true}
+                />
+              </IonCol>
+              <IonCol size="2">
+                <IonButton fill="clear" className="landingButton">
+                  Log In
+                </IonButton>
+              </IonCol>
+            </IonRow>
           </IonGrid>
         </div>
       </IonContent>
