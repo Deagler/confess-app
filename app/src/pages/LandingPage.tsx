@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_POST_BY_ID, GET_COMMUNITY_POSTS } from '../common/graphql/posts';
+import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
 import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,
@@ -18,11 +18,11 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonGrid,
-  IonSkeletonText,
   IonSlides,
   IonSlide,
   IonItemGroup,
   IonModal,
+  IonSpinner,
 } from '@ionic/react';
 import './LandingPage.css';
 import image from '../theme/IconImage/uoa.svg';
@@ -32,7 +32,7 @@ export interface LandingPageProps {
   email: string; // TODO: three input fields, logIn button click event
 }
 const LandingPage: React.FC = () => {
-  const { loading, data, called } = useQuery(GET_COMMUNITY_POSTS, {
+  const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {
       id: 'HW6lY4kJOpqSpL39hbUV',
     },
@@ -55,7 +55,6 @@ const LandingPage: React.FC = () => {
         <IonGrid>
           <IonRow className="ion-nowrap">
             <IonTitle>
-              {' '}
               <IonIcon className="ChipIcon" icon={chatbox} />
               Confess
             </IonTitle>
@@ -76,11 +75,9 @@ const LandingPage: React.FC = () => {
                 Log In
               </IonButton>
             </IonCol>
-            {/* </IonRow> */}
           </IonRow>
         </IonGrid>
       </IonHeader>
-
       <IonContent>
         <IonGrid className="ion-margin-vertical ion-text-center">
           <IonRow className="ion-justify-content-center">
@@ -120,10 +117,9 @@ const LandingPage: React.FC = () => {
 
           <IonRow className="ion-justify-content-center">
             <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-              {' '}
               <IonLabel className="ion-margin-vertical">
                 Or check out some confessions as a guest
-              </IonLabel>{' '}
+              </IonLabel>
             </IonCol>
           </IonRow>
 
@@ -204,7 +200,7 @@ const LandingPage: React.FC = () => {
             >
               {loading ? (
                 <IonSlide>
-                  <IonSkeletonText>Loading</IonSkeletonText>
+                  <IonSpinner />
                 </IonSlide>
               ) : (
                 <IonSlides
