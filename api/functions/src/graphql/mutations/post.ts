@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-server-express';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Post } from '../../typings';
@@ -42,6 +43,42 @@ async function submitPostForApproval(
   };
 }
 
+async function approvePost(_: any, { communityId, postId, approverId }) {
+  // verify approver
+  const approverRef = firestore.doc(`/users/${approverId}`);
+  const approver = await approverRef.get();
+  if (!approver.exists) {
+    throw new ApolloError(`user with id ${approverId} doesn't exist`);
+  }
+
+  // verify post
+  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
+  const post = await postRef.get();
+  if (!post.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
+  }
+
+  // update post
+  const patch = {
+    isApproved: true,
+    approvalInfo: {
+      approver: approverRef,
+      approvalTimestamp: moment().unix(),
+    },
+  };
+  await postRef.update(patch);
+
+  // success
+  return {
+    code: 200,
+    message: 'Post approved.',
+    success: true,
+  };
+}
+
 export const postMutations = {
   submitPostForApproval,
+  approvePost,
 };
