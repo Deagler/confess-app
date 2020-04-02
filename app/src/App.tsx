@@ -1,5 +1,3 @@
-import Menu from './components/Menu';
-import FeedPage from './pages/FeedPage';
 import React, { useState } from 'react';
 import {
   IonApp,
@@ -27,12 +25,16 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+import { ApolloProvider } from '@apollo/react-hooks';
+import { apolloClient } from './services/api/apolloClient';
+
+import LandingPage from './pages/LandingPage';
+import Menu from './components/Menu';
+import FeedPage from './pages/FeedPage';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { apolloClient } from './services/api/apolloClient';
-import LandingPage from './pages/LandingPage';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -85,7 +87,7 @@ const App: React.FC = () => {
             duration={toastInfo.duration}
           />
           <ApolloProvider client={apolloClient}>
-            {window.location.pathname !== '/landing' && <Menu />}
+            <Menu />
             <IonRouterOutlet id="main">
               <Route
                 path="/landing"
@@ -108,15 +110,11 @@ const App: React.FC = () => {
                 exact={true}
               />
               <Route
-                path="/"
-                render={() => <Redirect to="/page/Inbox" />}
-                exact={true}
-              />
-              <Route
                 path="/page/posts/:id"
                 render={() => <Postpage />}
                 exact={true}
               />
+              <Route path="/" render={() => <Redirect to="/landing" />} />
             </IonRouterOutlet>
           </ApolloProvider>
         </IonSplitPane>

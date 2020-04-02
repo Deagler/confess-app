@@ -9,7 +9,7 @@ import {
   IonToast,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
@@ -46,6 +46,13 @@ const Menu: React.FC<{}> = () => {
     client.writeData({ data: { selectedCommunity: community } });
   };
 
+  // cant put this in App because you cant have useLocation
+  // in the same component as the router is defined
+  const location = useLocation();
+  if (location.pathname === '/landing') {
+    return null;
+  }
+
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -72,4 +79,4 @@ const Menu: React.FC<{}> = () => {
   );
 };
 
-export default withRouter(Menu);
+export default Menu;
