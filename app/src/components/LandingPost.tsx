@@ -34,20 +34,18 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <h1>
-      <IonCard className="ion-margin-vertical">
-        <IonCardContent>
-          <IonCardHeader>
-            <IonCardSubtitle>{id}</IonCardSubtitle>
-            <IonCardTitle>{title}</IonCardTitle>
-            <IonCardSubtitle>
-              {moment.unix(creationTimestamp).fromNow()}
-            </IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>{content}</IonCardContent>
-          <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
-        </IonCardContent>
-      </IonCard>
+    <h1 style={{ width: 'inherit' }}>
+      <IonCardContent>
+        <IonCardHeader>
+          <IonCardSubtitle>{id}</IonCardSubtitle>
+          <IonCardTitle>{title}</IonCardTitle>
+          <IonCardSubtitle>
+            {moment.unix(creationTimestamp).fromNow()}
+          </IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
+      </IonCardContent>
     </h1>
   );
 };

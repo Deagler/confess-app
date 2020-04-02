@@ -23,7 +23,7 @@ body {
   justify-content: center;
 }
 
-.SubIntroduction ion-card-content ion-card-title {
+.SubIntroduction ion-card-title {
   font-size: 3.2em;
 }
 
@@ -52,13 +52,18 @@ body {
   font-size: 0.8706em;
   min-height: 20px;
   border: none;
-  color: black;
-  font-weight: normal;
+  color: white;
+  font-weight: 40;
   background: #4f8ef7;
   width: 150px;
   border-radius: 4px;
 }
 
+@media only screen and (max-width: 1026px) {
+  .landingButton {
+    width: inherit;
+  }
+}
 .ReadOnlyText {
   width: 400px;
 }
@@ -111,4 +116,17 @@ ion-input:focus-within {
 
 #ButtonHeader {
   align-content: flex-end;
+}
+
+.Description {
+  white-space: wrap;
+  text-align: center;
+  margin: 0.67em 0;
+  font-weight: 700;
+  line-height: 1.1875;
+  letter-spacing: -0.8px;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  color: var(--theme-text);
 }

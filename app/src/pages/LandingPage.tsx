@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_POST_BY_ID, GET_COMMUNITY_POSTS } from '../common/graphql/posts';
-import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
+import { chatbox, school, checkmarkCircleSharp, grid } from 'ionicons/icons';
 import {
   IonPage,
   IonIcon,
@@ -45,7 +45,7 @@ const LandingPage: React.FC = () => {
   const slideOpts = {
     direction: 'horizontal',
     speed: 1000, // 0.3s transition
-    autoplay: 300,
+    autoplay: true,
   };
   const [showModal, setShowModal] = useState(false);
 
@@ -100,24 +100,30 @@ const LandingPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <IonGrid className="ion-margin-vertical">
+        <IonGrid className="ion-margin-vertical ion-justify-content-center">
           <IonRow className="Introduction">
             <IonCol size="12" className="IntroductionCol">
               <IonLabel className="Slogon">
                 Confess anonymously to your peers
               </IonLabel>
-              <IonGrid style={{}}>
-                <IonCol>
-                  <IonInput
-                    required={true}
-                    inputmode="email"
-                    value={secondText}
-                    placeholder="Your vniversity email here"
-                    onIonChange={(e) => setSecondText(e.detail.value!)}
-                    clearInput={true}
-                  />
-                </IonCol>
-              </IonGrid>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
+              <IonInput
+                required={true}
+                inputmode="email"
+                value={secondText}
+                placeholder="Your vniversity email here"
+                onIonChange={(e) => setSecondText(e.detail.value!)}
+                clearInput={true}
+              />
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
               <IonButton
                 disabled={secondText?.trim() === ''}
                 fill="clear"
@@ -125,81 +131,89 @@ const LandingPage: React.FC = () => {
               >
                 Log In
               </IonButton>
-              <IonRow>
-                {' '}
-                <IonLabel className="ion-margin-vertical">
-                  Or check out some confessions as a guest
-                </IonLabel>{' '}
-              </IonRow>
-              <IonRow>
-                <IonItemGroup>
-                  <IonItem lines="none" className="UniversityList">
-                    <IonIcon slot="start" src={image} />
-                    <IonLabel>University of Auckland</IonLabel>
-                  </IonItem>
-                  <IonItem lines="none" className="UniversityList">
-                    <IonIcon slot="start" icon={school} />
-                    <IonLabel>More university coming soon</IonLabel>
-                  </IonItem>
-                </IonItemGroup>
-              </IonRow>
-              <IonRow className="ion-margin-vertical">
-                <IonChip className="Chip">
-                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
-                  <IonLabel>Confessions</IonLabel>
-                </IonChip>
-                <IonChip className="Chip">
-                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
-                  <IonLabel>Memes</IonLabel>
-                </IonChip>
-                <IonChip className="Chip">
-                  <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
-                  <IonLabel>Emotions</IonLabel>
-                </IonChip>
-                <IonChip className="Chip">
-                  <IonLabel>All in place</IonLabel>
-                </IonChip>
-              </IonRow>
             </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
+              {' '}
+              <IonLabel className="ion-margin-vertical">
+                Or check out some confessions as a guest
+              </IonLabel>{' '}
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
+              <IonItemGroup>
+                <IonItem lines="none" className="UniversityList">
+                  <IonIcon slot="start" src={image} />
+                  <IonLabel>University of Auckland</IonLabel>
+                </IonItem>
+                <IonItem lines="none" className="UniversityList">
+                  <IonIcon slot="start" icon={school} />
+                  <IonLabel>More universities coming soon</IonLabel>
+                </IonItem>
+              </IonItemGroup>
+            </IonCol>
+          </IonRow>
+
+          <IonRow className="ion-margin-vertical">
+            <IonChip className="Chip">
+              <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonLabel>Confessions</IonLabel>
+            </IonChip>
+            <IonChip className="Chip">
+              <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonLabel>Memes</IonLabel>
+            </IonChip>
+            <IonChip className="Chip">
+              <IonIcon className="ChipIcon" icon={checkmarkCircleSharp} />
+              <IonLabel>Emotions</IonLabel>
+            </IonChip>
+            <IonChip className="Chip">
+              <IonLabel>All in one place</IonLabel>
+            </IonChip>
           </IonRow>
         </IonGrid>
 
-        <IonGrid>
+        <IonGrid size-sm={true}>
           <IonRow>
-            <IonCol>
+            <IonCol size="8">
               <IonGrid className="SubIntroduction">
-                <IonCardContent>
-                  <IonCardTitle className="ion-margin-vertical">
-                    Completely anonymous confessions
-                  </IonCardTitle>
-                  <IonCardSubtitle style={{ fontSize: '15px' }}>
-                    We care about your privacy. Share your feelings and your
-                    memes with your peers safely and anonymously
-                  </IonCardSubtitle>
-                  <IonInput
-                    style={{}}
-                    className="ion-margin-vertical"
-                    inputmode="email"
-                    value={thirdText}
-                    placeholder="Your vniversity email here"
-                    onIonChange={(e) => setThirdText(e.detail.value!)}
-                    clearInput={true}
-                  />
-                  <IonButton
-                    disabled={thirdText?.trim() === ''}
-                    fill="clear"
-                    className="landingButton"
-                  >
-                    Log In
-                  </IonButton>
-                </IonCardContent>
+                <IonCardTitle className="ion-margin-vertical">
+                  Completely anonymous confessions
+                </IonCardTitle>
+                <IonCardSubtitle style={{ fontSize: '15px' }}>
+                  We care about your privacy. Share your feelings and your memes
+                  with your peers safely and anonymously
+                </IonCardSubtitle>
+                <IonInput
+                  style={{}}
+                  className="ion-margin-vertical"
+                  inputmode="email"
+                  value={thirdText}
+                  placeholder="Your vniversity email here"
+                  onIonChange={(e) => setThirdText(e.detail.value!)}
+                  clearInput={true}
+                />
+                <IonButton
+                  disabled={thirdText?.trim() === ''}
+                  className="landingButton"
+                >
+                  Log In
+                </IonButton>
               </IonGrid>
             </IonCol>
-            <IonCol
-              size="6"
-              style={{ height: '300px' }}
-              className="ion-margin-horizontal ion-text-nowrap"
-            >
+          </IonRow>
+          <IonRow
+            style={{ height: '300px' }}
+            className="ion-margin-horizontal ion-text-nowrap"
+          >
+            <IonCol size="8">
+              <IonTitle className="Description">
+                Confess is where you can go for a vent
+              </IonTitle>
               {loading ? (
                 <IonSlide />
               ) : (
