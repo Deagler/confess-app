@@ -1,24 +1,10 @@
 import React, { useState } from 'react';
 import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonItemDivider,
-  IonIcon,
-  IonLabel,
-  IonButton,
-  IonCard,
   IonCardHeader,
-  IonHeader,
   IonCardTitle,
   IonCardSubtitle,
   IonCardContent,
-  IonSlide,
-  IonContent,
-  IonTitle,
-  IonSlides,
 } from '@ionic/react';
-import { person } from 'ionicons/icons';
 import moment from 'moment';
 import './Post.css';
 
@@ -37,7 +23,7 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
     <h1 style={{ width: 'inherit' }}>
       <IonCardContent>
         <IonCardHeader>
-          <IonCardSubtitle>{id}</IonCardSubtitle>
+          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
           <IonCardSubtitle>
             {moment.unix(creationTimestamp).fromNow()}
