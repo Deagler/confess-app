@@ -21,7 +21,6 @@ import {
   IonSlides,
   IonSlide,
   IonItemGroup,
-  IonModal,
   IonSpinner,
 } from '@ionic/react';
 import './LandingPage.css';
@@ -39,16 +38,11 @@ const LandingPage: React.FC = () => {
   });
   const [secondText, setSecondText] = useState<string>();
   const [thirdText, setThirdText] = useState<string>();
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const slideOpts = {
     direction: 'horizontal',
     autoplay: true,
   };
-  const [showModal, setShowModal] = useState(false);
 
-  function handleInput(text: any) {
-    return text?.trim() === '' ? setIsDisabled(true) : setIsDisabled(false);
-  }
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -59,18 +53,11 @@ const LandingPage: React.FC = () => {
               Confess
             </IonTitle>
             <IonCol size="auto" />
-            <IonModal isOpen={showModal} swipeToClose={true}>
-              <IonInput />
-              <IonButton onClick={() => setShowModal(false)}>
-                Close Modal
-              </IonButton>
-            </IonModal>
             <IonCol size="0" size-xs="0" size-md="2">
               <IonButton
                 id="ButtonHeader"
                 fill="clear"
                 className="landingButton"
-                onClick={() => setShowModal(true)}
               >
                 Log In
               </IonButton>
@@ -98,18 +85,13 @@ const LandingPage: React.FC = () => {
                 placeholder="Your university email here"
                 onIonChange={(e) => setSecondText(e.detail.value!)}
                 clearInput={true}
-                onFocus={() => handleInput(secondText)}
               />
             </IonCol>
           </IonRow>
 
           <IonRow className="ion-justify-content-center">
             <IonCol size-xs="12" size-sm="6" size-md="4">
-              <IonButton
-                disabled={isDisabled}
-                fill="clear"
-                className="landingButton"
-              >
+              <IonButton fill="clear" className="landingButton">
                 Log In
               </IonButton>
             </IonCol>
@@ -175,13 +157,8 @@ const LandingPage: React.FC = () => {
                   placeholder="Your university email here"
                   onIonChange={(e) => setThirdText(e.detail.value!)}
                   clearInput={true}
-                  onFocus={() => handleInput(thirdText)}
                 />
-                <IonButton
-                  disabled={isDisabled}
-                  fill="clear"
-                  className="landingButton"
-                >
+                <IonButton fill="clear" className="landingButton">
                   Log In
                 </IonButton>
               </IonGrid>
