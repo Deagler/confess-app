@@ -5,6 +5,7 @@ import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,
   IonIcon,
+  IonToolbar,
   IonHeader,
   IonInput,
   IonContent,
@@ -49,24 +50,13 @@ const LandingPage: React.FC = () => {
         className="ion-no-border ion-align-self-center"
         style={{ maxWidth: '1000px' }}
       >
-        <IonGrid>
-          <IonRow className="ion-nowrap">
-            <IonTitle>
-              <IonIcon className="ChipIcon" icon={chatbox} />
-              Confess
-            </IonTitle>
-            <IonCol size="auto" />
-            <IonCol size="0" size-xs="0" size-md="2">
-              <IonButton
-                id="ButtonHeader"
-                fill="clear"
-                className="landingButton"
-              >
-                Log In
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+        <IonToolbar>
+          <IonItem slot="start" lines="none">
+            <IonIcon icon={chatbox} color="primary" />
+            <IonLabel>Confess</IonLabel>
+          </IonItem>
+          <IonButton slot="end">Log In</IonButton>
+        </IonToolbar>
       </IonHeader>
 
       <IonContent>
