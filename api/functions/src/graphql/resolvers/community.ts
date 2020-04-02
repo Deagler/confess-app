@@ -20,4 +20,18 @@ export const communityResolvers = {
       throw new ApolloError(error);
     }
   },
+  async unapprovedPosts(parent: any, args) {
+    try {
+      const unapprovedPostsQuery = await firestore
+        .collection(`communities/${parent.id}/posts`)
+        .where('isApproved', '==', false)
+        .get();
+
+      const unapprovedPosts: Post[] = unapprovedPostsQuery.docs.map(addIdToDoc);
+
+      return unapprovedPosts;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
+  },
 };

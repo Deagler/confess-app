@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonPage,
   IonHeader,
@@ -7,53 +7,52 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
+  IonCard,
+  IonSkeletonText,
+  IonToast,
 } from '@ionic/react';
+import { useQuery } from '@apollo/react-hooks';
 
 import PostRequest, { PostRequestProps } from '../components/PostRequest';
+import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
 
 const AdminPage: React.FC = () => {
-  const testPosts: PostRequestProps[] = [
-    {
-      id: 1,
-      title: 'This is the title',
-      date: new Date(),
-      content: 'This is the content',
-      author: 'This is the author',
+  const { loading, data, error } = useQuery(GET_COMMUNITY_UNAPPROVED_POSTS, {
+    variables: {
+      id: 'HW6lY4kJOpqSpL39hbUV',
     },
-    {
-      id: 1,
-      title: 'This is the title',
-      date: new Date(),
-      content: 'This is the content',
-      author: 'This is the author',
-    },
-    {
-      id: 1,
-      title: 'This is the title',
-      date: new Date(),
-      content: 'This is the content',
-    },
-  ];
-
-  const [posts, setPosts] = useState(testPosts);
+  });
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Admin</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Admin</IonTitle>
+          </IonToolbar>
+        </IonHeader>
 
-      <IonContent>
-        {posts.map((post: PostRequestProps, i: number) => (
-          <PostRequest key={i} {...post} />
-        ))}
-      </IonContent>
-    </IonPage>
+        <IonContent>
+          {loading ? (
+            <IonCard>
+              <IonSkeletonText animated={true} style={{ height: '200px' }} />
+            </IonCard>
+          ) : (
+            !error &&
+            data &&
+            data.community.unapprovedPosts.map(
+              (post: PostRequestProps, i: number) => (
+                <PostRequest key={i} {...post} />
+              )
+            )
+          )}
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 
