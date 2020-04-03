@@ -67,6 +67,11 @@ export const queryResolvers = {
 
       const queryResults = await commentsQuery.get();
 
+      // if there are no more documents return an empty list and the previous cursor
+      if (queryResults.empty) {
+        return { items: [], cursor: args.cursor };
+      }
+
       // document id of the final comment is used for the pagination cursor
       const nextCursor = queryResults.docs[queryResults.docs.length - 1].ref.id;
 

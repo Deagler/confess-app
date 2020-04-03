@@ -14,6 +14,7 @@ import {
   IonCardContent,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonText,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';
@@ -26,6 +27,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetComments, GetCommentsVariables } from '../types/GetComments';
 import { GET_COMMENTS } from '../common/graphql/comments';
 import { Direction } from '../types/globalTypes';
+
+const COMMENT_PAGE_LIMIT = 3;
 
 const Postpage: React.FC = () => {
   const [comments, setComments] = useState<(CommentData | null)[]>([]);
@@ -41,7 +44,7 @@ const Postpage: React.FC = () => {
     postId: postId!,
     // TODO: Connect sorting to UI
     sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
-    limit: 3,
+    limit: COMMENT_PAGE_LIMIT,
   };
   const { data, loading, error, fetchMore } = useQuery<
     GetComments,
@@ -60,9 +63,14 @@ const Postpage: React.FC = () => {
       },
       // Update the cache with the newly fetched results
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const previousComments = previousResult.comments?.items;
         const newComments = fetchMoreResult?.comments?.items;
+        const previousComments = previousResult.comments?.items;
         const newCursor = fetchMoreResult?.comments?.cursor;
+
+        // If a full page hasn't been returned we have reached the end
+        if (newComments?.length !== COMMENT_PAGE_LIMIT) {
+          setDisableInfiniteScroll(true);
+        }
 
         return {
           comments: {
@@ -112,7 +120,7 @@ const Postpage: React.FC = () => {
         />
         <IonCard>
           {(loading && (
-            <IonCardContent>
+            <IonCardContent className="ion-align-items-center">
               <IonSpinner />
             </IonCardContent>
           )) ||
