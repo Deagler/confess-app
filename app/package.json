@@ -21,6 +21,7 @@
     "@types/url-join": "^4.0.0",
     "apollo-boost": "^0.4.7",
     "firebase": "^7.13.1",
+    "glamor": "^2.20.40",
     "graphql": "^14.6.0",
     "ionicons": "^5.0.0",
     "moment": "^2.24.0",

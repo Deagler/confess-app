@@ -50,6 +50,7 @@ const auth = firebaseApp.auth();
 const App: React.FC = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log('UPDATED', user);
       if (user) {
         apolloClient.reFetchObservableQueries();
       }
