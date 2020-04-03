@@ -27,6 +27,14 @@ export const authResolvers = {
         },
       });
 
+      // localStorage.setItem(
+      //   'authState',
+      //   JSON.stringify({
+      //     accessToken: idToken,
+      //     __typename: 'AuthState',
+      //   })
+      // );
+
       return {
         code: 200,
         success: true,

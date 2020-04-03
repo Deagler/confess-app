@@ -22,5 +22,8 @@ export const apolloClient = new ApolloClient<NormalizedCacheObject>({
 cache.writeData({
   data: {
     selectedCommunity: localStorage.getItem('selectedCommunity') || '',
+    authState: localStorage.getItem('authState')
+      ? JSON.parse(localStorage.getItem('authState')!)
+      : null,
   },
 });

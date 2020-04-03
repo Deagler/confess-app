@@ -15,7 +15,10 @@ import { SelectChangeEventDetail } from '@ionic/core';
 import { withRouter } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import {
+  GET_SELECTED_COMMUNITY,
+  GET_AUTH_STATE,
+} from '../common/graphql/localState';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 
 import CommunitySelect from '../components/CommunitySelect';
@@ -27,6 +30,10 @@ import { LoginInput } from './LoginInput';
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
+  const authStateQuery = useQuery(GET_AUTH_STATE);
+  const authState = authStateQuery.data?.authState;
+
+  console.log(authStateQuery)
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
