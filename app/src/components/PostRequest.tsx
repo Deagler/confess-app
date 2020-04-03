@@ -60,6 +60,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <RejectPostModal
+        postId={id}
         isOpen={rejectModalOpen}
         onDidDismiss={() => setRejectModalOpen(false)}
       />
