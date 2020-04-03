@@ -97,13 +97,13 @@ const LandingPage: React.FC = () => {
                 <IonList>
                   <IonItem>
                     <IonAvatar slot="start">
-                      <img src={uoa} />
+                      <img alt="UoA" src={uoa} />
                     </IonAvatar>
                     <IonLabel>The University of Auckland</IonLabel>
                   </IonItem>
                   <IonItem>
                     <IonAvatar slot="start">
-                      <img src={school} />
+                      <img alt="Other" src={school} />
                     </IonAvatar>
                     <IonLabel>More universities coming soon.</IonLabel>
                   </IonItem>
