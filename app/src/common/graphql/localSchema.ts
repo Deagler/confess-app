@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 export const typeDefs = gql`
   type AuthState {
     accessToken: String!
+    localUser: User
   }
 
   extend type Query {

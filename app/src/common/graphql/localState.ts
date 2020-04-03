@@ -7,9 +7,21 @@ export const GET_SELECTED_COMMUNITY = gql`
 `;
 
 export const GET_AUTH_STATE = gql`
-  query GetSelectedCommunity {
+  query GetAuthState {
     authState @client {
       accessToken
+      localUser {
+        id
+        communityUsername
+        firstName
+        lastName
+        email
+        community {
+          id
+          name
+          abbreviation
+        }
+      }
     }
   }
 `;

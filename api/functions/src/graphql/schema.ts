@@ -11,6 +11,7 @@ const typeDefs = gql`
     communityUsername: String!
     firstName: String!
     lastName: String!
+    email: String!
     community: Community
   }
 

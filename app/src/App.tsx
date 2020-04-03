@@ -1,6 +1,6 @@
 import Menu from './components/Menu';
 import FeedPage from './pages/FeedPage';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonApp,
   IonRouterOutlet,
@@ -34,6 +34,7 @@ import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
 import AuthCallbackPage from './pages/AuthCallbackPage';
+import { firebaseApp } from './services/firebase';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -42,7 +43,23 @@ export const GlobalAppUtils = {
   hideToast: () => {},
 };
 
+const auth = firebaseApp.auth();
+
 const App: React.FC = () => {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        apolloClient.reFetchObservableQueries();
+      } else {
+        apolloClient.resetStore();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  });
+
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('');
 
