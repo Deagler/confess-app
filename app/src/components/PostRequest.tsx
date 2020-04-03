@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -18,6 +18,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { APPROVE_POST } from '../common/graphql/admin';
 import { ApprovePost, ApprovePostVariables } from '../types/ApprovePost';
+import RejectPostModal from '../components/RejectPostModal';
 
 export interface PostRequestProps {
   id: string;
@@ -53,9 +54,15 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
     }
   };
 
+  const [rejectModalOpen, setRejectModalOpen] = useState<boolean>(false);
+
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <RejectPostModal
+        isOpen={rejectModalOpen}
+        onDidDismiss={() => setRejectModalOpen(false)}
+      />
       <IonCard>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
@@ -81,8 +88,13 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
               </IonButton>
             </IonCol>
             <IonCol>
-              <IonButton color="danger" fill="outline" expand="block">
-                Deny
+              <IonButton
+                color="danger"
+                fill="outline"
+                expand="block"
+                onClick={() => setRejectModalOpen(true)}
+              >
+                Reject
               </IonButton>
             </IonCol>
           </IonRow>
