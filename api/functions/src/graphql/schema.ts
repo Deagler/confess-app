@@ -12,7 +12,7 @@ const typeDefs = gql`
     lastUpdated: Int!
     reason: String
   }
-  
+
   enum Direction {
     ASC
     DESC
@@ -43,7 +43,7 @@ const typeDefs = gql`
 
   type CommentConnection {
     items: [Comment]!
-    cursor: String!
+    cursor: String
   }
 
   type Community {
