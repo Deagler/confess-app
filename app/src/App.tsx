@@ -1,5 +1,3 @@
-import Menu from './components/Menu';
-import FeedPage from './pages/FeedPage';
 import React, { useState } from 'react';
 import {
   IonApp,
@@ -10,7 +8,6 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 /* Basic CSS for apps built with Ionic */
@@ -28,11 +25,16 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+import { ApolloProvider } from '@apollo/react-hooks';
+import { apolloClient } from './services/api/apolloClient';
+
+import LandingPage from './pages/LandingPage';
+import Menu from './components/Menu';
+import FeedPage from './pages/FeedPage';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { apolloClient } from './services/api/apolloClient';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -88,6 +90,11 @@ const App: React.FC = () => {
             <Menu />
             <IonRouterOutlet id="main">
               <Route
+                path="/landing"
+                render={() => <LandingPage />}
+                exact={true}
+              />
+              <Route
                 path="/page/posts"
                 render={(props) => <FeedPage {...props} />}
                 exact={true}
@@ -103,15 +110,11 @@ const App: React.FC = () => {
                 exact={true}
               />
               <Route
-                path="/"
-                render={() => <Redirect to="/page/Inbox" />}
-                exact={true}
-              />
-              <Route
                 path="/page/posts/:id"
                 render={() => <Postpage />}
                 exact={true}
               />
+              <Route path="/" render={() => <Redirect to="/landing" />} />
             </IonRouterOutlet>
           </ApolloProvider>
         </IonSplitPane>
