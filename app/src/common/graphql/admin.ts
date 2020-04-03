@@ -32,3 +32,23 @@ export const APPROVE_POST = gql`
     }
   }
 `;
+
+export const REJECT_POST = gql`
+  mutation RejectPost(
+    $communityId: String!
+    $postId: String!
+    $moderatorId: String!
+    $reason: String
+  ) {
+    rejectPost(
+      communityId: $communityId
+      postId: $postId
+      moderatorId: $moderatorId
+      reason: $reason
+    ) {
+      code
+      success
+      message
+    }
+  }
+`;
