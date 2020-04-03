@@ -96,6 +96,12 @@ const typeDefs = gql`
     message: String!
   }
 
+  type RejectPostResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type Mutation {
     submitPostForApproval(
       communityId: String!
@@ -116,6 +122,13 @@ const typeDefs = gql`
       postId: String!
       moderatorId: String!
     ): ApprovePostResponse
+
+    rejectPost(
+      communityId: String!
+      postId: String!
+      moderatorId: String!
+      reason: String
+    ): RejectPostResponse
   }
 `;
 
