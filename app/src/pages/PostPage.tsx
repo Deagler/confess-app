@@ -27,11 +27,11 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetComments, GetCommentsVariables } from '../types/GetComments';
 import { GET_COMMENTS } from '../common/graphql/comments';
 import { Direction } from '../types/globalTypes';
+import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
 
 const COMMENT_PAGE_LIMIT = 3;
 
 const Postpage: React.FC = () => {
-  const [comments, setComments] = useState<(CommentData | null)[]>([]);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
   const { id: postId } = useParams();
   const [disableInfiniteScroll, setDisableInfiniteScroll] = useState<boolean>(
@@ -46,15 +46,12 @@ const Postpage: React.FC = () => {
     sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
     limit: COMMENT_PAGE_LIMIT,
   };
-  const { data, loading, error, fetchMore } = useQuery<
+  const { data, loading, error, fetchMore, updateQuery } = useQuery<
     GetComments,
     GetCommentsVariables
   >(GET_COMMENTS, { variables: commentVariables });
 
   const getMoreComments = async (e: CustomEvent<void>) => {
-    console.log('cursor: ' + data?.comments?.cursor);
-    console.log('commentvariables: ' + JSON.stringify(commentVariables));
-    console.log('data: ' + JSON.stringify(data));
     await fetchMore({
       query: GET_COMMENTS,
       variables: {
@@ -85,8 +82,19 @@ const Postpage: React.FC = () => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  const handleCommentCreated = (newCommentProp: CommentData) => {
-    setComments((oldComments) => [newCommentProp, ...oldComments]);
+  const handleCommentCreated = (
+    newComment: SubmitComment_submitComment_comment
+  ) => {
+    updateQuery((currentResult, _) => {
+      const currentComments = currentResult.comments?.items;
+      return {
+        comments: {
+          items: [newComment, ...currentComments!],
+          cursor: currentResult.comments?.cursor!,
+          __typename: currentResult.comments!.__typename,
+        },
+      };
+    });
   };
 
   const handleReply = (author: string) => {
@@ -120,7 +128,7 @@ const Postpage: React.FC = () => {
         />
         <IonCard>
           {(loading && (
-            <IonCardContent className="ion-align-items-center">
+            <IonCardContent className="ion-text-center">
               <IonSpinner />
             </IonCardContent>
           )) ||

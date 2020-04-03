@@ -15,11 +15,17 @@ import React, { useState, RefObject } from 'react';
 import { send } from 'ionicons/icons';
 import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_COMMENT } from '../common/graphql/comments';
-import { SubmitCommentVariables, SubmitComment } from '../types/SubmitComment';
+import {
+  SubmitCommentVariables,
+  SubmitComment,
+  SubmitComment_submitComment_comment,
+} from '../types/SubmitComment';
 import { CommentData } from './Comment';
 
 export interface NewCommentInputProps {
-  onCommentCreated: (newCommentContent: CommentData) => void;
+  onCommentCreated: (
+    newCommentContent: SubmitComment_submitComment_comment
+  ) => void;
   inputRef: RefObject<HTMLIonTextareaElement>;
   postId: string | undefined;
 }
