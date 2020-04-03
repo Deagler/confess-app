@@ -1,9 +1,16 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  type ApprovalInfo {
-    approver: User!
-    approvalTimestamp: Int!
+  enum ModerationStatus {
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  type ModerationInfo {
+    moderator: User!
+    lastUpdated: Int!
+    reason: String
   }
 
   type User {
@@ -48,8 +55,8 @@ const typeDefs = gql`
     title: String!
     content: String!
 
-    isApproved: Boolean!
-    approvalInfo: ApprovalInfo
+    moderationStatus: ModerationStatus!
+    moderationInfo: ModerationInfo
 
     totalLikes: Int!
     likes: [User]!
@@ -89,6 +96,12 @@ const typeDefs = gql`
     message: String!
   }
 
+  type RejectPostResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type Mutation {
     submitPostForApproval(
       communityId: String!
@@ -107,8 +120,15 @@ const typeDefs = gql`
     approvePost(
       communityId: String!
       postId: String!
-      approverId: String!
+      moderatorId: String!
     ): ApprovePostResponse
+
+    rejectPost(
+      communityId: String!
+      postId: String!
+      moderatorId: String!
+      reason: String
+    ): RejectPostResponse
   }
 `;
 

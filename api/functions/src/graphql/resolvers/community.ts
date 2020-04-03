@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-express';
 import { firebaseApp } from '../../firebase';
-import { Post } from '../../typings';
+import { ModerationStatus, Post } from '../../typings';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -10,7 +10,7 @@ export const communityResolvers = {
     try {
       const postQuery = await firestore
         .collection(`communities/${parent.id}/posts`)
-        .where('isApproved', '==', true)
+        .where('moderationStatus', '==', ModerationStatus.APPROVED)
         .get();
 
       const posts: Post[] = postQuery.docs.map(addIdToDoc);
@@ -24,7 +24,7 @@ export const communityResolvers = {
     try {
       const unapprovedPostsQuery = await firestore
         .collection(`communities/${parent.id}/posts`)
-        .where('isApproved', '==', false)
+        .where('moderationStatus', '==', ModerationStatus.PENDING)
         .get();
 
       const unapprovedPosts: Post[] = unapprovedPostsQuery.docs.map(addIdToDoc);

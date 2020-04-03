@@ -4,22 +4,23 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ApprovePost
+// GraphQL mutation operation: RejectPost
 // ====================================================
 
-export interface ApprovePost_approvePost {
-  __typename: "ApprovePostResponse";
+export interface RejectPost_rejectPost {
+  __typename: "RejectPostResponse";
   code: string;
   success: boolean;
   message: string;
 }
 
-export interface ApprovePost {
-  approvePost: ApprovePost_approvePost | null;
+export interface RejectPost {
+  rejectPost: RejectPost_rejectPost | null;
 }
 
-export interface ApprovePostVariables {
+export interface RejectPostVariables {
   communityId: string;
   postId: string;
   moderatorId: string;
+  reason?: string | null;
 }

@@ -9,7 +9,7 @@ const props: PostRequestProps = {
   date: new Date(),
   content: 'this is the content',
   author: 'this is the author',
-  onApprove: () => {},
+  onModeration: () => {},
 };
 
 test('renders without crashing', () => {
@@ -28,7 +28,7 @@ test('displays content properly', async () => {
   await findByText('this is the content');
   await findByText('this is the author');
   await findByText('Approve');
-  await findByText('Deny');
+  await findByText('Reject');
 });
 
 test('displays author as anonymous if omitted', async () => {
