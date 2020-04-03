@@ -24,12 +24,14 @@ export interface RejectPostModalProps {
   postId: string;
   isOpen: boolean;
   onDidDismiss(): void;
+  onReject(): void;
 }
 
 const RejectPostModal: React.FC<RejectPostModalProps> = ({
   postId,
   isOpen,
   onDidDismiss,
+  onReject,
 }) => {
   const [rejectPost, { loading, error }] = useMutation<
     RejectPost,
@@ -52,6 +54,7 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
 
       // close dialog
       onDidDismiss();
+      onReject();
     } catch (error) {
       console.log(error);
     }

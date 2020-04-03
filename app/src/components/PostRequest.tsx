@@ -26,11 +26,11 @@ export interface PostRequestProps {
   date: Date;
   content: string;
   author?: string;
-  onApprove(): void;
+  onModeration(): void;
 }
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
-  const { id, title, date, content, author, onApprove } = props;
+  const { id, title, date, content, author, onModeration } = props;
 
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,
@@ -48,7 +48,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       });
 
       // callback
-      onApprove();
+      onModeration();
     } catch (error) {
       console.error(error);
     }
@@ -63,6 +63,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         postId={id}
         isOpen={rejectModalOpen}
         onDidDismiss={() => setRejectModalOpen(false)}
+        onReject={onModeration}
       />
       <IonCard>
         <IonCardHeader>

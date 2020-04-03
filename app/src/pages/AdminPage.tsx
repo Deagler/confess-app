@@ -49,7 +49,7 @@ const AdminPage: React.FC = () => {
             data &&
             data.community.unapprovedPosts.map(
               (post: PostRequestProps, i: number) => (
-                <PostRequest key={i} {...post} onApprove={() => refetch()} />
+                <PostRequest key={i} {...post} onModeration={() => refetch()} />
               )
             )
           )}
