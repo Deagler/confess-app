@@ -9,6 +9,8 @@ import {
   IonBackButton,
   IonCard,
   IonList,
+  IonToast,
+  IonSpinner,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';
@@ -17,11 +19,27 @@ import NewCommentInput from '../components/NewCommentInput';
 import './Page.css';
 import './PostPage.css';
 import { useParams } from 'react-router';
+import { useQuery } from '@apollo/react-hooks';
+import { GetComments, GetCommentsVariables } from '../types/GetComments';
+import { GET_COMMENTS } from '../common/graphql/comments';
+import { Direction } from '../types/globalTypes';
 
 const Postpage: React.FC = () => {
-  const [comments, setComments] = useState<CommentData[]>([]);
+  const [comments, setComments] = useState<(CommentData | null)[]>([]);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
   const { id: postId } = useParams();
+  const { data, loading, error, fetchMore } = useQuery<
+    GetComments,
+    GetCommentsVariables
+  >(GET_COMMENTS, {
+    variables: {
+      // TODO: get community id from somewhere
+      communityId: 'HW6lY4kJOpqSpL39hbUV',
+      postId: postId!,
+      sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
+      limit: 5,
+    },
+  });
 
   const handleCommentCreated = (newCommentProp: CommentData) => {
     setComments((oldComments) => [newCommentProp, ...oldComments]);
@@ -34,6 +52,7 @@ const Postpage: React.FC = () => {
 
   return (
     <IonPage>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -55,15 +74,18 @@ const Postpage: React.FC = () => {
           inputRef={newCommentElement}
           postId={postId}
         />
-        {comments.length !== 0 && (
-          <IonCard>
-            <IonList>
-              {comments.map((comment: CommentData, i: number) => (
-                <Comment key={i} {...comment} onReply={handleReply} />
-              ))}
-            </IonList>
-          </IonCard>
-        )}
+        <IonCard>
+          {(loading && <IonSpinner />) ||
+            (data?.comments?.items && (
+              <IonList>
+                {data?.comments?.items.map(
+                  (comment: CommentData | null, i: number) => (
+                    <Comment key={i} {...comment!} onReply={handleReply} />
+                  )
+                )}
+              </IonList>
+            ))}
+        </IonCard>
       </IonContent>
     </IonPage>
   );

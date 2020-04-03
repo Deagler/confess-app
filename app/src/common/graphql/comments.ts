@@ -36,8 +36,8 @@ export const SUBMIT_COMMENT = gql`
 
 export const GET_COMMENTS = gql`
   query GetComments(
-    $communityId: String!
-    $postId: String!
+    $communityId: ID!
+    $postId: ID!
     $sortBy: SortByInput
     $limit: Int
     $cursor: String

@@ -8,9 +8,19 @@
 //==============================================================
 
 export enum ModerationStatus {
-  APPROVED = "APPROVED",
-  PENDING = "PENDING",
-  REJECTED = "REJECTED",
+  APPROVED = 'APPROVED',
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+}
+
+export enum Direction {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export interface SortByInput {
+  property: string;
+  direction: Direction;
 }
 
 //==============================================================

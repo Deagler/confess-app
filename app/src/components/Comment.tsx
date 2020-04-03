@@ -20,10 +20,11 @@ export interface UserData {
 
 export interface CommentData {
   creationTimestamp: number;
-  author: UserData | null;
+  // TODO: Update once user resolvers are written
+  author?: UserData | null;
   content: string;
   totalLikes: number;
-  likes: (UserData | null)[];
+  likes?: (UserData | null)[];
 }
 
 export interface CommentProps extends CommentData {
