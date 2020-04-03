@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { typeDefs } from '../../common/graphql/localSchema';
 import { resolvers } from '../../common/graphql/localResolvers';
 import { HttpLink } from 'apollo-link-http';
+import { gql } from 'apollo-boost';
 
 const cache = new InMemoryCache();
 
@@ -19,11 +20,25 @@ export const apolloClient = new ApolloClient<NormalizedCacheObject>({
 });
 
 // Define default values for local state here
-cache.writeData({
-  data: {
-    selectedCommunity: localStorage.getItem('selectedCommunity') || '',
-    authState: localStorage.getItem('authState')
-      ? JSON.parse(localStorage.getItem('authState')!)
-      : null,
-  },
-});
+async function writeInitialData() {
+  cache.writeQuery({
+    query: gql`
+      query {
+        selectedCommunity
+        authState {
+          accessToken
+        }
+      }
+    `,
+    data: {
+      selectedCommunity: localStorage.getItem('selectedCommunity') || '',
+      authState: localStorage.getItem('authState')
+        ? JSON.parse(localStorage.getItem('authState')!)
+        : null,
+    },
+  });
+}
+
+writeInitialData();
+
+apolloClient.onResetStore(writeInitialData);

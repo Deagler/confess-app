@@ -8,6 +8,8 @@ export const GET_SELECTED_COMMUNITY = gql`
 
 export const GET_AUTH_STATE = gql`
   query GetSelectedCommunity {
-    authState @client
+    authState @client {
+      accessToken
+    }
   }
 `;

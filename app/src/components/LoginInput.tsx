@@ -46,6 +46,7 @@ export const LoginInput: React.FC<{}> = () => {
       url: `${window.location.origin}/callback`,
       handleCodeInApp: true,
     };
+
     try {
       setLoginStatus(LOGIN_STATUS.PENDING);
       await firebaseApp

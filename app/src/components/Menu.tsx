@@ -26,6 +26,7 @@ import ChannelList from '../components/ChannelList';
 
 import './Menu.css';
 import { LoginInput } from './LoginInput';
+import { gql } from 'apollo-boost';
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
@@ -33,7 +34,7 @@ const Menu: React.FC<{}> = () => {
   const authStateQuery = useQuery(GET_AUTH_STATE);
   const authState = authStateQuery.data?.authState;
 
-  console.log(authStateQuery)
+  console.log(authStateQuery);
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -54,7 +55,14 @@ const Menu: React.FC<{}> = () => {
   ) => {
     const community: string = event.detail.value!;
     localStorage.setItem('selectedCommunity', community);
-    client.writeData({ data: { selectedCommunity: community } });
+    client.writeQuery({
+      query: gql`
+        query {
+          selectedCommunity
+        }
+      `,
+      data: { selectedCommunity: community },
+    });
   };
 
   return (
