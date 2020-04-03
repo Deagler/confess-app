@@ -7,7 +7,7 @@ import {
   IonToast,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 /* Basic CSS for apps built with Ionic */
@@ -88,34 +88,41 @@ const App: React.FC = () => {
           />
           <ApolloProvider client={apolloClient}>
             <Menu />
-            <IonRouterOutlet id="main">
-              <Route
-                path="/landing"
-                render={() => <LandingPage />}
-                exact={true}
-              />
-              <Route
-                path="/page/posts"
-                render={(props) => <FeedPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/page/admin"
-                render={() => <AdminPage />}
-                exact={true}
-              />
-              <Route
-                path="/page/submit"
-                render={(props) => <SubmitPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/page/posts/:id"
-                render={() => <Postpage />}
-                exact={true}
-              />
-              <Route path="/" render={() => <Redirect to="/landing" />} />
-            </IonRouterOutlet>
+            <Switch>
+              <IonRouterOutlet id="main">
+                <Route
+                  path="/"
+                  render={() => <Redirect to="/landing" />}
+                  exact={true}
+                />
+                <Route
+                  path="/landing"
+                  render={() => <LandingPage />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/posts"
+                  render={(props) => <FeedPage {...props} />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/admin"
+                  render={() => <AdminPage />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/submit"
+                  render={(props) => <SubmitPage {...props} />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/posts/:id"
+                  render={() => <Postpage />}
+                  exact={true}
+                />
+                <Route render={() => <Redirect to="/landing" />} />
+              </IonRouterOutlet>
+            </Switch>
           </ApolloProvider>
         </IonSplitPane>
       </IonReactRouter>

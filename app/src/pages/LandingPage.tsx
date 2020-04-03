@@ -46,7 +46,7 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage id="landing-page">
       <IonContent>
         <div className="container ion-align-self-center">
           <IonToolbar>
