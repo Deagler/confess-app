@@ -37,7 +37,7 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
         title
         content
         authorAlias
-        isApproved
+        moderationStatus
         creationTimestamp
       }
     }
@@ -53,12 +53,6 @@ export const GET_COMMUNITY_POSTS = gql`
         title
         authorAlias
         creationTimestamp
-        approvalInfo {
-          approver {
-            id
-          }
-          approvalTimestamp
-        }
         content
         totalLikes
         totalComments

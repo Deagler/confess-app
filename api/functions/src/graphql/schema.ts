@@ -1,9 +1,16 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  type ApprovalInfo {
-    approver: User!
-    approvalTimestamp: Int!
+  enum ModerationStatus {
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  type ModerationInfo {
+    moderator: User!
+    lastUpdated: Int!
+    reason: String
   }
 
   type User {
@@ -48,8 +55,8 @@ const typeDefs = gql`
     title: String!
     content: String!
 
-    isApproved: Boolean!
-    approvalInfo: ApprovalInfo
+    moderationStatus: ModerationStatus!
+    moderationInfo: ModerationInfo
 
     totalLikes: Int!
     likes: [User]!
@@ -107,7 +114,7 @@ const typeDefs = gql`
     approvePost(
       communityId: String!
       postId: String!
-      approverId: String!
+      moderatorId: String!
     ): ApprovePostResponse
   }
 `;

@@ -19,12 +19,12 @@ export const APPROVE_POST = gql`
   mutation ApprovePost(
     $communityId: String!
     $postId: String!
-    $approverId: String!
+    $moderatorId: String!
   ) {
     approvePost(
       communityId: $communityId
       postId: $postId
-      approverId: $approverId
+      moderatorId: $moderatorId
     ) {
       code
       success

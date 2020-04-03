@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
-import { Post } from '../../typings';
+import { ModerationStatus, Post } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const communitiesCollection = firestore.collection('communities');
@@ -24,8 +24,8 @@ async function submitPostForApproval(
     content,
     channel,
     authorAlias,
-    isApproved: false,
-    approvalInfo: null,
+    moderationStatus: ModerationStatus.PENDING,
+    moderationInfo: null,
     totalComments: 0,
     totalLikes: 0,
     likes: [],
@@ -43,12 +43,12 @@ async function submitPostForApproval(
   };
 }
 
-async function approvePost(_: any, { communityId, postId, approverId }) {
+async function approvePost(_: any, { communityId, postId, moderatorId }) {
   // verify approver
-  const approverRef = firestore.doc(`/users/${approverId}`);
+  const approverRef = firestore.doc(`/users/${moderatorId}`);
   const approver = await approverRef.get();
   if (!approver.exists) {
-    throw new ApolloError(`user with id ${approverId} doesn't exist`);
+    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
   }
 
   // verify post
@@ -62,10 +62,10 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
 
   // update post
   const patch = {
-    isApproved: true,
-    approvalInfo: {
-      approver: approverRef,
-      approvalTimestamp: moment().unix(),
+    moderationStatus: ModerationStatus.APPROVED,
+    moderationInfo: {
+      moderator: approverRef,
+      lastUpdated: moment().unix(),
     },
   };
   await postRef.update(patch);

@@ -42,7 +42,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         variables: {
           postId: id,
           communityId: 'HW6lY4kJOpqSpL39hbUV',
-          approverId: 'aVyC8BFy1f5qGzXVwGSu',
+          moderatorId: 'aVyC8BFy1f5qGzXVwGSu',
         },
       });
 
