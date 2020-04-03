@@ -14,7 +14,6 @@ import {
   IonCardContent,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonText,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';

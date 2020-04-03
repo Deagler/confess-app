@@ -20,7 +20,6 @@ import {
   SubmitComment,
   SubmitComment_submitComment_comment,
 } from '../types/SubmitComment';
-import { CommentData } from './Comment';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
