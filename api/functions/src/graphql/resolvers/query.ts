@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-express';
 import { firebaseApp } from '../../firebase';
-import { Community, Post, User } from '../../typings';
+import { Comment, CommentsInput, Community, Post, User } from '../../typings';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -42,6 +42,37 @@ export const queryResolvers = {
       const communities: Community[] = communityQuery.docs.map(addIdToDoc);
 
       return communities;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
+  },
+  async comments(_: null, args: CommentsInput) {
+    try {
+      const commentsCollection = firestore.collection(
+        `communities/${args.communityId}/posts/${args.postId}/comments`
+      );
+
+      let commentsQuery = commentsCollection
+        .orderBy(
+          args.sortBy?.property || 'totalLikes',
+          args.sortBy?.direction || 'desc'
+        )
+        .limit(args.limit || 10);
+
+      // if request has cursor, update query to retrieve items beyond the cursor
+      if (args.cursor) {
+        const lastComment = await commentsCollection.doc(args.cursor).get();
+        commentsQuery = commentsQuery.startAfter(lastComment);
+      }
+
+      const queryResults = await commentsQuery.get();
+
+      // document id of the final comment is used for the pagination cursor
+      const nextCursor = queryResults.docs[queryResults.docs.length - 1].ref.id;
+
+      const comments: Comment[] = queryResults.docs.map(addIdToDoc);
+
+      return { items: comments, cursor: nextCursor };
     } catch (error) {
       throw new ApolloError(error);
     }

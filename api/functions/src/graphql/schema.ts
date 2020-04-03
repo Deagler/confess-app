@@ -12,6 +12,16 @@ const typeDefs = gql`
     lastUpdated: Int!
     reason: String
   }
+  
+  enum Direction {
+    ASC
+    DESC
+  }
+
+  input SortByInput {
+    property: String!
+    direction: Direction!
+  }
 
   type User {
     id: ID!
@@ -29,6 +39,11 @@ const typeDefs = gql`
     content: String!
     totalLikes: Int!
     likes: [User]!
+  }
+
+  type CommentConnection {
+    items: [Comment]!
+    cursor: String!
   }
 
   type Community {
@@ -70,6 +85,13 @@ const typeDefs = gql`
     user(id: ID!): User
     community(id: ID!): Community
     communities: [Community]!
+    comments(
+      communityId: ID!
+      postId: ID!
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): CommentConnection
   }
 
   interface MutationResponse {

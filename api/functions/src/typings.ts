@@ -55,3 +55,16 @@ export interface Comment {
   totalLikes: number;
   likes: User[];
 }
+
+export interface CommentsInput {
+  communityId: string;
+  postId: string;
+  sortBy?: SortByInput;
+  limit?: number;
+  cursor?: string;
+}
+
+export interface SortByInput {
+  property: string;
+  direction: 'asc' | 'desc' | undefined;
+}
