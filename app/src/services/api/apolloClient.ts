@@ -23,7 +23,7 @@ export const apolloClient = new ApolloClient<NormalizedCacheObject>({
 async function writeInitialData() {
   cache.writeQuery({
     query: gql`
-      query {
+      query getLocalState {
         selectedCommunity
         authState {
           accessToken

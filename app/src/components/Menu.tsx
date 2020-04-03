@@ -10,6 +10,7 @@ import {
   IonInput,
   IonRow,
   IonToast,
+  IonSpinner,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { withRouter } from 'react-router-dom';
@@ -17,7 +18,7 @@ import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
 import {
   GET_SELECTED_COMMUNITY,
-  GET_AUTH_STATE,
+  GET_LOCAL_USER,
 } from '../common/graphql/localState';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 
@@ -27,14 +28,13 @@ import ChannelList from '../components/ChannelList';
 import './Menu.css';
 import { LoginInput } from './LoginInput';
 import { gql } from 'apollo-boost';
+import { LocalUserDetail } from './LocalUserDetail';
+import { GetLocalUser } from '../types/GetLocalUser';
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
-  const authStateQuery = useQuery(GET_AUTH_STATE);
-  const authState = authStateQuery.data?.authState;
-
-  console.log(authStateQuery);
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -57,7 +57,7 @@ const Menu: React.FC<{}> = () => {
     localStorage.setItem('selectedCommunity', community);
     client.writeQuery({
       query: gql`
-        query {
+        query getSelectedCommunity {
           selectedCommunity
         }
       `,
@@ -79,7 +79,14 @@ const Menu: React.FC<{}> = () => {
             loading={loading}
             onCommunityChange={handleCommunityChange}
           />
-          <LoginInput />
+
+          {localUserQuery.loading || !localUserQuery.called ? (
+            <IonSpinner />
+          ) : localUserQuery.data?.localUser ? (
+            <LocalUserDetail user={localUserQuery.data?.localUser} />
+          ) : (
+            <LoginInput />
+          )}
           <ChannelList channels={channels} loading={false} />
         </IonContent>
       </IonMenu>

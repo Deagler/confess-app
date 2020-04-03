@@ -10,17 +10,22 @@ export const GET_AUTH_STATE = gql`
   query GetAuthState {
     authState @client {
       accessToken
-      localUser {
+    }
+  }
+`;
+
+export const GET_LOCAL_USER = gql`
+  query GetLocalUser {
+    localUser @client {
+      id
+      communityUsername
+      firstName
+      lastName
+      email
+      community {
         id
-        communityUsername
-        firstName
-        lastName
-        email
-        community {
-          id
-          name
-          abbreviation
-        }
+        name
+        abbreviation
       }
     }
   }

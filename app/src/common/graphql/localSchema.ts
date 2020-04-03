@@ -4,19 +4,12 @@ import gql from 'graphql-tag';
 export const typeDefs = gql`
   type AuthState {
     accessToken: String!
-    localUser: User
   }
 
   extend type Query {
-    isLoggedIn: Boolean!
     authState: AuthState
+    localUser: User
     selectedCommunity: String!
-  }
-
-  interface MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
   }
 
   type LoginResponse implements MutationResponse {

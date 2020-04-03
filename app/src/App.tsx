@@ -31,10 +31,12 @@ import './theme/variables.css';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import { apolloClient } from './services/api/apolloClient';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
+import { GetLocalUser } from './types/GetLocalUser';
+import { GET_LOCAL_USER } from './common/graphql/localState';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -50,8 +52,6 @@ const App: React.FC = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         apolloClient.reFetchObservableQueries();
-      } else {
-        apolloClient.resetStore();
       }
     });
 

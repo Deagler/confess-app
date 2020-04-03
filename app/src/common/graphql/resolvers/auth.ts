@@ -10,7 +10,7 @@ import { GET_USER_BY_ID } from '../users';
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
     query: gql`
-      query {
+      query getAuthState {
         authState {
           accessToken
         }
