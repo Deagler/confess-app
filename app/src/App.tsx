@@ -7,6 +7,7 @@ import {
   IonSplitPane,
   IonLoading,
   IonToast,
+  IonSpinner,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
@@ -37,6 +38,7 @@ import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
 import { GetLocalUser } from './types/GetLocalUser';
 import { GET_LOCAL_USER } from './common/graphql/localState';
+import { FullPageLoader } from './components/FullPageLoader';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -48,9 +50,14 @@ export const GlobalAppUtils = {
 const auth = firebaseApp.auth();
 
 const App: React.FC = () => {
+  const [authInited, setAuthInited] = useState(false);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log('UPDATED', user);
+      if (!authInited) {
+        setAuthInited(true);
+      }
+
       if (user) {
         apolloClient.reFetchObservableQueries();
       }
@@ -61,85 +68,51 @@ const App: React.FC = () => {
     };
   });
 
-  const [loading, setLoading] = useState(false);
-  const [loadingMsg, setLoadingMsg] = useState('');
-
-  const [toastInfo, setToastInfo] = useState({
-    show: false,
-    message: '',
-    duration: 2000,
-  });
-
-  GlobalAppUtils.showLoading = (msg = 'Please Wait...') => {
-    setLoading(true);
-    setLoadingMsg(msg);
-  };
-
-  GlobalAppUtils.hideLoading = () => {
-    setLoading(false);
-    setLoadingMsg('');
-  };
-
-  GlobalAppUtils.showToast = (msg, duration = 2000) => {
-    setToastInfo({ show: true, message: msg, duration });
-  };
-
-  GlobalAppUtils.hideToast = () => {
-    setToastInfo({ show: false, message: '', duration: 2000 });
-  };
-
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <IonLoading
-            isOpen={loading}
-            onDidDismiss={() => GlobalAppUtils.hideLoading()}
-            message={loadingMsg}
-          />
-          <IonToast
-            isOpen={toastInfo.show}
-            onDidDismiss={() => GlobalAppUtils.hideToast()}
-            message={toastInfo.message}
-            duration={toastInfo.duration}
-          />
-          <ApolloProvider client={apolloClient}>
-            <Menu />
-            <IonRouterOutlet id="main">
-              <Route
-                path="/page/posts"
-                render={(props) => <FeedPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/page/admin"
-                render={() => <AdminPage />}
-                exact={true}
-              />
-              <Route
-                path="/page/submit"
-                render={(props) => <SubmitPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/"
-                render={() => <Redirect to="/page/Inbox" />}
-                exact={true}
-              />
-              <Route
-                path="/callback"
-                render={(props) => <AuthCallbackPage {...props} />}
-                exact={true}
-              />
-              <Route
-                path="/page/posts/:id"
-                render={() => <Postpage />}
-                exact={true}
-              />
-            </IonRouterOutlet>
-          </ApolloProvider>
-        </IonSplitPane>
-      </IonReactRouter>
+      {!authInited ? (
+        <FullPageLoader />
+      ) : (
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <ApolloProvider client={apolloClient}>
+              <Menu />
+              <IonRouterOutlet id="main">
+                <Route
+                  path="/page/posts"
+                  render={(props) => <FeedPage {...props} />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/admin"
+                  render={() => <AdminPage />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/submit"
+                  render={(props) => <SubmitPage {...props} />}
+                  exact={true}
+                />
+                <Route
+                  path="/"
+                  render={() => <Redirect to="/page/Inbox" />}
+                  exact={true}
+                />
+                <Route
+                  path="/callback"
+                  render={(props) => <AuthCallbackPage {...props} />}
+                  exact={true}
+                />
+                <Route
+                  path="/page/posts/:id"
+                  render={() => <Postpage />}
+                  exact={true}
+                />
+              </IonRouterOutlet>
+            </ApolloProvider>
+          </IonSplitPane>
+        </IonReactRouter>
+      )}
     </IonApp>
   );
 };
