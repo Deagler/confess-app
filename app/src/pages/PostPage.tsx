@@ -11,6 +11,9 @@ import {
   IonList,
   IonToast,
   IonSpinner,
+  IonCardContent,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';
@@ -28,18 +31,51 @@ const Postpage: React.FC = () => {
   const [comments, setComments] = useState<(CommentData | null)[]>([]);
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
   const { id: postId } = useParams();
+  const [disableInfiniteScroll, setDisableInfiniteScroll] = useState<boolean>(
+    false
+  );
+
+  const commentVariables = {
+    // TODO: get community id from somewhere
+    communityId: 'HW6lY4kJOpqSpL39hbUV',
+    postId: postId!,
+    // TODO: Connect sorting to UI
+    sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
+    limit: 3,
+  };
   const { data, loading, error, fetchMore } = useQuery<
     GetComments,
     GetCommentsVariables
-  >(GET_COMMENTS, {
-    variables: {
-      // TODO: get community id from somewhere
-      communityId: 'HW6lY4kJOpqSpL39hbUV',
-      postId: postId!,
-      sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
-      limit: 5,
-    },
-  });
+  >(GET_COMMENTS, { variables: commentVariables });
+
+  const getMoreComments = async (e: CustomEvent<void>) => {
+    console.log('cursor: ' + data?.comments?.cursor);
+    console.log('commentvariables: ' + JSON.stringify(commentVariables));
+    console.log('data: ' + JSON.stringify(data));
+    await fetchMore({
+      query: GET_COMMENTS,
+      variables: {
+        ...commentVariables,
+        cursor: data?.comments?.cursor,
+      },
+      // Update the cache with the newly fetched results
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const previousComments = previousResult.comments?.items;
+        const newComments = fetchMoreResult?.comments?.items;
+        const newCursor = fetchMoreResult?.comments?.cursor;
+
+        return {
+          comments: {
+            items: [...previousComments!, ...newComments!],
+            cursor: newCursor!,
+            __typename: previousResult.comments!.__typename,
+          },
+        };
+      },
+    });
+
+    (e.target as HTMLIonInfiniteScrollElement).complete();
+  };
 
   const handleCommentCreated = (newCommentProp: CommentData) => {
     setComments((oldComments) => [newCommentProp, ...oldComments]);
@@ -75,15 +111,28 @@ const Postpage: React.FC = () => {
           postId={postId}
         />
         <IonCard>
-          {(loading && <IonSpinner />) ||
+          {(loading && (
+            <IonCardContent>
+              <IonSpinner />
+            </IonCardContent>
+          )) ||
             (data?.comments?.items && (
-              <IonList>
-                {data?.comments?.items.map(
-                  (comment: CommentData | null, i: number) => (
-                    <Comment key={i} {...comment!} onReply={handleReply} />
-                  )
-                )}
-              </IonList>
+              <>
+                <IonList>
+                  {data?.comments?.items.map(
+                    (comment: CommentData | null, i: number) => (
+                      <Comment key={i} {...comment!} onReply={handleReply} />
+                    )
+                  )}
+                </IonList>
+                <IonInfiniteScroll
+                  threshold="100px"
+                  disabled={disableInfiniteScroll}
+                  onIonInfinite={getMoreComments}
+                >
+                  <IonInfiniteScrollContent loadingText="Loading more comments..." />
+                </IonInfiniteScroll>
+              </>
             ))}
         </IonCard>
       </IonContent>
