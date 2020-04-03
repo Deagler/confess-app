@@ -33,3 +33,29 @@ export const SUBMIT_COMMENT = gql`
     }
   }
 `;
+
+export const GET_COMMENTS = gql`
+  query GetComments(
+    $communityId: String!
+    $postId: String!
+    $sortBy: SortByInput
+    $limit: Int
+    $cursor: String
+  ) {
+    comments(
+      communityId: $communityId
+      postId: $postId
+      sortBy: $sortBy
+      limit: $limit
+      cursor: $cursor
+    ) {
+      items {
+        id
+        content
+        creationTimestamp
+        totalLikes
+      }
+      cursor
+    }
+  }
+`;
