@@ -7,7 +7,7 @@ const usersCollection = firestore.collection('users');
 const communitiesCollection = firestore.collection('communities');
 
 export async function verifyUser(userRecord: UserRecord) {
-  if (!userRecord?.email) {
+  if (!userRecord?.email || !userRecord?.email_verified) {
     throw new AuthenticationError('Unauthorised');
   }
 
@@ -29,4 +29,16 @@ export async function verifyCommunity(communityId: string) {
   }
 
   return { communityRef, communityDoc };
+}
+
+export async function verifyPost(communityId: string, postId: string) {
+  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
+  const postDoc = await postRef.get();
+  if (!postDoc.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
+  }
+
+  return { postRef, postDoc };
 }

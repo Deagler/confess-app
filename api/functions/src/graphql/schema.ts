@@ -145,11 +145,7 @@ const typeDefs = gql`
       content: String!
     ): CreateCommentResponse
 
-    approvePost(
-      communityId: String!
-      postId: String!
-      moderatorId: String!
-    ): ApprovePostResponse
+    approvePost(communityId: String!, postId: String!): ApprovePostResponse
 
     rejectPost(
       communityId: String!

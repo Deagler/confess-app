@@ -3,7 +3,11 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
-import { verifyCommunity, verifyUser } from '../common/verification';
+import {
+  verifyCommunity,
+  verifyPost,
+  verifyUser,
+} from '../common/verification';
 
 const firestore = firebaseApp.firestore();
 
@@ -55,28 +59,24 @@ async function submitPostForApproval(
   };
 }
 
-async function approvePost(_: any, { communityId, postId, moderatorId }) {
-  // verify moderator
-  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
-  const moderator = await moderatorRef.get();
-  if (!moderator.exists) {
-    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+async function approvePost(_: any, { communityId, postId }, context: any) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  console.log(userRecord);
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
   }
 
-  // verify post
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
+  const { postRef } = await verifyPost(communityId, postId);
 
   // update post
   const patch = {
     moderationStatus: ModerationStatus.APPROVED,
     moderationInfo: {
-      moderator: moderatorRef,
+      moderator: userRef,
       lastUpdated: moment().unix(),
     },
   };

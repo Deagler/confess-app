@@ -16,16 +16,8 @@ export const GET_COMMUNITY_UNAPPROVED_POSTS = gql`
 `;
 
 export const APPROVE_POST = gql`
-  mutation ApprovePost(
-    $communityId: String!
-    $postId: String!
-    $moderatorId: String!
-  ) {
-    approvePost(
-      communityId: $communityId
-      postId: $postId
-      moderatorId: $moderatorId
-    ) {
+  mutation ApprovePost($communityId: String!, $postId: String!) {
+    approvePost(communityId: $communityId, postId: $postId) {
       code
       success
       message
