@@ -9,12 +9,26 @@ import { SortByInput } from "./globalTypes";
 // GraphQL query operation: GetPost
 // ====================================================
 
+export interface GetPost_post_comments_items_author_community {
+  __typename: "Community";
+  abbreviation: string;
+}
+
+export interface GetPost_post_comments_items_author {
+  __typename: "User";
+  firstName: string;
+  lastName: string;
+  communityUsername: string;
+  community: GetPost_post_comments_items_author_community | null;
+}
+
 export interface GetPost_post_comments_items {
   __typename: "Comment";
   id: string;
-  totalLikes: number;
-  content: string;
   creationTimestamp: number;
+  content: string;
+  author: GetPost_post_comments_items_author | null;
+  totalLikes: number;
 }
 
 export interface GetPost_post_comments {

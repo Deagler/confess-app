@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
-import { Comment, User } from '../../typings';
-import { addIdToDoc } from '../resolvers/utils';
+import { Comment } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const communitiesCollection = firestore.collection('communities');
@@ -38,11 +37,6 @@ async function submitComment(_: any, { communityId, postId, content }) {
       return Promise.resolve(addedCommentRef);
     })
   );
-
-  // Update author to User type because it is needed for the API response
-  const authorSnapshot = await authorRef.get();
-  const authorWithId = addIdToDoc(authorSnapshot) as User | undefined;
-  newComment.author = authorWithId;
 
   newComment.id = newCommentRef.id;
 

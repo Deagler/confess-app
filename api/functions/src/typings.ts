@@ -51,7 +51,6 @@ export interface Comment {
   creationTimestamp: number;
   // TODO: Create separate types for API types and database types
   authorRef: FirestoreDocRef | null;
-  author?: User | null;
   content: string;
   totalLikes: number;
   likes: User[];

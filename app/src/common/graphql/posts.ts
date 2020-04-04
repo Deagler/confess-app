@@ -23,9 +23,17 @@ export const GET_POST_BY_ID = gql`
       ) {
         items {
           id
-          totalLikes
-          content
           creationTimestamp
+          content
+          author {
+            firstName
+            lastName
+            communityUsername
+            community {
+              abbreviation
+            }
+          }
+          totalLikes
         }
         cursor
       }
@@ -49,9 +57,17 @@ export const GET_POST_COMMENTS_ONLY = gql`
       ) {
         items {
           id
-          totalLikes
-          content
           creationTimestamp
+          author {
+            firstName
+            lastName
+            communityUsername
+            community {
+              abbreviation
+            }
+          }
+          content
+          totalLikes
         }
         cursor
       }
