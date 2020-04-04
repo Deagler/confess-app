@@ -1,22 +1,34 @@
-import { ApolloError } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
-import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
-
-const firestore = firebaseApp.firestore();
-const communitiesCollection = firestore.collection('communities');
+import {
+  verifyCommunity,
+  verifyPost,
+  verifyUser,
+} from '../common/verification';
 
 async function submitPostForApproval(
   _: any,
-  { communityId, channel, title, content, authorAlias }
+  { communityId, channel, title, content, authorAlias },
+  context: any
 ) {
-  // TODO:
-  // Pull AuthorId from context.req
-  // verify user exists in the community
-  // validate channel for the community
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
 
-  const communityDoc = communitiesCollection.doc(communityId);
-  const communityPosts = communityDoc.collection('posts');
+  // can only post to your own community
+  if (userDoc.data()!.communityRef.id !== communityId) {
+    throw new AuthenticationError(
+      'Forbidden: you can only post to your own community'
+    );
+  }
+
+  const { communityRef } = await verifyCommunity(communityId);
+
+  // TODO: verify channel exists in community
+
+  const communityPosts = communityRef.collection('posts');
 
   const newPost: Partial<Post> = {
     creationTimestamp: moment().unix(),
@@ -24,6 +36,7 @@ async function submitPostForApproval(
     content,
     channel,
     authorAlias,
+    authorRef: userRef,
     moderationStatus: ModerationStatus.PENDING,
     moderationInfo: null,
     totalComments: 0,
@@ -43,28 +56,23 @@ async function submitPostForApproval(
   };
 }
 
-async function approvePost(_: any, { communityId, postId, moderatorId }) {
-  // verify moderator
-  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
-  const moderator = await moderatorRef.get();
-  if (!moderator.exists) {
-    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+async function approvePost(_: any, { communityId, postId }, context: any) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
   }
 
-  // verify post
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
+  const { postRef } = await verifyPost(communityId, postId);
 
   // update post
   const patch = {
     moderationStatus: ModerationStatus.APPROVED,
     moderationInfo: {
-      moderator: moderatorRef,
+      moderator: userRef,
       lastUpdated: moment().unix(),
     },
   };
@@ -80,29 +88,25 @@ async function approvePost(_: any, { communityId, postId, moderatorId }) {
 
 async function rejectPost(
   _: any,
-  { communityId, postId, moderatorId, reason }
+  { communityId, postId, reason },
+  context: any
 ) {
-  // verify moderator
-  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
-  const moderator = await moderatorRef.get();
-  if (!moderator.exists) {
-    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
   }
 
-  // verify post
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
+  const { postRef } = await verifyPost(communityId, postId);
 
   // update post
   const patch = {
     moderationStatus: ModerationStatus.REJECTED,
     moderationInfo: {
-      moderator: moderatorRef,
+      moderator: userRef,
       lastUpdated: moment().unix(),
       reason,
     },

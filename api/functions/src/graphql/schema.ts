@@ -64,7 +64,6 @@ const typeDefs = gql`
   type Post {
     id: ID!
     creationTimestamp: Int!
-    author: User!
     authorAlias: String
 
     channel: String!
@@ -139,23 +138,20 @@ const typeDefs = gql`
       content: String!
       authorAlias: String
     ): CreatePostResponse
+
     attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
+
     submitComment(
       communityId: String!
       postId: String!
       content: String!
     ): CreateCommentResponse
 
-    approvePost(
-      communityId: String!
-      postId: String!
-      moderatorId: String!
-    ): ApprovePostResponse
+    approvePost(communityId: String!, postId: String!): ApprovePostResponse
 
     rejectPost(
       communityId: String!
       postId: String!
-      moderatorId: String!
       reason: String
     ): RejectPostResponse
   }

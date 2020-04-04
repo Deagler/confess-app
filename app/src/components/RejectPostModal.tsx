@@ -47,7 +47,7 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
         variables: {
           postId,
           communityId: 'HW6lY4kJOpqSpL39hbUV',
-          moderatorId: 'aVyC8BFy1f5qGzXVwGSu',
+          moderatorId: 'aVyC8BFy1f5qGzXVwGSu', // remove this after types can be regenerated
           reason,
         },
       });

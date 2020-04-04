@@ -1,31 +1,29 @@
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
+import { verifyPost, verifyUser } from '../common/verification';
 
 const firestore = firebaseApp.firestore();
-const communitiesCollection = firestore.collection('communities');
-const usersCollection = firestore.collection('users');
 
-async function submitComment(_: any, { communityId, postId, content }) {
-  // TODO:
-  // - Retrieve author from user context
-  // - Validate post exists
-  // - Maybe we can retrieve the communityId from context as well
-  //   (communityId is needed as we cant query across subcollections)
-  const authorRef = usersCollection.doc('aVyC8BFy1f5qGzXVwGSu');
+async function submitComment(
+  _: any,
+  { communityId, postId, content },
+  context: any
+) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef } = await verifyUser(userRecord);
 
   const newComment: Partial<Comment> = {
     creationTimestamp: moment().unix(),
-    authorRef,
+    authorRef: userRef,
     content,
     totalLikes: 0,
     likes: [],
   };
 
-  const postRef = communitiesCollection
-    .doc(communityId)
-    .collection('posts')
-    .doc(postId);
+  const { postRef } = await verifyPost(communityId, postId);
   const commentsRef = postRef.collection('comments');
 
   // Transaction: Adding comment and updating comment count must be atomic
