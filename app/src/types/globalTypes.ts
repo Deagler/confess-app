@@ -7,15 +7,15 @@
 // START Enums and Input Objects
 //==============================================================
 
-export enum ModerationStatus {
-  APPROVED = 'APPROVED',
-  PENDING = 'PENDING',
-  REJECTED = 'REJECTED',
+export enum Direction {
+  ASC = "ASC",
+  DESC = "DESC",
 }
 
-export enum Direction {
-  ASC = 'ASC',
-  DESC = 'DESC',
+export enum ModerationStatus {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
 }
 
 export interface SortByInput {
