@@ -106,6 +106,7 @@ const Postpage: React.FC = () => {
       const newResult = update(currentResult, {
         post: {
           comments: { items: { $unshift: [newComment] } },
+          totalComments: { $set: currentResult?.post?.totalComments! + 1 },
         },
       });
 
