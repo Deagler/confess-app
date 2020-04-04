@@ -89,6 +89,11 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <IonPage>
+      <IonToast
+        isOpen={!error && !loading}
+        message="Post submitted for approval"
+        duration={2000}
+      />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader>
         <IonToolbar>
