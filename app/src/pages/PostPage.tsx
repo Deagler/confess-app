@@ -100,14 +100,15 @@ const Postpage: React.FC = () => {
     newComment: SubmitComment_submitComment_comment
   ) => {
     updateQuery((currentResult, _) => {
-      const currentComments = currentResult.post?.comments?.items;
       // Update the cached query result to have the newly created comment
-      currentResult.post!.comments = {
-        items: [newComment, ...currentComments!],
-        cursor: currentResult.post?.comments?.cursor!,
-        __typename: currentResult.post?.comments!.__typename,
-      };
-      return currentResult;
+
+      const newResult = update(currentResult, {
+        post: {
+          comments: { items: { $unshift: [newComment] } },
+        },
+      });
+
+      return newResult;
     });
   };
 
