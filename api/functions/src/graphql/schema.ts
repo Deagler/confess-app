@@ -35,7 +35,7 @@ const typeDefs = gql`
   type Comment {
     id: ID!
     creationTimestamp: Int!
-    author: User!
+    author: User
     content: String!
     totalLikes: Int!
     likes: [User]!
