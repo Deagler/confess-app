@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
-import { Comment, User } from '../../typings';
-import { addIdToDoc } from '../resolvers/utils';
+import { Comment } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const communitiesCollection = firestore.collection('communities');

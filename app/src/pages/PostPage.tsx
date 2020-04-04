@@ -16,7 +16,7 @@ import {
   IonInfiniteScrollContent,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
-import Post, { PostData } from '../components/Post';
+import Post from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 
 import './Page.css';
