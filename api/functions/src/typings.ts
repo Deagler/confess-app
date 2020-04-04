@@ -1,6 +1,12 @@
-interface ApprovalInfo {
-  approver: User;
-  approvalTimestamp: number;
+export enum ModerationStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+interface ModerationInfo {
+  moderator: User;
+  lastUpdated: number;
 }
 
 export type FirestoreDocRef = FirebaseFirestore.DocumentReference<
@@ -25,8 +31,8 @@ export interface Post {
   channel: string;
   title: string;
   content: string;
-  isApproved: boolean;
-  approvalInfo: ApprovalInfo | null;
+  moderationStatus: ModerationStatus;
+  moderationInfo: ModerationInfo | null;
   totalLikes: number;
   likes: User[];
   totalComments: number;

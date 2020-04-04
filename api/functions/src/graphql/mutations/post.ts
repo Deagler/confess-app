@@ -1,6 +1,7 @@
+import { ApolloError } from 'apollo-server-express';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
-import { Post } from '../../typings';
+import { ModerationStatus, Post } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const communitiesCollection = firestore.collection('communities');
@@ -23,8 +24,8 @@ async function submitPostForApproval(
     content,
     channel,
     authorAlias,
-    isApproved: false,
-    approvalInfo: null,
+    moderationStatus: ModerationStatus.PENDING,
+    moderationInfo: null,
     totalComments: 0,
     totalLikes: 0,
     likes: [],
@@ -42,6 +43,82 @@ async function submitPostForApproval(
   };
 }
 
+async function approvePost(_: any, { communityId, postId, moderatorId }) {
+  // verify moderator
+  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
+  const moderator = await moderatorRef.get();
+  if (!moderator.exists) {
+    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+  }
+
+  // verify post
+  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
+  const post = await postRef.get();
+  if (!post.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
+  }
+
+  // update post
+  const patch = {
+    moderationStatus: ModerationStatus.APPROVED,
+    moderationInfo: {
+      moderator: moderatorRef,
+      lastUpdated: moment().unix(),
+    },
+  };
+  await postRef.update(patch);
+
+  // success
+  return {
+    code: 200,
+    message: 'Post approved.',
+    success: true,
+  };
+}
+
+async function rejectPost(
+  _: any,
+  { communityId, postId, moderatorId, reason }
+) {
+  // verify moderator
+  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
+  const moderator = await moderatorRef.get();
+  if (!moderator.exists) {
+    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+  }
+
+  // verify post
+  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
+  const post = await postRef.get();
+  if (!post.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
+  }
+
+  // update post
+  const patch = {
+    moderationStatus: ModerationStatus.REJECTED,
+    moderationInfo: {
+      moderator: moderatorRef,
+      lastUpdated: moment().unix(),
+      reason,
+    },
+  };
+  await postRef.update(patch);
+
+  // success
+  return {
+    code: 200,
+    message: 'Post rejected.',
+    success: true,
+  };
+}
+
 export const postMutations = {
   submitPostForApproval,
+  approvePost,
+  rejectPost,
 };

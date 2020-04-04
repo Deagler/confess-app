@@ -14,7 +14,7 @@ import {
   IonFooter,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
 import {
@@ -70,6 +70,13 @@ const Menu: React.FC<{}> = () => {
     });
   };
 
+  // cant put this in App because you cant have useLocation
+  // in the same component as the router is defined
+  const location = useLocation();
+  if (location.pathname === '/landing') {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -104,4 +111,4 @@ const Menu: React.FC<{}> = () => {
   );
 };
 
-export default withRouter(Menu);
+export default Menu;

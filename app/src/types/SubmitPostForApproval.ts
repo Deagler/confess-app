@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { ModerationStatus } from "./globalTypes";
+
 // ====================================================
 // GraphQL mutation operation: SubmitPostForApproval
 // ====================================================
@@ -13,7 +15,7 @@ export interface SubmitPostForApproval_submitPostForApproval_post {
   title: string;
   content: string;
   authorAlias: string | null;
-  isApproved: boolean;
+  moderationStatus: ModerationStatus;
   creationTimestamp: number;
 }
 
