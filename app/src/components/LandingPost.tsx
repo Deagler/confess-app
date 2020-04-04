@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   IonCardHeader,
   IonCardTitle,
@@ -17,11 +18,21 @@ export interface PostProps {
   authorAlias?: string;
 }
 
+const MAX_CONTENT_LENGTH: number = 600;
+
+const truncateString = (str: string) => {
+  if (str.length <= MAX_CONTENT_LENGTH) {
+    return str;
+  }
+
+  return str.slice(0, MAX_CONTENT_LENGTH) + '...';
+};
+
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <h1>
+    <Link to={`/page/posts/${id}`} className="Link">
       <IonCardContent>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
@@ -30,10 +41,10 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent>{truncateString(content)}</IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </IonCardContent>
-    </h1>
+    </Link>
   );
 };
 
