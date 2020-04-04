@@ -14,11 +14,6 @@ export enum LOGIN_STATUS {
   FAILED,
 }
 
-const successContainer = css({
-  display: 'flex',
-  justifyContent: 'center',
-});
-
 const successLabel = css({
   display: 'flex',
   flexDirection: 'column',
@@ -41,7 +36,6 @@ export const LoginInput: React.FC<{}> = () => {
     LOGIN_STATUS.NONE
   );
   const [loginError, setLoginError] = useState<string>();
-  const client = useApolloClient();
   const handleLogin = async (inputEmail) => {
     const actionCodeSettings = {
       // URL must be whitelisted in the Firebase Console.

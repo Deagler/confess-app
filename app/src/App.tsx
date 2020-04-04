@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  IonApp,
-  IonRouterOutlet,
-  IonSplitPane,
-  IonLoading,
-  IonToast,
-  IonSpinner,
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */

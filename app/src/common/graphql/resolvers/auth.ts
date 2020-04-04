@@ -6,7 +6,6 @@ import {
   NormalizedCacheObject,
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
-import { GET_LOCAL_USER } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -79,11 +78,6 @@ async function attemptLoginWithEmailLink(
         __typename: 'LoginResponse',
       };
     }
-
-    // cache.writeQuery({
-    //   query: GET_LOCAL_USER,
-    //   data: { localUser: data.data.user },
-    // });
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
 

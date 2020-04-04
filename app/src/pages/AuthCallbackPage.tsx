@@ -6,24 +6,17 @@ import {
   IonCardTitle,
   IonCardContent,
   IonSpinner,
-  IonRow,
-  IonCol,
-  IonInput,
-  IonButton,
   IonAlert,
 } from '@ionic/react';
 
 import { RouteComponentProps, Redirect } from 'react-router';
 
 import './Page.css';
-import { firebaseApp } from '../services/firebase';
-import { IsValidEmailFormat } from '../utils';
 import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { gql } from 'apollo-boost';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
-import { GET_LOCAL_USER, GET_AUTH_STATE } from '../common/graphql/localState';
-import { apolloClient } from '../services/api/apolloClient';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 
 const LoggingInCardContent: React.FC = () => {
   return (
@@ -147,7 +140,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
 
     attemptLogin();
-  }, []);
+  }, [attemptLogin]);
 
   const renderAppropriateLoginCard = () => {
     if (attemptLoginInfo.loading || attemptSignupInfo.loading) {
