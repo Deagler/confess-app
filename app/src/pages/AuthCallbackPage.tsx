@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   IonPage,
@@ -14,7 +14,7 @@ import { RouteComponentProps, Redirect } from 'react-router';
 import './Page.css';
 import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { gql } from 'apollo-boost';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 
@@ -102,8 +102,6 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     ATTEMPT_LOGIN_WITH_EMAIL_LINK
   );
 
-  const client = useApolloClient();
-
   const [attemptSignupMutation, attemptSignupInfo] = useMutation(
     ATTEMPT_SIGNUP,
     {
@@ -134,13 +132,15 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     });
   };
 
+  const attemptLoginCallback = useCallback(attemptLogin, []);
+
   useEffect(() => {
     if (!localStorage.getItem('emailForSignIn')) {
       return;
     }
 
-    attemptLogin();
-  }, [attemptLogin]);
+    attemptLoginCallback();
+  }, [attemptLoginCallback]);
 
   const renderAppropriateLoginCard = () => {
     if (attemptLoginInfo.loading || attemptSignupInfo.loading) {

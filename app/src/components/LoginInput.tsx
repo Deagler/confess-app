@@ -5,7 +5,6 @@ import React from 'react';
 import { Checkmark } from 'react-checkmark';
 import { SubmittableEmailInput } from './SubmittableEmailInput';
 import { css } from 'glamor';
-import { useApolloClient } from '@apollo/react-hooks';
 
 export enum LOGIN_STATUS {
   NONE,
