@@ -15,10 +15,11 @@ const typeDefs = gql`
 
   type User {
     id: ID!
+    communityUsername: String!
     firstName: String!
     lastName: String!
-    communityUsername: String!
-    community: Community!
+    email: String!
+    community: Community
   }
 
   type Comment {
@@ -66,6 +67,7 @@ const typeDefs = gql`
 
   type Query {
     post(communityId: ID!, postId: ID!): Post
+    user(id: ID!): User
     community(id: ID!): Community
     communities: [Community]!
   }
@@ -81,6 +83,13 @@ const typeDefs = gql`
     success: Boolean!
     message: String!
     post: Post
+  }
+
+  type AttemptSignupResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    user: User
   }
 
   type CreateCommentResponse implements MutationResponse {
@@ -110,7 +119,7 @@ const typeDefs = gql`
       content: String!
       authorAlias: String
     ): CreatePostResponse
-
+    attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
     submitComment(
       communityId: String!
       postId: String!

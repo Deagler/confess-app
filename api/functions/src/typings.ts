@@ -9,12 +9,18 @@ interface ModerationInfo {
   lastUpdated: number;
 }
 
+export type FirestoreDocRef = FirebaseFirestore.DocumentReference<
+  FirebaseFirestore.DocumentData
+>;
+
 export interface User {
   id: string;
+  communityUsername: string;
   firstName: string;
   lastName: string;
-  communityUsername: string;
-  community: Community;
+  email: string;
+  communityRef: FirestoreDocRef | null;
+  community?: Community | null;
 }
 
 export interface Post {
@@ -43,9 +49,8 @@ export interface Comment {
   id: string;
   creationTimestamp: number;
   // TODO: Create separate types for API types and database types
-  author:
-    | User
-    | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
+  authorRef: FirestoreDocRef | null;
+  author?: User | null;
   content: string;
   totalLikes: number;
   likes: User[];

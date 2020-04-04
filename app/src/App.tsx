@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
-import {
-  IonApp,
-  IonRouterOutlet,
-  IonSplitPane,
-  IonLoading,
-  IonToast,
-} from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */
@@ -26,15 +20,20 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { ApolloProvider } from '@apollo/react-hooks';
-import { apolloClient } from './services/api/apolloClient';
-
 import LandingPage from './pages/LandingPage';
 import Menu from './components/Menu';
 import FeedPage from './pages/FeedPage';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
+import { ApolloProvider } from '@apollo/react-hooks';
+import {
+  apolloClient,
+  refreshApolloAuthentication,
+} from './services/api/apolloClient';
+import AuthCallbackPage from './pages/AuthCallbackPage';
+import { firebaseApp } from './services/firebase';
+import { FullPageLoader } from './components/FullPageLoader';
 
 export const GlobalAppUtils = {
   showLoading: (msg?) => {},
@@ -43,89 +42,81 @@ export const GlobalAppUtils = {
   hideToast: () => {},
 };
 
+const auth = firebaseApp.auth();
+
 const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [loadingMsg, setLoadingMsg] = useState('');
+  const [authInited, setAuthInited] = useState(false);
 
-  const [toastInfo, setToastInfo] = useState({
-    show: false,
-    message: '',
-    duration: 2000,
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!authInited) {
+        setAuthInited(true);
+      }
+
+      if (user) {
+        apolloClient.reFetchObservableQueries();
+        refreshApolloAuthentication();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   });
-
-  GlobalAppUtils.showLoading = (msg = 'Please Wait...') => {
-    setLoading(true);
-    setLoadingMsg(msg);
-  };
-
-  GlobalAppUtils.hideLoading = () => {
-    setLoading(false);
-    setLoadingMsg('');
-  };
-
-  GlobalAppUtils.showToast = (msg, duration = 2000) => {
-    setToastInfo({ show: true, message: msg, duration });
-  };
-
-  GlobalAppUtils.hideToast = () => {
-    setToastInfo({ show: false, message: '', duration: 2000 });
-  };
 
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <IonLoading
-            isOpen={loading}
-            onDidDismiss={() => GlobalAppUtils.hideLoading()}
-            message={loadingMsg}
-          />
-          <IonToast
-            isOpen={toastInfo.show}
-            onDidDismiss={() => GlobalAppUtils.hideToast()}
-            message={toastInfo.message}
-            duration={toastInfo.duration}
-          />
-          <ApolloProvider client={apolloClient}>
-            <Menu />
-            <Switch>
-              <IonRouterOutlet id="main">
-                <Route
-                  path="/"
-                  render={() => <Redirect to="/landing" />}
-                  exact={true}
-                />
-                <Route
-                  path="/landing"
-                  render={() => <LandingPage />}
-                  exact={true}
-                />
-                <Route
-                  path="/page/posts"
-                  render={(props) => <FeedPage {...props} />}
-                  exact={true}
-                />
-                <Route
-                  path="/page/admin"
-                  render={() => <AdminPage />}
-                  exact={true}
-                />
-                <Route
-                  path="/page/submit"
-                  render={(props) => <SubmitPage {...props} />}
-                  exact={true}
-                />
-                <Route
-                  path="/page/posts/:id"
-                  render={() => <Postpage />}
-                  exact={true}
-                />
-                <Route render={() => <Redirect to="/landing" />} />
-              </IonRouterOutlet>
-            </Switch>
-          </ApolloProvider>
-        </IonSplitPane>
-      </IonReactRouter>
+      {!authInited ? (
+        <FullPageLoader />
+      ) : (
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <ApolloProvider client={apolloClient}>
+              <Menu />
+              <Switch>
+                <IonRouterOutlet id="main">
+                  <Route
+                    path="/"
+                    render={() => <Redirect to="/landing" />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/callback"
+                    render={(props) => <AuthCallbackPage {...props} />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/landing"
+                    render={() => <LandingPage />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/page/posts"
+                    render={(props) => <FeedPage {...props} />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/page/admin"
+                    render={() => <AdminPage />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/page/submit"
+                    render={(props) => <SubmitPage {...props} />}
+                    exact={true}
+                  />
+                  <Route
+                    path="/page/posts/:id"
+                    render={() => <Postpage />}
+                    exact={true}
+                  />
+                  {/* <Route render={() => <Redirect to="/landing" />} /> */}
+                </IonRouterOutlet>
+              </Switch>
+            </ApolloProvider>
+          </IonSplitPane>
+        </IonReactRouter>
+      )}
     </IonApp>
   );
 };

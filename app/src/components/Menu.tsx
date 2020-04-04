@@ -2,27 +2,39 @@ import React from 'react';
 import {
   IonContent,
   IonMenu,
-  IonHeader,
   IonTitle,
   IonToolbar,
-  IonButton,
   IonToast,
+  IonSpinner,
+  IonFooter,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import {
+  GET_SELECTED_COMMUNITY,
+  GET_LOCAL_USER,
+} from '../common/graphql/localState';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 
 import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
 
 import './Menu.css';
+import { LoginInput } from './LoginInput';
+import { gql } from 'apollo-boost';
+import { LocalUserDetail } from './LocalUserDetail';
+import { GetLocalUser } from '../types/GetLocalUser';
+import { LogoutButton } from './LogoutButton';
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
+    fetchPolicy: 'network-only',
+  });
+  const userLoggedIn = !!localUserQuery.data?.localUser;
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -43,7 +55,14 @@ const Menu: React.FC<{}> = () => {
   ) => {
     const community: string = event.detail.value!;
     localStorage.setItem('selectedCommunity', community);
-    client.writeData({ data: { selectedCommunity: community } });
+    client.writeQuery({
+      query: gql`
+        query getSelectedCommunity {
+          selectedCommunity
+        }
+      `,
+      data: { selectedCommunity: community },
+    });
   };
 
   // cant put this in App because you cant have useLocation
@@ -53,29 +72,39 @@ const Menu: React.FC<{}> = () => {
     return null;
   }
 
+  console.log(localUserQuery);
+
   return (
-    <>
+    <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonMenu contentId="main" type="overlay">
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Confess</IonTitle>
-          </IonToolbar>
+        <IonToolbar>
+          <IonTitle>Confess</IonTitle>
+        </IonToolbar>
+        <IonContent>
           <CommunitySelect
             selectedCommunity={selectedCommunity}
             communityNames={data && data.communities.map((e) => e.name)}
             loading={loading}
             onCommunityChange={handleCommunityChange}
           />
-          <IonButton expand="block">LogIn</IonButton>
-          <IonButton expand="block">SignUp</IonButton>
-        </IonHeader>
 
-        <IonContent>
+          {localUserQuery.loading || !localUserQuery.called ? (
+            <IonSpinner />
+          ) : localUserQuery.data?.localUser ? (
+            <LocalUserDetail user={localUserQuery.data?.localUser} />
+          ) : (
+            <LoginInput />
+          )}
           <ChannelList channels={channels} loading={false} />
         </IonContent>
+        {userLoggedIn && (
+          <IonFooter>
+            <LogoutButton />
+          </IonFooter>
+        )}
       </IonMenu>
-    </>
+    </React.Fragment>
   );
 };
 

@@ -83,7 +83,6 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       history.replace(`/page/posts`);
       return;
     }
-    console.log(data);
 
     GlobalAppUtils.showToast(data!.submitPostForApproval!.message); // TODO: remove non-null assertion operator
     setConfessionText(undefined);
