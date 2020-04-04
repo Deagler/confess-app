@@ -3,10 +3,9 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
+import { verifyCommunity, verifyUser } from '../common/verification';
 
 const firestore = firebaseApp.firestore();
-const communitiesCollection = firestore.collection('communities');
-const usersCollection = firestore.collection('users');
 
 async function submitPostForApproval(
   _: any,
@@ -15,18 +14,7 @@ async function submitPostForApproval(
 ) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  console.log(userRecord);
-
-  if (!userRecord?.email) {
-    console.log(userRecord.email);
-    throw new AuthenticationError('Unauthorised');
-  }
-
-  const userRef = usersCollection.doc(userRecord.uid);
-  const userDoc = await userRef.get();
-  if (!userDoc.exists) {
-    throw new ApolloError(`No user document for ${userRecord.uid}`);
-  }
+  const { userRef, userDoc } = await verifyUser(userRecord);
 
   // can only post to your own community
   if (userDoc.data()!.community.id !== communityId) {
@@ -35,12 +23,7 @@ async function submitPostForApproval(
     );
   }
 
-  // verify community
-  const communityRef = communitiesCollection.doc(communityId);
-  const communityDoc = await communityRef.get();
-  if (!communityDoc.exists) {
-    throw new ApolloError(`Community with id ${userRecord.uid} not found`);
-  }
+  const { communityRef } = await verifyCommunity(communityId);
 
   // TODO: verify channel exists in community
 
