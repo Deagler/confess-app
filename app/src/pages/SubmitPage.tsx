@@ -50,6 +50,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [title, setTitle] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
+  const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
+    false
+  );
 
   const [submitPostForApproval, { loading, error }] = useMutation<
     SubmitPostForApproval,
@@ -80,6 +83,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setTitle(undefined);
       setSelectedChannel(undefined);
 
+      // show success message
+      setSuccessToastVisible(true);
+
       history.replace(`/page/posts`);
       return;
     } catch (error) {
@@ -90,9 +96,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   return (
     <IonPage>
       <IonToast
-        isOpen={!error && !loading}
+        isOpen={successToastVisible}
         message="Post submitted for approval"
         duration={2000}
+        onDidDismiss={() => setSuccessToastVisible(false)}
       />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader>
