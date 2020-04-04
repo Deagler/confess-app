@@ -50,6 +50,7 @@ async function attemptLoginWithEmailLink(
     };
 
     persistAuthState(cache, authState);
+    console.log(credential)
 
     if (credential.additionalUserInfo!.isNewUser) {
       return {
@@ -85,6 +86,21 @@ async function attemptLoginWithEmailLink(
   }
 }
 
-export const authResolvers = {
+async function doFirebaseLogout(_, __, { cache, client }) {
+  await firebaseApp.auth().signOut();
+
+  persistAuthState(cache, null);
+
+  return {
+    code: 'auth/logged_out',
+    success: true,
+    message: 'Logged out.',
+    authState: null,
+    __typename: 'LoginResponse',
+  };
+}
+
+export const authMutationResolvers = {
   attemptLoginWithEmailLink,
+  doFirebaseLogout,
 };

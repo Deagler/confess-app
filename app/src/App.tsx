@@ -32,12 +32,13 @@ import './theme/variables.css';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
-import { apolloClient } from './services/api/apolloClient';
+import { ApolloProvider } from '@apollo/react-hooks';
+import {
+  apolloClient,
+  refreshApolloAuthentication,
+} from './services/api/apolloClient';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
-import { GetLocalUser } from './types/GetLocalUser';
-import { GET_LOCAL_USER } from './common/graphql/localState';
 import { FullPageLoader } from './components/FullPageLoader';
 
 export const GlobalAppUtils = {
@@ -60,6 +61,7 @@ const App: React.FC = () => {
 
       if (user) {
         apolloClient.reFetchObservableQueries();
+        refreshApolloAuthentication();
       }
     });
 

@@ -10,6 +10,7 @@ import {
   IonCol,
   IonInput,
   IonButton,
+  IonAlert,
 } from '@ionic/react';
 
 import { RouteComponentProps, Redirect } from 'react-router';
@@ -19,8 +20,10 @@ import { firebaseApp } from '../services/firebase';
 import { IsValidEmailFormat } from '../utils';
 import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
+import { GET_LOCAL_USER, GET_AUTH_STATE } from '../common/graphql/localState';
+import { apolloClient } from '../services/api/apolloClient';
 
 const LoggingInCardContent: React.FC = () => {
   return (
@@ -68,7 +71,7 @@ const EmailInputCardContent: React.FC<any> = ({
   );
 };
 
-export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
+const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
   mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
     attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
       @client {
@@ -79,13 +82,50 @@ export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
   }
 `;
 
+const ATTEMPT_SIGNUP = gql`
+  mutation AttemptSignup($firstName: String!, $lastName: String!) {
+    attemptSignUp(firstName: $firstName, lastName: $lastName) {
+      code
+      success
+      message
+      user {
+        id
+        firstName
+        lastName
+        communityUsername
+        email
+        community {
+          id
+          name
+          abbreviation
+        }
+      }
+    }
+  }
+`;
+
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const [loginSuccess, setLoginSuccess] = useState(false);
   const [attemptLoginMutation, attemptLoginInfo] = useMutation(
     ATTEMPT_LOGIN_WITH_EMAIL_LINK
   );
 
-  const [loginError, setLoginError] = useState<string>();
+  const client = useApolloClient();
+
+  const [attemptSignupMutation, attemptSignupInfo] = useMutation(
+    ATTEMPT_SIGNUP,
+    {
+      update: (cache, result) => {
+        if (result.data?.attemptSignUp?.success) {
+          const user = result.data.attemptSignUp.user;
+          cache.writeQuery({
+            query: GET_LOCAL_USER,
+            data: { localUser: user },
+          });
+        }
+      },
+    }
+  );
+
   const [userEmail, setUserEmail] = useState<string>(
     localStorage.getItem('emailForSignIn')!
   );
@@ -115,19 +155,54 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
         return <LoggingInCardContent />;
       }
 
-      if (attemptLoginInfo.data && attemptLoginInfo.data.success) {
-        return (
-          <React.Fragment>
-            <Redirect to="/page/posts" />
-            <LoginSuccessCard />
-          </React.Fragment>
-        );
+      const data = attemptLoginInfo.data.attemptLoginWithEmailLink;
+
+      if (data && data.success && !attemptSignupInfo.called) {
+        if (data.code == 'auth/new_user') {
+          return (
+            <IonAlert
+              isOpen={true}
+              header={'Signup Dialog'}
+              backdropDismiss={false}
+              inputs={[
+                {
+                  name: 'firstName',
+                  type: 'text',
+                  placeholder: 'Your first name.',
+                },
+                {
+                  name: 'lastName',
+                  type: 'text',
+                  placeholder: 'Your last name.',
+                },
+              ]}
+              buttons={[
+                {
+                  text: 'Submit',
+                  handler: async (formDat) => {
+                    if (formDat.firstName && formDat.lastName) {
+                      await attemptSignupMutation({
+                        variables: { ...formDat },
+                      });
+
+                      history.replace('/page/posts');
+                    }
+                  },
+                },
+              ]}
+            />
+          );
+        } else {
+          return (
+            <React.Fragment>
+              <Redirect to="/page/posts" />
+              <LoginSuccessCard />
+            </React.Fragment>
+          );
+        }
       }
 
-      if (
-        attemptLoginInfo.error ||
-        (attemptLoginInfo.data && !attemptLoginInfo.data.success)
-      ) {
+      if (attemptLoginInfo.error || (data && !data.success)) {
         return (
           <React.Fragment>
             <Redirect to="/page/posts" />

@@ -1,6 +1,12 @@
 import { IonRow, IonCol, IonInput, IonButton, IonSpinner } from '@ionic/react';
 import React from 'react';
 import { IsValidEmailFormat } from '../utils';
+import { css } from 'glamor';
+
+const lightPadding = css({
+  padding: '8px',
+  wrap: true,
+});
 
 export const SubmittableEmailInput: React.FC<{
   email?: string;
@@ -11,7 +17,7 @@ export const SubmittableEmailInput: React.FC<{
   submitText: string;
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
   return (
-    <IonRow>
+    <IonRow {...lightPadding}>
       <IonCol size-md="9" size-sm="12">
         <IonInput
           value={email}

@@ -33,15 +33,6 @@ async function getMockIdToken(uid) {
 
 // injects firebase user information into express request param
 export const attachFirebaseIdToken = async (req, res, next) => {
-  if (process.env.NODE_ENV == 'development') {
-    // Add Mock token in dev environment
-    const mockIdtoken = await getMockIdToken(process.env.LOCAL_MOCK_USER);
-    console.log(`Return Mock Id Token for user ${mockIdtoken?.email}`);
-    req.user = mockIdtoken;
-    next();
-    return;
-  }
-
   let idToken;
   if (
     req.headers.authorization &&
@@ -54,6 +45,12 @@ export const attachFirebaseIdToken = async (req, res, next) => {
     idToken = req.cookies.__session;
   } else {
     console.log('No token attached');
+    if (process.env.NODE_ENV == 'development') {
+      // Add Mock token in dev environment
+      const mockIdtoken = await getMockIdToken(process.env.LOCAL_MOCK_USER);
+      console.log(`Return Mock Id Token for user ${mockIdtoken?.email}`);
+      req.user = mockIdtoken;
+    }
     next();
     return;
   }

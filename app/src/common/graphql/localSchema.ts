@@ -24,5 +24,6 @@ export const typeDefs = gql`
       userEmail: String!
       emailLink: String!
     ): LoginResponse
+    doFirebaseLogout: LoginResponse
   }
 `;

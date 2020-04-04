@@ -11,6 +11,7 @@ import {
   IonRow,
   IonToast,
   IonSpinner,
+  IonFooter,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { withRouter } from 'react-router-dom';
@@ -30,11 +31,15 @@ import { LoginInput } from './LoginInput';
 import { gql } from 'apollo-boost';
 import { LocalUserDetail } from './LocalUserDetail';
 import { GetLocalUser } from '../types/GetLocalUser';
+import { LogoutButton } from './LogoutButton';
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
   const { loading, data, error } = useQuery(GET_COMMUNITIES);
-  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
+    fetchPolicy: 'network-only',
+  });
+
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
@@ -89,6 +94,11 @@ const Menu: React.FC<{}> = () => {
           )}
           <ChannelList channels={channels} loading={false} />
         </IonContent>
+        {userLoggedIn && (
+          <IonFooter>
+            <LogoutButton />
+          </IonFooter>
+        )}
       </IonMenu>
     </React.Fragment>
   );

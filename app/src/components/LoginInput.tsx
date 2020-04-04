@@ -12,6 +12,9 @@ import {
 import React from 'react';
 import { Checkmark } from 'react-checkmark';
 import { SubmittableEmailInput } from './SubmittableEmailInput';
+import { css } from 'glamor';
+import { useApolloClient } from '@apollo/react-hooks';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 
 export enum LOGIN_STATUS {
   NONE,
@@ -20,16 +23,24 @@ export enum LOGIN_STATUS {
   FAILED,
 }
 
+const successContainer = css({
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const successLabel = css({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
 const LoginSuccess: React.FC<{}> = () => {
   return (
-    <IonRow className="ion-justify-content-center">
-      <IonCol size="1" className="ion-padding">
-        <Checkmark size="medium" />
-      </IonCol>
-      <IonCol size="9" className="ion-padding ion-text-center">
-        <IonLabel>Click the link in your e-mail to login!</IonLabel>
-      </IonCol>
-    </IonRow>
+    <div {...successLabel}>
+      <Checkmark size="large" />
+      <IonLabel>Click the link in your e-mail to login!</IonLabel>
+    </div>
   );
 };
 
@@ -39,7 +50,7 @@ export const LoginInput: React.FC<{}> = () => {
     LOGIN_STATUS.NONE
   );
   const [loginError, setLoginError] = useState<string>();
-
+  const client = useApolloClient();
   const handleLogin = async (loginEmail) => {
     const actionCodeSettings = {
       // URL must be whitelisted in the Firebase Console.
