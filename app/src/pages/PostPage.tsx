@@ -23,10 +23,14 @@ import './Page.css';
 import './PostPage.css';
 import { useParams } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
-import { GetComments, GetCommentsVariables } from '../types/GetComments';
-import { GET_COMMENTS } from '../common/graphql/comments';
 import { Direction } from '../types/globalTypes';
 import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
+import { GetPostVariables, GetPost } from '../types/GetPost';
+import {
+  GET_POST_BY_ID,
+  GET_POST_COMMENTS_ONLY,
+} from '../common/graphql/posts';
+import update from 'immutability-helper';
 
 const COMMENT_PAGE_LIMIT = 3;
 
@@ -37,44 +41,55 @@ const Postpage: React.FC = () => {
     false
   );
 
-  const commentVariables = {
+  const postVariables: GetPostVariables = {
     // TODO: get community id from somewhere
     communityId: 'HW6lY4kJOpqSpL39hbUV',
     postId: postId!,
     // TODO: Connect sorting to UI
-    sortBy: { property: 'creationTimestamp', direction: Direction.DESC },
-    limit: COMMENT_PAGE_LIMIT,
+    sortCommentsBy: {
+      property: 'creationTimestamp',
+      direction: Direction.ASC,
+    },
+    commentsLimit: COMMENT_PAGE_LIMIT,
   };
   const { data, loading, error, fetchMore, updateQuery } = useQuery<
-    GetComments,
-    GetCommentsVariables
-  >(GET_COMMENTS, { variables: commentVariables });
+    GetPost,
+    GetPostVariables
+  >(GET_POST_BY_ID, { variables: postVariables });
 
   const getMoreComments = async (e: CustomEvent<void>) => {
     await fetchMore({
-      query: GET_COMMENTS,
+      query: GET_POST_COMMENTS_ONLY,
       variables: {
-        ...commentVariables,
-        cursor: data?.comments?.cursor,
+        ...postVariables,
+        commentsCursor: data?.post?.comments?.cursor,
       },
       // Update the cache with the newly fetched results
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newComments = fetchMoreResult?.comments?.items;
-        const previousComments = previousResult.comments?.items;
-        const newCursor = fetchMoreResult?.comments?.cursor;
+        const newComments = fetchMoreResult?.post?.comments?.items;
+        const previousComments = previousResult.post?.comments?.items;
+        const newCursor = fetchMoreResult?.post?.comments?.cursor;
 
         // If a full page hasn't been returned we have reached the end
         if (newComments?.length !== COMMENT_PAGE_LIMIT) {
           setDisableInfiniteScroll(true);
         }
 
-        return {
-          comments: {
-            items: [...previousComments!, ...newComments!],
-            cursor: newCursor!,
-            __typename: previousResult.comments!.__typename,
-          },
+        const updatedComments = {
+          items: [...previousComments!, ...newComments!],
+          cursor: newCursor!,
+          __typename: previousResult.post?.comments!.__typename,
         };
+
+        // cannot modify previousResult as Apollo uses this to detect changes
+        // and trigger re-renders
+        const newResult = update(previousResult, {
+          post: {
+            comments: { $set: updatedComments },
+          },
+        });
+
+        return newResult;
       },
     });
 
@@ -85,14 +100,14 @@ const Postpage: React.FC = () => {
     newComment: SubmitComment_submitComment_comment
   ) => {
     updateQuery((currentResult, _) => {
-      const currentComments = currentResult.comments?.items;
-      return {
-        comments: {
-          items: [newComment, ...currentComments!],
-          cursor: currentResult.comments?.cursor!,
-          __typename: currentResult.comments!.__typename,
-        },
+      const currentComments = currentResult.post?.comments?.items;
+      // Update the cached query result to have the newly created comment
+      currentResult.post!.comments = {
+        items: [newComment, ...currentComments!],
+        cursor: currentResult.post?.comments?.cursor!,
+        __typename: currentResult.post?.comments!.__typename,
       };
+      return currentResult;
     });
   };
 
@@ -131,10 +146,10 @@ const Postpage: React.FC = () => {
               <IonSpinner />
             </IonCardContent>
           )) ||
-            (data?.comments?.items && (
+            (data?.post?.comments?.items && (
               <>
                 <IonList>
-                  {data?.comments?.items.map(
+                  {data?.post?.comments?.items.map(
                     (comment: CommentData | null, i: number) => (
                       <Comment key={i} {...comment!} onReply={handleReply} />
                     )

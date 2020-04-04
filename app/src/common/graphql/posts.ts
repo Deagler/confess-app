@@ -33,6 +33,32 @@ export const GET_POST_BY_ID = gql`
   }
 `;
 
+export const GET_POST_COMMENTS_ONLY = gql`
+  query GetPostComments(
+    $communityId: ID!
+    $postId: ID!
+    $sortCommentsBy: SortByInput
+    $commentsLimit: Int
+    $commentsCursor: String
+  ) {
+    post(communityId: $communityId, postId: $postId) {
+      comments(
+        sortBy: $sortCommentsBy
+        limit: $commentsLimit
+        cursor: $commentsCursor
+      ) {
+        items {
+          id
+          totalLikes
+          content
+          creationTimestamp
+        }
+        cursor
+      }
+    }
+  }
+`;
+
 export const SUBMIT_POST_FOR_APPROVAL = gql`
   mutation SubmitPostForApproval(
     $communityId: String!
