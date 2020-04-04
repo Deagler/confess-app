@@ -6,6 +6,7 @@ import {
   NormalizedCacheObject,
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
+import { GET_LOCAL_USER } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -51,7 +52,6 @@ async function attemptLoginWithEmailLink(
 
     persistAuthState(cache, authState);
 
-
     if (credential.additionalUserInfo!.isNewUser) {
       return {
         code: 'auth/new_user',
@@ -70,6 +70,21 @@ async function attemptLoginWithEmailLink(
       },
     });
 
+    if (!data.data.user) {
+      return {
+        code: 'auth/new_user',
+        success: true,
+        message: "Logged in. Let's take you to the signup page.",
+        authState,
+        __typename: 'LoginResponse',
+      };
+    }
+
+    // cache.writeQuery({
+    //   query: GET_LOCAL_USER,
+    //   data: { localUser: data.data.user },
+    // });
+
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
 
     return {
@@ -77,6 +92,7 @@ async function attemptLoginWithEmailLink(
       success: true,
       message: 'Successfully logged in.',
       authState,
+      localUser: data.data.user,
       __typename: 'LoginResponse',
     };
   } catch (e) {
@@ -90,6 +106,8 @@ async function doFirebaseLogout(_, __, { cache, client }) {
   await firebaseApp.auth().signOut();
 
   persistAuthState(cache, null);
+  localStorage.setItem('authState', 'null');
+  client.resetStore();
 
   return {
     code: 'auth/logged_out',

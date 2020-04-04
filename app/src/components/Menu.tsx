@@ -77,6 +77,8 @@ const Menu: React.FC<{}> = () => {
     return null;
   }
 
+  console.log(localUserQuery);
+
   return (
     <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />

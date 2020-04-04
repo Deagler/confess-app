@@ -11,21 +11,26 @@ async function getMockIdToken(uid) {
   }
 
   if (!mockCachedToken) {
-    const user = await firebaseApp.auth().getUser(uid);
+    try {
+      const user = await firebaseApp.auth().getUser(uid);
 
-    mockCachedToken = {
-      iss: 'https://securetoken.google.com/confess-api',
-      aud: 'confess-api',
-      auth_time: -1,
-      user_id: user.uid,
-      sub: user.uid,
-      iat: -1,
-      exp: -1,
-      email: user.email,
-      email_verified: user.emailVerified,
-      firebase: user.providerData,
-      uid: user.uid,
-    };
+      mockCachedToken = {
+        iss: 'https://securetoken.google.com/confess-api',
+        aud: 'confess-api',
+        auth_time: -1,
+        user_id: user.uid,
+        sub: user.uid,
+        iat: -1,
+        exp: -1,
+        email: user.email,
+        email_verified: user.emailVerified,
+        firebase: user.providerData,
+        uid: user.uid,
+      };
+    } catch (e) {
+      console.log('unable to mock token');
+      return undefined;
+    }
   }
 
   return mockCachedToken;

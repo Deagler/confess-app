@@ -155,7 +155,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
 
     if (attemptLoginInfo.called) {
-      const data = attemptLoginInfo.data.attemptLoginWithEmailLink;
+      const data = attemptLoginInfo.data?.attemptLoginWithEmailLink;
 
       if (data && data.success && !attemptSignupInfo.called) {
         if (data.code == 'auth/new_user') {
