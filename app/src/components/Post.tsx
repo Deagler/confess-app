@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -15,10 +15,14 @@ import {
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
-
+import {
+  ToggleLikePostVariables,
+  ToggleLikePost,
+} from '../types/ToggleLikePost';
 import './Post.css';
 import { Link } from 'react-router-dom';
-
+import { useMutation } from '@apollo/react-hooks';
+import { TOGGLE_LIKE_POST } from '../common/graphql/posts';
 export interface PostData {
   id: string;
   title: string;
@@ -33,7 +37,6 @@ export interface PostProps extends PostData {
   onCommentClick: () => void;
   isExpanded?: boolean;
 }
-
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
@@ -46,6 +49,19 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     totalComments,
     onCommentClick,
   } = props;
+
+  const [toggleLikePost] = useMutation<ToggleLikePost, ToggleLikePostVariables>(
+    TOGGLE_LIKE_POST
+  );
+
+  const handleLikeClick = async () => {
+    const { data } = await toggleLikePost({
+      variables: {
+        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        postId: id,
+      },
+    });
+  };
 
   return (
     <IonCard>
@@ -67,7 +83,12 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol>
-            <IonButton fill="clear" expand="full" color="primary">
+            <IonButton
+              onClick={handleLikeClick}
+              fill="clear"
+              expand="full"
+              color="primary"
+            >
               <IonIcon icon={heart} />
               <IonLabel>{totalLikes}</IonLabel>
             </IonButton>
