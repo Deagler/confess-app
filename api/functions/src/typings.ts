@@ -26,6 +26,7 @@ export interface User {
 export interface Post {
   id: string;
   creationTimestamp: number;
+  authorRef: FirestoreDocRef;
   author: User;
   authorAlias?: string;
   channel: string;

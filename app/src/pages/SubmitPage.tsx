@@ -14,12 +14,13 @@ import {
   IonSelectOption,
   IonInput,
   IonTextarea,
+  IonToast,
+  IonSpinner,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
-import { GlobalAppUtils } from '../App';
 import { RouteComponentProps } from 'react-router';
 import {
   SubmitPostForApproval,
@@ -50,7 +51,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
 
-  const [submitPostForApproval] = useMutation<
+  const [submitPostForApproval, { loading, error }] = useMutation<
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
   >(SUBMIT_POST_FOR_APPROVAL);
@@ -62,39 +63,33 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     authorAliasInput?: string
   ) => {
     // TODO: add input validation
-    GlobalAppUtils.showLoading();
-    const { data } = await submitPostForApproval({
-      variables: {
-        communityId: 'HW6lY4kJOpqSpL39hbUV',
-        channel,
-        title: postTitle,
-        content,
-        authorAlias: authorAliasInput || '',
-      },
-    });
-    GlobalAppUtils.hideLoading();
+    try {
+      await submitPostForApproval({
+        variables: {
+          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          channel,
+          title: postTitle,
+          content,
+          authorAlias: authorAliasInput || '',
+        },
+      });
 
-    // TODO: add error handling and remove non-null assertion operator
-    if (!data!.submitPostForApproval!.success) {
-      console.error(data);
-      GlobalAppUtils.showToast(
-        'Failed to create post. Our team has been notified.'
-      );
+      // success
+      setConfessionText(undefined);
+      setAuthorAlias(undefined);
+      setTitle(undefined);
+      setSelectedChannel(undefined);
+
       history.replace(`/page/posts`);
       return;
+    } catch (error) {
+      console.error(error);
     }
-
-    GlobalAppUtils.showToast(data!.submitPostForApproval!.message); // TODO: remove non-null assertion operator
-    setConfessionText(undefined);
-    setAuthorAlias(undefined);
-    setTitle(undefined);
-    setSelectedChannel(undefined);
-
-    history.replace(`/page/posts`);
   };
 
   return (
     <IonPage>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -112,7 +107,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                 )
               }
             >
-              Post
+              {loading ? <IonSpinner /> : 'Post'}
             </IonButton>
           </IonButtons>
           <IonTitle>Create Post</IonTitle>

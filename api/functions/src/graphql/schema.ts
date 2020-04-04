@@ -64,7 +64,6 @@ const typeDefs = gql`
   type Post {
     id: ID!
     creationTimestamp: Int!
-    author: User!
     authorAlias: String
 
     channel: String!
