@@ -1,15 +1,12 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
-import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
 import {
   verifyCommunity,
   verifyPost,
   verifyUser,
 } from '../common/verification';
-
-const firestore = firebaseApp.firestore();
 
 async function submitPostForApproval(
   _: any,
