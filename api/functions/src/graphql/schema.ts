@@ -69,7 +69,7 @@ const typeDefs = gql`
     message: String!
   }
 
-  type CreatePostResponse implements MutationResponse {
+  type PostUpdatedResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -96,7 +96,7 @@ const typeDefs = gql`
       title: String!
       content: String!
       authorAlias: String
-    ): CreatePostResponse
+    ): PostUpdatedResponse
 
     submitComment(
       communityId: String!
@@ -109,6 +109,8 @@ const typeDefs = gql`
       postId: String!
       approverId: String!
     ): ApprovePostResponse
+
+    toggleLikePost(communityId: String!, postId: String!): PostUpdatedResponse
   }
 `;
 

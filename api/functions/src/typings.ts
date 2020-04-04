@@ -22,7 +22,9 @@ export interface Post {
   isApproved: boolean;
   approvalInfo: ApprovalInfo | null;
   totalLikes: number;
-  likes: User[];
+  likeRefs: Array<
+    FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
+  >;
   totalComments: number;
   comments: Comment[];
 }

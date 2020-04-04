@@ -28,12 +28,12 @@ async function submitPostForApproval(
     approvalInfo: null,
     totalComments: 0,
     totalLikes: 0,
-    likes: [],
-    comments: [],
+    likeRefs: [],
   };
   const newPostRef = communityPosts.doc();
   await newPostRef.set(newPost);
   newPost.id = newPostRef.id;
+
   return {
     code: 200,
     message: 'Post submitted for approval.',
@@ -77,36 +77,39 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
   };
 }
 
-async function toggleLikePost(_: any, { communityId, postId, isLikedByUser }) {
+async function toggleLikePost(_: any, { communityId, postId }) {
   // verify user
   // verify post
+
   const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
   const post = await postRef.get();
+
   if (!post.exists) {
     throw new ApolloError(
       `post ${postId} does't exist in community ${communityId}`
     );
   }
 
-  await firestore.runTransaction((t) =>
-    t.get(postRef).then((postDoc) => {
-      let newTotalLikes;
-      if (!isLikedByUser) {
-        newTotalLikes = (postDoc.data()?.totalLikes || 0) + 1;
-      } else {
-        newTotalLikes = (postDoc.data()?.totalLikes || 0) - 1;
-      }
-      t.update(postRef, { totalLikes: newTotalLikes });
-      // postDoc.data()?.likes.push(); here: how do i pass user type in? and how do i check if the user is connected to network
-      return Promise.resolve(postRef);
-    })
-  );
+  const userId = 'v3uyCOqsJxdJQ9yATdcv5SnM1Sf2';
+  const userRef = firestore.doc(`users/${userId}`);
+
+  const userHasLiked = await (post.data()! as Post).likeRefs.includes(userRef);
+
+  await postRef.update({
+    totalLikes: userHasLiked
+      ? FirebaseFirestore.FieldValue.increment(-1)
+      : FirebaseFirestore.FieldValue.increment(1),
+    likeRefs: userHasLiked
+      ? FirebaseFirestore.FieldValue.arrayRemove(userRef)
+      : FirebaseFirestore.FieldValue.arrayUnion(userRef),
+  });
 
   // success
   return {
     code: 200,
     message: 'Post approved.',
     success: true,
+    post: await postRef.get(),
   };
 }
 

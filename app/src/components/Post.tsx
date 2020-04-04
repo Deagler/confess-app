@@ -57,7 +57,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const [toggleLikePost] = useMutation<ToggleLikePost, ToggleLikePostVariables>(
     TOGGLE_LIKE_POST
   );
-  const client = useApolloClient();
+
   const handleLikeButtonClick = async (
     communityId: string,
     postId: string
@@ -68,9 +68,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       variables: {
         communityId: 'HW6lY4kJOpqSpL39hbUV',
         postId: id,
-        isLikedByUser,
       },
     });
+
+    console.log(data);
   };
 
   return (
@@ -94,7 +95,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton
-              // onClick={handleLikeClick}
+              onClick={() => handleLikeButtonClick('adasdsa', id)}
               fill="clear"
               expand="full"
               color="primary"
