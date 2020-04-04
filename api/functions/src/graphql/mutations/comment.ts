@@ -2,10 +2,7 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
-import {
-  verifyPost,
-  verifyUser,
-} from '../common/verification';
+import { verifyPost, verifyUser } from '../common/verification';
 
 const firestore = firebaseApp.firestore();
 
