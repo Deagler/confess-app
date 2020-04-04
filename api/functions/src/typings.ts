@@ -37,6 +37,7 @@ export interface Post {
   likes: User[];
   totalComments: number;
   comments: Comment[];
+  communityId?: string;
 }
 
 export interface Community {
@@ -57,8 +58,6 @@ export interface Comment {
 }
 
 export interface CommentsInput {
-  communityId: string;
-  postId: string;
   sortBy?: SortByInput;
   limit?: number;
   cursor?: string;

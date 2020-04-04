@@ -77,7 +77,12 @@ const typeDefs = gql`
     totalLikes: Int!
     likes: [User]!
     totalComments: Int!
-    comments: [Comment]!
+    comments(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): CommentConnection!
+    communityId: String
   }
 
   type Query {
@@ -85,13 +90,6 @@ const typeDefs = gql`
     user(id: ID!): User
     community(id: ID!): Community
     communities: [Community]!
-    comments(
-      communityId: ID!
-      postId: ID!
-      sortBy: SortByInput
-      limit: Int
-      cursor: String
-    ): CommentConnection
   }
 
   interface MutationResponse {
