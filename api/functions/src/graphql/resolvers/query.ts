@@ -12,7 +12,15 @@ export const queryResolvers = {
         .doc(`communities/${args.communityId}/posts/${args.postId}`)
         .get();
 
-      return addIdToDoc(post) as Post | undefined;
+      if (!post.exists) {
+        throw new ApolloError(
+          `post ${args.postId} does't exist in community ${args.communityId}`
+        );
+      }
+
+      const postWithId = addIdToDoc(post) as Post;
+      postWithId.communityId = args.communityId;
+      return postWithId;
     } catch (error) {
       throw new ApolloError(error);
     }

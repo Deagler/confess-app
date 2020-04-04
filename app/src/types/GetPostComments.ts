@@ -6,10 +6,10 @@
 import { SortByInput } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: GetPost
+// GraphQL query operation: GetPostComments
 // ====================================================
 
-export interface GetPost_post_comments_items {
+export interface GetPostComments_post_comments_items {
   __typename: "Comment";
   id: string;
   totalLikes: number;
@@ -17,29 +17,22 @@ export interface GetPost_post_comments_items {
   creationTimestamp: number;
 }
 
-export interface GetPost_post_comments {
+export interface GetPostComments_post_comments {
   __typename: "CommentConnection";
-  items: (GetPost_post_comments_items | null)[];
+  items: (GetPostComments_post_comments_items | null)[];
   cursor: string | null;
 }
 
-export interface GetPost_post {
+export interface GetPostComments_post {
   __typename: "Post";
-  id: string;
-  creationTimestamp: number;
-  authorAlias: string | null;
-  title: string;
-  content: string;
-  totalLikes: number;
-  totalComments: number;
-  comments: GetPost_post_comments;
+  comments: GetPostComments_post_comments;
 }
 
-export interface GetPost {
-  post: GetPost_post | null;
+export interface GetPostComments {
+  post: GetPostComments_post | null;
 }
 
-export interface GetPostVariables {
+export interface GetPostCommentsVariables {
   communityId: string;
   postId: string;
   sortCommentsBy?: SortByInput | null;

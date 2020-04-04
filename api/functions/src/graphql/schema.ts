@@ -13,6 +13,16 @@ const typeDefs = gql`
     reason: String
   }
 
+  enum Direction {
+    ASC
+    DESC
+  }
+
+  input SortByInput {
+    property: String!
+    direction: Direction!
+  }
+
   type User {
     id: ID!
     communityUsername: String!
@@ -29,6 +39,11 @@ const typeDefs = gql`
     content: String!
     totalLikes: Int!
     likes: [User]!
+  }
+
+  type CommentConnection {
+    items: [Comment]!
+    cursor: String
   }
 
   type Community {
@@ -62,7 +77,12 @@ const typeDefs = gql`
     totalLikes: Int!
     likes: [User]!
     totalComments: Int!
-    comments: [Comment]!
+    comments(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): CommentConnection!
+    communityId: String
   }
 
   type Query {

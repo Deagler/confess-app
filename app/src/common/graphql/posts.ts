@@ -1,8 +1,14 @@
 import { gql } from 'apollo-boost';
 
 export const GET_POST_BY_ID = gql`
-  query GetPost($id: ID!) {
-    post(id: $id) {
+  query GetPost(
+    $communityId: ID!
+    $postId: ID!
+    $sortCommentsBy: SortByInput
+    $commentsLimit: Int
+    $commentsCursor: String
+  ) {
+    post(communityId: $communityId, postId: $postId) {
       id
       creationTimestamp
       authorAlias
@@ -10,6 +16,45 @@ export const GET_POST_BY_ID = gql`
       content
       totalLikes
       totalComments
+      comments(
+        sortBy: $sortCommentsBy
+        limit: $commentsLimit
+        cursor: $commentsCursor
+      ) {
+        items {
+          id
+          totalLikes
+          content
+          creationTimestamp
+        }
+        cursor
+      }
+    }
+  }
+`;
+
+export const GET_POST_COMMENTS_ONLY = gql`
+  query GetPostComments(
+    $communityId: ID!
+    $postId: ID!
+    $sortCommentsBy: SortByInput
+    $commentsLimit: Int
+    $commentsCursor: String
+  ) {
+    post(communityId: $communityId, postId: $postId) {
+      comments(
+        sortBy: $sortCommentsBy
+        limit: $commentsLimit
+        cursor: $commentsCursor
+      ) {
+        items {
+          id
+          totalLikes
+          content
+          creationTimestamp
+        }
+        cursor
+      }
     }
   }
 `;
