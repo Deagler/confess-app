@@ -18,7 +18,7 @@ async function submitPostForApproval(
   const { userRef, userDoc } = await verifyUser(userRecord);
 
   // can only post to your own community
-  if (userDoc.data()!.community.id !== communityId) {
+  if (userDoc.data()!.communityRef.id !== communityId) {
     throw new AuthenticationError(
       'Forbidden: you can only post to your own community'
     );
