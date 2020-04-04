@@ -21,6 +21,9 @@ export const SUBMIT_COMMENT = gql`
           firstName
           lastName
           communityUsername
+          community {
+            abbreviation
+          }
         }
         content
         totalLikes

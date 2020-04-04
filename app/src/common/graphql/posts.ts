@@ -29,6 +29,9 @@ export const GET_POST_BY_ID = gql`
             firstName
             lastName
             communityUsername
+            community {
+              abbreviation
+            }
           }
           totalLikes
         }
@@ -59,6 +62,9 @@ export const GET_POST_COMMENTS_ONLY = gql`
             firstName
             lastName
             communityUsername
+            community {
+              abbreviation
+            }
           }
           content
           totalLikes
