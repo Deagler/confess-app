@@ -50,7 +50,7 @@ async function attemptLoginWithEmailLink(
     };
 
     persistAuthState(cache, authState);
-    console.log(credential)
+
 
     if (credential.additionalUserInfo!.isNewUser) {
       return {

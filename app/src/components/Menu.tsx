@@ -39,7 +39,7 @@ const Menu: React.FC<{}> = () => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
-
+  const userLoggedIn = !!localUserQuery.data?.localUser;
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);

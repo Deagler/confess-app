@@ -150,11 +150,11 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   }, []);
 
   const renderAppropriateLoginCard = () => {
-    if (attemptLoginInfo.called) {
-      if (attemptLoginInfo.loading) {
-        return <LoggingInCardContent />;
-      }
+    if (attemptLoginInfo.loading || attemptSignupInfo.loading) {
+      return <LoggingInCardContent />;
+    }
 
+    if (attemptLoginInfo.called) {
       const data = attemptLoginInfo.data.attemptLoginWithEmailLink;
 
       if (data && data.success && !attemptSignupInfo.called) {
