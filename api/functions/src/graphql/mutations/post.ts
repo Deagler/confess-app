@@ -62,7 +62,6 @@ async function submitPostForApproval(
 async function approvePost(_: any, { communityId, postId }, context: any) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  console.log(userRecord);
   const { userRef, userDoc } = await verifyUser(userRecord);
 
   // check moderator is admin
@@ -92,29 +91,25 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
 
 async function rejectPost(
   _: any,
-  { communityId, postId, moderatorId, reason }
+  { communityId, postId, reason },
+  context: any
 ) {
-  // verify moderator
-  const moderatorRef = firestore.doc(`/users/${moderatorId}`);
-  const moderator = await moderatorRef.get();
-  if (!moderator.exists) {
-    throw new ApolloError(`user with id ${moderatorId} doesn't exist`);
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
   }
 
-  // verify post
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
+  const { postRef } = await verifyPost(communityId, postId);
 
   // update post
   const patch = {
     moderationStatus: ModerationStatus.REJECTED,
     moderationInfo: {
-      moderator: moderatorRef,
+      moderator: userRef,
       lastUpdated: moment().unix(),
       reason,
     },

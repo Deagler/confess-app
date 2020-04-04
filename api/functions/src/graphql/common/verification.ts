@@ -7,7 +7,7 @@ const usersCollection = firestore.collection('users');
 const communitiesCollection = firestore.collection('communities');
 
 export async function verifyUser(userRecord: UserRecord) {
-  if (!userRecord?.email || !userRecord?.email_verified) {
+  if (!userRecord?.email) {
     throw new AuthenticationError('Unauthorised');
   }
 

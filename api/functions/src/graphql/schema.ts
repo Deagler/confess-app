@@ -138,7 +138,9 @@ const typeDefs = gql`
       content: String!
       authorAlias: String
     ): CreatePostResponse
+
     attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
+
     submitComment(
       communityId: String!
       postId: String!
@@ -150,7 +152,6 @@ const typeDefs = gql`
     rejectPost(
       communityId: String!
       postId: String!
-      moderatorId: String!
       reason: String
     ): RejectPostResponse
   }
