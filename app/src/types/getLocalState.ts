@@ -12,7 +12,25 @@ export interface getLocalState_authState {
   accessToken: string;
 }
 
+export interface getLocalState_localUser_community {
+  __typename: "Community";
+  id: string;
+  name: string;
+  abbreviation: string;
+}
+
+export interface getLocalState_localUser {
+  __typename: "User";
+  id: string;
+  communityUsername: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  community: getLocalState_localUser_community | null;
+}
+
 export interface getLocalState {
   selectedCommunity: string;
   authState: getLocalState_authState | null;
+  localUser: getLocalState_localUser | null;
 }

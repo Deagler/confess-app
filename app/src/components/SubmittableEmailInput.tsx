@@ -18,7 +18,7 @@ export const SubmittableEmailInput: React.FC<{
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
   return (
     <IonRow {...lightPadding}>
-      <IonCol size-md="9" size-sm="12">
+      <IonCol size-md="12">
         <IonInput
           value={email}
           style={{ width: '100%' }}
@@ -28,12 +28,12 @@ export const SubmittableEmailInput: React.FC<{
       </IonCol>
       <IonCol
         size-sm="12"
-        size-md="3"
         className="ion-text-center ion-align-self-end ion-justify-self-end"
       >
         <IonButton
           disabled={!email || !IsValidEmailFormat(email) || loading}
           onClick={() => submit(email)}
+          fill="solid"
         >
           {loading ? <IonSpinner /> : submitText}
         </IonButton>

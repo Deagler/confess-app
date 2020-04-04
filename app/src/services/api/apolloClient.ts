@@ -51,7 +51,18 @@ async function writeInitialData() {
         authState {
           accessToken
         }
-        localUser
+        localUser {
+          id
+          communityUsername
+          firstName
+          lastName
+          email
+          community {
+            id
+            name
+            abbreviation
+          }
+        }
       }
     `,
     data: {
