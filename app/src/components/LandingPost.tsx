@@ -20,7 +20,14 @@ export interface PostProps {
 
 const postCard = css({
   width: '100%',
-  height: '300px',
+  height: '450px',
+});
+
+const postContent = css({
+  height: '325px',
+  marginBottom: '16px',
+  maxHeight: '100%',
+  overflow: 'auto',
 });
 
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
@@ -35,10 +42,12 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
           {moment.unix(creationTimestamp).fromNow()}
         </IonCardSubtitle>
       </IonCardHeader>
-      <IonCardContent>
-        <p>{content}</p>
-        <p>{authorAlias || 'Anonymous'}</p>
-      </IonCardContent>
+      <div {...postContent}>
+        <IonCardContent>
+          <p>{content}</p>
+          <p>{authorAlias || 'Anonymous'}</p>
+        </IonCardContent>
+      </div>
     </IonCard>
   );
 };

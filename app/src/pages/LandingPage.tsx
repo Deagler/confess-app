@@ -165,7 +165,7 @@ const LandingPage: React.FC = () => {
                     {loading ? (
                       <IonSkeletonText
                         animated={true}
-                        style={{ height: '300px' }}
+                        style={{ height: '450px' }}
                       />
                     ) : (
                       <IonSlides pager={true} options={slideOpts}>

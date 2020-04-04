@@ -30,7 +30,7 @@ export const LogoutButton: React.FC<{}> = () => {
     awaitRefetchQueries: true,
     refetchQueries: [{ query: GET_AUTH_STATE }, { query: GET_LOCAL_USER }],
     onCompleted: () => {
-      history.replace('/');
+      history.push('/');
     },
   });
 
