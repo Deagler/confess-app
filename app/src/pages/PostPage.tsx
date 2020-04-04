@@ -134,7 +134,7 @@ const Postpage: React.FC = () => {
           {(loading && <PostSkeleton />) ||
             (data?.post && (
               <Post
-                {...testPost}
+                {...data.post}
                 onCommentClick={() => newCommentElement.current!.setFocus()}
                 collapsable={false}
               />

@@ -28,7 +28,7 @@ export interface PostData {
   content: string;
   totalLikes: number;
   totalComments: number;
-  authorAlias?: string;
+  authorAlias?: string | null;
 }
 
 export interface PostProps extends PostData {

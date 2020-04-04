@@ -11,6 +11,7 @@ const PostSkeleton: React.FC<{}> = () => (
         <IonSkeletonText animated={true} style={{ width: '20%' }} />
       </IonLabel>
       <SkeletonParagraph />
+      <br />
       <SkeletonParagraph />
       <IonLabel>
         <IonSkeletonText animated={true} style={{ width: '20%' }} />
