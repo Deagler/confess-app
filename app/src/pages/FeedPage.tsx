@@ -49,6 +49,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
               key={i}
               {...post}
               onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+              collapsable={true}
             />
           ))
         )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -31,8 +31,18 @@ export interface PostData {
 
 export interface PostProps extends PostData {
   onCommentClick: () => void;
-  isExpanded?: boolean;
+  collapsable: boolean;
 }
+
+const MAX_CONTENT_LENGTH: number = 600;
+
+const truncateString = (str: string) => {
+  if (str.length <= MAX_CONTENT_LENGTH) {
+    return str;
+  }
+
+  return str.slice(0, MAX_CONTENT_LENGTH) + '...';
+};
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
@@ -41,11 +51,13 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     creationTimestamp,
     content,
     authorAlias,
-    isExpanded,
     totalLikes,
     totalComments,
     onCommentClick,
+    collapsable,
   } = props;
+
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
     <IonCard>
@@ -57,11 +69,18 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
-          {content}
+        <IonCardContent>
+          <p>{expanded || !collapsable ? content : truncateString(content)}</p>
         </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>
+
+      <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
+        {collapsable &&
+          content.length > MAX_CONTENT_LENGTH &&
+          (expanded ? 'See Less' : 'See More')}
+      </IonButton>
+
       <IonItemDivider />
 
       <IonGrid>
