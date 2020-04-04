@@ -6,8 +6,8 @@ export const GET_SELECTED_COMMUNITY = gql`
   }
 `;
 
-export const TOGGLE_LIKE_POST = gql`
-  query ToggleLikePost {
+export const GET_USER_LIKE = gql`
+  query GetUserLike {
     isLikedByUser @client
   }
 `;

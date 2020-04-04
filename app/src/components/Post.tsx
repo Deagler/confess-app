@@ -21,8 +21,9 @@ import {
 } from '../types/ToggleLikePost';
 import './Post.css';
 import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient, useQuery } from '@apollo/react-hooks';
 import { TOGGLE_LIKE_POST } from '../common/graphql/posts';
+import { GET_USER_LIKE } from '../common/graphql/localState';
 export interface PostData {
   id: string;
   title: string;
@@ -35,6 +36,7 @@ export interface PostData {
 
 export interface PostProps extends PostData {
   onCommentClick: () => void;
+  // onLikeButtonClick: () => void;
   isExpanded?: boolean;
 }
 const Post: React.FC<PostProps> = (props: PostProps) => {
@@ -50,15 +52,23 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     onCommentClick,
   } = props;
 
+  const toggleLikePostQuery = useQuery(GET_USER_LIKE);
+  const isLikedByUser: boolean = toggleLikePostQuery.data?.isLikedByUser;
   const [toggleLikePost] = useMutation<ToggleLikePost, ToggleLikePostVariables>(
     TOGGLE_LIKE_POST
   );
-
-  const handleLikeClick = async () => {
+  const client = useApolloClient();
+  const handleLikeButtonClick = async (
+    communityId: string,
+    postId: string
+    // isLikedByUser: boolean
+  ) => {
+    // TODO: add input validation
     const { data } = await toggleLikePost({
       variables: {
         communityId: 'HW6lY4kJOpqSpL39hbUV',
         postId: id,
+        isLikedByUser,
       },
     });
   };
@@ -84,7 +94,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton
-              onClick={handleLikeClick}
+              // onClick={handleLikeClick}
               fill="clear"
               expand="full"
               color="primary"

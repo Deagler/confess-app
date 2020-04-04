@@ -68,8 +68,16 @@ export const GET_COMMUNITY_POSTS = gql`
 `;
 
 export const TOGGLE_LIKE_POST = gql`
-  mutation ToggleLikePost($communityId: String!, $postId: String!) {
-    toggleLikePost(communityId: $communityId, postId: $postId) @client {
+  mutation ToggleLikePost(
+    $communityId: String!
+    $postId: String!
+    $isLikedByUser: Boolean!
+  ) {
+    toggleLikePost(
+      communityId: $communityId
+      postId: $postId
+      isLikedByUser: $isLikedByUser
+    ) {
       code
       success
       message

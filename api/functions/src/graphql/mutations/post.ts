@@ -77,7 +77,7 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
   };
 }
 
-async function toggleLikePost(_: any, { communityId, postId }) {
+async function toggleLikePost(_: any, { communityId, postId, isLikedByUser }) {
   // verify user
   // verify post
   const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
@@ -88,10 +88,16 @@ async function toggleLikePost(_: any, { communityId, postId }) {
     );
   }
 
-  const newUpdateRef = await firestore.runTransaction((t) =>
+  await firestore.runTransaction((t) =>
     t.get(postRef).then((postDoc) => {
-      const newTotalLikes = (postDoc.data()?.totalLikes || 0) + 1;
+      let newTotalLikes;
+      if (!isLikedByUser) {
+        newTotalLikes = (postDoc.data()?.totalLikes || 0) + 1;
+      } else {
+        newTotalLikes = (postDoc.data()?.totalLikes || 0) - 1;
+      }
       t.update(postRef, { totalLikes: newTotalLikes });
+      // postDoc.data()?.likes.push(); here: how do i pass user type in? and how do i check if the user is connected to network
       return Promise.resolve(postRef);
     })
   );
