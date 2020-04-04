@@ -11,7 +11,6 @@ export const queryResolvers = {
       const post = await firestore
         .doc(`communities/${args.communityId}/posts/${args.postId}`)
         .get();
-
       return addIdToDoc(post) as Post | undefined;
     } catch (error) {
       throw new ApolloError(error);

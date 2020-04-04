@@ -33,7 +33,6 @@ async function submitPostForApproval(
   };
   const newPostRef = communityPosts.doc();
   await newPostRef.set(newPost);
-
   newPost.id = newPostRef.id;
   return {
     code: 200,
@@ -78,7 +77,35 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
   };
 }
 
+async function toggleLikePost(_: any, { communityId, postId }) {
+  // verify user
+  // verify post
+  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
+  const post = await postRef.get();
+  if (!post.exists) {
+    throw new ApolloError(
+      `post ${postId} does't exist in community ${communityId}`
+    );
+  }
+
+  const newUpdateRef = await firestore.runTransaction((t) =>
+    t.get(postRef).then((postDoc) => {
+      const newTotalLikes = (postDoc.data()?.totalLikes || 0) + 1;
+      t.update(postRef, { totalLikes: newTotalLikes });
+      return Promise.resolve(postRef);
+    })
+  );
+
+  // success
+  return {
+    code: 200,
+    message: 'Post approved.',
+    success: true,
+  };
+}
+
 export const postMutations = {
   submitPostForApproval,
   approvePost,
+  toggleLikePost,
 };

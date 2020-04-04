@@ -13,7 +13,8 @@ import {
 import Comment, { CommentData } from '../components/Comment';
 import Post, { PostData } from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
-
+import { useMutation } from '@apollo/react-hooks';
+import { TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import './Page.css';
 import './PostPage.css';
 import { useParams } from 'react-router';

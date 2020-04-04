@@ -5,3 +5,9 @@ export const GET_SELECTED_COMMUNITY = gql`
     selectedCommunity @client
   }
 `;
+
+export const TOGGLE_LIKE_POST = gql`
+  query ToggleLikePost {
+    isLikedByUser @client
+  }
+`;
