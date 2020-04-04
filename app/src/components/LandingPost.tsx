@@ -20,6 +20,7 @@ export interface PostProps {
 
 const postCard = css({
   width: '100%',
+  maxWidth: '100%',
   height: '450px',
 });
 
@@ -27,6 +28,7 @@ const postContent = css({
   height: '325px',
   marginBottom: '16px',
   maxHeight: '100%',
+  maxWidth: '100%',
   overflow: 'auto',
 });
 

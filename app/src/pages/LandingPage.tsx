@@ -35,13 +35,6 @@ const secondaryHero = css({
   maxHeight: '500px',
 });
 
-const loginInputContainer = css({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  height: '100%',
-});
-
 const LandingPage: React.FC = () => {
   const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {
@@ -136,10 +129,9 @@ const LandingPage: React.FC = () => {
           </IonGrid>
 
           <IonItemDivider />
-
           <IonGrid>
-            <div {...secondaryHero}>
-              <IonCol size-md="4" size-xs="12">
+            <IonRow {...secondaryHero}>
+              <IonCol size-md="4" size-sm="12">
                 <IonRow>
                   <IonCol>
                     <h2>Completely anonymous.</h2>
@@ -153,7 +145,7 @@ const LandingPage: React.FC = () => {
                   <LoginInput />
                 </IonRow>
               </IonCol>
-              <IonCol size-md="8" size-xs="12">
+              <IonCol size-md="8" size-sm="12">
                 <IonRow>
                   <IonCol>
                     <h2>Fresh confessions.</h2>
@@ -161,26 +153,24 @@ const LandingPage: React.FC = () => {
                   </IonCol>
                 </IonRow>
                 <IonRow>
-                  <IonCol>
-                    {loading ? (
-                      <IonSkeletonText
-                        animated={true}
-                        style={{ height: '450px' }}
-                      />
-                    ) : (
-                      <IonSlides pager={true} options={slideOpts}>
-                        {data &&
-                          data.community.feed.slice(0, 4).map((slide) => (
-                            <IonSlide key={slide.id} className="ion-text-left">
-                              <LandingPost {...slide} />
-                            </IonSlide>
-                          ))}
-                      </IonSlides>
-                    )}
-                  </IonCol>
+                  {loading ? (
+                    <IonSkeletonText
+                      animated={true}
+                      style={{ height: '450px' }}
+                    />
+                  ) : (
+                    <IonSlides pager={true} options={slideOpts}>
+                      {data &&
+                        data.community.feed.slice(0, 4).map((slide) => (
+                          <IonSlide key={slide.id} className="ion-text-left">
+                            <LandingPost {...slide} />
+                          </IonSlide>
+                        ))}
+                    </IonSlides>
+                  )}
                 </IonRow>
               </IonCol>
-            </div>
+            </IonRow>
           </IonGrid>
         </div>
       </IonContent>
