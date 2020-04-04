@@ -31,6 +31,7 @@ import {
   GET_POST_COMMENTS_ONLY,
 } from '../common/graphql/posts';
 import update from 'immutability-helper';
+import PostSkeleton from '../components/PostSkeleton';
 
 const COMMENT_PAGE_LIMIT = 3;
 
@@ -130,11 +131,14 @@ const Postpage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div className="PostReadOnly">
-          <Post
-            {...testPost}
-            onCommentClick={() => newCommentElement.current!.setFocus()}
-            collapsable={false}
-          />
+          {(loading && <PostSkeleton />) ||
+            (data?.post && (
+              <Post
+                {...testPost}
+                onCommentClick={() => newCommentElement.current!.setFocus()}
+                collapsable={false}
+              />
+            ))}
         </div>
         <NewCommentInput
           onCommentCreated={handleCommentCreated}
