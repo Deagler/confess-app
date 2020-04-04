@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   IonCardHeader,
   IonCardTitle,
@@ -6,6 +7,8 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import moment from 'moment';
+
+import { truncateString } from '../utils';
 
 import './Post.css';
 
@@ -17,11 +20,13 @@ export interface PostProps {
   authorAlias?: string;
 }
 
+const MAX_CONTENT_LENGTH: number = 600;
+
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <h1>
+    <Link to={`/page/posts/${id}`} className="Link">
       <IonCardContent>
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
@@ -30,10 +35,12 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent>
+          {truncateString(content, MAX_CONTENT_LENGTH)}
+        </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </IonCardContent>
-    </h1>
+    </Link>
   );
 };
 

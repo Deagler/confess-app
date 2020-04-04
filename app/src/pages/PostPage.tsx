@@ -133,7 +133,7 @@ const Postpage: React.FC = () => {
           <Post
             {...testPost}
             onCommentClick={() => newCommentElement.current!.setFocus()}
-            isExpanded={true}
+            collapsable={false}
           />
         </div>
         <NewCommentInput

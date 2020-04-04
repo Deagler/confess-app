@@ -12,6 +12,7 @@ const props: PostProps = {
   totalLikes: 7,
   totalComments: 56,
   onCommentClick: () => null,
+  collapsable: false,
 };
 
 test('renders without crashing', () => {

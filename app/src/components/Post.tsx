@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -14,10 +14,12 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import { truncateString } from '../utils';
+
 import './Post.css';
-import { Link } from 'react-router-dom';
 
 export interface PostData {
   id: string;
@@ -31,8 +33,10 @@ export interface PostData {
 
 export interface PostProps extends PostData {
   onCommentClick: () => void;
-  isExpanded?: boolean;
+  collapsable: boolean;
 }
+
+const MAX_CONTENT_LENGTH: number = 600;
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
@@ -41,11 +45,13 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     creationTimestamp,
     content,
     authorAlias,
-    isExpanded,
     totalLikes,
     totalComments,
     onCommentClick,
+    collapsable,
   } = props;
+
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
     <IonCard>
@@ -57,11 +63,22 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
-          {content}
+        <IonCardContent>
+          <p>
+            {expanded || !collapsable
+              ? content
+              : truncateString(content, MAX_CONTENT_LENGTH)}
+          </p>
         </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>
+
+      <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
+        {collapsable &&
+          content.length > MAX_CONTENT_LENGTH &&
+          (expanded ? 'See Less' : 'See More')}
+      </IonButton>
+
       <IonItemDivider />
 
       <IonGrid>
