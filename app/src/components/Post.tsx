@@ -14,10 +14,12 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import { truncateString } from '../utils';
+
 import './Post.css';
-import { Link } from 'react-router-dom';
 
 export interface PostData {
   id: string;
@@ -35,14 +37,6 @@ export interface PostProps extends PostData {
 }
 
 const MAX_CONTENT_LENGTH: number = 600;
-
-const truncateString = (str: string) => {
-  if (str.length <= MAX_CONTENT_LENGTH) {
-    return str;
-  }
-
-  return str.slice(0, MAX_CONTENT_LENGTH) + '...';
-};
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
@@ -70,7 +64,11 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <p>{expanded || !collapsable ? content : truncateString(content)}</p>
+          <p>
+            {expanded || !collapsable
+              ? content
+              : truncateString(content, MAX_CONTENT_LENGTH)}
+          </p>
         </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>

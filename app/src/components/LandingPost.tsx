@@ -8,6 +8,8 @@ import {
 } from '@ionic/react';
 import moment from 'moment';
 
+import { truncateString } from '../utils';
+
 import './Post.css';
 
 export interface PostProps {
@@ -19,14 +21,6 @@ export interface PostProps {
 }
 
 const MAX_CONTENT_LENGTH: number = 600;
-
-const truncateString = (str: string) => {
-  if (str.length <= MAX_CONTENT_LENGTH) {
-    return str;
-  }
-
-  return str.slice(0, MAX_CONTENT_LENGTH) + '...';
-};
 
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
@@ -41,7 +35,9 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>{truncateString(content)}</IonCardContent>
+        <IonCardContent>
+          {truncateString(content, MAX_CONTENT_LENGTH)}
+        </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </IonCardContent>
     </Link>
