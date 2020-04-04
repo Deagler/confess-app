@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
-import * as firebase from 'firebase/app';
+import React from 'react';
 import {
   IonContent,
   IonMenu,
-  IonHeader,
   IonTitle,
   IonToolbar,
-  IonButton,
-  IonInput,
-  IonRow,
   IonToast,
   IonSpinner,
   IonFooter,

@@ -13,8 +13,6 @@ interface ResolverMap {
   [field: string]: ResolverFn;
 }
 
-
-
 export const resolvers = {
   Query: {
     ...queryResolvers,

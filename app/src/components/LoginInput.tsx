@@ -1,20 +1,11 @@
 import { useState } from 'react';
 import { firebaseApp } from '../services/firebase';
-import {
-  IonRow,
-  IonInput,
-  IonButton,
-  IonToast,
-  IonSpinner,
-  IonCol,
-  IonLabel,
-} from '@ionic/react';
+import { IonToast, IonLabel } from '@ionic/react';
 import React from 'react';
 import { Checkmark } from 'react-checkmark';
 import { SubmittableEmailInput } from './SubmittableEmailInput';
 import { css } from 'glamor';
 import { useApolloClient } from '@apollo/react-hooks';
-import { GET_LOCAL_USER } from '../common/graphql/localState';
 
 export enum LOGIN_STATUS {
   NONE,
@@ -51,7 +42,7 @@ export const LoginInput: React.FC<{}> = () => {
   );
   const [loginError, setLoginError] = useState<string>();
   const client = useApolloClient();
-  const handleLogin = async (loginEmail) => {
+  const handleLogin = async (inputEmail) => {
     const actionCodeSettings = {
       // URL must be whitelisted in the Firebase Console.
       url: `${window.location.origin}/callback`,
@@ -62,9 +53,9 @@ export const LoginInput: React.FC<{}> = () => {
       setLoginStatus(LOGIN_STATUS.PENDING);
       await firebaseApp
         .auth()
-        .sendSignInLinkToEmail(loginEmail, actionCodeSettings);
+        .sendSignInLinkToEmail(inputEmail, actionCodeSettings);
       setLoginStatus(LOGIN_STATUS.SUCCESS);
-      localStorage.setItem('emailForSignIn', loginEmail);
+      localStorage.setItem('emailForSignIn', inputEmail);
     } catch (e) {
       setLoginError(
         'An error occurred while logging in. Our team has been notified.'

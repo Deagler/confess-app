@@ -1,4 +1,4 @@
-import { IonRow, IonCol, IonLabel, IonAvatar, IonGrid } from '@ionic/react';
+import { IonRow, IonCol, IonLabel, IonAvatar } from '@ionic/react';
 import React from 'react';
 import { GetLocalUser_localUser } from '../types/GetLocalUser';
 import { css } from 'glamor';
