@@ -1,6 +1,8 @@
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
+import { verifyUser } from '../common/verification';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -20,7 +22,16 @@ export const communityResolvers = {
       throw new ApolloError(error);
     }
   },
-  async unapprovedPosts(parent: any, args) {
+  async unapprovedPosts(parent: any, args, context: any) {
+    // pull user from request context
+    const userRecord: UserRecord = context.req.user;
+    const { userDoc } = await verifyUser(userRecord);
+
+    // check moderator is admin
+    if (!userDoc.data()!.isAdmin) {
+      throw new AuthenticationError('Only administrators can moderate posts');
+    }
+
     try {
       const unapprovedPostsQuery = await firestore
         .collection(`communities/${parent.id}/posts`)
