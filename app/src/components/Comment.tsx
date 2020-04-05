@@ -125,8 +125,12 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
             <IonItem lines="none">
               <IonButton
                 onClick={() =>
-                  handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', '', id)
-                } // GET POST ID
+                  handleLikeButtonClick(
+                    'HW6lY4kJOpqSpL39hbUV',
+                    'BSg4tDaHCeLDkdvbE4mA', // TODO: GET POST ID
+                    id
+                  )
+                }
                 fill="clear"
                 expand="full"
                 disabled={!userLoggedIn || serverLikeInfo.loading}
