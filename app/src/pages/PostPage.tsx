@@ -69,29 +69,21 @@ const Postpage: React.FC = () => {
       // Update the cache with the newly fetched results
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newComments = fetchMoreResult?.post?.comments?.items;
-        const previousComments = previousResult.post?.comments?.items;
-        const newCursor = fetchMoreResult?.post?.comments?.cursor;
 
         // If a full page hasn't been returned we have reached the end
         if (newComments?.length !== COMMENT_PAGE_LIMIT) {
           setDisableInfiniteScroll(true);
         }
 
-        const updatedComments = {
-          items: [...previousComments!, ...newComments!],
-          cursor: newCursor!,
-          __typename: previousResult.post?.comments!.__typename,
-        };
-
-        // cannot modify previousResult as Apollo uses this to detect changes
-        // and trigger re-renders
-        const newResult = update(previousResult, {
+        // cannot modify previousResult as Apollo uses this to detect changes to trigger re-renders
+        return update(previousResult, {
           post: {
-            comments: { $set: updatedComments },
+            comments: {
+              items: { $push: newComments! },
+              cursor: { $set: fetchMoreResult?.post?.comments.cursor! },
+            },
           },
         });
-
-        return newResult;
       },
     });
 
@@ -162,6 +154,7 @@ const Postpage: React.FC = () => {
                     )
                   )}
                 </IonList>
+                <br />
                 <IonInfiniteScroll
                   threshold="100px"
                   disabled={disableInfiniteScroll}
