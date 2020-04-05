@@ -1,11 +1,7 @@
 import { gql } from 'apollo-boost';
 
 export const SUBMIT_COMMENT = gql`
-  mutation SubmitComment(
-    $communityId: ID!
-    $postId: ID!
-    $content: String!
-  ) {
+  mutation SubmitComment($communityId: ID!, $postId: ID!, $content: String!) {
     submitComment(
       communityId: $communityId
       postId: $postId

@@ -6,6 +6,11 @@ import { css } from 'glamor';
 const lightPadding = css({
   padding: '8px',
   wrap: true,
+  width: '100%',
+  maxWidth: '400px',
+
+  display: 'flex',
+  flexDirection: 'row',
 });
 
 export const SubmittableEmailInput: React.FC<{
@@ -17,27 +22,21 @@ export const SubmittableEmailInput: React.FC<{
   submitText: string;
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
   return (
-    <IonRow {...lightPadding}>
-      <IonCol size-md="12">
-        <IonInput
-          value={email}
-          style={{ width: '100%' }}
-          placeholder={placeholderText}
-          onIonChange={(e) => setEmail(e.detail.value!)}
-        />
-      </IonCol>
-      <IonCol
-        size-sm="12"
-        className="ion-text-center ion-align-self-end ion-justify-self-end"
+    <div {...lightPadding}>
+      <IonInput
+        value={email}
+        style={{ maxWidth: '400px', minWidth: '300px' }}
+        placeholder={placeholderText}
+        onIonChange={(e) => setEmail(e.detail.value!)}
+      />
+
+      <IonButton
+        disabled={!email || !IsValidEmailFormat(email) || loading}
+        onClick={() => submit(email)}
+        fill="solid"
       >
-        <IonButton
-          disabled={!email || !IsValidEmailFormat(email) || loading}
-          onClick={() => submit(email)}
-          fill="solid"
-        >
-          {loading ? <IonSpinner /> : submitText}
-        </IonButton>
-      </IonCol>
-    </IonRow>
+        {loading ? <IonSpinner /> : submitText}
+      </IonButton>
+    </div>
   );
 };

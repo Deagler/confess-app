@@ -27,6 +27,13 @@ import { gql } from 'apollo-boost';
 import { LocalUserDetail } from './LocalUserDetail';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
+import { css } from 'glamor';
+import { appPageCSS } from './WebHeader';
+import { AppLogo } from './AppLogo';
+
+const menuCss = css({
+  borderRight: '0',
+});
 
 const Menu: React.FC<{}> = () => {
   // get communities and channels
@@ -77,9 +84,9 @@ const Menu: React.FC<{}> = () => {
   return (
     <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonMenu contentId="main" type="overlay">
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
+      <IonMenu {...css(menuCss, appPageCSS)} contentId="main" type="overlay">
+        <IonToolbar className="ion-hide-lg-up">
+          <AppLogo />
         </IonToolbar>
         <IonContent>
           <CommunitySelect
@@ -88,14 +95,16 @@ const Menu: React.FC<{}> = () => {
             loading={loading}
             onCommunityChange={handleCommunityChange}
           />
+          <div className="ion-hide-lg-up">
+            {localUserQuery.loading || !localUserQuery.called ? (
+              <IonSpinner />
+            ) : localUserQuery.data?.localUser ? (
+              <LocalUserDetail user={localUserQuery.data?.localUser} />
+            ) : (
+              <LoginInput />
+            )}
+          </div>
 
-          {localUserQuery.loading || !localUserQuery.called ? (
-            <IonSpinner />
-          ) : localUserQuery.data?.localUser ? (
-            <LocalUserDetail user={localUserQuery.data?.localUser} />
-          ) : (
-            <LoginInput />
-          )}
           <ChannelList channels={channels} loading={false} />
         </IonContent>
         {userLoggedIn && (

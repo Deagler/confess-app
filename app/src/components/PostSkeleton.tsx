@@ -2,7 +2,7 @@ import { IonCard, IonLabel, IonSkeletonText } from '@ionic/react';
 import React from 'react';
 
 const PostSkeleton: React.FC<{}> = () => (
-  <IonCard>
+  <IonCard className="ion-margin">
     <div className="ion-padding">
       <IonLabel>
         <IonSkeletonText animated={true} style={{ width: '40%' }} />

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import {
+  IonApp,
+  IonRouterOutlet,
+  IonSplitPane,
+  IonGrid,
+  IonRow,
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */
@@ -35,6 +41,10 @@ import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
 import SecureRoute from './components/SecureRoute';
+import { WebHeader, appPageCSS } from './components/WebHeader';
+import { css } from 'glamor';
+import { AppRouter } from './AppRouter';
+import { app } from 'firebase';
 
 export const GlobalAppUtils = {
   showLoading: () => {},
@@ -44,6 +54,13 @@ export const GlobalAppUtils = {
 };
 
 const auth = firebaseApp.auth();
+
+const appContainer = css({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  flex: 1,
+});
 
 const App: React.FC = () => {
   const [authLocalUser, setAuthLocalUser] = useState<
@@ -70,56 +87,16 @@ const App: React.FC = () => {
         <FullPageLoader />
       ) : (
         <IonReactRouter>
-          <IonSplitPane contentId="main">
-            <ApolloProvider client={apolloClient}>
-              <Menu />
-              <Switch>
-                <IonRouterOutlet id="main">
-                  <Route
-                    path="/"
-                    render={() =>
-                      authLocalUser != null ? (
-                        <Redirect to="/page/posts" />
-                      ) : (
-                        <Redirect to="/landing" />
-                      )
-                    }
-                    exact={true}
-                  />
-                  <Route
-                    path="/callback"
-                    render={(props) => <AuthCallbackPage {...props} />}
-                    exact={true}
-                  />
-                  <Route
-                    path="/landing"
-                    render={() => <LandingPage />}
-                    exact={true}
-                  />
-                  <Route
-                    path="/page/posts"
-                    render={(props) => <FeedPage {...props} />}
-                    exact={true}
-                  />
-                  <SecureRoute
-                    path="/page/admin"
-                    component={AdminPage}
-                    exact={true}
-                  />
-                  <Route
-                    path="/page/submit"
-                    render={(props) => <SubmitPage {...props} />}
-                    exact={true}
-                  />
-                  <Route
-                    path="/page/posts/:id"
-                    render={() => <Postpage />}
-                    exact={true}
-                  />
-                </IonRouterOutlet>
-              </Switch>
-            </ApolloProvider>
-          </IonSplitPane>
+          <ApolloProvider client={apolloClient}>
+            <div {...appContainer}>
+              <WebHeader />
+
+              <IonSplitPane contentId="main">
+                <Menu />
+                <AppRouter userLoggedIn={!!authLocalUser} />
+              </IonSplitPane>
+            </div>
+          </ApolloProvider>
         </IonReactRouter>
       )}
     </IonApp>

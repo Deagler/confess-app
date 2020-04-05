@@ -11,6 +11,7 @@ import {
   IonButton,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonSplitPane,
 } from '@ionic/react';
 
 import Post from '../components/Post';
@@ -19,6 +20,7 @@ import { RouteComponentProps } from 'react-router';
 import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
+import { appPageCSS } from '../components/WebHeader';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -29,8 +31,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   } = usePaginatedFeedQuery();
 
   return (
-    <IonPage>
-      <IonHeader>
+    <IonPage {...appPageCSS}>
+      <IonHeader id="header" className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
@@ -40,6 +42,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
+        <IonTitle className="ion-hide-lg-down ion-padding-top">Feed</IonTitle>
+
         {(loading && <FeedSkeleton />) ||
           (data?.community?.feed?.items &&
             data?.community?.feed?.items.map((post, i: number) => (
