@@ -7,21 +7,26 @@ import { Direction } from '../types/globalTypes';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 import update from 'immutability-helper';
-
-const POST_PAGE_LIMIT = 3;
-
-const feedVariables: GetCommunityPostsVariables = {
-  // TODO: Get community id from somewhere
-  id: 'HW6lY4kJOpqSpL39hbUV',
-  sortBy: {
-    // TODO: Add sorting to the UI
-    property: 'creationTimestamp',
-    direction: Direction.DESC,
-  },
-  limit: POST_PAGE_LIMIT,
-};
+import { GetPostVariables, GetPost } from '../types/GetPost';
+import {
+  GET_POST_BY_ID,
+  GET_POST_COMMENTS_ONLY,
+} from '../common/graphql/posts';
 
 export const usePaginatedFeedQuery = () => {
+  const POST_PAGE_LIMIT = 3;
+
+  const feedVariables: GetCommunityPostsVariables = {
+    // TODO: Get community id from somewhere
+    id: 'HW6lY4kJOpqSpL39hbUV',
+    sortBy: {
+      // TODO: Add sorting to the UI
+      property: 'creationTimestamp',
+      direction: Direction.DESC,
+    },
+    limit: POST_PAGE_LIMIT,
+  };
+
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
 
   const { loading, data, fetchMore } = useQuery<
@@ -41,7 +46,6 @@ export const usePaginatedFeedQuery = () => {
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newPosts = fetchMoreResult?.community?.feed.items;
 
-        console.log('fetch more res: ' + JSON.stringify(fetchMoreResult));
         // If a full page hasn't been returned we have reached the end
         if (newPosts?.length !== POST_PAGE_LIMIT) {
           setHasMorePosts(false);
@@ -62,4 +66,69 @@ export const usePaginatedFeedQuery = () => {
   };
 
   return { data, loading, hasMorePosts, fetchMorePosts };
+};
+
+export const usePaginatedPostQuery = (postId: string) => {
+  const COMMENT_PAGE_LIMIT = 3;
+
+  const postVariables: GetPostVariables = {
+    // TODO: get community id from somewhere
+    communityId: 'HW6lY4kJOpqSpL39hbUV',
+    postId,
+    // TODO: Connect sorting to UI
+    sortCommentsBy: {
+      property: 'creationTimestamp',
+      direction: Direction.ASC,
+    },
+    commentsLimit: COMMENT_PAGE_LIMIT,
+  };
+
+  const [hasMoreComments, setHasMoreComments] = useState<boolean>(true);
+
+  const { data, loading, error, fetchMore, updateQuery } = useQuery<
+    GetPost,
+    GetPostVariables
+  >(GET_POST_BY_ID, {
+    variables: postVariables,
+  });
+
+  const fetchMoreComments = async (e: CustomEvent<void>) => {
+    await fetchMore({
+      query: GET_POST_COMMENTS_ONLY,
+      variables: {
+        ...postVariables,
+        commentsCursor: data?.post?.comments?.cursor,
+      },
+      // Update the cache with the newly fetched results
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const newComments = fetchMoreResult?.post?.comments?.items;
+
+        // If a full page hasn't been returned we have reached the end
+        if (newComments?.length !== COMMENT_PAGE_LIMIT) {
+          setHasMoreComments(false);
+        }
+
+        // cannot modify previousResult as Apollo uses this to detect changes to trigger re-renders
+        return update(previousResult, {
+          post: {
+            comments: {
+              items: { $push: newComments! },
+              cursor: { $set: fetchMoreResult?.post?.comments.cursor! },
+            },
+          },
+        });
+      },
+    });
+
+    (e.target as HTMLIonInfiniteScrollElement).complete();
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    hasMoreComments,
+    fetchMoreComments,
+    updateQuery,
+  };
 };

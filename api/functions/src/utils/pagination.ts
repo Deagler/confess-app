@@ -17,7 +17,6 @@ export const paginateResults = async (
 
   // if request has cursor, update query to retrieve items beyond the cursor
   if (cursorDocument) {
-    console.log('yeet ');
     query = query.startAfter(cursorDocument);
   }
 
