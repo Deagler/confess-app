@@ -23,14 +23,14 @@ import RejectPostModal from '../components/RejectPostModal';
 export interface PostRequestProps {
   id: string;
   title: string;
-  date: Date;
+  creationTimestamp: number;
   content: string;
   author?: string;
   onModeration(): void;
 }
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
-  const { id, title, date, content, author, onModeration } = props;
+  const { id, title, creationTimestamp, content, author, onModeration } = props;
 
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,
@@ -68,7 +68,9 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         <IonCardHeader>
           <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
-          <IonCardSubtitle>{moment(date).fromNow()}</IonCardSubtitle>
+          <IonCardSubtitle>
+            {moment.unix(creationTimestamp).fromNow()}
+          </IonCardSubtitle>
         </IonCardHeader>
 
         <IonCardContent>{content}</IonCardContent>

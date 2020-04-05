@@ -3,11 +3,13 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { SortByInput } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: GetCommunityUnapprovedPosts
 // ====================================================
 
-export interface GetCommunityUnapprovedPosts_community_unapprovedPosts {
+export interface GetCommunityUnapprovedPosts_community_unapprovedPosts_items {
   __typename: "Post";
   id: string;
   title: string;
@@ -16,10 +18,16 @@ export interface GetCommunityUnapprovedPosts_community_unapprovedPosts {
   content: string;
 }
 
+export interface GetCommunityUnapprovedPosts_community_unapprovedPosts {
+  __typename: "PostConnection";
+  items: GetCommunityUnapprovedPosts_community_unapprovedPosts_items[];
+  cursor: string | null;
+}
+
 export interface GetCommunityUnapprovedPosts_community {
   __typename: "Community";
   id: string;
-  unapprovedPosts: (GetCommunityUnapprovedPosts_community_unapprovedPosts | null)[];
+  unapprovedPosts: GetCommunityUnapprovedPosts_community_unapprovedPosts;
 }
 
 export interface GetCommunityUnapprovedPosts {
@@ -28,4 +36,7 @@ export interface GetCommunityUnapprovedPosts {
 
 export interface GetCommunityUnapprovedPostsVariables {
   id: string;
+  sortBy?: SortByInput | null;
+  cursor?: string | null;
+  limit?: number | null;
 }

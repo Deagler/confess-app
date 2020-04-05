@@ -7,24 +7,24 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
-  IonCard,
-  IonSkeletonText,
   IonToast,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from '@ionic/react';
-import { useQuery } from '@apollo/react-hooks';
 
-import PostRequest, { PostRequestProps } from '../components/PostRequest';
-import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
+import PostRequest from '../components/PostRequest';
+import FeedSkeleton from '../components/FeedSkeleton';
+import { usePaginatedUnapprovedPostsQuery } from '../customHooks/pagination';
 
 const AdminPage: React.FC = () => {
-  const { loading, data, error, refetch } = useQuery(
-    GET_COMMUNITY_UNAPPROVED_POSTS,
-    {
-      variables: {
-        id: 'HW6lY4kJOpqSpL39hbUV',
-      },
-    }
-  );
+  const {
+    loading,
+    data,
+    error,
+    refetch,
+    hasMorePosts,
+    fetchMorePosts,
+  } = usePaginatedUnapprovedPostsQuery();
 
   return (
     <>
@@ -41,18 +41,22 @@ const AdminPage: React.FC = () => {
 
         <IonContent>
           {loading ? (
-            <IonCard>
-              <IonSkeletonText animated={true} style={{ height: '200px' }} />
-            </IonCard>
+            <FeedSkeleton />
           ) : (
             !error &&
-            data &&
-            data.community.unapprovedPosts.map(
-              (post: PostRequestProps, i: number) => (
-                <PostRequest key={i} {...post} onModeration={() => refetch()} />
-              )
-            )
+            data?.community?.unapprovedPosts.items &&
+            data.community.unapprovedPosts.items.map((post, i: number) => (
+              <PostRequest key={i} {...post} onModeration={() => refetch()} />
+            ))
           )}
+          <br />
+          <IonInfiniteScroll
+            threshold="100px"
+            disabled={!hasMorePosts}
+            onIonInfinite={fetchMorePosts}
+          >
+            <IonInfiniteScrollContent loadingText="Loading more confessions..." />
+          </IonInfiniteScroll>
         </IonContent>
       </IonPage>
     </>

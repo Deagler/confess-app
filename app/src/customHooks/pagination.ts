@@ -12,21 +12,27 @@ import {
   GET_POST_BY_ID,
   GET_POST_COMMENTS_ONLY,
 } from '../common/graphql/posts';
+import {
+  GetCommunityUnapprovedPostsVariables,
+  GetCommunityUnapprovedPosts,
+} from '../types/GetCommunityUnapprovedPosts';
+import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
+
+// TODO: Refactor these into a single hook to reduce duplicate code
+const POST_PAGE_LIMIT = 3;
+
+const feedVariables: GetCommunityPostsVariables = {
+  // TODO: Get community id from somewhere
+  id: 'HW6lY4kJOpqSpL39hbUV',
+  sortBy: {
+    // TODO: Add sorting to the UI
+    property: 'creationTimestamp',
+    direction: Direction.DESC,
+  },
+  limit: POST_PAGE_LIMIT,
+};
 
 export const usePaginatedFeedQuery = () => {
-  const POST_PAGE_LIMIT = 3;
-
-  const feedVariables: GetCommunityPostsVariables = {
-    // TODO: Get community id from somewhere
-    id: 'HW6lY4kJOpqSpL39hbUV',
-    sortBy: {
-      // TODO: Add sorting to the UI
-      property: 'creationTimestamp',
-      direction: Direction.DESC,
-    },
-    limit: POST_PAGE_LIMIT,
-  };
-
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
 
   const { loading, data, fetchMore } = useQuery<
@@ -66,6 +72,50 @@ export const usePaginatedFeedQuery = () => {
   };
 
   return { data, loading, hasMorePosts, fetchMorePosts };
+};
+
+export const usePaginatedUnapprovedPostsQuery = () => {
+  const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
+
+  const { loading, data, error, fetchMore, refetch } = useQuery<
+    GetCommunityUnapprovedPosts,
+    GetCommunityUnapprovedPostsVariables
+  >(GET_COMMUNITY_UNAPPROVED_POSTS, {
+    variables: feedVariables,
+  });
+
+  const fetchMorePosts = async (e: CustomEvent<void>) => {
+    await fetchMore({
+      query: GET_COMMUNITY_UNAPPROVED_POSTS,
+      variables: {
+        ...feedVariables,
+        cursor: data?.community?.unapprovedPosts.cursor,
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const newPosts = fetchMoreResult?.community?.unapprovedPosts.items;
+
+        // If a full page hasn't been returned we have reached the end
+        if (newPosts?.length !== POST_PAGE_LIMIT) {
+          setHasMorePosts(false);
+        }
+
+        // cannot modify previousResult as Apollo uses this to detect changes to trigger re-renders
+        return update(previousResult, {
+          community: {
+            unapprovedPosts: {
+              items: { $push: newPosts! },
+              cursor: {
+                $set: fetchMoreResult?.community?.unapprovedPosts.cursor!,
+              },
+            },
+          },
+        });
+      },
+    });
+    (e.target as HTMLIonInfiniteScrollElement).complete();
+  };
+
+  return { data, loading, error, hasMorePosts, fetchMorePosts, refetch };
 };
 
 export const usePaginatedPostQuery = (postId: string) => {
