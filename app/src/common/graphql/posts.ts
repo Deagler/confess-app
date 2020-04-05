@@ -1,8 +1,14 @@
 import { gql } from 'apollo-boost';
 
 export const GET_POST_BY_ID = gql`
-  query GetPost($id: ID!) {
-    post(id: $id) {
+  query GetPost(
+    $communityId: ID!
+    $postId: ID!
+    $sortCommentsBy: SortByInput
+    $commentsLimit: Int
+    $commentsCursor: String
+  ) {
+    post(communityId: $communityId, postId: $postId) {
       id
       creationTimestamp
       authorAlias
@@ -10,6 +16,61 @@ export const GET_POST_BY_ID = gql`
       content
       totalLikes
       totalComments
+      comments(
+        sortBy: $sortCommentsBy
+        limit: $commentsLimit
+        cursor: $commentsCursor
+      ) {
+        items {
+          id
+          creationTimestamp
+          content
+          author {
+            firstName
+            lastName
+            communityUsername
+            community {
+              abbreviation
+            }
+          }
+          totalLikes
+        }
+        cursor
+      }
+    }
+  }
+`;
+
+export const GET_POST_COMMENTS_ONLY = gql`
+  query GetPostComments(
+    $communityId: ID!
+    $postId: ID!
+    $sortCommentsBy: SortByInput
+    $commentsLimit: Int
+    $commentsCursor: String
+  ) {
+    post(communityId: $communityId, postId: $postId) {
+      comments(
+        sortBy: $sortCommentsBy
+        limit: $commentsLimit
+        cursor: $commentsCursor
+      ) {
+        items {
+          id
+          creationTimestamp
+          author {
+            firstName
+            lastName
+            communityUsername
+            community {
+              abbreviation
+            }
+          }
+          content
+          totalLikes
+        }
+        cursor
+      }
     }
   }
 `;
@@ -37,7 +98,7 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
         title
         content
         authorAlias
-        isApproved
+        moderationStatus
         creationTimestamp
       }
     }
@@ -53,12 +114,6 @@ export const GET_COMMUNITY_POSTS = gql`
         title
         authorAlias
         creationTimestamp
-        approvalInfo {
-          approver {
-            id
-          }
-          approvalTimestamp
-        }
         content
         totalLikes
         totalComments
@@ -68,19 +123,20 @@ export const GET_COMMUNITY_POSTS = gql`
 `;
 
 export const TOGGLE_LIKE_POST = gql`
-  mutation ToggleLikePost(
-    $communityId: String!
-    $postId: String!
-    $isLikedByUser: Boolean!
-  ) {
-    toggleLikePost(
-      communityId: $communityId
-      postId: $postId
-      isLikedByUser: $isLikedByUser
-    ) {
+  mutation ToggleLikePost($communityId: String!, $postId: String!) {
+    toggleLikePost(communityId: $communityId, postId: $postId) {
       code
       success
       message
+      post {
+        id
+        title
+        authorAlias
+        creationTimestamp
+        content
+        totalLikes
+        totalComments
+      }
     }
   }
 `;

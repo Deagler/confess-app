@@ -1,26 +1,49 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  type ApprovalInfo {
-    approver: User!
-    approvalTimestamp: Int!
+  enum ModerationStatus {
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  type ModerationInfo {
+    moderator: User!
+    lastUpdated: Int!
+    reason: String
+  }
+
+  enum Direction {
+    ASC
+    DESC
+  }
+
+  input SortByInput {
+    property: String!
+    direction: Direction!
   }
 
   type User {
     id: ID!
+    communityUsername: String!
     firstName: String!
     lastName: String!
-    communityUsername: String!
-    community: Community!
+    email: String!
+    community: Community
   }
 
   type Comment {
     id: ID!
     creationTimestamp: Int!
-    author: User!
+    author: User
     content: String!
     totalLikes: Int!
     likes: [User]!
+  }
+
+  type CommentConnection {
+    items: [Comment]!
+    cursor: String
   }
 
   type Community {
@@ -41,24 +64,29 @@ const typeDefs = gql`
   type Post {
     id: ID!
     creationTimestamp: Int!
-    author: User!
     authorAlias: String
 
     channel: String!
     title: String!
     content: String!
 
-    isApproved: Boolean!
-    approvalInfo: ApprovalInfo
+    moderationStatus: ModerationStatus!
+    moderationInfo: ModerationInfo
 
     totalLikes: Int!
     likes: [User]!
     totalComments: Int!
-    comments: [Comment]!
+    comments(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): CommentConnection!
+    communityId: String
   }
 
   type Query {
     post(communityId: ID!, postId: ID!): Post
+    user(id: ID!): User
     community(id: ID!): Community
     communities: [Community]!
   }
@@ -76,6 +104,13 @@ const typeDefs = gql`
     post: Post
   }
 
+  type AttemptSignupResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    user: User
+  }
+
   type CreateCommentResponse implements MutationResponse {
     code: String!
     success: Boolean!
@@ -84,6 +119,12 @@ const typeDefs = gql`
   }
 
   type ApprovePostResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
+  type RejectPostResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -98,18 +139,22 @@ const typeDefs = gql`
       authorAlias: String
     ): PostUpdatedResponse
 
+    attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
+
     submitComment(
       communityId: String!
       postId: String!
       content: String!
     ): CreateCommentResponse
 
-    approvePost(
+    approvePost(communityId: String!, postId: String!): ApprovePostResponse
+
+    rejectPost(
       communityId: String!
       postId: String!
-      approverId: String!
-    ): ApprovePostResponse
-
+      reason: String
+    ): RejectPostResponse
+    
     toggleLikePost(communityId: String!, postId: String!): PostUpdatedResponse
   }
 `;

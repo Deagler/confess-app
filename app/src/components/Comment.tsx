@@ -12,18 +12,24 @@ import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 
+interface CommunityData {
+  abbreviation: string;
+}
+
 export interface UserData {
   firstName: string;
   lastName: string;
   communityUsername: string;
+  community: CommunityData | null;
 }
 
 export interface CommentData {
   creationTimestamp: number;
-  author: UserData | null;
+  // TODO: Update once user resolvers are written
+  author?: UserData | null;
   content: string;
   totalLikes: number;
-  likes: (UserData | null)[];
+  likes?: (UserData | null)[];
 }
 
 export interface CommentProps extends CommentData {
@@ -35,6 +41,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
     : 'unknown';
+  const authorCommunity = author?.community?.abbreviation ?? '';
 
   // TODO: Add liking mutation, and fetch liked status
   const [liked, setLiked] = useState<boolean>(false);
@@ -47,7 +54,9 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           <IonCol size="12" size-sm="6">
             <IonItem lines="none">
               <IonLabel slot="start">
-                <h6>{authorDisplayName}</h6>
+                <h6>
+                  {authorDisplayName} <span>&middot;</span> {authorCommunity}
+                </h6>
               </IonLabel>
             </IonItem>
           </IonCol>

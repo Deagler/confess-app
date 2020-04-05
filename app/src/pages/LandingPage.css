@@ -1,0 +1,44 @@
+/* TODO: move to a css-in-js provider to remove this page scoping hack */
+
+body {
+  --ion-background-color: rgb(245, 245, 245);
+}
+
+#landing-page .container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+#landing-page ion-chip {
+  background-color: transparent;
+}
+
+#landing-page ion-chip ion-icon {
+  color: #4f83f7;
+}
+
+#landing-page ion-input {
+  border: solid 1px;
+}
+
+#landing-page ion-input:focus-within {
+  border: solid 1px #4f8ef7;
+}
+
+#landing-page ion-button {
+  color: white;
+  background: #4f83f7;
+}
+
+#landing-page h1 {
+  font-size: 48px;
+}
+
+#landing-page h2 {
+  font-size: 30px;
+}
+
+#landing-page ion-col p {
+  margin-left: 0px;
+}

@@ -1,32 +1,46 @@
-interface ApprovalInfo {
-  approver: User;
-  approvalTimestamp: number;
+export enum ModerationStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
 }
+
+interface ModerationInfo {
+  moderator: User;
+  lastUpdated: number;
+}
+
+export type FirestoreDocRef = FirebaseFirestore.DocumentReference<
+  FirebaseFirestore.DocumentData
+>;
 
 export interface User {
   id: string;
+  communityUsername: string;
   firstName: string;
   lastName: string;
-  communityUsername: string;
-  community: Community;
+  email: string;
+  communityRef: FirestoreDocRef | null;
+  community?: Community | null;
 }
 
 export interface Post {
   id: string;
   creationTimestamp: number;
+  authorRef: FirestoreDocRef;
   author: User;
   authorAlias?: string;
   channel: string;
   title: string;
   content: string;
-  isApproved: boolean;
-  approvalInfo: ApprovalInfo | null;
+  moderationStatus: ModerationStatus;
+  moderationInfo: ModerationInfo | null;
   totalLikes: number;
   likeRefs: Array<
     FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
   >;
   totalComments: number;
   comments: Comment[];
+  communityId?: string;
 }
 
 export interface Community {
@@ -39,10 +53,19 @@ export interface Comment {
   id: string;
   creationTimestamp: number;
   // TODO: Create separate types for API types and database types
-  author:
-    | User
-    | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
+  authorRef: FirestoreDocRef | null;
   content: string;
   totalLikes: number;
   likes: User[];
+}
+
+export interface CommentsInput {
+  sortBy?: SortByInput;
+  limit?: number;
+  cursor?: string;
+}
+
+export interface SortByInput {
+  property: string;
+  direction: 'asc' | 'desc' | undefined;
 }

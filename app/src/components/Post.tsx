@@ -14,16 +14,16 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
-import moment from 'moment';
-import {
-  ToggleLikePostVariables,
-  ToggleLikePost,
-} from '../types/ToggleLikePost';
-import './Post.css';
 import { Link } from 'react-router-dom';
-import { useMutation, useApolloClient, useQuery } from '@apollo/react-hooks';
+import moment from 'moment';
+
+import { truncateString } from '../utils';
+
+import './Post.css';
+import { useMutation } from '@apollo/react-hooks';
 import { TOGGLE_LIKE_POST } from '../common/graphql/posts';
-import { GET_USER_LIKE } from '../common/graphql/localState';
+import { ToggleLikePost } from '../types/ToggleLikePost';
+
 export interface PostData {
   id: string;
   title: string;
@@ -31,14 +31,16 @@ export interface PostData {
   content: string;
   totalLikes: number;
   totalComments: number;
-  authorAlias?: string;
+  authorAlias?: string | null;
 }
 
 export interface PostProps extends PostData {
   onCommentClick: () => void;
-  // onLikeButtonClick: () => void;
-  isExpanded?: boolean;
+  collapsable: boolean;
 }
+
+const MAX_CONTENT_LENGTH: number = 600;
+
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
@@ -46,33 +48,15 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     creationTimestamp,
     content,
     authorAlias,
-    isExpanded,
     totalLikes,
     totalComments,
     onCommentClick,
+    collapsable,
   } = props;
 
-  const toggleLikePostQuery = useQuery(GET_USER_LIKE);
-  const isLikedByUser: boolean = toggleLikePostQuery.data?.isLikedByUser;
-  const [toggleLikePost] = useMutation<ToggleLikePost, ToggleLikePostVariables>(
-    TOGGLE_LIKE_POST
-  );
+  const [expanded, setExpanded] = useState<boolean>(false);
 
-  const handleLikeButtonClick = async (
-    communityId: string,
-    postId: string
-    // isLikedByUser: boolean
-  ) => {
-    // TODO: add input validation
-    const { data } = await toggleLikePost({
-      variables: {
-        communityId: 'HW6lY4kJOpqSpL39hbUV',
-        postId: id,
-      },
-    });
-
-    console.log(data);
-  };
+  const [toggleLikeMutation] = useMutation<ToggleLikePost>(TOGGLE_LIKE_POST);
 
   return (
     <IonCard>
@@ -84,11 +68,22 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             {moment.unix(creationTimestamp).fromNow()}
           </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent className={isExpanded ? 'showText' : 'hideText'}>
-          {content}
+        <IonCardContent>
+          <p>
+            {expanded || !collapsable
+              ? content
+              : truncateString(content, MAX_CONTENT_LENGTH)}
+          </p>
         </IonCardContent>
         <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
       </Link>
+
+      <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
+        {collapsable &&
+          content.length > MAX_CONTENT_LENGTH &&
+          (expanded ? 'See Less' : 'See More')}
+      </IonButton>
+
       <IonItemDivider />
 
       <IonGrid>

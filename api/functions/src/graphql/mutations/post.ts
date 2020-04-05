@@ -1,22 +1,34 @@
-import { ApolloError } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
-import { firebaseApp } from '../../firebase';
-import { Post } from '../../typings';
-
-const firestore = firebaseApp.firestore();
-const communitiesCollection = firestore.collection('communities');
+import { ModerationStatus, Post } from '../../typings';
+import {
+  verifyCommunity,
+  verifyPost,
+  verifyUser,
+} from '../common/verification';
 
 async function submitPostForApproval(
   _: any,
-  { communityId, channel, title, content, authorAlias }
+  { communityId, channel, title, content, authorAlias },
+  context: any
 ) {
-  // TODO:
-  // Pull AuthorId from context.req
-  // verify user exists in the community
-  // validate channel for the community
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
 
-  const communityDoc = communitiesCollection.doc(communityId);
-  const communityPosts = communityDoc.collection('posts');
+  // can only post to your own community
+  if (userDoc.data()!.communityRef.id !== communityId) {
+    throw new AuthenticationError(
+      'Forbidden: you can only post to your own community'
+    );
+  }
+
+  const { communityRef } = await verifyCommunity(communityId);
+
+  // TODO: verify channel exists in community
+
+  const communityPosts = communityRef.collection('posts');
 
   const newPost: Partial<Post> = {
     creationTimestamp: moment().unix(),
@@ -24,8 +36,9 @@ async function submitPostForApproval(
     content,
     channel,
     authorAlias,
-    isApproved: false,
-    approvalInfo: null,
+    authorRef: userRef,
+    moderationStatus: ModerationStatus.PENDING,
+    moderationInfo: null,
     totalComments: 0,
     totalLikes: 0,
     likeRefs: [],
@@ -42,29 +55,24 @@ async function submitPostForApproval(
   };
 }
 
-async function approvePost(_: any, { communityId, postId, approverId }) {
-  // verify approver
-  const approverRef = firestore.doc(`/users/${approverId}`);
-  const approver = await approverRef.get();
-  if (!approver.exists) {
-    throw new ApolloError(`user with id ${approverId} doesn't exist`);
+async function approvePost(_: any, { communityId, postId }, context: any) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
   }
 
-  // verify post
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
+  const { postRef } = await verifyPost(communityId, postId);
 
   // update post
   const patch = {
-    isApproved: true,
-    approvalInfo: {
-      approver: approverRef,
-      approvalTimestamp: moment().unix(),
+    moderationStatus: ModerationStatus.APPROVED,
+    moderationInfo: {
+      moderator: userRef,
+      lastUpdated: moment().unix(),
     },
   };
   await postRef.update(patch);
@@ -73,6 +81,41 @@ async function approvePost(_: any, { communityId, postId, approverId }) {
   return {
     code: 200,
     message: 'Post approved.',
+    success: true,
+  };
+}
+
+async function rejectPost(
+  _: any,
+  { communityId, postId, reason },
+  context: any
+) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  // check moderator is admin
+  if (!userDoc.data()!.isAdmin) {
+    throw new AuthenticationError('Only administrators can moderate posts');
+  }
+
+  const { postRef } = await verifyPost(communityId, postId);
+
+  // update post
+  const patch = {
+    moderationStatus: ModerationStatus.REJECTED,
+    moderationInfo: {
+      moderator: userRef,
+      lastUpdated: moment().unix(),
+      reason,
+    },
+  };
+  await postRef.update(patch);
+
+  // success
+  return {
+    code: 200,
+    message: 'Post rejected.',
     success: true,
   };
 }
@@ -116,5 +159,6 @@ async function toggleLikePost(_: any, { communityId, postId }) {
 export const postMutations = {
   submitPostForApproval,
   approvePost,
+  rejectPost,
   toggleLikePost,
 };

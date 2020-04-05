@@ -7,11 +7,17 @@
 // GraphQL mutation operation: SubmitComment
 // ====================================================
 
+export interface SubmitComment_submitComment_comment_author_community {
+  __typename: "Community";
+  abbreviation: string;
+}
+
 export interface SubmitComment_submitComment_comment_author {
   __typename: "User";
   firstName: string;
   lastName: string;
   communityUsername: string;
+  community: SubmitComment_submitComment_comment_author_community | null;
 }
 
 export interface SubmitComment_submitComment_comment_likes {
@@ -25,7 +31,7 @@ export interface SubmitComment_submitComment_comment {
   __typename: "Comment";
   id: string;
   creationTimestamp: number;
-  author: SubmitComment_submitComment_comment_author;
+  author: SubmitComment_submitComment_comment_author | null;
   content: string;
   totalLikes: number;
   likes: (SubmitComment_submitComment_comment_likes | null)[];

@@ -48,6 +48,5 @@ test('displays content properly', async () => {
     </MockedProvider>
   );
   await findByText('Confess');
-  await findByText('LogIn');
-  await findByText('SignUp');
+  await findByText('Login');
 });
