@@ -91,7 +91,6 @@ const typeDefs = gql`
       limit: Int
       cursor: String
     ): CommentConnection!
-    communityId: String
   }
 
   type Query {
