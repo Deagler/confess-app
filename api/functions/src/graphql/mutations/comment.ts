@@ -1,9 +1,11 @@
+import { ApolloError } from 'apollo-server-express';
+import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
 import { verifyPost, verifyUser } from '../common/verification';
-
+import { addIdToDoc } from '../resolvers/utils';
 const firestore = firebaseApp.firestore();
 
 async function submitComment(
@@ -46,6 +48,52 @@ async function submitComment(
   };
 }
 
+async function toggleLikeComment(
+  _: any,
+  { communityId, postId, commentId },
+  context
+) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef } = await verifyUser(userRecord);
+
+  const commentRef = firestore.doc(
+    `/communities/${communityId}/posts/${postId}/comments/${commentId}`
+  );
+  const comment = await commentRef.get();
+
+  if (!comment.exists) {
+    throw new ApolloError(
+      `comment ${commentId} does't exist in post ${postId} of community ${communityId}`
+    );
+  }
+
+  const userHasLiked = await (comment.data()! as Comment).likeRefs.some(
+    (likeRef) => likeRef.id == userRef.id
+  );
+
+  await commentRef.update({
+    totalLikes: userHasLiked
+      ? admin.firestore.FieldValue.increment(-1)
+      : admin.firestore.FieldValue.increment(1),
+    likeRefs: userHasLiked
+      ? admin.firestore.FieldValue.arrayRemove(userRef)
+      : admin.firestore.FieldValue.arrayUnion(userRef),
+  });
+
+  const commentData = addIdToDoc(await commentRef.get());
+  commentData.isCommentLikedByUser = !userHasLiked;
+
+  // success
+  return {
+    code: 200,
+    message: 'comment liked.',
+    success: true,
+    comment: commentData,
+  };
+}
+
 export const commentMutations = {
   submitComment,
+  toggleLikeComment,
 };
