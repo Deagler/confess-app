@@ -75,7 +75,8 @@ async function toggleLikeComment(
       : admin.firestore.FieldValue.arrayUnion(userRef),
   });
 
-  const comment = addIdToDoc(commentDoc);
+  // refetch comment for updated values
+  const comment = addIdToDoc(await commentRef.get());
   comment.isCommentLikedByUser = !userHasLiked;
 
   // success
