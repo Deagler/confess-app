@@ -16,7 +16,7 @@ import {
 
 import Post, { PostProps } from '../components/Post';
 import { RouteComponentProps } from 'react-router';
-import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
+import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 
 import './Page.css';
 

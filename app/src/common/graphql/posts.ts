@@ -107,24 +107,6 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
   }
 `;
 
-export const GET_COMMUNITY_POSTS = gql`
-  query GetCommunityPosts($id: ID!) {
-    community(id: $id) {
-      id
-      feed {
-        id
-        title
-        authorAlias
-        creationTimestamp
-        content
-        totalLikes
-        totalComments
-        isLikedByUser
-      }
-    }
-  }
-`;
-
 export const GET_POST_LIKE_STATUS = gql`
   query GetPostLikeData($communityId: ID!, $postId: ID!) {
     post(communityId: $communityId, postId: $postId) {
