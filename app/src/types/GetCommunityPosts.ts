@@ -16,6 +16,7 @@ export interface GetCommunityPosts_community_feed {
   content: string;
   totalLikes: number;
   totalComments: number;
+  isLikedByUser: boolean;
 }
 
 export interface GetCommunityPosts_community {

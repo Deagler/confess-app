@@ -1,9 +1,5 @@
 import { ApolloClient, NormalizedCacheObject, gql } from 'apollo-boost';
-import {
-  GET_POST_BY_ID,
-  GET_POST_LIKE_STATUS,
-  SERVER_TOGGLE_LIKE_POST,
-} from '../posts';
+import { SERVER_TOGGLE_LIKE_POST } from '../posts';
 const postFragmentLikeStatus = gql`
   fragment postLikeStatus on Post {
     id

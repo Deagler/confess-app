@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ToggleLikePost
+// GraphQL mutation operation: ServerToggleLikePost
 // ====================================================
 
-export interface ToggleLikePost_clientToggleLikePost_post {
+export interface ServerToggleLikePost_toggleLikePost_post {
   __typename: "Post";
   id: string;
   title: string;
@@ -19,19 +19,19 @@ export interface ToggleLikePost_clientToggleLikePost_post {
   isLikedByUser: boolean;
 }
 
-export interface ToggleLikePost_clientToggleLikePost {
+export interface ServerToggleLikePost_toggleLikePost {
   __typename: "PostUpdatedResponse";
   code: string;
   success: boolean;
   message: string;
-  post: ToggleLikePost_clientToggleLikePost_post | null;
+  post: ServerToggleLikePost_toggleLikePost_post | null;
 }
 
-export interface ToggleLikePost {
-  clientToggleLikePost: ToggleLikePost_clientToggleLikePost | null;
+export interface ServerToggleLikePost {
+  toggleLikePost: ServerToggleLikePost_toggleLikePost | null;
 }
 
-export interface ToggleLikePostVariables {
+export interface ServerToggleLikePostVariables {
   communityId: string;
   postId: string;
 }

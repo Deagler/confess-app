@@ -154,7 +154,6 @@ async function toggleLikePost(_: any, { communityId, postId }, context) {
 
   const postData = addIdToDoc(await postRef.get());
   postData.isLikedByUser = !userHasLiked;
-  console.log(postData);
 
   // success
   return {

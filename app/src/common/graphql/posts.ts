@@ -79,7 +79,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
 
 export const SUBMIT_POST_FOR_APPROVAL = gql`
   mutation SubmitPostForApproval(
-    $communityId: String!
+    $communityId: ID!
     $channel: String!
     $title: String!
     $content: String!
@@ -126,7 +126,7 @@ export const GET_COMMUNITY_POSTS = gql`
 `;
 
 export const GET_POST_LIKE_STATUS = gql`
-  query GetPostLikeData($communityId: String!, $postId: String!) {
+  query GetPostLikeData($communityId: ID!, $postId: ID!) {
     post(communityId: $communityId, postId: $postId) {
       id
       totalLikes
@@ -134,7 +134,7 @@ export const GET_POST_LIKE_STATUS = gql`
   }
 `;
 export const CLIENT_TOGGLE_LIKE_POST = gql`
-  mutation ToggleLikePost($communityId: String!, $postId: String!) {
+  mutation ToggleLikePost($communityId: ID!, $postId: ID!) {
     clientToggleLikePost(communityId: $communityId, postId: $postId) @client {
       code
       success
@@ -153,7 +153,7 @@ export const CLIENT_TOGGLE_LIKE_POST = gql`
   }
 `;
 export const SERVER_TOGGLE_LIKE_POST = gql`
-  mutation ServerToggleLikePost($communityId: String!, $postId: String!) {
+  mutation ServerToggleLikePost($communityId: ID!, $postId: ID!) {
     toggleLikePost(communityId: $communityId, postId: $postId) {
       code
       success

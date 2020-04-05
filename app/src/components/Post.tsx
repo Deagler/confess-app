@@ -21,11 +21,7 @@ import { truncateString } from '../utils';
 
 import './Post.css';
 import { useMutation } from '@apollo/react-hooks';
-import {
-  SERVER_TOGGLE_LIKE_POST,
-  CLIENT_TOGGLE_LIKE_POST,
-} from '../common/graphql/posts';
-import { ToggleLikePost } from '../types/ToggleLikePost';
+import { CLIENT_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 
 export interface PostData {
   id: string;
@@ -34,6 +30,7 @@ export interface PostData {
   content: string;
   totalLikes: number;
   totalComments: number;
+  isLikedByUser: boolean | null;
   authorAlias?: string | null;
 }
 
@@ -54,14 +51,18 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     totalLikes,
     totalComments,
     onCommentClick,
+    isLikedByUser,
     collapsable,
   } = props;
 
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const [clientToggleLike] = useMutation(CLIENT_TOGGLE_LIKE_POST);
+  const [clientToggleLike, clientLikeInfo] = useMutation(
+    CLIENT_TOGGLE_LIKE_POST
+  );
 
   const handleLikeButtonClick = async (communityId, postId) => {
+    
     await clientToggleLike({
       variables: {
         communityId: 'HW6lY4kJOpqSpL39hbUV',
@@ -102,10 +103,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton
-              onClick={() => handleLikeButtonClick('adasdsa', id)}
+              onClick={() => handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', id)}
               fill="clear"
               expand="full"
-              color="primary"
+              color={isLikedByUser ? 'danger' : 'primary'}
             >
               <IonIcon icon={heart} />
               <IonLabel>{totalLikes}</IonLabel>
