@@ -4,7 +4,7 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
-import { verifyPost, verifyUser } from '../common/verification';
+import { verifyComment, verifyPost, verifyUser } from '../common/verification';
 import { addIdToDoc } from '../resolvers/utils';
 const firestore = firebaseApp.firestore();
 
@@ -57,9 +57,7 @@ async function toggleLikeComment(
   const userRecord: UserRecord = context.req.user;
   const { userRef } = await verifyUser(userRecord);
 
-  const commentRef = firestore.doc(
-    `/communities/${communityId}/posts/${postId}/comments/${commentId}`
-  );
+  const { commentRef } = await verifyComment(communityId, postId, commentId);
   const comment = await commentRef.get();
 
   if (!comment.exists) {

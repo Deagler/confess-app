@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
 import { firebaseApp } from '../../firebase';
 import { Comment, Community, Post, User } from '../../typings';
+import { verifyComment } from '../common/verification';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -59,17 +60,12 @@ export const queryResolvers = {
     args: { communityId: string; postId: string; commentId: string }
   ) {
     try {
-      const comment = await firestore
-        .doc(
-          `communities/${args.communityId}/posts/${args.postId}/comments/${args.commentId}`
-        )
-        .get();
-
-      if (!comment.exists) {
-        throw new ApolloError(
-          `post ${args.commentId} does't exist in community ${args.communityId}`
-        );
-      }
+      const { commentRef } = await verifyComment(
+        args.communityId,
+        args.postId,
+        args.commentId
+      );
+      const comment = await commentRef.get();
 
       const commentWithId = addIdToDoc(comment) as Comment;
       commentWithId.postId = args.postId;
