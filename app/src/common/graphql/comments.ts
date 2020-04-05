@@ -23,6 +23,7 @@ export const SUBMIT_COMMENT = gql`
         }
         content
         totalLikes
+        isCommentLikedByUser
         likes {
           firstName
           lastName

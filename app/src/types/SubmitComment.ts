@@ -34,6 +34,7 @@ export interface SubmitComment_submitComment_comment {
   author: SubmitComment_submitComment_comment_author | null;
   content: string;
   totalLikes: number;
+  isCommentLikedByUser: boolean;
   likes: (SubmitComment_submitComment_comment_likes | null)[];
 }
 
