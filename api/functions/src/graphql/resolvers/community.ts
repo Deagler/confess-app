@@ -38,7 +38,7 @@ export const communityResolvers = {
       throw new ApolloError(error);
     }
   },
-  async unapprovedPosts(parent: any, args, context: any) {
+  async unapprovedPosts(parent: any, { sortBy, cursor, limit }, context: any) {
     // pull user from request context
     const userRecord: UserRecord = context.req.user;
     const { userDoc } = await verifyUser(userRecord);
@@ -49,14 +49,33 @@ export const communityResolvers = {
     }
 
     try {
-      const unapprovedPostsQuery = await firestore
-        .collection(`communities/${parent.id}/posts`)
-        .where('moderationStatus', '==', ModerationStatus.PENDING)
-        .get();
+      const postCollection = await firestore.collection(
+        `communities/${parent.id}/posts`
+      );
 
-      const unapprovedPosts: Post[] = unapprovedPostsQuery.docs.map(addIdToDoc);
+      const cursorDocument = cursor
+        ? await postCollection.doc(cursor).get()
+        : undefined;
 
-      return unapprovedPosts;
+      const unapprovedPostsQuery = postCollection.where(
+        'moderationStatus',
+        '==',
+        ModerationStatus.PENDING
+      );
+
+      const paginationResults = await paginateResults(
+        unapprovedPostsQuery,
+        sortBy,
+        cursorDocument,
+        limit
+      );
+
+      const unapprovedPosts: Post[] = paginationResults.items.map(addIdToDoc);
+
+      return {
+        items: unapprovedPosts,
+        cursor: paginationResults.newCursorDocumentId,
+      };
     } catch (error) {
       throw new ApolloError(error);
     }

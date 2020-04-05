@@ -56,7 +56,11 @@ const typeDefs = gql`
     name: String!
     abbreviation: String!
     feed(sortBy: SortByInput, limit: Int, cursor: String): PostConnection!
-    unapprovedPosts: [Post]!
+    unapprovedPosts(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): PostConnection!
     channels: [Channel]!
   }
 
