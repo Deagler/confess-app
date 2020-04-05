@@ -38,7 +38,7 @@ export interface SubmitComment_submitComment_comment {
 }
 
 export interface SubmitComment_submitComment {
-  __typename: "CreateCommentResponse";
+  __typename: "CommentUpdatedResponse";
   code: string;
   success: boolean;
   message: string;

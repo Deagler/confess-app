@@ -70,6 +70,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
           }
           content
           totalLikes
+          isCommentLikedByUser
         }
         cursor
       }
