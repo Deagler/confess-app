@@ -39,6 +39,7 @@ export interface CommentData {
 export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
   isCommentLikedByUser;
+  postIdForComment: string | undefined;
 }
 
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
@@ -50,6 +51,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     creationTimestamp,
     totalLikes,
     isCommentLikedByUser,
+    postIdForComment,
   } = props;
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
@@ -64,7 +66,11 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_COMMENT
   );
-  const handleLikeButtonClick = async (communityId, postId, commentId) => {
+  const handleLikeButtonClick = async (
+    communityId: string,
+    postId: string | undefined,
+    commentId: string
+  ) => {
     if (serverLikeInfo.loading) {
       return;
     }
@@ -125,7 +131,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 onClick={() =>
                   handleLikeButtonClick(
                     'HW6lY4kJOpqSpL39hbUV',
-                    'B2B900CQDiXLDzHBLWtZ', // TODO: GET POST ID /communities/HW6lY4kJOpqSpL39hbUV/posts/NfuygiZzND479oqiv0lA/comments/0CjN2GNsjpmvtgawycQF
+                    postIdForComment,
                     id
                   )
                 }
