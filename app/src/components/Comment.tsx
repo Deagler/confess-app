@@ -33,7 +33,6 @@ export interface CommentData {
   author?: UserData | null;
   content: string;
   totalLikes: number;
-  likes?: (UserData | null)[];
   isCommentLikedByUser: boolean | null;
 }
 
@@ -127,16 +126,18 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 onClick={() =>
                   handleLikeButtonClick(
                     'HW6lY4kJOpqSpL39hbUV',
-                    'BSg4tDaHCeLDkdvbE4mA', // TODO: GET POST ID
+                    'B2B900CQDiXLDzHBLWtZ', // TODO: GET POST ID /communities/HW6lY4kJOpqSpL39hbUV/posts/NfuygiZzND479oqiv0lA/comments/0CjN2GNsjpmvtgawycQF
                     id
                   )
                 }
                 fill="clear"
                 expand="full"
                 disabled={!userLoggedIn || serverLikeInfo.loading}
-                color={isCommentLikedByUser ? 'danger' : 'primary'}
               >
-                <IonIcon color={likedButtonColor} icon={heart} />
+                <IonIcon
+                  color={isCommentLikedByUser ? 'danger' : 'primary'}
+                  icon={heart}
+                />
                 <IonLabel>{totalLikes}</IonLabel>
               </IonButton>
               <IonButton
