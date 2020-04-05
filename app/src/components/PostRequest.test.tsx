@@ -2,11 +2,12 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import PostRequest, { PostRequestProps } from './PostRequest';
 import { wrapWithApolloProvider } from '../utils/testing';
+import moment from 'moment';
 
 const props: PostRequestProps = {
   id: '10',
   title: 'this is the title',
-  date: new Date(),
+  creationTimestamp: moment().unix(),
   content: 'this is the content',
   author: 'this is the author',
   onModeration: () => {},

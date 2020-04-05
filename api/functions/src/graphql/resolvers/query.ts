@@ -49,7 +49,6 @@ export const queryResolvers = {
       const communityQuery = await firestore.collection(`communities`).get();
 
       const communities: Community[] = communityQuery.docs.map(addIdToDoc);
-
       return communities;
     } catch (error) {
       throw new ApolloError(error);
@@ -60,14 +59,13 @@ export const queryResolvers = {
     args: { communityId: string; postId: string; commentId: string }
   ) {
     try {
-      const { commentRef } = await verifyComment(
+      const { commentDoc } = await verifyComment(
         args.communityId,
         args.postId,
         args.commentId
       );
-      const comment = await commentRef.get();
 
-      const commentWithId = addIdToDoc(comment) as Comment;
+      const commentWithId = addIdToDoc(commentDoc) as Comment;
       commentWithId.postId = args.postId;
       commentWithId.communityId = args.communityId;
       return commentWithId;

@@ -1,4 +1,3 @@
-import { ApolloError } from 'apollo-server-express';
 import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
@@ -51,23 +50,20 @@ async function submitComment(
 async function toggleLikeComment(
   _: any,
   { communityId, postId, commentId },
-  context
+  context: any
 ) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
   const { userRef } = await verifyUser(userRecord);
 
-  const { commentRef } = await verifyComment(communityId, postId, commentId);
-  const comment = await commentRef.get();
+  const { commentRef, commentDoc } = await verifyComment(
+    communityId,
+    postId,
+    commentId
+  );
 
-  if (!comment.exists) {
-    throw new ApolloError(
-      `comment ${commentId} does't exist in post ${postId} of community ${communityId}`
-    );
-  }
-
-  const userHasLiked = await (comment.data()! as Comment).likeRefs.some(
-    (likeRef) => likeRef.id == userRef.id
+  const userHasLiked: boolean = (commentDoc.data()! as Comment).likeRefs.some(
+    (likeRef) => likeRef.id === userRef.id
   );
 
   await commentRef.update({
@@ -79,15 +75,15 @@ async function toggleLikeComment(
       : admin.firestore.FieldValue.arrayUnion(userRef),
   });
 
-  const commentData = addIdToDoc(await commentRef.get());
-  commentData.isCommentLikedByUser = !userHasLiked;
+  const comment = addIdToDoc(commentDoc);
+  comment.isCommentLikedByUser = !userHasLiked;
 
   // success
   return {
     code: 200,
     message: 'comment liked.',
     success: true,
-    comment: commentData,
+    comment,
   };
 }
 
