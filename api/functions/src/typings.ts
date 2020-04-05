@@ -21,6 +21,7 @@ export interface User {
   email: string;
   communityRef: FirestoreDocRef | null;
   community?: Community | null;
+  isAdmin?: boolean;
 }
 
 export interface Post {

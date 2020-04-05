@@ -22,6 +22,7 @@ export interface GetUserById_user {
   communityUsername: string;
   email: string;
   community: GetUserById_user_community | null;
+  isAdmin: boolean | null;
 }
 
 export interface GetUserById {

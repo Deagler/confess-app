@@ -27,6 +27,7 @@ export const GET_LOCAL_USER = gql`
         name
         abbreviation
       }
+      isAdmin
     }
   }
 `;

@@ -30,6 +30,7 @@ const typeDefs = gql`
     lastName: String!
     email: String!
     community: Community
+    isAdmin: Boolean
   }
 
   type Comment {

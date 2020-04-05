@@ -22,6 +22,7 @@ export interface GetLocalUser_localUser {
   lastName: string;
   email: string;
   community: GetLocalUser_localUser_community | null;
+  isAdmin: boolean | null;
 }
 
 export interface GetLocalUser {
