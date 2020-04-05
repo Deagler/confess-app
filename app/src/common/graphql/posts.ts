@@ -35,6 +35,7 @@ export const GET_POST_BY_ID = gql`
             }
           }
           totalLikes
+          isCommentLikedByUser
         }
         cursor
       }
@@ -70,6 +71,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
           }
           content
           totalLikes
+          isCommentLikedByUser
         }
         cursor
       }

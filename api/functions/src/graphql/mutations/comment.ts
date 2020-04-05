@@ -1,9 +1,10 @@
+import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
-import { verifyPost, verifyUser } from '../common/verification';
-
+import { verifyComment, verifyPost, verifyUser } from '../common/verification';
+import { addIdToDoc } from '../resolvers/utils';
 const firestore = firebaseApp.firestore();
 
 async function submitComment(
@@ -20,7 +21,7 @@ async function submitComment(
     authorRef: userRef,
     content,
     totalLikes: 0,
-    likes: [],
+    likeRefs: [],
   };
 
   const { postRef } = await verifyPost(communityId, postId);
@@ -46,6 +47,48 @@ async function submitComment(
   };
 }
 
+async function toggleLikeComment(
+  _: any,
+  { communityId, postId, commentId },
+  context: any
+) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef } = await verifyUser(userRecord);
+
+  const { commentRef, commentDoc } = await verifyComment(
+    communityId,
+    postId,
+    commentId
+  );
+
+  const userHasLiked: boolean = (commentDoc.data()! as Comment).likeRefs.some(
+    (likeRef) => likeRef.id === userRef.id
+  );
+
+  await commentRef.update({
+    totalLikes: userHasLiked
+      ? admin.firestore.FieldValue.increment(-1)
+      : admin.firestore.FieldValue.increment(1),
+    likeRefs: userHasLiked
+      ? admin.firestore.FieldValue.arrayRemove(userRef)
+      : admin.firestore.FieldValue.arrayUnion(userRef),
+  });
+
+  // refetch comment for updated values
+  const comment = addIdToDoc(await commentRef.get());
+  comment.isCommentLikedByUser = !userHasLiked;
+
+  // success
+  return {
+    code: 200,
+    message: 'comment liked.',
+    success: true,
+    comment,
+  };
+}
+
 export const commentMutations = {
   submitComment,
+  toggleLikeComment,
 };

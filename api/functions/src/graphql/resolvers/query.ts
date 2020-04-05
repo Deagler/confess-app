@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
 import { firebaseApp } from '../../firebase';
-import { Community, Post, User } from '../../typings';
+import { Comment, Community, Post, User } from '../../typings';
+import { verifyComment } from '../common/verification';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -48,8 +49,26 @@ export const queryResolvers = {
       const communityQuery = await firestore.collection(`communities`).get();
 
       const communities: Community[] = communityQuery.docs.map(addIdToDoc);
-
       return communities;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
+  },
+  async comment(
+    _: null,
+    args: { communityId: string; postId: string; commentId: string }
+  ) {
+    try {
+      const { commentDoc } = await verifyComment(
+        args.communityId,
+        args.postId,
+        args.commentId
+      );
+
+      const commentWithId = addIdToDoc(commentDoc) as Comment;
+      commentWithId.postId = args.postId;
+      commentWithId.communityId = args.communityId;
+      return commentWithId;
     } catch (error) {
       throw new ApolloError(error);
     }

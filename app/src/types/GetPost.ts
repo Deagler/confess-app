@@ -29,6 +29,7 @@ export interface GetPost_post_comments_items {
   content: string;
   author: GetPost_post_comments_items_author | null;
   totalLikes: number;
+  isCommentLikedByUser: boolean;
 }
 
 export interface GetPost_post_comments {
