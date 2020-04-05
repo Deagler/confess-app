@@ -7,7 +7,7 @@ import {
   IonRow,
   IonCol,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
@@ -60,8 +60,6 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
   // TODO: Add liking mutation, and fetch liked status
-  const [liked, setLiked] = useState<boolean>(false);
-  const likedButtonColor: string = liked ? 'primary' : 'medium';
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_COMMENT
   );
@@ -138,7 +136,9 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                   color={isCommentLikedByUser ? 'danger' : 'primary'}
                   icon={heart}
                 />
-                <IonLabel>{totalLikes}</IonLabel>
+                <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
+                  {totalLikes}
+                </IonLabel>
               </IonButton>
               <IonButton
                 fill="clear"
