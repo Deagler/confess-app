@@ -46,12 +46,21 @@ const typeDefs = gql`
     cursor: String
   }
 
+  type PostConnection {
+    items: [Post!]!
+    cursor: String
+  }
+
   type Community {
     id: ID!
     name: String!
     abbreviation: String!
-    feed: [Post]!
-    unapprovedPosts: [Post]!
+    feed(sortBy: SortByInput, limit: Int, cursor: String): PostConnection!
+    unapprovedPosts(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+    ): PostConnection!
     channels: [Channel]!
   }
 
@@ -82,7 +91,6 @@ const typeDefs = gql`
       limit: Int
       cursor: String
     ): CommentConnection!
-    communityId: String
   }
 
   type Query {

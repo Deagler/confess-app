@@ -1,15 +1,23 @@
 import { gql } from 'apollo-boost';
 
 export const GET_COMMUNITY_UNAPPROVED_POSTS = gql`
-  query GetCommunityUnapprovedPosts($id: ID!) {
+  query GetCommunityUnapprovedPosts(
+    $id: ID!
+    $sortBy: SortByInput
+    $cursor: String
+    $limit: Int
+  ) {
     community(id: $id) {
       id
-      unapprovedPosts {
-        id
-        title
-        authorAlias
-        creationTimestamp
-        content
+      unapprovedPosts(sortBy: $sortBy, cursor: $cursor, limit: $limit) {
+        items {
+          id
+          title
+          authorAlias
+          creationTimestamp
+          content
+        }
+        cursor
       }
     }
   }
@@ -26,11 +34,7 @@ export const APPROVE_POST = gql`
 `;
 
 export const REJECT_POST = gql`
-  mutation RejectPost(
-    $communityId: ID!
-    $postId: ID!
-    $reason: String
-  ) {
+  mutation RejectPost($communityId: ID!, $postId: ID!, $reason: String) {
     rejectPost(communityId: $communityId, postId: $postId, reason: $reason) {
       code
       success

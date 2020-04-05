@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import {
   IonPage,
   IonHeader,
@@ -10,22 +9,24 @@ import {
   IonContent,
   IonFooter,
   IonButton,
-  IonSkeletonText,
-  IonCard,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from '@ionic/react';
 
-import Post, { PostProps } from '../components/Post';
+import Post from '../components/Post';
 import { RouteComponentProps } from 'react-router';
-import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
 
 import './Page.css';
+import FeedSkeleton from '../components/FeedSkeleton';
+import { usePaginatedFeedQuery } from '../customHooks/pagination';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
-    variables: {
-      id: 'HW6lY4kJOpqSpL39hbUV',
-    },
-  });
+  const {
+    data,
+    loading,
+    hasMorePosts,
+    fetchMorePosts,
+  } = usePaginatedFeedQuery();
 
   return (
     <IonPage>
@@ -39,20 +40,24 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
-        {loading ? (
-          <IonCard>
-            <IonSkeletonText animated={true} style={{ height: '200px' }} />
-          </IonCard>
-        ) : (
-          data.community.feed.map((post: PostProps, i: number) => (
-            <Post
-              key={i}
-              {...post}
-              onCommentClick={() => history.push(`/page/posts/${post.id}`)}
-              collapsable={true}
-            />
-          ))
-        )}
+        {(loading && <FeedSkeleton />) ||
+          (data?.community?.feed?.items &&
+            data?.community?.feed?.items.map((post, i: number) => (
+              <Post
+                key={i}
+                {...post}
+                onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+                collapsable={true}
+              />
+            )))}
+        <br />
+        <IonInfiniteScroll
+          threshold="200px"
+          disabled={!hasMorePosts}
+          onIonInfinite={fetchMorePosts}
+        >
+          <IonInfiniteScrollContent loadingText="Loading more confessions..." />
+        </IonInfiniteScroll>
       </IonContent>
 
       <IonFooter>
