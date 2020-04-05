@@ -20,8 +20,10 @@ import moment from 'moment';
 import { truncateString } from '../utils';
 
 import './Post.css';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { CLIENT_TOGGLE_LIKE_POST } from '../common/graphql/posts';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
+import { GetLocalUser } from '../types/GetLocalUser';
 
 export interface PostData {
   id: string;
@@ -55,6 +57,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     collapsable,
   } = props;
 
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
+    fetchPolicy: 'network-only',
+  });
+  const userLoggedIn = !!localUserQuery.data?.localUser;
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const [clientToggleLike, clientLikeInfo] = useMutation(
@@ -62,7 +68,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   );
 
   const handleLikeButtonClick = async (communityId, postId) => {
-    
     await clientToggleLike({
       variables: {
         communityId: 'HW6lY4kJOpqSpL39hbUV',
@@ -103,6 +108,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton
+              disabled={!userLoggedIn}
               onClick={() => handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', id)}
               fill="clear"
               expand="full"
