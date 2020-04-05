@@ -77,7 +77,7 @@ export const usePaginatedFeedQuery = () => {
 export const usePaginatedUnapprovedPostsQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
 
-  const { loading, data, error, fetchMore, refetch } = useQuery<
+  const { loading, data, error, fetchMore, refetch, updateQuery } = useQuery<
     GetCommunityUnapprovedPosts,
     GetCommunityUnapprovedPostsVariables
   >(GET_COMMUNITY_UNAPPROVED_POSTS, {
@@ -115,7 +115,15 @@ export const usePaginatedUnapprovedPostsQuery = () => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return { data, loading, error, hasMorePosts, fetchMorePosts, refetch };
+  return {
+    data,
+    loading,
+    error,
+    hasMorePosts,
+    fetchMorePosts,
+    refetch,
+    updateQuery,
+  };
 };
 
 export const usePaginatedPostQuery = (postId: string) => {

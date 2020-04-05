@@ -15,16 +15,30 @@ import {
 import PostRequest from '../components/PostRequest';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedUnapprovedPostsQuery } from '../customHooks/pagination';
+import update from 'immutability-helper';
 
 const AdminPage: React.FC = () => {
   const {
     loading,
     data,
     error,
-    refetch,
+    updateQuery,
     hasMorePosts,
     fetchMorePosts,
   } = usePaginatedUnapprovedPostsQuery();
+
+  const handlePostRemoval = (index: number) => {
+    // Remove the moderated post from the cache
+    updateQuery((currentPosts) => {
+      return update(currentPosts, {
+        community: {
+          unapprovedPosts: {
+            items: { $splice: [[index, 1]] },
+          },
+        },
+      });
+    });
+  };
 
   return (
     <>
@@ -45,8 +59,12 @@ const AdminPage: React.FC = () => {
           ) : (
             !error &&
             data?.community?.unapprovedPosts.items &&
-            data.community.unapprovedPosts.items.map((post, i: number) => (
-              <PostRequest key={i} {...post} onModeration={() => refetch()} />
+            data.community.unapprovedPosts.items.map((post, index: number) => (
+              <PostRequest
+                key={index}
+                {...post}
+                onModeration={() => handlePostRemoval(index)}
+              />
             ))
           )}
           <br />
