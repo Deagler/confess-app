@@ -21,7 +21,10 @@ import { truncateString } from '../utils';
 
 import './Post.css';
 import { useMutation } from '@apollo/react-hooks';
-import { TOGGLE_LIKE_POST } from '../common/graphql/posts';
+import {
+  SERVER_TOGGLE_LIKE_POST,
+  CLIENT_TOGGLE_LIKE_POST,
+} from '../common/graphql/posts';
 import { ToggleLikePost } from '../types/ToggleLikePost';
 
 export interface PostData {
@@ -56,7 +59,16 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
 
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const [toggleLikeMutation] = useMutation<ToggleLikePost>(TOGGLE_LIKE_POST);
+  const [clientToggleLike] = useMutation(CLIENT_TOGGLE_LIKE_POST);
+
+  const handleLikeButtonClick = async (communityId, postId) => {
+    await clientToggleLike({
+      variables: {
+        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        postId,
+      },
+    });
+  };
 
   return (
     <IonCard>

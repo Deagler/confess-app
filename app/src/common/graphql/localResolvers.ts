@@ -2,6 +2,7 @@ import { ApolloCache } from 'apollo-cache';
 
 import { authMutationResolvers } from './resolvers/auth';
 import { queryResolvers } from './resolvers/query';
+import { postMutationResolvers } from './resolvers/posts';
 
 type ResolverFn = (
   parent: any,
@@ -19,5 +20,6 @@ export const resolvers = {
   },
   Mutation: {
     ...authMutationResolvers,
+    ...postMutationResolvers,
   },
 };

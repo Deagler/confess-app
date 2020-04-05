@@ -1,12 +1,17 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, ApolloError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
+import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
 import {
   verifyCommunity,
   verifyPost,
   verifyUser,
 } from '../common/verification';
+import admin from 'firebase-admin';
+import { addIdToDoc } from '../resolvers/utils';
+
+const firestore = firebaseApp.firestore();
 
 async function submitPostForApproval(
   _: any,
@@ -120,9 +125,10 @@ async function rejectPost(
   };
 }
 
-async function toggleLikePost(_: any, { communityId, postId }) {
-  // verify user
-  // verify post
+async function toggleLikePost(_: any, { communityId, postId }, context) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef } = await verifyUser(userRecord);
 
   const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
   const post = await postRef.get();
@@ -133,26 +139,29 @@ async function toggleLikePost(_: any, { communityId, postId }) {
     );
   }
 
-  const userId = 'v3uyCOqsJxdJQ9yATdcv5SnM1Sf2';
-  const userRef = firestore.doc(`users/${userId}`);
-
-  const userHasLiked = await (post.data()! as Post).likeRefs.includes(userRef);
+  const userHasLiked = await (post.data()! as Post).likeRefs.some(
+    (likeRef) => likeRef.id == userRef.id
+  );
 
   await postRef.update({
     totalLikes: userHasLiked
-      ? FirebaseFirestore.FieldValue.increment(-1)
-      : FirebaseFirestore.FieldValue.increment(1),
+      ? admin.firestore.FieldValue.increment(-1)
+      : admin.firestore.FieldValue.increment(1),
     likeRefs: userHasLiked
-      ? FirebaseFirestore.FieldValue.arrayRemove(userRef)
-      : FirebaseFirestore.FieldValue.arrayUnion(userRef),
+      ? admin.firestore.FieldValue.arrayRemove(userRef)
+      : admin.firestore.FieldValue.arrayUnion(userRef),
   });
+
+  const postData = addIdToDoc(await postRef.get());
+  postData.isLikedByUser = !userHasLiked;
+  console.log(postData);
 
   // success
   return {
     code: 200,
-    message: 'Post approved.',
+    message: 'Post liked.',
     success: true,
-    post: await postRef.get(),
+    post: postData,
   };
 }
 

@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
-import { Comment, CommentsInput } from '../../typings';
+import { Comment, CommentsInput, Post } from '../../typings';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
@@ -38,5 +39,23 @@ export const postResolvers = {
     } catch (error) {
       throw new ApolloError(error);
     }
+  },
+  async isLikedByUser(parent: any, _, context) {
+    // pull user from request context
+    const userRecord: UserRecord = context.req.user;
+
+    if (!userRecord) {
+      return false;
+    }
+
+    const postData: Post = parent;
+    if (!parent.likeRefs) {
+      return false;
+    }
+    const userHasLiked = await postData.likeRefs.some(
+      (likeRef) => likeRef.id == userRecord.uid
+    );
+
+    return userHasLiked;
   },
 };

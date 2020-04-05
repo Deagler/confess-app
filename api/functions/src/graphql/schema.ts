@@ -75,6 +75,7 @@ const typeDefs = gql`
 
     totalLikes: Int!
     likes: [User]!
+    isLikedByUser: Boolean
     totalComments: Int!
     comments(
       sortBy: SortByInput
@@ -154,7 +155,7 @@ const typeDefs = gql`
       postId: String!
       reason: String
     ): RejectPostResponse
-    
+
     toggleLikePost(communityId: String!, postId: String!): PostUpdatedResponse
   }
 `;

@@ -43,7 +43,6 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         variables: {
           postId: id,
           communityId: 'HW6lY4kJOpqSpL39hbUV',
-          moderatorId: 'aVyC8BFy1f5qGzXVwGSu', // TODO: remove this after types updated
         },
       });
 
