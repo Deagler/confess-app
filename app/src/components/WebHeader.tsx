@@ -15,9 +15,9 @@ import { findByLabelText } from '@testing-library/react';
 const webHeader = css({
   width: '100%',
   height: '80px',
-  '-webkit-box-shadow': '0 4px 6px -6px #222',
-  '-moz-box-shadow': '0 4px 6px -6px #222',
-  'box-shadow': '0 4px 6px -6px #222',
+  WebKitShadow: '0 4px 6px -6px #222',
+  MozBoxShadow: '0 4px 6px -6px #222',
+  boxShadow: '0 4px 6px -6px #222',
   zIndex: 9999999,
 });
 
@@ -44,7 +44,7 @@ export const WebHeader: React.FC<{}> = () => {
               <AppLogo />
             </IonToolbar>
           </IonCol>
-          <IonCol size="8" >
+          <IonCol size="8">
             <div {...loginInputContainer}>
               <LoginInput />
             </div>

@@ -32,7 +32,7 @@ import { appPageCSS } from './WebHeader';
 import { AppLogo } from './AppLogo';
 
 const menuCss = css({
-  borderRight: '0',
+  borderRight: '0'
 });
 
 const Menu: React.FC<{}> = () => {

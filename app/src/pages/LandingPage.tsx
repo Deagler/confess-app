@@ -47,6 +47,8 @@ const LandingPage: React.FC = () => {
     },
   };
 
+  console.log(data);
+
   return (
     <IonPage id="landing-page">
       <IonContent>
@@ -155,8 +157,8 @@ const LandingPage: React.FC = () => {
                     />
                   ) : (
                     <IonSlides pager={true} options={slideOpts}>
-                      {data &&
-                        data.community.feed.slice(0, 4).map((slide) => (
+                      {data?.community?.feed &&
+                        data.community.feed.items.slice(0, 4).map((slide) => (
                           <IonSlide key={slide.id} className="ion-text-left">
                             <LandingPost {...slide} />
                           </IonSlide>
