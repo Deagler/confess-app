@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
+import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,

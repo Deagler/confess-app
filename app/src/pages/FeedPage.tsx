@@ -19,6 +19,7 @@ import { RouteComponentProps } from 'react-router';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 
 import './Page.css';
+import FeedSkeleton from '../components/FeedSkeleton';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
@@ -39,20 +40,16 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
-        {loading ? (
-          <IonCard>
-            <IonSkeletonText animated={true} style={{ height: '200px' }} />
-          </IonCard>
-        ) : (
-          data.community.feed.map((post: PostProps, i: number) => (
-            <Post
-              key={i}
-              {...post}
-              onCommentClick={() => history.push(`/page/posts/${post.id}`)}
-              collapsable={true}
-            />
-          ))
-        )}
+        {(loading && <FeedSkeleton />) ||
+          (data?.community?.feed?.items &&
+            data?.community?.feed?.items.map((post: PostProps, i: number) => (
+              <Post
+                key={i}
+                {...post}
+                onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+                collapsable={true}
+              />
+            )))}
       </IonContent>
 
       <IonFooter>
