@@ -14,16 +14,20 @@ export const postResolvers = {
         `communities/${parent.communityId}/posts/${parent.id}/comments`
       );
 
+      const cursorDocument = cursor
+        ? await commentsCollection.doc(cursor).get()
+        : undefined;
+
       const paginationResults = await paginateResults(
         commentsCollection,
         sortBy,
-        cursor,
+        cursorDocument,
         limit
       );
 
       const comments: Comment[] = paginationResults.items.map(addIdToDoc);
 
-      return { items: comments, cursor: paginationResults.newCursor };
+      return { items: comments, cursor: paginationResults.newCursorDocumentId };
     } catch (error) {
       throw new ApolloError(error);
     }

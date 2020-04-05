@@ -46,11 +46,16 @@ const typeDefs = gql`
     cursor: String
   }
 
+  type PostConnection {
+    items: [Post!]!
+    cursor: String
+  }
+
   type Community {
     id: ID!
     name: String!
     abbreviation: String!
-    feed: [Post]!
+    feed(sortBy: SortByInput, limit: Int, cursor: String): PostConnection!
     unapprovedPosts: [Post]!
     channels: [Channel]!
   }
