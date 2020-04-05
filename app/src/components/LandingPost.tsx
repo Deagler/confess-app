@@ -1,16 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   IonCardHeader,
   IonCardTitle,
   IonCardSubtitle,
   IonCardContent,
+  IonCard,
 } from '@ionic/react';
 import moment from 'moment';
-
-import { truncateString } from '../utils';
-
-import './Post.css';
+import { css } from 'glamor';
 
 export interface PostProps {
   id: string;
@@ -20,27 +17,39 @@ export interface PostProps {
   authorAlias?: string;
 }
 
-const MAX_CONTENT_LENGTH: number = 600;
+const postCard = css({
+  width: '100%',
+  maxWidth: '100%',
+  height: '450px',
+});
+
+const postContent = css({
+  height: '325px',
+  marginBottom: '16px',
+  maxHeight: '100%',
+  maxWidth: '100%',
+  overflow: 'auto',
+});
 
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
   const { id, title, creationTimestamp, content, authorAlias } = props;
 
   return (
-    <Link to={`/page/posts/${id}`} className="Link">
-      <IonCardContent>
-        <IonCardHeader>
-          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
-          <IonCardTitle>{title}</IonCardTitle>
-          <IonCardSubtitle>
-            {moment.unix(creationTimestamp).fromNow()}
-          </IonCardSubtitle>
-        </IonCardHeader>
+    <IonCard {...postCard}>
+      <IonCardHeader>
+        <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+        <IonCardTitle>{title}</IonCardTitle>
+        <IonCardSubtitle>
+          {moment.unix(creationTimestamp).fromNow()}
+        </IonCardSubtitle>
+      </IonCardHeader>
+      <div {...postContent}>
         <IonCardContent>
-          {truncateString(content, MAX_CONTENT_LENGTH)}
+          <p>{content}</p>
+          <p>{authorAlias || 'Anonymous'}</p>
         </IonCardContent>
-        <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
-      </IonCardContent>
-    </Link>
+      </div>
+    </IonCard>
   );
 };
 

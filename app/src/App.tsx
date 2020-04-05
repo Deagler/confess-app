@@ -36,22 +36,21 @@ import { firebaseApp } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
 
 export const GlobalAppUtils = {
-  showLoading: (msg?) => {},
+  showLoading: () => {},
   hideLoading: () => {},
-  showToast: (msg, duration?) => {},
+  showToast: () => {},
   hideToast: () => {},
 };
 
 const auth = firebaseApp.auth();
 
 const App: React.FC = () => {
-  const [authInited, setAuthInited] = useState(false);
-
+  const [authLocalUser, setAuthLocalUser] = useState<
+    firebase.User | undefined | null
+  >(undefined);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!authInited) {
-        setAuthInited(true);
-      }
+      setAuthLocalUser(user!);
 
       if (user) {
         apolloClient.reFetchObservableQueries();
@@ -66,7 +65,7 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      {!authInited ? (
+      {authLocalUser === undefined ? (
         <FullPageLoader />
       ) : (
         <IonReactRouter>
@@ -77,7 +76,13 @@ const App: React.FC = () => {
                 <IonRouterOutlet id="main">
                   <Route
                     path="/"
-                    render={() => <Redirect to="/landing" />}
+                    render={() =>
+                      authLocalUser != null ? (
+                        <Redirect to="/page/posts" />
+                      ) : (
+                        <Redirect to="/landing" />
+                      )
+                    }
                     exact={true}
                   />
                   <Route
