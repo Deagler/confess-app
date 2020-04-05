@@ -124,6 +124,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               fill="clear"
               expand="full"
               color={isLikedByUser ? 'danger' : 'primary'}
+              disabled={serverLikeInfo.loading}
             >
               <IonIcon icon={heart} />
               <IonLabel>{totalLikes}</IonLabel>
