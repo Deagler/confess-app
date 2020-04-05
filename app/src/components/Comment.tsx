@@ -55,6 +55,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
     : 'unknown';
   const authorCommunity = author?.community?.abbreviation ?? '';
+
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });

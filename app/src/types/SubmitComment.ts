@@ -20,13 +20,6 @@ export interface SubmitComment_submitComment_comment_author {
   community: SubmitComment_submitComment_comment_author_community | null;
 }
 
-export interface SubmitComment_submitComment_comment_likes {
-  __typename: "User";
-  firstName: string;
-  lastName: string;
-  communityUsername: string;
-}
-
 export interface SubmitComment_submitComment_comment {
   __typename: "Comment";
   id: string;
@@ -35,7 +28,6 @@ export interface SubmitComment_submitComment_comment {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
-  likes: (SubmitComment_submitComment_comment_likes | null)[];
 }
 
 export interface SubmitComment_submitComment {
