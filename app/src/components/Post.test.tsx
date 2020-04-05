@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import Post, { PostProps } from './Post';
 import { MemoryRouter } from 'react-router-dom';
+import { wrapWithApolloProvider } from '../utils/testing';
 
 const props: PostProps = {
   id: 'id',
@@ -12,23 +13,28 @@ const props: PostProps = {
   totalLikes: 7,
   totalComments: 56,
   onCommentClick: () => null,
+  isLikedByUser: false,
   collapsable: false,
 };
 
 test('renders without crashing', () => {
   const { baseElement } = render(
-    <MemoryRouter>
-      <Post {...props} />
-    </MemoryRouter>
+    wrapWithApolloProvider(
+      <MemoryRouter>
+        <Post {...props} />
+      </MemoryRouter>
+    )
   );
   expect(baseElement).toBeDefined();
 });
 
 test('displays content properly', async () => {
   const { findByText } = render(
-    <MemoryRouter>
-      <Post {...props} />
-    </MemoryRouter>
+    wrapWithApolloProvider(
+      <MemoryRouter>
+        <Post {...props} />
+      </MemoryRouter>
+    )
   );
   await findByText('#id');
   await findByText('this is the title');
@@ -40,9 +46,11 @@ test('displays content properly', async () => {
 
 test('displays author as anonymous if omitted', async () => {
   const { findByText } = render(
-    <MemoryRouter>
-      <Post {...props} authorAlias={undefined} />
-    </MemoryRouter>
+    wrapWithApolloProvider(
+      <MemoryRouter>
+        <Post {...props} authorAlias={undefined} />
+      </MemoryRouter>
+    )
   );
   await findByText('Anonymous');
 });
