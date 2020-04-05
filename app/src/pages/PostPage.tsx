@@ -99,7 +99,12 @@ const Postpage: React.FC = () => {
               <IonList>
                 {data?.post?.comments?.items.map(
                   (comment: CommentData | null, i: number) => (
-                    <Comment key={i} {...comment!} onReply={handleReply} />
+                    <Comment
+                      key={i}
+                      {...comment!}
+                      onReply={handleReply}
+                      postIdForComment={data?.post?.id}
+                    />
                   )
                 )}
               </IonList>
