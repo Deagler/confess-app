@@ -34,6 +34,7 @@ import {
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
+import SecureRoute from './components/SecureRoute';
 
 export const GlobalAppUtils = {
   showLoading: () => {},
@@ -100,9 +101,9 @@ const App: React.FC = () => {
                     render={(props) => <FeedPage {...props} />}
                     exact={true}
                   />
-                  <Route
+                  <SecureRoute
                     path="/page/admin"
-                    render={() => <AdminPage />}
+                    component={AdminPage}
                     exact={true}
                   />
                   <Route
