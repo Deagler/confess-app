@@ -60,6 +60,8 @@ export interface Comment {
   likeRefs: Array<
     FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
   >;
+  postId?: string;
+  communityId?: string;
 }
 
 export interface CommentsInput {
