@@ -66,7 +66,7 @@ async function writeInitialData() {
       }
     `,
     data: {
-      selectedCommunity: localStorage.getItem('selectedCommunity') || '',
+      selectedCommunity: localStorage.getItem('selectedCommunity'),
       authState: localStorage.getItem('authState')
         ? JSON.parse(localStorage.getItem('authState')!)
         : null,

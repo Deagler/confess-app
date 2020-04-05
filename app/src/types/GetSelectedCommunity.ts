@@ -4,9 +4,9 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getSelectedCommunity
+// GraphQL query operation: GetSelectedCommunity
 // ====================================================
 
-export interface getSelectedCommunity {
-  selectedCommunity: string;
+export interface GetSelectedCommunity {
+  selectedCommunity: string | null;
 }
