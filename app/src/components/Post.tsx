@@ -21,9 +21,9 @@ import { truncateString } from '../utils';
 
 import './Post.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { CLIENT_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
+import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 
 export interface PostData {
   id: string;
@@ -63,15 +63,33 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const [clientToggleLike, clientLikeInfo] = useMutation(
-    CLIENT_TOGGLE_LIKE_POST
+  const [serverToggleLike, serverLikeInfo] = useMutation(
+    SERVER_TOGGLE_LIKE_POST
   );
 
   const handleLikeButtonClick = async (communityId, postId) => {
-    await clientToggleLike({
+    if (serverLikeInfo.loading) {
+      return;
+    }
+
+    await serverToggleLike({
       variables: {
         communityId: 'HW6lY4kJOpqSpL39hbUV',
         postId,
+      },
+      optimisticResponse: {
+        toggleLikePost: {
+          code: 200,
+          message: 'Post liked.',
+          success: true,
+          post: {
+            id,
+            isLikedByUser: !isLikedByUser,
+            totalLikes: isLikedByUser ? totalLikes - 1 : totalLikes + 1,
+            __typename: 'Post',
+          },
+          __typename: 'PostUpdatedResponse',
+        },
       },
     });
   };
@@ -108,7 +126,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonRow className="ion-justify-content-center">
           <IonCol>
             <IonButton
-              disabled={!userLoggedIn}
+              disabled={!userLoggedIn || serverLikeInfo.loading}
               onClick={() => handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', id)}
               fill="clear"
               expand="full"

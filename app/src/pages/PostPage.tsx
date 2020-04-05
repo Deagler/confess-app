@@ -56,7 +56,7 @@ const Postpage: React.FC = () => {
     GetPost,
     GetPostVariables
   >(GET_POST_BY_ID, {
-    variables: postVariables
+    variables: postVariables,
   });
 
   const getMoreComments = async (e: CustomEvent<void>) => {

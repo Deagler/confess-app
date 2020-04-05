@@ -133,25 +133,7 @@ export const GET_POST_LIKE_STATUS = gql`
     }
   }
 `;
-export const CLIENT_TOGGLE_LIKE_POST = gql`
-  mutation ToggleLikePost($communityId: ID!, $postId: ID!) {
-    clientToggleLikePost(communityId: $communityId, postId: $postId) @client {
-      code
-      success
-      message
-      post {
-        id
-        title
-        authorAlias
-        creationTimestamp
-        content
-        totalLikes
-        totalComments
-        isLikedByUser
-      }
-    }
-  }
-`;
+
 export const SERVER_TOGGLE_LIKE_POST = gql`
   mutation ServerToggleLikePost($communityId: ID!, $postId: ID!) {
     toggleLikePost(communityId: $communityId, postId: $postId) {

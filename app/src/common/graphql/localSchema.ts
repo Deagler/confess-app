@@ -26,6 +26,5 @@ export const typeDefs = gql`
       emailLink: String!
     ): LoginResponse
     doFirebaseLogout: LoginResponse
-    clientToggleLikePost(communityId: ID!, postId: ID!): PostUpdatedResponse
   }
 `;
