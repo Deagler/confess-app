@@ -20,7 +20,8 @@ import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
 
 // TODO: Refactor these hooks into a single hook to reduce duplicate code
 
-const POST_PAGE_LIMIT = 3;
+const POST_PAGE_LIMIT = 5;
+const COMMENT_PAGE_LIMIT = 5;
 
 const feedVariables: GetCommunityPostsVariables = {
   // TODO: Get community id from somewhere
@@ -120,8 +121,6 @@ export const usePaginatedUnapprovedPostsQuery = () => {
 };
 
 export const usePaginatedPostQuery = (postId: string) => {
-  const COMMENT_PAGE_LIMIT = 3;
-
   const postVariables: GetPostVariables = {
     // TODO: get community id from somewhere
     communityId: 'HW6lY4kJOpqSpL39hbUV',
