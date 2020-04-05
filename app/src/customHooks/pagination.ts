@@ -18,7 +18,8 @@ import {
 } from '../types/GetCommunityUnapprovedPosts';
 import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
 
-// TODO: Refactor these into a single hook to reduce duplicate code
+// TODO: Refactor these hooks into a single hook to reduce duplicate code
+
 const POST_PAGE_LIMIT = 3;
 
 const feedVariables: GetCommunityPostsVariables = {
@@ -35,7 +36,7 @@ const feedVariables: GetCommunityPostsVariables = {
 export const usePaginatedFeedQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
 
-  const { loading, data, fetchMore } = useQuery<
+  const useQueryVariables = useQuery<
     GetCommunityPosts,
     GetCommunityPostsVariables
   >(GET_COMMUNITY_POSTS, {
@@ -43,11 +44,11 @@ export const usePaginatedFeedQuery = () => {
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {
-    await fetchMore({
+    await useQueryVariables.fetchMore({
       query: GET_COMMUNITY_POSTS,
       variables: {
         ...feedVariables,
-        cursor: data?.community?.feed.cursor,
+        cursor: useQueryVariables.data?.community?.feed.cursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newPosts = fetchMoreResult?.community?.feed.items;
@@ -71,13 +72,13 @@ export const usePaginatedFeedQuery = () => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return { data, loading, hasMorePosts, fetchMorePosts };
+  return { ...useQueryVariables, hasMorePosts, fetchMorePosts };
 };
 
 export const usePaginatedUnapprovedPostsQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
 
-  const { loading, data, error, fetchMore, refetch, updateQuery } = useQuery<
+  const useQueryVariables = useQuery<
     GetCommunityUnapprovedPosts,
     GetCommunityUnapprovedPostsVariables
   >(GET_COMMUNITY_UNAPPROVED_POSTS, {
@@ -85,11 +86,11 @@ export const usePaginatedUnapprovedPostsQuery = () => {
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {
-    await fetchMore({
+    await useQueryVariables.fetchMore({
       query: GET_COMMUNITY_UNAPPROVED_POSTS,
       variables: {
         ...feedVariables,
-        cursor: data?.community?.unapprovedPosts.cursor,
+        cursor: useQueryVariables.data?.community?.unapprovedPosts.cursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newPosts = fetchMoreResult?.community?.unapprovedPosts.items;
@@ -115,15 +116,7 @@ export const usePaginatedUnapprovedPostsQuery = () => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return {
-    data,
-    loading,
-    error,
-    hasMorePosts,
-    fetchMorePosts,
-    refetch,
-    updateQuery,
-  };
+  return { ...useQueryVariables, hasMorePosts, fetchMorePosts };
 };
 
 export const usePaginatedPostQuery = (postId: string) => {
@@ -143,19 +136,19 @@ export const usePaginatedPostQuery = (postId: string) => {
 
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(true);
 
-  const { data, loading, error, fetchMore, updateQuery } = useQuery<
-    GetPost,
-    GetPostVariables
-  >(GET_POST_BY_ID, {
-    variables: postVariables,
-  });
+  const useQueryVariables = useQuery<GetPost, GetPostVariables>(
+    GET_POST_BY_ID,
+    {
+      variables: postVariables,
+    }
+  );
 
   const fetchMoreComments = async (e: CustomEvent<void>) => {
-    await fetchMore({
+    await useQueryVariables.fetchMore({
       query: GET_POST_COMMENTS_ONLY,
       variables: {
         ...postVariables,
-        commentsCursor: data?.post?.comments?.cursor,
+        commentsCursor: useQueryVariables.data?.post?.comments?.cursor,
       },
       // Update the cache with the newly fetched results
       updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -181,12 +174,5 @@ export const usePaginatedPostQuery = (postId: string) => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return {
-    data,
-    loading,
-    error,
-    hasMoreComments,
-    fetchMoreComments,
-    updateQuery,
-  };
+  return { ...useQueryVariables, hasMoreComments, fetchMoreComments };
 };
