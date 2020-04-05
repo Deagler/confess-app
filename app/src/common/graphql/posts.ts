@@ -15,6 +15,7 @@ export const GET_POST_BY_ID = gql`
       title
       content
       totalLikes
+      isLikedByUser
       totalComments
       comments(
         sortBy: $sortCommentsBy
@@ -50,6 +51,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
     $commentsCursor: String
   ) {
     post(communityId: $communityId, postId: $postId) {
+      id
       comments(
         sortBy: $sortCommentsBy
         limit: $commentsLimit
@@ -77,7 +79,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
 
 export const SUBMIT_POST_FOR_APPROVAL = gql`
   mutation SubmitPostForApproval(
-    $communityId: String!
+    $communityId: ID!
     $channel: String!
     $title: String!
     $content: String!
@@ -117,6 +119,36 @@ export const GET_COMMUNITY_POSTS = gql`
         content
         totalLikes
         totalComments
+        isLikedByUser
+      }
+    }
+  }
+`;
+
+export const GET_POST_LIKE_STATUS = gql`
+  query GetPostLikeData($communityId: ID!, $postId: ID!) {
+    post(communityId: $communityId, postId: $postId) {
+      id
+      totalLikes
+    }
+  }
+`;
+
+export const SERVER_TOGGLE_LIKE_POST = gql`
+  mutation ServerToggleLikePost($communityId: ID!, $postId: ID!) {
+    toggleLikePost(communityId: $communityId, postId: $postId) {
+      code
+      success
+      message
+      post {
+        id
+        title
+        authorAlias
+        creationTimestamp
+        content
+        totalLikes
+        totalComments
+        isLikedByUser
       }
     }
   }

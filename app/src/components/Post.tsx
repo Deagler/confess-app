@@ -20,6 +20,10 @@ import moment from 'moment';
 import { truncateString } from '../utils';
 
 import './Post.css';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
+import { GetLocalUser } from '../types/GetLocalUser';
+import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 
 export interface PostData {
   id: string;
@@ -28,6 +32,7 @@ export interface PostData {
   content: string;
   totalLikes: number;
   totalComments: number;
+  isLikedByUser: boolean | null;
   authorAlias?: string | null;
 }
 
@@ -48,10 +53,46 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     totalLikes,
     totalComments,
     onCommentClick,
+    isLikedByUser,
     collapsable,
   } = props;
 
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
+    fetchPolicy: 'network-only',
+  });
+  const userLoggedIn = !!localUserQuery.data?.localUser;
   const [expanded, setExpanded] = useState<boolean>(false);
+
+  const [serverToggleLike, serverLikeInfo] = useMutation(
+    SERVER_TOGGLE_LIKE_POST
+  );
+
+  const handleLikeButtonClick = async (communityId, postId) => {
+    if (serverLikeInfo.loading) {
+      return;
+    }
+
+    await serverToggleLike({
+      variables: {
+        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        postId,
+      },
+      optimisticResponse: {
+        toggleLikePost: {
+          code: 200,
+          message: 'Post liked.',
+          success: true,
+          post: {
+            id,
+            isLikedByUser: !isLikedByUser,
+            totalLikes: isLikedByUser ? totalLikes - 1 : totalLikes + 1,
+            __typename: 'Post',
+          },
+          __typename: 'PostUpdatedResponse',
+        },
+      },
+    });
+  };
 
   return (
     <IonCard>
@@ -84,7 +125,13 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol>
-            <IonButton fill="clear" expand="full" color="primary">
+            <IonButton
+              disabled={!userLoggedIn || serverLikeInfo.loading}
+              onClick={() => handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', id)}
+              fill="clear"
+              expand="full"
+              color={isLikedByUser ? 'danger' : 'primary'}
+            >
               <IonIcon icon={heart} />
               <IonLabel>{totalLikes}</IonLabel>
             </IonButton>

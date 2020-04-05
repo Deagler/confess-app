@@ -35,7 +35,9 @@ export interface Post {
   moderationStatus: ModerationStatus;
   moderationInfo: ModerationInfo | null;
   totalLikes: number;
-  likes: User[];
+  likeRefs: Array<
+    FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
+  >;
   totalComments: number;
   comments: Comment[];
   communityId?: string;

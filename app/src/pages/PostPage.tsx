@@ -18,12 +18,10 @@ import {
 import Comment, { CommentData } from '../components/Comment';
 import Post from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
-
 import './Page.css';
 import './PostPage.css';
 import { useParams } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
-import { Direction } from '../types/globalTypes';
 import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
 import { GetPostVariables, GetPost } from '../types/GetPost';
 import {
@@ -31,6 +29,7 @@ import {
   GET_POST_COMMENTS_ONLY,
 } from '../common/graphql/posts';
 import update from 'immutability-helper';
+import { Direction } from '../types/globalTypes';
 import PostSkeleton from '../components/PostSkeleton';
 
 const COMMENT_PAGE_LIMIT = 3;
@@ -56,7 +55,9 @@ const Postpage: React.FC = () => {
   const { data, loading, error, fetchMore, updateQuery } = useQuery<
     GetPost,
     GetPostVariables
-  >(GET_POST_BY_ID, { variables: postVariables });
+  >(GET_POST_BY_ID, {
+    variables: postVariables,
+  });
 
   const getMoreComments = async (e: CustomEvent<void>) => {
     await fetchMore({

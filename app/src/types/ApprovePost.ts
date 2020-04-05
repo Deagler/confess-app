@@ -21,5 +21,4 @@ export interface ApprovePost {
 export interface ApprovePostVariables {
   communityId: string;
   postId: string;
-  moderatorId: string;
 }

@@ -21,6 +21,5 @@ export interface RejectPost {
 export interface RejectPostVariables {
   communityId: string;
   postId: string;
-  moderatorId: string;
   reason?: string | null;
 }

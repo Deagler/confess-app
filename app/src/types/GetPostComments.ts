@@ -39,6 +39,7 @@ export interface GetPostComments_post_comments {
 
 export interface GetPostComments_post {
   __typename: "Post";
+  id: string;
   comments: GetPostComments_post_comments;
 }
 

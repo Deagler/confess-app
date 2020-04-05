@@ -115,7 +115,6 @@ const App: React.FC = () => {
                     render={() => <Postpage />}
                     exact={true}
                   />
-                  <Route render={() => <Redirect to="/landing" />} />
                 </IonRouterOutlet>
               </Switch>
             </ApolloProvider>

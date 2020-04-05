@@ -20,7 +20,7 @@ export interface SubmitPostForApproval_submitPostForApproval_post {
 }
 
 export interface SubmitPostForApproval_submitPostForApproval {
-  __typename: "CreatePostResponse";
+  __typename: "PostUpdatedResponse";
   code: string;
   success: boolean;
   message: string;

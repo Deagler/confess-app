@@ -75,6 +75,7 @@ const typeDefs = gql`
 
     totalLikes: Int!
     likes: [User]!
+    isLikedByUser: Boolean!
     totalComments: Int!
     comments(
       sortBy: SortByInput
@@ -97,7 +98,7 @@ const typeDefs = gql`
     message: String!
   }
 
-  type CreatePostResponse implements MutationResponse {
+  type PostUpdatedResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -132,28 +133,30 @@ const typeDefs = gql`
 
   type Mutation {
     submitPostForApproval(
-      communityId: String!
+      communityId: ID!
       channel: String!
       title: String!
       content: String!
       authorAlias: String
-    ): CreatePostResponse
+    ): PostUpdatedResponse
 
     attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
 
     submitComment(
-      communityId: String!
-      postId: String!
+      communityId: ID!
+      postId: ID!
       content: String!
     ): CreateCommentResponse
 
-    approvePost(communityId: String!, postId: String!): ApprovePostResponse
+    approvePost(communityId: ID!, postId: ID!): ApprovePostResponse
 
     rejectPost(
-      communityId: String!
-      postId: String!
+      communityId: ID!
+      postId: ID!
       reason: String
     ): RejectPostResponse
+
+    toggleLikePost(communityId: ID!, postId: ID!): PostUpdatedResponse
   }
 `;
 
