@@ -57,7 +57,9 @@ export interface Comment {
   authorRef: FirestoreDocRef | null;
   content: string;
   totalLikes: number;
-  likes: User[];
+  likeRefs: Array<
+    FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
+  >;
 }
 
 export interface CommentsInput {

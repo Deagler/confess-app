@@ -20,7 +20,7 @@ async function submitComment(
     authorRef: userRef,
     content,
     totalLikes: 0,
-    likes: [],
+    likeRefs: [],
   };
 
   const { postRef } = await verifyPost(communityId, postId);
