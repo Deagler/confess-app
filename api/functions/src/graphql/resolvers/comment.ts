@@ -1,5 +1,6 @@
 import { ApolloError } from 'apollo-server-express';
-import { User } from '../../typings';
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
+import { Comment, User } from '../../typings';
 import { addIdToDoc } from './utils';
 
 export const commentResolvers = {
@@ -15,5 +16,23 @@ export const commentResolvers = {
     } catch (error) {
       throw new ApolloError(error);
     }
+  },
+  async isCommentLikedByUser(parent: any, _, context) {
+    // pull user from request context
+    const userRecord: UserRecord = context.req.user;
+
+    if (!userRecord) {
+      return false;
+    }
+
+    const commentData: Comment = parent;
+    if (!parent.likeRefs) {
+      return false;
+    }
+    const userHasLiked = await commentData.likeRefs.some(
+      (likeRef) => likeRef.id == userRecord.uid
+    );
+
+    return userHasLiked;
   },
 };
