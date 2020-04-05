@@ -1,4 +1,5 @@
-import { AuthenticationError, ApolloError } from 'apollo-server-express';
+import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
@@ -8,7 +9,6 @@ import {
   verifyPost,
   verifyUser,
 } from '../common/verification';
-import admin from 'firebase-admin';
 import { addIdToDoc } from '../resolvers/utils';
 
 const firestore = firebaseApp.firestore();

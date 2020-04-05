@@ -9,7 +9,6 @@ const communitiesCollection = firebaseApp.firestore().collection('communities');
 async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
   const userRecord: UserRecord = context.req.user;
 
-
   if (!userRecord || !userRecord.email) {
     return { code: 401, success: false, message: 'Unauthorised' };
   }
