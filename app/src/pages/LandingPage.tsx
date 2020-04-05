@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/posts';
 import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
@@ -6,10 +6,8 @@ import {
   IonPage,
   IonIcon,
   IonToolbar,
-  IonInput,
   IonList,
   IonContent,
-  IonButton,
   IonRow,
   IonAvatar,
   IonCol,
@@ -41,9 +39,6 @@ const LandingPage: React.FC = () => {
       id: 'HW6lY4kJOpqSpL39hbUV',
     },
   });
-
-  const [secondText, setSecondText] = useState<string>();
-  const [thirdText, setThirdText] = useState<string>();
 
   const slideOpts = {
     direction: 'horizontal',

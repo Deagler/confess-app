@@ -26,7 +26,7 @@ import FeedPage from './pages/FeedPage';
 import SubmitPage from './pages/SubmitPage';
 import AdminPage from './pages/AdminPage';
 import Postpage from './pages/PostPage';
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import {
   apolloClient,
   refreshApolloAuthentication,
@@ -34,12 +34,11 @@ import {
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
-import { GET_LOCAL_USER } from './common/graphql/localState';
 
 export const GlobalAppUtils = {
-  showLoading: (msg?) => {},
+  showLoading: () => {},
   hideLoading: () => {},
-  showToast: (msg, duration?) => {},
+  showToast: () => {},
   hideToast: () => {},
 };
 
