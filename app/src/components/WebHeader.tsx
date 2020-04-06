@@ -11,6 +11,7 @@ import { css } from 'glamor';
 import { LoginInput } from './LoginInput';
 import { AppLogo } from './AppLogo';
 import { findByLabelText } from '@testing-library/react';
+import { useShouldBlockMenu } from '../utils/menus';
 
 const webHeader = css({
   width: '100%',
@@ -21,11 +22,7 @@ const webHeader = css({
   zIndex: 9999999,
 });
 
-export const appPageCSS = css({
-  '@media(min-width:992px)': {
-    marginTop: '82px',
-  },
-});
+
 
 const loginInputContainer = css({
   display: 'flex',
@@ -35,6 +32,11 @@ const loginInputContainer = css({
 });
 
 export const WebHeader: React.FC<{}> = () => {
+  const shouldBlockMenu = useShouldBlockMenu();
+  if (shouldBlockMenu) {
+    return null;
+  }
+
   return (
     <div className="ion-hide-lg-down" {...webHeader}>
       <IonGrid>

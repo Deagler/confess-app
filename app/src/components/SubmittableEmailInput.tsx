@@ -5,6 +5,7 @@ import { css } from 'glamor';
 
 const lightPadding = css({
   padding: '8px',
+  margin:'8px',
   flexWrap: 'wrap',
   width: '100%',
   maxWidth: '400px',

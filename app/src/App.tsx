@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonApp,
-  IonRouterOutlet,
   IonSplitPane,
-  IonGrid,
-  IonRow,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 /* Basic CSS for apps built with Ionic */
@@ -26,25 +22,17 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import LandingPage from './pages/LandingPage';
 import Menu from './components/Menu';
-import FeedPage from './pages/FeedPage';
-import SubmitPage from './pages/SubmitPage';
-import AdminPage from './pages/AdminPage';
-import Postpage from './pages/PostPage';
 import { ApolloProvider } from '@apollo/react-hooks';
 import {
   apolloClient,
   refreshApolloAuthentication,
 } from './services/api/apolloClient';
-import AuthCallbackPage from './pages/AuthCallbackPage';
 import { firebaseApp } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
-import SecureRoute from './components/SecureRoute';
-import { WebHeader, appPageCSS } from './components/WebHeader';
+import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
-import { app } from 'firebase';
 
 export const GlobalAppUtils = {
   showLoading: () => {},

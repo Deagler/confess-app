@@ -7,6 +7,7 @@ import {
   IonToast,
   IonSpinner,
   IonFooter,
+  IonHeader,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { useLocation } from 'react-router-dom';
@@ -28,13 +29,38 @@ import { LocalUserDetail } from './LocalUserDetail';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
 import { css } from 'glamor';
-import { appPageCSS } from './WebHeader';
 import { AppLogo } from './AppLogo';
+import { useShouldBlockMenu } from '../utils/menus';
+import { appPageCSS, offWhiteCSS } from '../theme/global';
 
-const menuCss = css({
+const menuCSS = css({
   borderRight: '0',
   '@media(min-width:992px)': {
     width: '300px',
+  },
+});
+
+const sidebarContent = css({
+  height: '100%',
+  '& .MuiAutocomplete-root': {
+    backgroundColor: 'white',
+  },
+});
+
+const channelsContainer = css({
+  marginTop: '4px',
+  '& ion-list, ion-item': offWhiteCSS,
+  '& ion-list': {
+    padding: '0px !important',
+    height: '100%',
+    marginTop: '10px',
+  },
+  '& ion-item': {
+    borderLeft: 'solid 1px rgb(190,190,190)',
+    borderRadius: '0px !important',
+    '.selected': {
+      borderLeft: 'solid 1px var(--ion-color-primary)',
+    },
   },
 });
 
@@ -60,10 +86,8 @@ const Menu: React.FC<{}> = () => {
   }
 
   const client = useApolloClient();
-  const handleCommunityChange = (
-    event: CustomEvent<SelectChangeEventDetail>
-  ) => {
-    const community: string = event.detail.value!;
+  const handleCommunityChange = (event: React.ChangeEvent<{}>, val: string) => {
+    const community: string = val;
     localStorage.setItem('selectedCommunity', community);
     client.writeQuery({
       query: gql`
@@ -75,40 +99,40 @@ const Menu: React.FC<{}> = () => {
     });
   };
 
-  // cant put this in App because you cant have useLocation
-  // in the same component as the router is defined
-  const location = useLocation();
-  if (location.pathname === '/landing') {
+  const shouldBlockMenu = useShouldBlockMenu();
+  if (shouldBlockMenu) {
     return null;
   }
-
-  console.log(localUserQuery);
 
   return (
     <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonMenu {...css(menuCss, appPageCSS)} contentId="main" type="overlay">
-        <IonToolbar className="ion-hide-lg-up">
-          <AppLogo />
-        </IonToolbar>
+      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
         <IonContent>
-          <CommunitySelect
-            selectedCommunity={selectedCommunity}
-            communityNames={data && data.communities.map((e) => e.name)}
-            loading={loading}
-            onCommunityChange={handleCommunityChange}
-          />
           <div className="ion-hide-lg-up">
-            {localUserQuery.loading || !localUserQuery.called ? (
-              <IonSpinner />
-            ) : localUserQuery.data?.localUser ? (
-              <LocalUserDetail user={localUserQuery.data?.localUser} />
-            ) : (
-              <LoginInput />
-            )}
+            <AppLogo />
           </div>
 
-          <ChannelList channels={channels} loading={false} />
+          <div {...sidebarContent} className="ion-padding">
+            <CommunitySelect
+              selectedCommunity={selectedCommunity}
+              communityNames={data && data.communities.map((e) => e.name)}
+              loading={loading}
+              onCommunityChange={handleCommunityChange}
+            />
+            <div className="ion-hide-lg-up ion-margin">
+              {localUserQuery.loading || !localUserQuery.called ? (
+                <IonSpinner />
+              ) : localUserQuery.data?.localUser ? (
+                <LocalUserDetail user={localUserQuery.data?.localUser} />
+              ) : (
+                <LoginInput />
+              )}
+            </div>
+            <div {...channelsContainer}>
+              <ChannelList channels={channels} loading={false} />
+            </div>
+          </div>
         </IonContent>
         {userLoggedIn && (
           <IonFooter>

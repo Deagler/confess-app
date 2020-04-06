@@ -20,7 +20,7 @@ import { RouteComponentProps } from 'react-router';
 import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
-import { appPageCSS } from '../components/WebHeader';
+import { appPageCSS } from '../theme/global';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
