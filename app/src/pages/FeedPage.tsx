@@ -14,6 +14,8 @@ import {
   IonSplitPane,
   IonCardTitle,
   IonLabel,
+  IonIcon,
+  IonCard,
 } from '@ionic/react';
 
 import Post from '../components/Post';
@@ -23,6 +25,7 @@ import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
+import { chatbox } from 'ionicons/icons';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -44,6 +47,17 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
+        <div className="ion-hide-lg-up ion-margin ion-padding">
+          <IonButton
+            expand="block"
+            routerLink="/page/submit"
+            routerDirection="forward"
+          >
+            <IonIcon color="white" slot="start" icon={chatbox} />
+            New Confession
+          </IonButton>
+        </div>
+
         <h4 className="ion-hide-lg-down ion-margin-top">
           <strong>Feed</strong>
         </h4>
@@ -67,16 +81,6 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
           <IonInfiniteScrollContent loadingText="Loading more confessions..." />
         </IonInfiniteScroll>
       </IonContent>
-
-      <IonFooter>
-        <IonButton
-          expand="block"
-          routerLink="/page/submit"
-          routerDirection="forward"
-        >
-          New Confession
-        </IonButton>
-      </IonFooter>
     </IonPage>
   );
 };

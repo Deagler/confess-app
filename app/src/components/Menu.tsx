@@ -8,6 +8,8 @@ import {
   IonSpinner,
   IonFooter,
   IonHeader,
+  IonButton,
+  IonIcon,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { useLocation } from 'react-router-dom';
@@ -32,6 +34,7 @@ import { css } from 'glamor';
 import { AppLogo } from './AppLogo';
 import { useShouldBlockMenu } from '../utils/menus';
 import { appPageCSS, offWhiteCSS } from '../theme/global';
+import { chatbox } from 'ionicons/icons';
 
 const menuCSS = css({
   borderRight: '0',
@@ -115,12 +118,24 @@ const Menu: React.FC<{}> = () => {
           </div>
 
           <div {...sidebarContent} className="ion-padding">
-            <CommunitySelect
-              selectedCommunity={selectedCommunity}
-              communityNames={data && data.communities.map((e) => e.name)}
-              loading={loading}
-              onCommunityChange={handleCommunityChange}
-            />
+            <IonButton
+              expand="block"
+              routerLink="/page/submit"
+              routerDirection="forward"
+              className="ion-margin-bottom ion-hide-lg-down"
+            >
+              <IonIcon color="white" slot="start" icon={chatbox} />
+              New Confession
+            </IonButton>
+            <div className=" ion-padding-top ion-padding-bottom">
+              <CommunitySelect
+                selectedCommunity={selectedCommunity}
+                communityNames={data && data.communities.map((e) => e.name)}
+                loading={loading}
+                onCommunityChange={handleCommunityChange}
+              />
+            </div>
+
             <div className="ion-hide-lg-up ion-margin-top ion-margin-bottom ion-text-center">
               {localUserQuery.loading || !localUserQuery.called ? (
                 <IonSpinner />
