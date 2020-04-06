@@ -24,13 +24,13 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-export const LogoutButton: React.FC<{}> = () => {
+export const LogoutButton: React.FC<{ showText: boolean }> = ({ showText }) => {
   const history = useHistory();
   const [doLogout, { loading }] = useMutation(LOGOUT_MUTATION, {
     awaitRefetchQueries: true,
     refetchQueries: [{ query: GET_AUTH_STATE }, { query: GET_LOCAL_USER }],
     onCompleted: () => {
-      history.push('/');
+      history.push('/landing');
     },
   });
 
@@ -51,7 +51,7 @@ export const LogoutButton: React.FC<{}> = () => {
         ) : (
           <IonIcon icon={logOutOutline} slot="start" />
         )}
-        Logout
+        {showText && <span>Logout</span>}
       </IonButton>
     </div>
   );

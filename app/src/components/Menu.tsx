@@ -120,7 +120,7 @@ const Menu: React.FC<{}> = () => {
               loading={loading}
               onCommunityChange={handleCommunityChange}
             />
-            <div className="ion-hide-lg-up ion-margin">
+            <div className="ion-hide-lg-up ion-margin-top ion-margin-bottom ion-text-center">
               {localUserQuery.loading || !localUserQuery.called ? (
                 <IonSpinner />
               ) : localUserQuery.data?.localUser ? (
@@ -135,8 +135,8 @@ const Menu: React.FC<{}> = () => {
           </div>
         </IonContent>
         {userLoggedIn && (
-          <IonFooter>
-            <LogoutButton />
+          <IonFooter className="ion-hide-lg-up">
+            <LogoutButton showText={true} />
           </IonFooter>
         )}
       </IonMenu>
