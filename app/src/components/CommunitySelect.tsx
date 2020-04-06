@@ -31,7 +31,7 @@ const CommunitySelect: React.FC<{}> = () => {
     // update apollo cache
     client.writeQuery({
       query: GET_SELECTED_COMMUNITY_ID,
-      data: { selectedCommunity: communityId },
+      data: { selectedCommunityId: communityId },
     });
   };
 

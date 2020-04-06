@@ -61,7 +61,7 @@ const Menu: React.FC<{}> = () => {
           ) : (
             <LoginInput />
           )}
-          <ChannelList channels={channels} loading={false} />
+          <ChannelList />
         </IonContent>
         {userLoggedIn && (
           <IonFooter>
