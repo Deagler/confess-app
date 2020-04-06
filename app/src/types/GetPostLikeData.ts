@@ -7,6 +7,11 @@
 // GraphQL query operation: GetPostLikeData
 // ====================================================
 
+export interface GetPostLikeData_selectedCommunity {
+  __typename: "Community";
+  id: string;
+}
+
 export interface GetPostLikeData_post {
   __typename: "Post";
   id: string;
@@ -14,6 +19,7 @@ export interface GetPostLikeData_post {
 }
 
 export interface GetPostLikeData {
+  selectedCommunity: GetPostLikeData_selectedCommunity | null;
   post: GetPostLikeData_post | null;
 }
 

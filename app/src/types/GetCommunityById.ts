@@ -18,6 +18,7 @@ export interface GetCommunityById_community {
   id: string;
   name: string;
   abbreviation: string;
+  imageURI: string;
   channels: (GetCommunityById_community_channels | null)[];
 }
 

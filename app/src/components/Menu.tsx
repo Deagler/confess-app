@@ -9,6 +9,7 @@ import {
   IonHeader,
   IonButton,
   IonIcon,
+  IonToast,
 } from '@ionic/react';
 import { useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
@@ -74,11 +75,7 @@ const Menu: React.FC<{}> = () => {
 
   return (
     <React.Fragment>
-      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonMenu contentId="main" type="overlay">
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
-        </IonToolbar>
+      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
         <IonContent>
           <div className="ion-hide-lg-up">
             <AppLogo />
@@ -95,12 +92,7 @@ const Menu: React.FC<{}> = () => {
               New Confession
             </IonButton>
             <div className=" ion-padding-top ion-padding-bottom">
-              <CommunitySelect
-                selectedCommunity={selectedCommunity}
-                communityNames={data && data.communities.map((e) => e.name)}
-                loading={loading}
-                onCommunityChange={handleCommunityChange}
-              />
+              <CommunitySelect />
             </div>
 
             <div className="ion-hide-lg-up ion-margin-top ion-margin-bottom ion-text-center">
@@ -113,7 +105,7 @@ const Menu: React.FC<{}> = () => {
               )}
             </div>
             <div {...channelsContainer}>
-              <ChannelList channels={channels} loading={false} />
+              <ChannelList />
             </div>
           </div>
         </IonContent>

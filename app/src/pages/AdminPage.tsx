@@ -56,31 +56,33 @@ const AdminPage: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-        <div className="contentContainer">
-          <h4 className="ion-hide-lg-down ion-margin-top">
-            <strong>Admin Portal</strong>
-          </h4>
-          {loading ? (
-            <FeedSkeleton />
-          ) : (
-            !error &&
-            data?.community?.unapprovedPosts.items &&
-            data.community.unapprovedPosts.items.map((post, index: number) => (
-              <PostRequest
-                key={index}
-                {...post}
-                onModeration={() => handlePostRemoval(index)}
-              />
-            ))
-          )}
-          <br />
-          <IonInfiniteScroll
-            threshold="100px"
-            disabled={!hasMorePosts}
-            onIonInfinite={fetchMorePosts}
-          >
-            <IonInfiniteScrollContent loadingText="Loading more confessions..." />
-          </IonInfiniteScroll>
+          <div className="contentContainer">
+            <h4 className="ion-hide-lg-down ion-margin-top">
+              <strong>Admin Portal</strong>
+            </h4>
+            {loading ? (
+              <FeedSkeleton />
+            ) : (
+              !error &&
+              data?.community?.unapprovedPosts.items &&
+              data.community.unapprovedPosts.items.map(
+                (post, index: number) => (
+                  <PostRequest
+                    key={index}
+                    {...post}
+                    onModeration={() => handlePostRemoval(index)}
+                  />
+                )
+              )
+            )}
+            <br />
+            <IonInfiniteScroll
+              threshold="100px"
+              disabled={!hasMorePosts}
+              onIonInfinite={fetchMorePosts}
+            >
+              <IonInfiniteScrollContent loadingText="Loading more confessions..." />
+            </IonInfiniteScroll>
           </div>
         </IonContent>
       </IonPage>

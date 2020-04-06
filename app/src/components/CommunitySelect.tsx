@@ -5,6 +5,8 @@ import {
   IonSelectOption,
   IonLabel,
   IonSpinner,
+  IonThumbnail,
+  IonImg,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
@@ -13,9 +15,20 @@ import { GetCommunities } from '../types/GetCommunities';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { css } from 'glamor';
+
+const communityThumbnail = css({
+  width: '48px !important',
+  height: '48px !important',
+});
 
 const CommunitySelect: React.FC<{}> = () => {
   const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
+  const {
+    loading: selectedCommunityLoading,
+    data: selectedCommData,
+  } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
 
   const popoverOptions = {
     header: 'University',
@@ -24,9 +37,7 @@ const CommunitySelect: React.FC<{}> = () => {
 
   const client = useApolloClient();
 
-  const handleCommunityChange = (e: CustomEvent<SelectChangeEventDetail>) => {
-    const communityId = e.detail.value;
-
+  const handleCommunityChange = (communityId) => {
     const selectedCommunity =
       data &&
       data.communities.find((community) => community?.id === communityId);
@@ -44,11 +55,17 @@ const CommunitySelect: React.FC<{}> = () => {
   return (
     <Autocomplete
       id="community-selector"
-      options={communityNames || []}
-      getOptionLabel={(option) => option}
-      defaultValue={selectedCommunity}
-      getOptionSelected={(option, value) => option == selectedCommunity}
-      onChange={(e, val) => onCommunityChange}
+      options={data?.communities || []}
+      getOptionLabel={(option) => option?.abbreviation || ''}
+      value={
+        selectedCommData?.selectedCommunity
+          ? selectedCommData!.selectedCommunity
+          : null
+      }
+      getOptionSelected={(option, value) => {
+        return option!.id == value!.id;
+      }}
+      onChange={(e, val) => handleCommunityChange(val.id)}
       disableClearable={true}
       renderInput={(params) => (
         <TextField
@@ -67,18 +84,18 @@ const CommunitySelect: React.FC<{}> = () => {
         />
       )}
       renderOption={(option) =>
-        !loading ? (
+        !loading && !selectedCommunityLoading ? (
           <React.Fragment>
             <IonThumbnail slot="start">
-              <IonImg src={'assets/uoa.svg'} />
+              <IonImg {...communityThumbnail} src={option!.imageURI} />
             </IonThumbnail>
-            <IonLabel>{option}</IonLabel>
+            <IonLabel>{option!.name}</IonLabel>
           </React.Fragment>
         ) : (
           'Loading...'
         )
       }
-      loading={loading}
+      loading={loading || selectedCommunityLoading}
     />
   );
 };

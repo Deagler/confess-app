@@ -77,7 +77,7 @@ const Postpage: React.FC = () => {
         <div className="contentContainer">
           <div
             style={{ flex: 0, width: 'fit-content' }}
-            className="ion-hide-lg-down ion-justify-self-start ion-padding-top ion-margin-left"
+            className="ion-hide-lg-down ion-justify-self-start ion-margin-left"
           >
             <IonBackButton defaultHref="/page/posts" text="Back To Feed" />
           </div>
@@ -108,7 +108,12 @@ const Postpage: React.FC = () => {
                 <IonList>
                   {data?.post?.comments?.items.map(
                     (comment: CommentData | null, i: number) => (
-                      <Comment key={i} {...comment!} onReply={handleReply} />
+                      <Comment
+                        key={i}
+                        {...comment!}
+                        onReply={handleReply}
+                        postIdForComment={data?.post?.id}
+                      />
                     )
                   )}
                 </IonList>
@@ -123,42 +128,6 @@ const Postpage: React.FC = () => {
               </IonCard>
             ))}
         </div>
-        <NewCommentInput
-          onCommentCreated={handleCommentCreated}
-          inputRef={newCommentElement}
-          postId={postId}
-        />
-        {(loading && (
-          <IonCard>
-            <IonCardContent className="ion-text-center">
-              <IonSpinner />
-            </IonCardContent>
-          </IonCard>
-        )) ||
-          (data?.post?.comments?.items.length !== 0 && (
-            <IonCard>
-              <IonList>
-                {data?.post?.comments?.items.map(
-                  (comment: CommentData | null, i: number) => (
-                    <Comment
-                      key={i}
-                      {...comment!}
-                      onReply={handleReply}
-                      postIdForComment={data?.post?.id}
-                    />
-                  )
-                )}
-              </IonList>
-              <br />
-              <IonInfiniteScroll
-                threshold="100px"
-                disabled={!hasMoreComments}
-                onIonInfinite={fetchMoreComments}
-              >
-                <IonInfiniteScrollContent loadingText="Loading more comments..." />
-              </IonInfiniteScroll>
-            </IonCard>
-          ))}
       </IonContent>
     </IonPage>
   );

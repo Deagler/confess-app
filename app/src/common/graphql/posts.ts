@@ -129,9 +129,6 @@ export const GET_POST_LIKE_STATUS = gql`
 
 export const SERVER_TOGGLE_LIKE_POST = gql`
   mutation ServerToggleLikePost($communityId: ID!, $postId: ID!) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     toggleLikePost(communityId: $communityId, postId: $postId) {
       code
       success
