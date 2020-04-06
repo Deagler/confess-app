@@ -70,6 +70,7 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
     throw new AuthenticationError('Only administrators can moderate posts');
   }
 
+  const { communityRef } = await verifyCommunity(communityId);
   const { postRef } = await verifyPost(communityId, postId);
 
   // update post
@@ -80,6 +81,21 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
       lastUpdated: moment().unix(),
     },
   };
+
+  await firestore.runTransaction((t) =>
+    t.get(communityRef).then((communityDoc) => {
+      t.set(
+        postRef,
+        { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
+        { merge: true }
+      );
+      t.update(communityRef, {
+        totalApprovedPosts: admin.firestore.FieldValue.increment(1),
+      });
+      return Promise.resolve();
+    })
+  );
+
   await postRef.update(patch);
 
   // success
