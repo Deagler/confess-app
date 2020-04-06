@@ -6,8 +6,9 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonToast,
 } from '@ionic/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
@@ -56,7 +57,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
     : 'unknown';
   const authorCommunity = author?.community?.abbreviation ?? '';
-
+  const [showToast, setShowToast] = useState<boolean>(false);
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
@@ -95,66 +96,98 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
       },
     });
   };
+
+  const handleShareClick = () => {
+    let message;
+    let newVariable: any;
+    newVariable = window.navigator;
+    if (newVariable.share && newVariable) {
+      newVariable
+        .share({
+          title: 'Your friend shared a comment from Confess App ',
+          text: 'A good comment from Confess App: \n' + content,
+          url: window.location.href,
+        })
+        .then(() => (message = 'Successful share'))
+        .catch((error) => (message = 'Error sharing ' + error));
+    } else {
+      setShowToast(true);
+    }
+  };
+
   return (
-    <IonItem>
-      <IonGrid>
-        <IonRow>
-          <IonCol size="12" size-sm="6">
-            <IonItem lines="none">
-              <IonLabel slot="start">
-                <h6>
-                  {authorDisplayName} <span>&middot;</span> {authorCommunity}
-                </h6>
-              </IonLabel>
-            </IonItem>
-          </IonCol>
-          <IonCol size="12" size-sm="6">
-            <IonItem lines="none">
-              <IonIcon color="medium" icon={timeOutline} size="medium" />
-              <IonLabel color="medium">
-                <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
-              </IonLabel>
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <p>{content}</p>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem lines="none">
-              <IonButton
-                onClick={() => handleLikeButtonClick(postIdForComment, id)}
-                fill="clear"
-                expand="full"
-                disabled={!userLoggedIn || serverLikeInfo.loading}
-              >
-                <IonIcon
-                  color={isCommentLikedByUser ? 'danger' : 'primary'}
-                  icon={heart}
-                />
-                <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
-                  {totalLikes}
+    <>
+      <IonToast
+        isOpen={showToast}
+        message="Web Share API is not supported in your browser."
+        duration={2000}
+        onDidDismiss={() => setShowToast(false)}
+      />
+      <IonItem>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-sm="6">
+              <IonItem lines="none">
+                <IonLabel slot="start">
+                  <h6>
+                    {authorDisplayName} <span>&middot;</span> {authorCommunity}
+                  </h6>
                 </IonLabel>
-              </IonButton>
-              <IonButton
-                fill="clear"
-                expand="full"
-                color="medium"
-                onClick={() => onReply(authorDisplayName)}
-              >
-                <IonIcon color="medium" icon={chatbox} />
-              </IonButton>
-              <IonButton fill="clear" expand="full" color="medium">
-                <IonIcon icon={shareSocial} />
-              </IonButton>
-            </IonItem>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonItem>
+              </IonItem>
+            </IonCol>
+            <IonCol size="12" size-sm="6">
+              <IonItem lines="none">
+                <IonIcon color="medium" icon={timeOutline} size="medium" />
+                <IonLabel color="medium">
+                  <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
+                </IonLabel>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <p>{content}</p>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonItem lines="none">
+                <IonButton
+                  onClick={() => handleLikeButtonClick(postIdForComment, id)}
+                  fill="clear"
+                  expand="full"
+                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                >
+                  <IonIcon
+                    color={isCommentLikedByUser ? 'danger' : 'primary'}
+                    icon={heart}
+                  />
+                  <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
+                    {totalLikes}
+                  </IonLabel>
+                </IonButton>
+                <IonButton
+                  fill="clear"
+                  expand="full"
+                  color="medium"
+                  onClick={() => onReply(authorDisplayName)}
+                >
+                  <IonIcon color="medium" icon={chatbox} />
+                </IonButton>
+                <IonButton
+                  onClick={handleShareClick}
+                  fill="clear"
+                  expand="full"
+                  color="medium"
+                >
+                  <IonIcon icon={shareSocial} />
+                </IonButton>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonItem>
+    </>
   );
 };
 
