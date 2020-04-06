@@ -14,6 +14,7 @@ import {
   IonCardContent,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonButton,
 } from '@ionic/react';
 import Comment, { CommentData } from '../components/Comment';
 import Post from '../components/Post';
@@ -25,6 +26,7 @@ import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
 import update from 'immutability-helper';
 import PostSkeleton from '../components/PostSkeleton';
 import { usePaginatedPostQuery } from '../customHooks/pagination';
+import { appPageCSS } from '../theme/global';
 
 const Postpage: React.FC = () => {
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
@@ -61,9 +63,9 @@ const Postpage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage {...appPageCSS}>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonHeader>
+      <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/page/posts" text="Back" />
@@ -72,6 +74,12 @@ const Postpage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <div
+          style={{ flex: 0, width: 'fit-content' }}
+          className="ion-hide-lg-down ion-justify-self-start ion-padding-top ion-margin-left"
+        >
+          <IonBackButton defaultHref="/page/posts" text="Back To Feed" />
+        </div>
         <div className="PostReadOnly">
           {(loading && <PostSkeleton />) ||
             (data?.post && (

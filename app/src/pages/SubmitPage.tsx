@@ -16,6 +16,12 @@ import {
   IonTextarea,
   IonToast,
   IonSpinner,
+  IonCard,
+  IonFooter,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCardContent,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SubmitPage.css';
@@ -26,6 +32,7 @@ import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
 } from '../types/SubmitPostForApproval';
+import { appPageCSS } from '../theme/global';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -42,6 +49,85 @@ const channels = [
   'Arts',
   'Very long name to demonstrate that text wrapping is working',
 ];
+
+const SubmitForm: React.FC<{
+  selectedChannel;
+  setSelectedChannel;
+  setTitle;
+  title;
+  setConfessionText;
+  confessionText;
+  authorAlias;
+  setAuthorAlias;
+}> = ({
+  selectedChannel,
+  setSelectedChannel,
+  setTitle,
+  title,
+  setConfessionText,
+  confessionText,
+  authorAlias,
+  setAuthorAlias,
+}) => {
+  return (
+    <IonList>
+      <IonItem>
+        <IonLabel style={selectedChannel ? {} : { color: 'lightgrey' }}>
+          {selectedChannel || 'Choose a channel'}
+        </IonLabel>
+        <IonSelect
+          selectedText={' '}
+          interfaceOptions={channelInterfaceOptions}
+          interface="popover"
+          multiple={false}
+          onIonChange={(e) => setSelectedChannel(e.detail.value)}
+          value={selectedChannel}
+        >
+          {channels.map((channel, index) => (
+            <IonSelectOption key={index}>{channel}</IonSelectOption>
+          ))}
+        </IonSelect>
+      </IonItem>
+      <IonItem>
+        <IonLabel position="stacked">Title</IonLabel>
+        <IonInput
+          clearInput={true}
+          inputMode="text"
+          maxlength={255}
+          minlength={2}
+          placeholder="Enter confession title"
+          required={true}
+          onIonChange={(e) => setTitle(e.detail.value!)}
+          value={title}
+          spellCheck={true}
+        />
+      </IonItem>
+      <IonItem>
+        <IonLabel position="stacked">Your Confession</IonLabel>
+        <IonTextarea
+          rows={10}
+          required={true}
+          placeholder="Enter your confession. Make sure to follow the rules, all posts are moderated before they can be seen. "
+          onIonChange={(e) => setConfessionText(e.detail.value!)}
+          value={confessionText}
+          spellCheck={true}
+        />
+      </IonItem>
+      <IonItem>
+        <IonLabel position="stacked">Author (Optional)</IonLabel>
+        <IonInput
+          clearInput={true}
+          inputMode="text"
+          maxlength={255}
+          minlength={2}
+          placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
+          onIonChange={(e) => setAuthorAlias(e.detail.value!)}
+          value={authorAlias}
+        />
+      </IonItem>
+    </IonList>
+  );
+};
 
 const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // TODO: Add form handling, can be done with state or libraries such as Formik
@@ -86,7 +172,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       // show success message
       setSuccessToastVisible(true);
 
-      history.replace(`/page/posts`);
+      history.goBack();
       return;
     } catch (error) {
       console.error(error);
@@ -94,7 +180,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <IonPage>
+    <IonPage {...appPageCSS}>
       <IonToast
         isOpen={successToastVisible}
         message="Post submitted for approval"
@@ -102,7 +188,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         onDidDismiss={() => setSuccessToastVisible(false)}
       />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonHeader>
+      <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/page/posts" text="Cancel" />
@@ -122,66 +208,74 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               {loading ? <IonSpinner /> : 'Post'}
             </IonButton>
           </IonButtons>
-          <IonTitle>Create Post</IonTitle>
+          <IonTitle>Create Confession</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonList>
-          <IonItem>
-            <IonLabel style={selectedChannel ? {} : { color: 'lightgrey' }}>
-              {selectedChannel || 'Choose a channel'}
-            </IonLabel>
-            <IonSelect
-              selectedText={' '}
-              interfaceOptions={channelInterfaceOptions}
-              interface="popover"
-              multiple={false}
-              onIonChange={(e) => setSelectedChannel(e.detail.value)}
-              value={selectedChannel}
-            >
-              {channels.map((channel, index) => (
-                <IonSelectOption key={index}>{channel}</IonSelectOption>
-              ))}
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Title</IonLabel>
-            <IonInput
-              clearInput={true}
-              inputMode="text"
-              maxlength={255}
-              minlength={2}
-              placeholder="Enter confession title"
-              required={true}
-              onIonChange={(e) => setTitle(e.detail.value!)}
-              value={title}
-              spellCheck={true}
+        <IonTitle className="ion-hide-lg-down ion-padding-top">
+          Create a new Confession
+        </IonTitle>
+        <IonCard className="ion-hide-lg-down">
+          <IonCardContent>
+            <SubmitForm
+              selectedChannel={selectedChannel}
+              setSelectedChannel={setSelectedChannel}
+              setTitle={setTitle}
+              title={title}
+              setConfessionText={setConfessionText}
+              confessionText={confessionText}
+              authorAlias={authorAlias}
+              setAuthorAlias={setAuthorAlias}
             />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Your Confession</IonLabel>
-            <IonTextarea
-              rows={10}
-              required={true}
-              placeholder="Enter your confession. Make sure to follow the rules, all posts are moderated before they can be seen. "
-              onIonChange={(e) => setConfessionText(e.detail.value!)}
-              value={confessionText}
-              spellCheck={true}
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Author (Optional)</IonLabel>
-            <IonInput
-              clearInput={true}
-              inputMode="text"
-              maxlength={255}
-              minlength={2}
-              placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
-              onIonChange={(e) => setAuthorAlias(e.detail.value!)}
-              value={authorAlias}
-            />
-          </IonItem>
-        </IonList>
+          </IonCardContent>
+
+          <IonFooter>
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <IonCol>
+                  <IonButton
+                    onClick={() => {
+                      history.goBack();
+                    }}
+                    color="danger"
+                    expand="block"
+                  >
+                    Cancel
+                  </IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton
+                    disabled={!(selectedChannel && title && confessionText)}
+                    onClick={() =>
+                      handleSubmit(
+                        selectedChannel!,
+                        title!,
+                        confessionText!,
+                        authorAlias
+                      )
+                    }
+                    color="primary"
+                    expand="block"
+                  >
+                    Submit
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonFooter>
+        </IonCard>
+        <div className="ion-hide-lg-up">
+          <SubmitForm
+            selectedChannel={selectedChannel}
+            setSelectedChannel={setSelectedChannel}
+            setTitle={setTitle}
+            title={title}
+            setConfessionText={setConfessionText}
+            confessionText={confessionText}
+            authorAlias={authorAlias}
+            setAuthorAlias={setAuthorAlias}
+          />
+        </div>
       </IonContent>
     </IonPage>
   );
