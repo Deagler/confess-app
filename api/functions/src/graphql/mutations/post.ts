@@ -141,7 +141,16 @@ async function rejectPost(
       reason,
     },
   };
-  await postRef.update(patch);
+
+  await firestore.runTransaction((t) =>
+    t.get(postRef).then((postDoc) => {
+      if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
+        throw new ApolloError(`post ${postRef.id} has already been moderated`);
+      }
+      t.update(postRef, patch);
+      return Promise.resolve();
+    })
+  );
 
   // success
   return {
