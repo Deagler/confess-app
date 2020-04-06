@@ -26,6 +26,8 @@ const webHeader = css({
   MozBoxShadow: '0 4px 6px -6px #222',
   boxShadow: '0 4px 6px -6px #222',
   zIndex: 9999999,
+  backgroundColor: 'white',
+  '--background': 'white',
 });
 
 const loginInputContainer = css({
@@ -33,12 +35,14 @@ const loginInputContainer = css({
   flex: 1,
   justifyContent: 'flex-end',
   width: '100%',
-  alignItems: 'center'
+  alignItems: 'center',
+  zIndex: 9999999,
 });
 
 const spinnerContainer = css({
   height: '100%',
   width: '250px',
+  zIndex: 9999999,
 });
 
 export const WebHeader: React.FC<{}> = () => {

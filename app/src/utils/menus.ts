@@ -1,10 +1,11 @@
 import { useLocation } from 'react-router';
 
+const pagesToBlockMenuOn = ['/landing', '/callback'];
 export const useShouldBlockMenu = () => {
   const location = useLocation();
-  if (location.pathname === '/landing') {
+  if (pagesToBlockMenuOn.includes(location.pathname)) {
     return true;
   }
 
   return false;
-}
+};

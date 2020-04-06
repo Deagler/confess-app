@@ -1,15 +1,20 @@
 import { css } from 'glamor';
 import { IonSpinner } from '@ionic/react';
 import React from 'react';
+import { offWhiteCSS } from '../theme/global';
 
-const loadingContainer = css({
-  display: 'flex',
-  width: '100wh',
-  height: '100vh',
-  justifyContent: 'center',
-  alignContent: 'center',
-  alignItems: 'center',
-});
+const loadingContainer = css(
+  {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    zIndex:-1
+  },
+  offWhiteCSS
+);
 
 const largeSpinner = css({
   width: '64px',

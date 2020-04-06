@@ -7,6 +7,8 @@ import {
   IonCardContent,
   IonSpinner,
   IonAlert,
+  IonTitle,
+  IonLabel,
 } from '@ionic/react';
 
 import { RouteComponentProps, Redirect } from 'react-router';
@@ -17,6 +19,53 @@ import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
+import { appPageCSS, offWhiteCSS } from '../theme/global';
+import { css } from 'glamor';
+
+const callbackPageCSS = css({
+  height: '100vh',
+  width: '100wh',
+  justifyContent: 'center',
+  alignContent: 'center',
+  alignItems: 'center',
+});
+
+const loginCard = css({
+  maxWidth: '400px',
+});
+
+const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
+  mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
+    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
+      @client {
+      code
+      success
+      message
+    }
+  }
+`;
+
+const ATTEMPT_SIGNUP = gql`
+  mutation AttemptSignup($firstName: String!, $lastName: String!) {
+    attemptSignUp(firstName: $firstName, lastName: $lastName) {
+      code
+      success
+      message
+      user {
+        id
+        firstName
+        lastName
+        communityUsername
+        email
+        community {
+          id
+          name
+          abbreviation
+        }
+      }
+    }
+  }
+`;
 
 const LoggingInCardContent: React.FC = () => {
   return (
@@ -63,39 +112,6 @@ const EmailInputCardContent: React.FC<any> = ({
     </IonCardContent>
   );
 };
-
-const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
-  mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
-    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
-      @client {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const ATTEMPT_SIGNUP = gql`
-  mutation AttemptSignup($firstName: String!, $lastName: String!) {
-    attemptSignUp(firstName: $firstName, lastName: $lastName) {
-      code
-      success
-      message
-      user {
-        id
-        firstName
-        lastName
-        communityUsername
-        email
-        community {
-          id
-          name
-          abbreviation
-        }
-      }
-    }
-  }
-`;
 
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [attemptLoginMutation, attemptLoginInfo] = useMutation(
@@ -218,8 +234,13 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <IonPage>
-      <IonCard>{renderAppropriateLoginCard()}</IonCard>
+    <IonPage {...css(offWhiteCSS, callbackPageCSS)}>
+      <div className="ion-text-center">
+        <IonCard {...loginCard}>
+          <IonCardTitle className="ion-padding-top">You're almost in!</IonCardTitle>
+          {renderAppropriateLoginCard()}
+        </IonCard>
+      </div>
     </IonPage>
   );
 };

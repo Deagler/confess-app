@@ -12,6 +12,8 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonSplitPane,
+  IonCardTitle,
+  IonLabel,
 } from '@ionic/react';
 
 import Post from '../components/Post';
@@ -42,7 +44,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
-        <IonTitle className="ion-hide-lg-down ion-padding-top">Feed</IonTitle>
+        <h4 className="ion-hide-lg-down ion-margin-top">
+          <strong>Feed</strong>
+        </h4>
 
         {(loading && <FeedSkeleton />) ||
           (data?.community?.feed?.items &&

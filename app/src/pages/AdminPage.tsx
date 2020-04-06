@@ -10,12 +10,14 @@ import {
   IonToast,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonLabel,
 } from '@ionic/react';
 
 import PostRequest from '../components/PostRequest';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedUnapprovedPostsQuery } from '../customHooks/pagination';
 import update from 'immutability-helper';
+import { appPageCSS } from '../theme/global';
 
 const AdminPage: React.FC = () => {
   const {
@@ -43,17 +45,20 @@ const AdminPage: React.FC = () => {
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonPage>
-        <IonHeader>
+      <IonPage {...appPageCSS}>
+        <IonHeader className="ion-hide-lg-up">
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
             </IonButtons>
-            <IonTitle>Admin</IonTitle>
+            <IonTitle>Admin Portal</IonTitle>
           </IonToolbar>
         </IonHeader>
 
         <IonContent>
+          <h4 className="ion-hide-lg-down ion-margin-top">
+            <strong>Admin Portal</strong>
+          </h4>
           {loading ? (
             <FeedSkeleton />
           ) : (

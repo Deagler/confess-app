@@ -212,9 +212,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonTitle className="ion-hide-lg-down ion-padding-top">
-          Create a new Confession
-        </IonTitle>
+        <h4 className="ion-hide-lg-down ion-margin-top">
+          <strong>Create a new confession</strong>
+        </h4>
         <IonCard className="ion-hide-lg-down">
           <IonCardContent>
             <SubmitForm

@@ -120,7 +120,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           (expanded ? 'See Less' : 'See More')}
       </IonButton>
 
-      <IonItemDivider />
+      <IonItemDivider color="white"/>
 
       <IonGrid>
         <IonRow className="ion-justify-content-center">

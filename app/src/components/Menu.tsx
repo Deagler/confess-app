@@ -38,6 +38,7 @@ const menuCSS = css({
   '@media(min-width:992px)': {
     width: '300px',
   },
+  scroll: 'none',
 });
 
 const sidebarContent = css({

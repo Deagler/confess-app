@@ -76,7 +76,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         <IonCardContent>{content}</IonCardContent>
         <IonCardContent>{author || 'Anonymous'}</IonCardContent>
 
-        <IonItemDivider />
+        <IonItemDivider color="white" />
 
         <IonGrid>
           <IonRow className="ion-justify-content-center">
