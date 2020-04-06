@@ -2,7 +2,15 @@ import gql from 'graphql-tag';
 
 export const GET_SELECTED_COMMUNITY = gql`
   query GetSelectedCommunity {
-    selectedCommunity @client
+    selectedCommunity @client {
+      id
+      name
+      abbreviation
+      channels {
+        id
+        name
+      }
+    }
   }
 `;
 

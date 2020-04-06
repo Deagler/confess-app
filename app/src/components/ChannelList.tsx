@@ -5,58 +5,65 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
+  IonSpinner,
+  IonToast,
 } from '@ionic/react';
 import { airplaneOutline } from 'ionicons/icons';
+import { useQuery } from '@apollo/react-hooks';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
-export interface ChannelListProps {
-  channels?: string[];
-  loading: boolean;
-}
-
-const ChannelList: React.FC<ChannelListProps> = (props: ChannelListProps) => {
-  const { loading, channels } = props;
-
+const ChannelList: React.FC<{}> = () => {
   const [selectedChannel, setSelectedChannel] = useState<string>();
+  const { data, loading, error } = useQuery<GetSelectedCommunity>(
+    GET_SELECTED_COMMUNITY
+  );
 
   return (
-    <IonList>
-      {loading ? (
-        <IonItem>...Loading</IonItem>
-      ) : (
-        <>
-          <IonMenuToggle autoHide={false}>
-            <IonItem
-              className={selectedChannel === 'all' ? 'selected' : ''}
-              routerLink={`/page/posts`}
-              routerDirection="none"
-              lines="none"
-              detail={false}
-              onClick={() => setSelectedChannel('all')}
-            >
-              <IonIcon slot="start" icon={airplaneOutline} />
-              <IonLabel>All</IonLabel>
-            </IonItem>
-          </IonMenuToggle>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonList>
+        {loading ? (
+          <IonSpinner />
+        ) : (
+          <>
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                className={selectedChannel === 'all' ? 'selected' : ''}
+                routerLink={`/page/posts`}
+                routerDirection="none"
+                lines="none"
+                detail={false}
+                onClick={() => setSelectedChannel('all')}
+              >
+                <IonIcon slot="start" icon={airplaneOutline} />
+                <IonLabel>All</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
 
-          {channels &&
-            channels.map((channel: string, index: number) => (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem
-                  className={selectedChannel === channel ? 'selected' : ''}
-                  routerLink={`/page/posts?community=${channel}`}
-                  routerDirection="none"
-                  lines="none"
-                  detail={false}
-                  onClick={() => setSelectedChannel(channel)}
-                >
-                  <IonIcon slot="start" icon={airplaneOutline} />
-                  <IonLabel>{channel}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            ))}
-        </>
-      )}
-    </IonList>
+            {!error &&
+              data &&
+              data.selectedCommunity!.channels.map((channel, index: number) => (
+                <IonMenuToggle key={index} autoHide={false}>
+                  <IonItem
+                    className={
+                      selectedChannel === channel!.name ? 'selected' : ''
+                    }
+                    routerLink={`/page/posts?community=${channel!.name}`}
+                    routerDirection="none"
+                    lines="none"
+                    detail={false}
+                    onClick={() => setSelectedChannel(channel!.name)}
+                  >
+                    <IonIcon slot="start" icon={airplaneOutline} />
+                    <IonLabel>{channel!.name}</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              ))}
+          </>
+        )}
+      </IonList>
+    </>
   );
 };
 

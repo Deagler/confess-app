@@ -4,15 +4,16 @@ import { MemoryRouter } from 'react-router-dom';
 import Menu from './Menu';
 import { MockedProvider } from '@apollo/react-testing';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 const mocks = [
   {
     request: {
-      query: GET_COMMUNITIES,
+      query: GET_SELECTED_COMMUNITY,
     },
     result: {
       data: {
-        communities: {
+        selectedCommunity: {
           id: '123',
           name: 'university',
           abbreviation: 'uni',
@@ -23,6 +24,28 @@ const mocks = [
             },
           ],
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_COMMUNITIES,
+    },
+    result: {
+      data: {
+        communities: [
+          {
+            id: '123',
+            name: 'university',
+            abbreviation: 'uni',
+            channels: [
+              {
+                id: '456',
+                name: 'my channel',
+              },
+            ],
+          },
+        ],
       },
     },
   },
