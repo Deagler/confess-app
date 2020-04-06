@@ -272,7 +272,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                       color="primary"
                       expand="block"
                     >
-                      Submit
+                      {loading ? <IonSpinner /> : 'Submit'}
                     </IonButton>
                   </IonCol>
                 </IonRow>
