@@ -32,8 +32,6 @@ const Menu: React.FC<{}> = () => {
 
   // restore selected community from local storage
   const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
-  const selectedCommunity: string =
-    selectedCommunityQuery.data?.selectedCommunity || '';
 
   const channels: string[] = [];
   // TODO: get channels from selected community

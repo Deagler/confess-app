@@ -30,7 +30,7 @@ export interface getLocalState_localUser {
 }
 
 export interface getLocalState {
-  selectedCommunity: string | null;
+  selectedCommunityId: string | null;
   authState: getLocalState_authState | null;
   localUser: getLocalState_localUser | null;
 }

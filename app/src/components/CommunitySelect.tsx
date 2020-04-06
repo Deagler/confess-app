@@ -10,7 +10,7 @@ import { SelectChangeEventDetail } from '@ionic/core';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
-import { gql } from 'apollo-boost';
+import { GET_SELECTED_COMMUNITY_ID } from '../common/graphql/localState';
 
 const CommunitySelect: React.FC<{}> = () => {
   const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
@@ -26,15 +26,11 @@ const CommunitySelect: React.FC<{}> = () => {
     const communityId = e.detail.value;
 
     // persist selected community across sessions
-    localStorage.setItem('selectedCommunity', communityId);
+    localStorage.setItem('selectedCommunityId', communityId);
 
     // update apollo cache
     client.writeQuery({
-      query: gql`
-        query getSelectedCommunity {
-          selectedCommunity
-        }
-      `,
+      query: GET_SELECTED_COMMUNITY_ID,
       data: { selectedCommunity: communityId },
     });
   };

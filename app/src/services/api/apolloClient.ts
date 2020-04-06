@@ -47,7 +47,7 @@ async function writeInitialData() {
   cache.writeQuery({
     query: gql`
       query getLocalState {
-        selectedCommunity
+        selectedCommunityId
         authState {
           accessToken
         }
@@ -66,7 +66,7 @@ async function writeInitialData() {
       }
     `,
     data: {
-      selectedCommunity: localStorage.getItem('selectedCommunity'),
+      selectedCommunityId: localStorage.getItem('selectedCommunityId'),
       authState: localStorage.getItem('authState')
         ? JSON.parse(localStorage.getItem('authState')!)
         : null,
