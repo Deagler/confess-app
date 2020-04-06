@@ -34,25 +34,39 @@ export const SubmittableEmailInput: React.FC<{
   submitText: string;
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
   return (
-    <div {...lightPadding}>
-      <div {...inputBoxStyling}>
-        <IonInput
-          value={email}
-          style={{ maxWidth: '400px', minWidth: '250px' }}
-          placeholder={placeholderText}
-          onIonChange={(e) => setEmail(e.detail.value!)}
-        />
-      </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const isValid = email && IsValidEmailFormat(email) && !loading;
+        if (!isValid) {
+          return;
+        }
+        submit(email);
+      }}
+    >
+      <div {...lightPadding}>
+        <div {...inputBoxStyling}>
+          <IonInput
+            value={email}
+            inputmode="email"
+            type="email"
+            style={{ maxWidth: '400px', minWidth: '250px' }}
+            placeholder={placeholderText}
+            onIonChange={(e) => setEmail(e.detail.value!)}
+          />
+        </div>
 
-      <div>
-        <IonButton
-          disabled={!email || !IsValidEmailFormat(email) || loading}
-          onClick={() => submit(email)}
-          fill="solid"
-        >
-          {loading ? <IonSpinner /> : submitText}
-        </IonButton>
+        <div>
+          <IonButton
+            disabled={!email || !IsValidEmailFormat(email) || loading}
+            onClick={() => submit(email)}
+            fill="solid"
+            type="submit"
+          >
+            {loading ? <IonSpinner /> : submitText}
+          </IonButton>
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
