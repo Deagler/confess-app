@@ -66,7 +66,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       />
       <IonCard>
         <IonCardHeader>
-          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+          <IonCardSubtitle>{`Post ID: ${id}`}</IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
           <IonCardSubtitle>
             {moment.unix(creationTimestamp).fromNow()}

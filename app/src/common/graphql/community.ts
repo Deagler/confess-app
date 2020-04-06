@@ -12,6 +12,7 @@ export const GET_COMMUNITY_POSTS = gql`
       feed(sortBy: $sortBy, cursor: $cursor, limit: $limit) {
         items {
           id
+          postNumber
           title
           authorAlias
           creationTimestamp

@@ -12,6 +12,7 @@ import { SortByInput } from "./globalTypes";
 export interface GetCommunityPosts_community_feed_items {
   __typename: "Post";
   id: string;
+  postNumber: number | null;
   title: string;
   authorAlias: string | null;
   creationTimestamp: number;

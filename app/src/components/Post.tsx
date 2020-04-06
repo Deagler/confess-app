@@ -27,6 +27,7 @@ import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 
 export interface PostData {
   id: string;
+  postNumber?: number | null;
   title: string;
   creationTimestamp: number;
   content: string;
@@ -46,6 +47,7 @@ const MAX_CONTENT_LENGTH: number = 600;
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
+    postNumber,
     title,
     creationTimestamp,
     content,
@@ -98,7 +100,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     <IonCard>
       <Link to={`/page/posts/${id}`} className="Link">
         <IonCardHeader>
-          <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+          <IonCardSubtitle>
+            {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
+          </IonCardSubtitle>
           <IonCardTitle>{title}</IonCardTitle>
           <IonCardSubtitle>
             {moment.unix(creationTimestamp).fromNow()}

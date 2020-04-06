@@ -10,6 +10,7 @@ export const GET_POST_BY_ID = gql`
   ) {
     post(communityId: $communityId, postId: $postId) {
       id
+      postNumber
       creationTimestamp
       authorAlias
       title
