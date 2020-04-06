@@ -13,13 +13,15 @@ import {
 } from '@ionic/react';
 import React, { useState, RefObject } from 'react';
 import { send } from 'ionicons/icons';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SUBMIT_COMMENT } from '../common/graphql/comments';
 import {
   SubmitCommentVariables,
   SubmitComment,
   SubmitComment_submitComment_comment,
 } from '../types/SubmitComment';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -38,6 +40,9 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     SubmitComment,
     SubmitCommentVariables
   >(SUBMIT_COMMENT);
+  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
+    GET_SELECTED_COMMUNITY
+  );
   const [content, setContent] = useState<string>();
 
   const handleSubmit = async () => {
@@ -45,7 +50,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     try {
       const { data } = await submitComment({
         variables: {
-          communityId: '', // comes from client subquery
+          communityId: selectedCommunityQuery.data!.selectedCommunity!.id, 
           postId: postId!,
           content: content!,
         },

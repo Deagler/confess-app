@@ -14,11 +14,13 @@ import {
   IonSpinner,
 } from '@ionic/react';
 import moment from 'moment';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { APPROVE_POST } from '../common/graphql/admin';
 import { ApprovePost, ApprovePostVariables } from '../types/ApprovePost';
 import RejectPostModal from '../components/RejectPostModal';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 export interface PostRequestProps {
   id: string;
@@ -31,7 +33,9 @@ export interface PostRequestProps {
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
   const { id, title, creationTimestamp, content, author, onModeration } = props;
-
+  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
+    GET_SELECTED_COMMUNITY
+  );
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,
     ApprovePostVariables
@@ -42,7 +46,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       await approvePost({
         variables: {
           postId: id,
-          communityId: '', // comes from client subquery
+          communityId: selectedCommunityQuery.data!.selectedCommunity!.id, 
         },
       });
 
