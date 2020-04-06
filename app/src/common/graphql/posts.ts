@@ -8,6 +8,9 @@ export const GET_POST_BY_ID = gql`
     $commentsLimit: Int
     $commentsCursor: String
   ) {
+    selectedCommunity @client {
+      id @export(as: "communityId")
+    }
     post(communityId: $communityId, postId: $postId) {
       id
       creationTimestamp
@@ -51,6 +54,9 @@ export const GET_POST_COMMENTS_ONLY = gql`
     $commentsLimit: Int
     $commentsCursor: String
   ) {
+    selectedCommunity @client {
+      id @export(as: "communityId")
+    }
     post(communityId: $communityId, postId: $postId) {
       id
       comments(

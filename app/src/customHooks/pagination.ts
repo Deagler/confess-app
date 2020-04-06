@@ -122,7 +122,7 @@ export const usePaginatedUnapprovedPostsQuery = () => {
 export const usePaginatedPostQuery = (postId: string) => {
   const postVariables: GetPostVariables = {
     // TODO: get community id from somewhere
-    communityId: 'HW6lY4kJOpqSpL39hbUV',
+    communityId: '', // comes from client subquery
     postId,
     // TODO: Connect sorting to UI
     sortCommentsBy: {
