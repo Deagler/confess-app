@@ -83,20 +83,30 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
   };
 
   await firestore.runTransaction((t) =>
-    t.get(communityRef).then((communityDoc) => {
-      t.set(
-        postRef,
-        { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
-        { merge: true }
-      );
-      t.update(communityRef, {
-        totalApprovedPosts: admin.firestore.FieldValue.increment(1),
-      });
-      return Promise.resolve();
-    })
-  );
+    t
+      .getAll<FirebaseFirestore.DocumentData>(postRef, communityRef)
+      .then((docs) => {
+        const postDoc = docs[0];
+        const communityDoc = docs[1];
 
-  await postRef.update(patch);
+        if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
+          throw new ApolloError(
+            `post ${postRef.id} has already been moderated`
+          );
+        }
+
+        t.set(
+          postRef,
+          { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
+          { merge: true }
+        );
+        t.update(communityRef, {
+          totalApprovedPosts: admin.firestore.FieldValue.increment(1),
+        });
+        t.update(postRef, patch);
+        return Promise.resolve();
+      })
+  );
 
   // success
   return {
