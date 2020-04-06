@@ -4,15 +4,25 @@ import { IsValidEmailFormat } from '../utils';
 import { css } from 'glamor';
 
 const lightPadding = css({
-  padding: '8px',
-  margin:'8px',
+  padding: '4px',
   flexWrap: 'wrap',
   width: '100%',
   maxWidth: '400px',
 
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'center'
+  justifyContent: 'center',
+});
+
+const inputBoxStyling = css({
+  '& ion-input': {
+    border: 'solid 1px rgba(196, 196, 196, 1)',
+    borderRadius: '4px',
+  },
+  '& ion-input:focus-within': {
+    border: 'solid 1px #4f8ef7',
+  },
+  margin: '0px 4px',
 });
 
 export const SubmittableEmailInput: React.FC<{
@@ -25,10 +35,10 @@ export const SubmittableEmailInput: React.FC<{
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
   return (
     <div {...lightPadding}>
-      <div>
+      <div {...inputBoxStyling}>
         <IonInput
           value={email}
-          style={{ maxWidth: '400px', minWidth: '300px' }}
+          style={{ maxWidth: '400px', minWidth: '250px' }}
           placeholder={placeholderText}
           onIonChange={(e) => setEmail(e.detail.value!)}
         />

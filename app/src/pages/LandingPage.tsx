@@ -27,7 +27,6 @@ import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
 import { offWhiteCSS } from '../theme/global';
 
-
 const containerClass = css(
   {
     maxWidth: '1000px',
@@ -42,13 +41,6 @@ const chipClass = css({
 });
 
 const loginInput = css({
-  '& ion-input': {
-    border: 'solid 1px',
-    borderRadius: '4px',
-  },
-  '& ion-input:focus-within': {
-    border: 'solid 1px #4f8ef7',
-  },
   maxWidth: '300px',
 });
 

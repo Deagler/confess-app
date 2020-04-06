@@ -41,7 +41,7 @@ const menuCSS = css({
 });
 
 const sidebarContent = css({
-  height: '100%',
+  height: '80%',
   '& .MuiAutocomplete-root': {
     backgroundColor: 'white',
   },
@@ -52,7 +52,7 @@ const channelsContainer = css({
   '& ion-list, ion-item': offWhiteCSS,
   '& ion-list': {
     padding: '0px !important',
-    height: '100%',
+    maxHeight: '100%',
     marginTop: '10px',
   },
   '& ion-item': {
