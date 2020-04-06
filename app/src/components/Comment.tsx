@@ -38,7 +38,6 @@ export interface CommentData {
 
 export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
-  isCommentLikedByUser;
   postIdForComment: string | undefined;
 }
 
@@ -67,7 +66,6 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     SERVER_TOGGLE_LIKE_COMMENT
   );
   const handleLikeButtonClick = async (
-    communityId: string,
     postId: string | undefined,
     commentId: string
   ) => {
@@ -77,7 +75,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
     await serverToggleLike({
       variables: {
-        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        communityId: '', // comes from client subquery
         postId,
         commentId,
       },
@@ -128,13 +126,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           <IonCol>
             <IonItem lines="none">
               <IonButton
-                onClick={() =>
-                  handleLikeButtonClick(
-                    'HW6lY4kJOpqSpL39hbUV',
-                    postIdForComment,
-                    id
-                  )
-                }
+                onClick={() => handleLikeButtonClick(postIdForComment, id)}
                 fill="clear"
                 expand="full"
                 disabled={!userLoggedIn || serverLikeInfo.loading}

@@ -4,14 +4,14 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAuthState
+// GraphQL query operation: GetAuthState
 // ====================================================
 
-export interface getAuthState_authState {
+export interface GetAuthState_authState {
   __typename: "AuthState";
   accessToken: string;
 }
 
-export interface getAuthState {
-  authState: getAuthState_authState | null;
+export interface GetAuthState {
+  authState: GetAuthState_authState | null;
 }
