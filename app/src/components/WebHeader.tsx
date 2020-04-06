@@ -25,7 +25,7 @@ const webHeader = css({
   WebKitShadow: '0 4px 6px -6px #222',
   MozBoxShadow: '0 4px 6px -6px #222',
   boxShadow: '0 4px 6px -6px #222',
-  zIndex: 9999999,
+  zIndex: 100,
   backgroundColor: 'white',
   '--background': 'white',
 });
@@ -36,7 +36,7 @@ const loginInputContainer = css({
   justifyContent: 'flex-end',
   width: '100%',
   alignItems: 'center',
-  zIndex: 9999999,
+  zIndex: 100,
 });
 
 const spinnerContainer = css({
