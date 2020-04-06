@@ -42,16 +42,6 @@ const channelInterfaceOptions = {
   message: 'The post will be found in the selected channel',
 };
 
-// TODO: Replace with apollo hooks useQuery once back-end is setup
-const channels = [
-  'Engineering',
-  'Commerce',
-  'Science',
-  'Law',
-  'Arts',
-  'Very long name to demonstrate that text wrapping is working',
-];
-
 const SubmitForm: React.FC<{
   selectedChannel;
   setSelectedChannel;
@@ -71,6 +61,18 @@ const SubmitForm: React.FC<{
   authorAlias,
   setAuthorAlias,
 }) => {
+  const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
+  const channels = data && data.selectedCommunity!.channels;
+
+  const handleChannelChange = (e) => {
+    const channelId = e.detail.value;
+
+    const channelName = channels?.find((channel) => channel?.id === channelId)
+      ?.name;
+
+    setSelectedChannel(channelName);
+  };
+
   return (
     <IonList>
       <IonItem>
@@ -82,12 +84,14 @@ const SubmitForm: React.FC<{
           interfaceOptions={channelInterfaceOptions}
           interface="popover"
           multiple={false}
-          onIonChange={(e) => setSelectedChannel(e.detail.value)}
-          value={selectedChannel}
+          onIonChange={handleChannelChange}
         >
-          {channels.map((channel, index) => (
-            <IonSelectOption key={index}>{channel}</IonSelectOption>
-          ))}
+          {channels &&
+            channels.map((channel, index) => (
+              <IonSelectOption key={index} value={channel?.id}>
+                {channel?.name}
+              </IonSelectOption>
+            ))}
         </IonSelect>
       </IonItem>
       <IonItem>
@@ -144,21 +148,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
 
-  const channels = data && data.selectedCommunity!.channels;
-
   const [submitPostForApproval, { loading, error }] = useMutation<
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
   >(SUBMIT_POST_FOR_APPROVAL);
-
-  const handleChannelChange = (e) => {
-    const channelId = e.detail.value;
-
-    const channelName = channels?.find((channel) => channel?.id === channelId)
-      ?.name;
-
-    setSelectedChannel(channelName);
-  };
 
   const handleSubmit = async (
     channel: string,
