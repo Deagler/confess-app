@@ -59,7 +59,6 @@ export const SubmittableEmailInput: React.FC<{
         <div>
           <IonButton
             disabled={!email || !IsValidEmailFormat(email) || loading}
-            onClick={() => submit(email)}
             fill="solid"
             type="submit"
           >

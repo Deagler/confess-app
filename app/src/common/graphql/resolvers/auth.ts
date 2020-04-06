@@ -31,6 +31,7 @@ async function attemptLoginWithEmailLink(
   { userEmail, emailLink },
   { cache, client }
 ) {
+  console.log(emailLink, userEmail);
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 
@@ -119,6 +120,7 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
   persistAuthState(cache, null);
   localStorage.setItem('authState', 'null');
+  localStorage.removeItem('selectedCommunityId')
   client.resetStore();
 
   return {
