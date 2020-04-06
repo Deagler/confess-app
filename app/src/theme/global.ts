@@ -14,5 +14,20 @@ export const appPageCSS = css(
   offWhiteCSS,
   {
     '& ion-content': offWhiteCSS,
+  },
+  {
+    '& .contentContainer': {
+      maxWidth: '1000px',
+      '@media(min-width:992px)': {
+        marginTop: '40px',
+        marginLeft: 'auto',
+        marginRight: '30%',
+      },
+      '@media(min-width:2000px)': {
+        marginTop: '40px',
+        marginLeft: 'auto',
+        marginRight: 'calc(50%-1500px)',
+      },
+    },
   }
 );

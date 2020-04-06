@@ -56,6 +56,7 @@ const AdminPage: React.FC = () => {
         </IonHeader>
 
         <IonContent>
+        <div className="contentContainer">
           <h4 className="ion-hide-lg-down ion-margin-top">
             <strong>Admin Portal</strong>
           </h4>
@@ -80,6 +81,7 @@ const AdminPage: React.FC = () => {
           >
             <IonInfiniteScrollContent loadingText="Loading more confessions..." />
           </IonInfiniteScroll>
+          </div>
         </IonContent>
       </IonPage>
     </>

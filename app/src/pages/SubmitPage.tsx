@@ -212,11 +212,60 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <h4 className="ion-hide-lg-down ion-margin-top">
-          <strong>Create a new confession</strong>
-        </h4>
-        <IonCard className="ion-hide-lg-down">
-          <IonCardContent>
+        <div className="contentContainer">
+          <h4 className="ion-hide-lg-down ion-margin-top">
+            <strong>Create a new confession</strong>
+          </h4>
+          <IonCard className="ion-hide-lg-down">
+            <IonCardContent>
+              <SubmitForm
+                selectedChannel={selectedChannel}
+                setSelectedChannel={setSelectedChannel}
+                setTitle={setTitle}
+                title={title}
+                setConfessionText={setConfessionText}
+                confessionText={confessionText}
+                authorAlias={authorAlias}
+                setAuthorAlias={setAuthorAlias}
+              />
+            </IonCardContent>
+
+            <IonFooter>
+              <IonGrid>
+                <IonRow className="ion-justify-content-center">
+                  <IonCol>
+                    <IonButton
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                      color="danger"
+                      expand="block"
+                    >
+                      Cancel
+                    </IonButton>
+                  </IonCol>
+                  <IonCol>
+                    <IonButton
+                      disabled={!(selectedChannel && title && confessionText)}
+                      onClick={() =>
+                        handleSubmit(
+                          selectedChannel!,
+                          title!,
+                          confessionText!,
+                          authorAlias
+                        )
+                      }
+                      color="primary"
+                      expand="block"
+                    >
+                      Submit
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </IonFooter>
+          </IonCard>
+          <div className="ion-hide-lg-up">
             <SubmitForm
               selectedChannel={selectedChannel}
               setSelectedChannel={setSelectedChannel}
@@ -227,54 +276,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               authorAlias={authorAlias}
               setAuthorAlias={setAuthorAlias}
             />
-          </IonCardContent>
-
-          <IonFooter>
-            <IonGrid>
-              <IonRow className="ion-justify-content-center">
-                <IonCol>
-                  <IonButton
-                    onClick={() => {
-                      history.goBack();
-                    }}
-                    color="danger"
-                    expand="block"
-                  >
-                    Cancel
-                  </IonButton>
-                </IonCol>
-                <IonCol>
-                  <IonButton
-                    disabled={!(selectedChannel && title && confessionText)}
-                    onClick={() =>
-                      handleSubmit(
-                        selectedChannel!,
-                        title!,
-                        confessionText!,
-                        authorAlias
-                      )
-                    }
-                    color="primary"
-                    expand="block"
-                  >
-                    Submit
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonFooter>
-        </IonCard>
-        <div className="ion-hide-lg-up">
-          <SubmitForm
-            selectedChannel={selectedChannel}
-            setSelectedChannel={setSelectedChannel}
-            setTitle={setTitle}
-            title={title}
-            setConfessionText={setConfessionText}
-            confessionText={confessionText}
-            authorAlias={authorAlias}
-            setAuthorAlias={setAuthorAlias}
-          />
+          </div>
         </div>
       </IonContent>
     </IonPage>

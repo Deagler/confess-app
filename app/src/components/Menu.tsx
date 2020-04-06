@@ -39,7 +39,7 @@ import { chatbox } from 'ionicons/icons';
 const menuCSS = css({
   borderRight: '0',
   '@media(min-width:992px)': {
-    width: '300px',
+    maxWidth: '300px',
   },
   scroll: 'none',
 });

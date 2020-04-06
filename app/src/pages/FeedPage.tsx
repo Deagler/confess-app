@@ -47,39 +47,41 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
 
       <IonContent>
-        <div className="ion-hide-lg-up ion-margin ion-padding">
-          <IonButton
-            expand="block"
-            routerLink="/page/submit"
-            routerDirection="forward"
+        <div className="contentContainer">
+          <div className="ion-hide-lg-up ion-margin ion-padding">
+            <IonButton
+              expand="block"
+              routerLink="/page/submit"
+              routerDirection="forward"
+            >
+              <IonIcon color="white" slot="start" icon={chatbox} />
+              New Confession
+            </IonButton>
+          </div>
+
+          <h4 className="ion-hide-lg-down ion-margin-top">
+            <strong>Feed</strong>
+          </h4>
+
+          {(loading && <FeedSkeleton />) ||
+            (data?.community?.feed?.items &&
+              data?.community?.feed?.items.map((post, i: number) => (
+                <Post
+                  key={i}
+                  {...post}
+                  onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+                  collapsable={true}
+                />
+              )))}
+          <br />
+          <IonInfiniteScroll
+            threshold="200px"
+            disabled={!hasMorePosts}
+            onIonInfinite={fetchMorePosts}
           >
-            <IonIcon color="white" slot="start" icon={chatbox} />
-            New Confession
-          </IonButton>
+            <IonInfiniteScrollContent loadingText="Loading more confessions..." />
+          </IonInfiniteScroll>
         </div>
-
-        <h4 className="ion-hide-lg-down ion-margin-top">
-          <strong>Feed</strong>
-        </h4>
-
-        {(loading && <FeedSkeleton />) ||
-          (data?.community?.feed?.items &&
-            data?.community?.feed?.items.map((post, i: number) => (
-              <Post
-                key={i}
-                {...post}
-                onCommentClick={() => history.push(`/page/posts/${post.id}`)}
-                collapsable={true}
-              />
-            )))}
-        <br />
-        <IonInfiniteScroll
-          threshold="200px"
-          disabled={!hasMorePosts}
-          onIonInfinite={fetchMorePosts}
-        >
-          <IonInfiniteScrollContent loadingText="Loading more confessions..." />
-        </IonInfiniteScroll>
       </IonContent>
     </IonPage>
   );
