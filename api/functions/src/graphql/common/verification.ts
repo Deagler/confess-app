@@ -42,3 +42,20 @@ export async function verifyPost(communityId: string, postId: string) {
 
   return { postRef, postDoc };
 }
+
+export async function verifyComment(
+  communityId: string,
+  postId: string,
+  commentId: string
+) {
+  const commentRef = firestore.doc(
+    `/communities/${communityId}/posts/${postId}/comments/${commentId}`
+  );
+  const commentDoc = await commentRef.get();
+  if (!commentDoc.exists) {
+    throw new ApolloError(
+      `post ${commentId} does't exist in community ${communityId}`
+    );
+  }
+  return { commentRef, commentDoc };
+}

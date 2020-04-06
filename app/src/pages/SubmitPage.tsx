@@ -25,13 +25,15 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import './SubmitPage.css';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { RouteComponentProps } from 'react-router';
 import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
 } from '../types/SubmitPostForApproval';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import { appPageCSS } from '../theme/global';
 
 const channelInterfaceOptions = {
@@ -140,10 +142,23 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     false
   );
 
+  const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
+
+  const channels = data && data.selectedCommunity!.channels;
+
   const [submitPostForApproval, { loading, error }] = useMutation<
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
   >(SUBMIT_POST_FOR_APPROVAL);
+
+  const handleChannelChange = (e) => {
+    const channelId = e.detail.value;
+
+    const channelName = channels?.find((channel) => channel?.id === channelId)
+      ?.name;
+
+    setSelectedChannel(channelName);
+  };
 
   const handleSubmit = async (
     channel: string,
@@ -151,11 +166,17 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     content: string,
     authorAliasInput?: string
   ) => {
+    const communityId = data?.selectedCommunity?.id;
+    if (!communityId) {
+      console.error('failed to submit post: communityId is not set');
+      return;
+    }
+
     // TODO: add input validation
     try {
       await submitPostForApproval({
         variables: {
-          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          communityId,
           channel,
           title: postTitle,
           content,

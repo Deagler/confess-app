@@ -20,13 +20,6 @@ export interface SubmitComment_submitComment_comment_author {
   community: SubmitComment_submitComment_comment_author_community | null;
 }
 
-export interface SubmitComment_submitComment_comment_likes {
-  __typename: "User";
-  firstName: string;
-  lastName: string;
-  communityUsername: string;
-}
-
 export interface SubmitComment_submitComment_comment {
   __typename: "Comment";
   id: string;
@@ -34,11 +27,11 @@ export interface SubmitComment_submitComment_comment {
   author: SubmitComment_submitComment_comment_author | null;
   content: string;
   totalLikes: number;
-  likes: (SubmitComment_submitComment_comment_likes | null)[];
+  isCommentLikedByUser: boolean;
 }
 
 export interface SubmitComment_submitComment {
-  __typename: "CreateCommentResponse";
+  __typename: "CommentUpdatedResponse";
   code: string;
   success: boolean;
   message: string;

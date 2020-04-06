@@ -1,37 +1,44 @@
 import React from 'react';
 import {
+  IonToast,
   IonSelect,
   IonSelectOption,
   IonLabel,
-  IonIcon,
-  IonThumbnail,
-  IonImg,
   IonSpinner,
 } from '@ionic/react';
 import { SelectChangeEventDetail } from '@ionic/core';
+import { GET_COMMUNITIES } from '../common/graphql/communities';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { GetCommunities } from '../types/GetCommunities';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-export interface CommunitySelectProps {
-  onCommunityChange(e: React.ChangeEvent<{}>, val: string): void;
-  communityNames?: string[];
-  selectedCommunity?: string;
-  loading: boolean;
-}
-
-const CommunitySelect: React.FC<CommunitySelectProps> = (
-  props: CommunitySelectProps
-) => {
-  const {
-    loading,
-    communityNames,
-    onCommunityChange,
-    selectedCommunity,
-  } = props;
+const CommunitySelect: React.FC<{}> = () => {
+  const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
 
   const popoverOptions = {
     header: 'University',
     message: "Which university's confessions would you like to see?",
+  };
+
+  const client = useApolloClient();
+
+  const handleCommunityChange = (e: CustomEvent<SelectChangeEventDetail>) => {
+    const communityId = e.detail.value;
+
+    const selectedCommunity =
+      data &&
+      data.communities.find((community) => community?.id === communityId);
+
+    // persist selected community across sessions
+    localStorage.setItem('selectedCommunityId', communityId);
+
+    // update apollo cache
+    client.writeQuery({
+      query: GET_SELECTED_COMMUNITY,
+      data: { selectedCommunity },
+    });
   };
 
   return (

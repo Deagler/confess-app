@@ -9,8 +9,9 @@ export const typeDefs = gql`
   extend type Query {
     authState: AuthState
     localUser: User
-    selectedCommunity: String!
+    selectedCommunity: Community
     isLikedByUser: Boolean!
+    isCommentLikedByUser: Boolean!
   }
 
   type LoginResponse implements MutationResponse {

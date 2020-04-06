@@ -4,29 +4,22 @@ import {
   IonMenu,
   IonTitle,
   IonToolbar,
-  IonToast,
   IonSpinner,
   IonFooter,
   IonHeader,
   IonButton,
   IonIcon,
 } from '@ionic/react';
-import { SelectChangeEventDetail } from '@ionic/core';
 import { useLocation } from 'react-router-dom';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
-import {
-  GET_SELECTED_COMMUNITY,
-  GET_LOCAL_USER,
-} from '../common/graphql/localState';
-import { GET_COMMUNITIES } from '../common/graphql/communities';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 
 import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
 
 import './Menu.css';
 import { LoginInput } from './LoginInput';
-import { gql } from 'apollo-boost';
 import { LocalUserDetail } from './LocalUserDetail';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
@@ -69,39 +62,10 @@ const channelsContainer = css({
 });
 
 const Menu: React.FC<{}> = () => {
-  // get communities and channels
-  const { loading, data, error } = useQuery(GET_COMMUNITIES);
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
-
-  // restore selected community from local storage
-  const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
-  const selectedCommunity: string =
-    selectedCommunityQuery.data?.selectedCommunity || '';
-
-  let channels: string[] = [];
-  if (data && selectedCommunity && data.communities) {
-    // TODO: streamline this, possibly set community object/id instead of name
-    channels = data.communities
-      .find((e) => e.name === selectedCommunity)
-      .channels.map((e) => e.name);
-  }
-
-  const client = useApolloClient();
-  const handleCommunityChange = (event: React.ChangeEvent<{}>, val: string) => {
-    const community: string = val;
-    localStorage.setItem('selectedCommunity', community);
-    client.writeQuery({
-      query: gql`
-        query getSelectedCommunity {
-          selectedCommunity
-        }
-      `,
-      data: { selectedCommunity: community },
-    });
-  };
 
   const shouldBlockMenu = useShouldBlockMenu();
   if (shouldBlockMenu) {
@@ -111,7 +75,10 @@ const Menu: React.FC<{}> = () => {
   return (
     <React.Fragment>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
+      <IonMenu contentId="main" type="overlay">
+        <IonToolbar>
+          <IonTitle>Confess</IonTitle>
+        </IonToolbar>
         <IonContent>
           <div className="ion-hide-lg-up">
             <AppLogo />

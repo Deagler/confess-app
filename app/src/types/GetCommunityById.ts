@@ -4,23 +4,27 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetSelectedCommunity
+// GraphQL query operation: GetCommunityById
 // ====================================================
 
-export interface GetSelectedCommunity_selectedCommunity_channels {
+export interface GetCommunityById_community_channels {
   __typename: "Channel";
   id: string;
   name: string;
 }
 
-export interface GetSelectedCommunity_selectedCommunity {
+export interface GetCommunityById_community {
   __typename: "Community";
   id: string;
   name: string;
   abbreviation: string;
-  channels: (GetSelectedCommunity_selectedCommunity_channels | null)[];
+  channels: (GetCommunityById_community_channels | null)[];
 }
 
-export interface GetSelectedCommunity {
-  selectedCommunity: GetSelectedCommunity_selectedCommunity | null;
+export interface GetCommunityById {
+  community: GetCommunityById_community | null;
+}
+
+export interface GetCommunityByIdVariables {
+  communityId: string;
 }

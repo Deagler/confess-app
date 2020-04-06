@@ -40,6 +40,9 @@ const typeDefs = gql`
     content: String!
     totalLikes: Int!
     likes: [User]!
+    isCommentLikedByUser: Boolean!
+    communityId: String
+    postId: String
   }
 
   type CommentConnection {
@@ -100,6 +103,7 @@ const typeDefs = gql`
     user(id: ID!): User
     community(id: ID!): Community
     communities: [Community]!
+    comment(communityId: ID!, postId: ID!, commentId: ID!): Comment
   }
 
   interface MutationResponse {
@@ -122,7 +126,7 @@ const typeDefs = gql`
     user: User
   }
 
-  type CreateCommentResponse implements MutationResponse {
+  type CommentUpdatedResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -156,7 +160,7 @@ const typeDefs = gql`
       communityId: ID!
       postId: ID!
       content: String!
-    ): CreateCommentResponse
+    ): CommentUpdatedResponse
 
     approvePost(communityId: ID!, postId: ID!): ApprovePostResponse
 
@@ -167,6 +171,12 @@ const typeDefs = gql`
     ): RejectPostResponse
 
     toggleLikePost(communityId: ID!, postId: ID!): PostUpdatedResponse
+
+    toggleLikeComment(
+      communityId: ID!
+      postId: ID!
+      commentId: ID!
+    ): CommentUpdatedResponse
   }
 `;
 

@@ -7,6 +7,9 @@ export const GET_COMMUNITY_POSTS = gql`
     $cursor: String
     $limit: Int
   ) {
+    selectedCommunity @client {
+      id @export(as: "id")
+    }
     community(id: $id) {
       id
       feed(sortBy: $sortBy, cursor: $cursor, limit: $limit) {

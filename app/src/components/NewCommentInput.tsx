@@ -45,7 +45,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     try {
       const { data } = await submitComment({
         variables: {
-          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          communityId: '', // comes from client subquery
           postId: postId!,
           content: content!,
         },

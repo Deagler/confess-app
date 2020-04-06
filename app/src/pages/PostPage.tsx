@@ -123,6 +123,42 @@ const Postpage: React.FC = () => {
               </IonCard>
             ))}
         </div>
+        <NewCommentInput
+          onCommentCreated={handleCommentCreated}
+          inputRef={newCommentElement}
+          postId={postId}
+        />
+        {(loading && (
+          <IonCard>
+            <IonCardContent className="ion-text-center">
+              <IonSpinner />
+            </IonCardContent>
+          </IonCard>
+        )) ||
+          (data?.post?.comments?.items.length !== 0 && (
+            <IonCard>
+              <IonList>
+                {data?.post?.comments?.items.map(
+                  (comment: CommentData | null, i: number) => (
+                    <Comment
+                      key={i}
+                      {...comment!}
+                      onReply={handleReply}
+                      postIdForComment={data?.post?.id}
+                    />
+                  )
+                )}
+              </IonList>
+              <br />
+              <IonInfiniteScroll
+                threshold="100px"
+                disabled={!hasMoreComments}
+                onIonInfinite={fetchMoreComments}
+              >
+                <IonInfiniteScrollContent loadingText="Loading more comments..." />
+              </IonInfiniteScroll>
+            </IonCard>
+          ))}
       </IonContent>
     </IonPage>
   );

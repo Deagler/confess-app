@@ -42,7 +42,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       await approvePost({
         variables: {
           postId: id,
-          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          communityId: '', // comes from client subquery
         },
       });
 

@@ -46,7 +46,7 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
       await rejectPost({
         variables: {
           postId,
-          communityId: 'HW6lY4kJOpqSpL39hbUV',
+          communityId: '', // comes from client subquery
           reason,
         },
       });
