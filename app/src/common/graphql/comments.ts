@@ -47,6 +47,9 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
     $postId: ID!
     $commentId: ID!
   ) {
+    selectedCommunity @client {
+      id @export(as: "communityId")
+    }
     toggleLikeComment(
       communityId: $communityId
       postId: $postId

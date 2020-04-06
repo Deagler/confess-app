@@ -67,14 +67,14 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     SERVER_TOGGLE_LIKE_POST
   );
 
-  const handleLikeButtonClick = async (communityId, postId) => {
+  const handleLikeButtonClick = async (postId: string) => {
     if (serverLikeInfo.loading) {
       return;
     }
 
     await serverToggleLike({
       variables: {
-        communityId: 'HW6lY4kJOpqSpL39hbUV',
+        communityId: '', // comes from client subquery
         postId,
       },
       optimisticResponse: {
@@ -127,7 +127,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           <IonCol>
             <IonButton
               disabled={!userLoggedIn || serverLikeInfo.loading}
-              onClick={() => handleLikeButtonClick('HW6lY4kJOpqSpL39hbUV', id)}
+              onClick={() => handleLikeButtonClick(id)}
               fill="clear"
               expand="full"
               color={isLikedByUser ? 'danger' : 'primary'}

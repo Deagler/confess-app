@@ -117,6 +117,9 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
 
 export const GET_POST_LIKE_STATUS = gql`
   query GetPostLikeData($communityId: ID!, $postId: ID!) {
+    selectedCommunity @client {
+      id @export(as: "communityId")
+    }
     post(communityId: $communityId, postId: $postId) {
       id
       totalLikes
@@ -126,6 +129,9 @@ export const GET_POST_LIKE_STATUS = gql`
 
 export const SERVER_TOGGLE_LIKE_POST = gql`
   mutation ServerToggleLikePost($communityId: ID!, $postId: ID!) {
+    selectedCommunity @client {
+      id @export(as: "communityId")
+    }
     toggleLikePost(communityId: $communityId, postId: $postId) {
       code
       success
