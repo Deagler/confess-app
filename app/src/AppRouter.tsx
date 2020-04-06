@@ -9,20 +9,17 @@ import AdminPage from './pages/AdminPage';
 import SubmitPage from './pages/SubmitPage';
 import Postpage from './pages/PostPage';
 
-export const AppRouter: React.FC<{ userLoggedIn: boolean }> = (
-  userLoggedIn
-) => {
+export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
+  userLoggedIn,
+}) => {
+  console.log(userLoggedIn);
   return (
     <Switch>
       <IonRouterOutlet id="main">
         <Route
           path="/"
           render={() =>
-            userLoggedIn ? (
-              <Redirect to="/page/posts" />
-            ) : (
-              <Redirect to="/landing" />
-            )
+            userLoggedIn ? <Redirect to="/page/posts" /> : <LandingPage />
           }
           exact={true}
         />
@@ -31,7 +28,6 @@ export const AppRouter: React.FC<{ userLoggedIn: boolean }> = (
           render={(props) => <AuthCallbackPage {...props} />}
           exact={true}
         />
-        <Route path="/landing" render={() => <LandingPage />} exact={true} />
         <Route
           path="/page/posts"
           render={(props) => <FeedPage {...props} />}

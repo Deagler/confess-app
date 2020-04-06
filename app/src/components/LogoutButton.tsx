@@ -30,7 +30,7 @@ export const LogoutButton: React.FC<{ showText: boolean }> = ({ showText }) => {
     awaitRefetchQueries: true,
     refetchQueries: [{ query: GET_AUTH_STATE }, { query: GET_LOCAL_USER }],
     onCompleted: () => {
-      history.push('/landing');
+      window.location.href = '/'
     },
   });
 
