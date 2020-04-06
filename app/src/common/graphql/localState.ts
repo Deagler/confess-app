@@ -26,6 +26,7 @@ export const GET_LOCAL_USER = gql`
         id
         name
         abbreviation
+        imageURI
       }
       isAdmin
     }

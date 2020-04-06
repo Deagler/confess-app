@@ -63,11 +63,7 @@ const CommunitySelect: React.FC<CommunitySelectProps> = (
         !loading ? (
           <React.Fragment>
             <IonThumbnail slot="start">
-              <IonImg
-                src={
-                  'https://d2u4q3iydaupsp.cloudfront.net/omXzf40rj1a84mgkuzYszcOPCpLlfUq2MbGs585U5fNKkiBzSBOusGFs0GcYddctvihX7xfbRDRssgsOSVU6Es9ARxNxdJqK2p0KCFTLJzDvIwELZM4m7fxbqrTlSclk'
-                }
-              />
+              <IonImg src={'assets/uoa.svg'} />
             </IonThumbnail>
             <IonLabel>{option}</IonLabel>
           </React.Fragment>

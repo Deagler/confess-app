@@ -25,12 +25,11 @@ export const LocalUserDetail: React.FC<{
     <IonRow>
       <IonCol className="ion-align-items-center ion-align-content-center">
         <div {...userDetailContainer}>
-          <IonAvatar {...userAvatar}>
-            <img
-              alt="user avatar"
-              src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-            />
-          </IonAvatar>
+          {user.community && (
+            <IonAvatar {...userAvatar}>
+              <img alt="user avatar" src={user.community.imageURI} />
+            </IonAvatar>
+          )}
           <div {...userInfoContainer}>
             <IonLabel>
               <strong>{`${user.firstName} ${user.lastName}`}</strong>

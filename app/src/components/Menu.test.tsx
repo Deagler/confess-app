@@ -16,6 +16,7 @@ const mocks = [
           id: '123',
           name: 'university',
           abbreviation: 'uni',
+          imageURI: 'asdasd',
           channels: [
             {
               id: '456',

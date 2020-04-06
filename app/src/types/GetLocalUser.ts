@@ -12,6 +12,7 @@ export interface GetLocalUser_localUser_community {
   id: string;
   name: string;
   abbreviation: string;
+  imageURI: string;
 }
 
 export interface GetLocalUser_localUser {
