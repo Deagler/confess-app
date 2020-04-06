@@ -50,6 +50,20 @@ async function writeInitialData() {
     'selectedCommunityId'
   );
 
+  // set this to start with, avoids race conditions with the async query below
+  cache.writeQuery({
+    query: gql`
+      query getSelectedCommunityId {
+        selectedCommunity {
+          id
+        }
+      }
+    `,
+    data: {
+      selectedCommunity: { id: selectedCommunityId },
+    },
+  });
+
   if (selectedCommunityId) {
     const selectedCommunity = await apolloClient.query({
       query: GET_COMMUNITY_BY_ID,
