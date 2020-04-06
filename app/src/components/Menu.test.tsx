@@ -62,15 +62,3 @@ test('renders without crashing', () => {
   );
   expect(baseElement).toBeDefined();
 });
-
-test('displays content properly', async () => {
-  const { findByText } = render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter>
-        <Menu />
-      </MemoryRouter>
-    </MockedProvider>
-  );
-  await findByText('Confess');
-  await findByText('Login');
-});
