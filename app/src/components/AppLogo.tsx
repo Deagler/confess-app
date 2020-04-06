@@ -5,7 +5,7 @@ import { css } from 'glamor';
 
 const appLogoCSS = css({
   backgroundColor: 'transparent',
-  '--background': 'transparent'
+  '--background': 'transparent',
 });
 
 export const AppLogo: React.FC<any> = () => {

@@ -50,7 +50,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     try {
       const { data } = await submitComment({
         variables: {
-          communityId: selectedCommunityQuery.data!.selectedCommunity!.id, 
+          communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
           postId: postId!,
           content: content!,
         },

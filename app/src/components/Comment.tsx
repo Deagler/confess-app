@@ -82,7 +82,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
     await serverToggleLike({
       variables: {
-        communityId: selectedCommunityQuery.data!.selectedCommunity!.id, 
+        communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
         postId,
         commentId,
       },

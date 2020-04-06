@@ -120,7 +120,7 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
   persistAuthState(cache, null);
   localStorage.setItem('authState', 'null');
-  localStorage.removeItem('selectedCommunityId')
+  localStorage.removeItem('selectedCommunityId');
   client.resetStore();
 
   return {

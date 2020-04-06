@@ -1,17 +1,8 @@
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonSpinner,
-} from '@ionic/react';
+import { IonToolbar, IonGrid, IonRow, IonCol, IonSpinner } from '@ionic/react';
 import React from 'react';
 import { css } from 'glamor';
 import { LoginInput } from './LoginInput';
 import { AppLogo } from './AppLogo';
-import { findByLabelText } from '@testing-library/react';
 import { useShouldBlockMenu } from '../utils/menus';
 import { LocalUserDetail } from './LocalUserDetail';
 import { useQuery } from '@apollo/react-hooks';

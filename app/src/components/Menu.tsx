@@ -2,16 +2,11 @@ import React from 'react';
 import {
   IonContent,
   IonMenu,
-  IonTitle,
-  IonToolbar,
   IonSpinner,
   IonFooter,
-  IonHeader,
   IonButton,
   IonIcon,
-  IonToast,
 } from '@ionic/react';
-import { useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_LOCAL_USER } from '../common/graphql/localState';

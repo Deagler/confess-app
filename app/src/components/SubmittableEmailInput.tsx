@@ -1,4 +1,4 @@
-import { IonRow, IonCol, IonInput, IonButton, IonSpinner } from '@ionic/react';
+import { IonInput, IonButton, IonSpinner } from '@ionic/react';
 import React from 'react';
 import { IsValidEmailFormat } from '../utils';
 import { css } from 'glamor';

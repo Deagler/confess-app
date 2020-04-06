@@ -7,15 +7,10 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
-  IonFooter,
   IonButton,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonSplitPane,
-  IonCardTitle,
-  IonLabel,
   IonIcon,
-  IonCard,
 } from '@ionic/react';
 
 import Post from '../components/Post';
@@ -26,7 +21,6 @@ import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
 import { chatbox } from 'ionicons/icons';
-import { FullPageLoader } from '../components/FullPageLoader';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {

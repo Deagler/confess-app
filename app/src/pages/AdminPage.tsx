@@ -10,7 +10,6 @@ import {
   IonToast,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonLabel,
 } from '@ionic/react';
 
 import PostRequest from '../components/PostRequest';

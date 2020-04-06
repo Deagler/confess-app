@@ -1,11 +1,10 @@
+import React from 'react';
 import { IonButton, IonIcon, IonSpinner } from '@ionic/react';
 import { logOutOutline } from 'ionicons/icons';
-import React from 'react';
 import { css } from 'glamor';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { GET_AUTH_STATE, GET_LOCAL_USER } from '../common/graphql/localState';
-import { useHistory } from 'react-router';
 
 const logoutButton = css({
   color: 'red',
@@ -25,12 +24,11 @@ const LOGOUT_MUTATION = gql`
 `;
 
 export const LogoutButton: React.FC<{ showText: boolean }> = ({ showText }) => {
-  const history = useHistory();
   const [doLogout, { loading }] = useMutation(LOGOUT_MUTATION, {
     awaitRefetchQueries: true,
     refetchQueries: [{ query: GET_AUTH_STATE }, { query: GET_LOCAL_USER }],
     onCompleted: () => {
-      window.location.href = '/'
+      window.location.href = '/';
     },
   });
 

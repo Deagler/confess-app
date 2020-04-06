@@ -11,7 +11,7 @@ const loadingContainer = css(
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    zIndex:-1
+    zIndex: -1,
   },
   offWhiteCSS
 );

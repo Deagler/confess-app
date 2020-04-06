@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  IonToast,
-  IonSelect,
-  IonSelectOption,
-  IonLabel,
-  IonSpinner,
-  IonThumbnail,
-  IonImg,
-} from '@ionic/react';
-import { SelectChangeEventDetail } from '@ionic/core';
+import { IonLabel, IonSpinner, IonThumbnail, IonImg } from '@ionic/react';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
@@ -24,16 +15,11 @@ const communityThumbnail = css({
 });
 
 const CommunitySelect: React.FC<{}> = () => {
-  const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
+  const { loading, data } = useQuery<GetCommunities>(GET_COMMUNITIES);
   const {
     loading: selectedCommunityLoading,
     data: selectedCommData,
   } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
-
-  const popoverOptions = {
-    header: 'University',
-    message: "Which university's confessions would you like to see?",
-  };
 
   const client = useApolloClient();
 

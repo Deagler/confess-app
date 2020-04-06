@@ -46,7 +46,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
       await approvePost({
         variables: {
           postId: id,
-          communityId: selectedCommunityQuery.data!.selectedCommunity!.id, 
+          communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
         },
       });
 
