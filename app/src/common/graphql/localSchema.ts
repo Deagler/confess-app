@@ -9,7 +9,6 @@ export const typeDefs = gql`
   extend type Query {
     authState: AuthState
     localUser: User
-    selectedCommunityId: ID
     selectedCommunity: Community
     isLikedByUser: Boolean!
     isCommentLikedByUser: Boolean!

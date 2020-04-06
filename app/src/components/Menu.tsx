@@ -10,10 +10,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import {
-  GET_SELECTED_COMMUNITY,
-  GET_LOCAL_USER,
-} from '../common/graphql/localState';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 
 import CommunitySelect from '../components/CommunitySelect';
 import ChannelList from '../components/ChannelList';
@@ -29,12 +26,6 @@ const Menu: React.FC<{}> = () => {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
-
-  // restore selected community from local storage
-  const selectedCommunityQuery = useQuery(GET_SELECTED_COMMUNITY);
-
-  const channels: string[] = [];
-  // TODO: get channels from selected community
 
   // cant put this in App because you cant have useLocation
   // in the same component as the router is defined
