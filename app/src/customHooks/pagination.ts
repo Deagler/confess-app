@@ -17,8 +17,10 @@ import {
   GetCommunityUnapprovedPosts,
 } from '../types/GetCommunityUnapprovedPosts';
 import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
+import { removeDuplicatesById } from '../utils';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+
 
 // TODO: Refactor these hooks into a single hook to reduce duplicate code
 
@@ -157,6 +159,11 @@ export const usePaginatedPostQuery = (postId: string) => {
       // Update the cache with the newly fetched results
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newComments = fetchMoreResult?.post?.comments?.items;
+        const previousComments = previousResult.post?.comments.items;
+        const uniqueComments = removeDuplicatesById([
+          ...previousComments!,
+          ...newComments!,
+        ]);
 
         // If a full page hasn't been returned we have reached the end
         if (newComments?.length !== COMMENT_PAGE_LIMIT) {
@@ -167,7 +174,7 @@ export const usePaginatedPostQuery = (postId: string) => {
         return update(previousResult, {
           post: {
             comments: {
-              items: { $push: newComments! },
+              items: { $set: uniqueComments },
               cursor: { $set: fetchMoreResult?.post?.comments.cursor! },
             },
           },

@@ -15,3 +15,17 @@ export function truncateString(str: string, length: number): string {
 
   return str.slice(0, length) + '...';
 }
+
+export function removeDuplicatesById<T extends { id: string } | null>(
+  items: T[]
+): T[] {
+  const newItems: T[] = [];
+  const idSet = new Set();
+  items.forEach((item) => {
+    if (item && !idSet.has(item.id)) {
+      idSet.add(item.id);
+      newItems.push(item);
+    }
+  });
+  return newItems;
+}
