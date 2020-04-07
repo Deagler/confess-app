@@ -28,9 +28,6 @@ export const GET_COMMUNITY_UNAPPROVED_POSTS = gql`
 
 export const APPROVE_POST = gql`
   mutation ApprovePost($communityId: ID!, $postId: ID!) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     approvePost(communityId: $communityId, postId: $postId) {
       code
       success
@@ -41,9 +38,6 @@ export const APPROVE_POST = gql`
 
 export const REJECT_POST = gql`
   mutation RejectPost($communityId: ID!, $postId: ID!, $reason: String) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     rejectPost(communityId: $communityId, postId: $postId, reason: $reason) {
       code
       success

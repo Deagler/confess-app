@@ -1,30 +1,29 @@
 import React from 'react';
-import {
-  IonToast,
-  IonSelect,
-  IonSelectOption,
-  IonLabel,
-  IonSpinner,
-} from '@ionic/react';
-import { SelectChangeEventDetail } from '@ionic/core';
+import { IonLabel, IonSpinner, IonThumbnail, IonImg } from '@ionic/react';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { css } from 'glamor';
+
+const communityThumbnail = css({
+  width: '48px !important',
+  height: '48px !important',
+});
 
 const CommunitySelect: React.FC<{}> = () => {
-  const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
-
-  const popoverOptions = {
-    header: 'University',
-    message: "Which university's confessions would you like to see?",
-  };
+  const { loading, data } = useQuery<GetCommunities>(GET_COMMUNITIES);
+  const {
+    loading: selectedCommunityLoading,
+    data: selectedCommData,
+  } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
 
   const client = useApolloClient();
 
-  const handleCommunityChange = (e: CustomEvent<SelectChangeEventDetail>) => {
-    const communityId = e.detail.value;
-
+  const handleCommunityChange = (communityId) => {
     const selectedCommunity =
       data &&
       data.communities.find((community) => community?.id === communityId);
@@ -40,28 +39,50 @@ const CommunitySelect: React.FC<{}> = () => {
   };
 
   return (
-    <>
-      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonSelect
-        interfaceOptions={popoverOptions}
-        interface="popover"
-        placeholder="Select University"
-        onIonChange={handleCommunityChange}
-        // value={selectedCommunity}
-      >
-        {loading ? (
-          <IonSpinner />
+    <Autocomplete
+      id="community-selector"
+      options={data?.communities || []}
+      getOptionLabel={(option) => option?.abbreviation || ''}
+      value={
+        selectedCommData?.selectedCommunity
+          ? selectedCommData!.selectedCommunity
+          : null
+      }
+      getOptionSelected={(option, value) => {
+        return option!.id == value!.id;
+      }}
+      onChange={(e, val) => handleCommunityChange(val.id)}
+      disableClearable={true}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Select a University"
+          variant="outlined"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? <IonSpinner /> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+      renderOption={(option) =>
+        !loading && !selectedCommunityLoading ? (
+          <React.Fragment>
+            <IonThumbnail slot="start">
+              <IonImg {...communityThumbnail} src={option!.imageURI} />
+            </IonThumbnail>
+            <IonLabel>{option!.name}</IonLabel>
+          </React.Fragment>
         ) : (
-          !error &&
-          data &&
-          data!.communities.map((community, index: number) => (
-            <IonSelectOption key={index} value={community?.id}>
-              <IonLabel>{community?.name}</IonLabel>
-            </IonSelectOption>
-          ))
-        )}
-      </IonSelect>
-    </>
+          'Loading...'
+        )
+      }
+      loading={loading || selectedCommunityLoading}
+    />
   );
 };
 

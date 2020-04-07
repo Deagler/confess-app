@@ -12,9 +12,13 @@ import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { GET_LOCAL_USER } from '../common/graphql/localState';
+import {
+  GET_LOCAL_USER,
+  GET_SELECTED_COMMUNITY,
+} from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 interface CommunityData {
   abbreviation: string;
 }
@@ -60,6 +64,9 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
+  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
+    GET_SELECTED_COMMUNITY
+  );
   const userLoggedIn = !!localUserQuery.data?.localUser;
   // TODO: Add liking mutation, and fetch liked status
   const [serverToggleLike, serverLikeInfo] = useMutation(
@@ -75,7 +82,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
     await serverToggleLike({
       variables: {
-        communityId: '', // comes from client subquery
+        communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
         postId,
         commentId,
       },

@@ -6,6 +6,8 @@ import {
   NormalizedCacheObject,
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
+import { GetUserById } from '../../../types/GetUserById';
+import { GET_SELECTED_COMMUNITY } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -29,6 +31,7 @@ async function attemptLoginWithEmailLink(
   { userEmail, emailLink },
   { cache, client }
 ) {
+  console.log(emailLink, userEmail);
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 
@@ -62,7 +65,7 @@ async function attemptLoginWithEmailLink(
     }
 
     // Existing user: let's retrieve data from backend.
-    const data = await apolloClient.query({
+    const data = await apolloClient.query<GetUserById>({
       query: GET_USER_BY_ID,
       variables: {
         id: currentUser.uid,
@@ -77,6 +80,22 @@ async function attemptLoginWithEmailLink(
         authState,
         __typename: 'LoginResponse',
       };
+    }
+
+    if (data.data.user.community) {
+      const { community } = data.data.user;
+      // persist selected community across sessions
+      localStorage.setItem('selectedCommunityId', community.id);
+
+      // update apollo cache
+      client.writeQuery({
+        query: GET_SELECTED_COMMUNITY,
+        data: {
+          selectedCommunity: {
+            id: community.id,
+          },
+        },
+      });
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
@@ -101,6 +120,7 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
   persistAuthState(cache, null);
   localStorage.setItem('authState', 'null');
+  localStorage.removeItem('selectedCommunityId');
   client.resetStore();
 
   return {

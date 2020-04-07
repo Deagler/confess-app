@@ -59,6 +59,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     abbreviation: String!
+    imageURI: String!
     feed(sortBy: SortByInput, limit: Int, cursor: String): PostConnection!
     unapprovedPosts(
       sortBy: SortByInput

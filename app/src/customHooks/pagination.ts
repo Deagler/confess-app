@@ -17,6 +17,8 @@ import {
   GetCommunityUnapprovedPosts,
 } from '../types/GetCommunityUnapprovedPosts';
 import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
+import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 
 // TODO: Refactor these hooks into a single hook to reduce duplicate code
 
@@ -35,12 +37,16 @@ const feedVariables: GetCommunityPostsVariables = {
 
 export const usePaginatedFeedQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
+  const { data: selectedComm } = useQuery<GetSelectedCommunity>(
+    GET_SELECTED_COMMUNITY
+  );
 
   const useQueryVariables = useQuery<
     GetCommunityPosts,
     GetCommunityPostsVariables
   >(GET_COMMUNITY_POSTS, {
     variables: feedVariables,
+    skip: !selectedComm?.selectedCommunity,
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {

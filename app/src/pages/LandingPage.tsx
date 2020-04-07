@@ -23,10 +23,26 @@ import {
 
 import uoa from '../assets/uoa.svg';
 import LandingPost from '../components/LandingPost';
-
-import './LandingPage.css';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
+import { offWhiteCSS } from '../theme/global';
+
+const containerClass = css(
+  {
+    maxWidth: '1000px',
+    margin: 'auto',
+    padding: '20px',
+  },
+  offWhiteCSS
+);
+
+const chipClass = css({
+  backgroundColor: 'transparent',
+});
+
+const loginInput = css({
+  maxWidth: '300px',
+});
 
 const secondaryHero = css({
   display: 'flex',
@@ -47,12 +63,14 @@ const LandingPage: React.FC = () => {
     },
   };
 
+  console.log(data);
+
   return (
     <IonPage id="landing-page">
-      <IonContent>
-        <div className="container ion-align-self-center">
+      <IonContent {...offWhiteCSS}>
+        <div {...containerClass} className=" ion-align-self-center">
           <IonToolbar>
-            <IonItem slot="start" lines="none">
+            <IonItem {...offWhiteCSS} slot="start" lines="none">
               <IonIcon icon={chatbox} color="primary" size="large" />
               <IonLabel style={{ fontSize: '24px' }}>Confess</IonLabel>
             </IonItem>
@@ -66,7 +84,7 @@ const LandingPage: React.FC = () => {
             </IonRow>
 
             <IonRow className="ion-justify-content-center">
-              <IonCol size="5" size-xs="12" size-md="4">
+              <IonCol {...loginInput} size="3">
                 <LoginInput />
               </IonCol>
             </IonRow>
@@ -85,14 +103,14 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <IonList>
-                  <IonItem>
+                <IonList {...offWhiteCSS}>
+                  <IonItem {...offWhiteCSS}>
                     <IonAvatar slot="start">
                       <img alt="UoA" src={uoa} />
                     </IonAvatar>
                     <IonLabel>The University of Auckland</IonLabel>
                   </IonItem>
-                  <IonItem>
+                  <IonItem {...offWhiteCSS}>
                     <IonAvatar slot="start">
                       <img alt="Other" src={school} />
                     </IonAvatar>
@@ -103,19 +121,19 @@ const LandingPage: React.FC = () => {
             </IonRow>
 
             <IonRow className="ion-margin-top ion-justify-content-center">
-              <IonChip>
-                <IonIcon icon={checkmarkCircleSharp} />
+              <IonChip {...chipClass}>
+                <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Confessions</IonLabel>
               </IonChip>
-              <IonChip>
-                <IonIcon icon={checkmarkCircleSharp} />
+              <IonChip {...chipClass}>
+                <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Memes</IonLabel>
               </IonChip>
-              <IonChip>
-                <IonIcon icon={checkmarkCircleSharp} />
+              <IonChip {...chipClass}>
+                <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Emotions</IonLabel>
               </IonChip>
-              <IonChip>
+              <IonChip {...chipClass}>
                 <IonLabel style={{ fontWeight: 'bold' }}>
                   All in one place.
                 </IonLabel>
@@ -123,7 +141,7 @@ const LandingPage: React.FC = () => {
             </IonRow>
           </IonGrid>
 
-          <IonItemDivider />
+          <IonItemDivider {...offWhiteCSS} />
           <IonGrid>
             <IonRow {...secondaryHero}>
               <IonCol size-md="4" size-sm="12">
@@ -136,8 +154,10 @@ const LandingPage: React.FC = () => {
                     </p>
                   </IonCol>
                 </IonRow>
-                <IonRow>
-                  <LoginInput />
+                <IonRow className="ion-justify-content-center">
+                  <IonCol {...loginInput}>
+                    <LoginInput />
+                  </IonCol>
                 </IonRow>
               </IonCol>
               <IonCol size-md="8" size-sm="12">
@@ -155,8 +175,8 @@ const LandingPage: React.FC = () => {
                     />
                   ) : (
                     <IonSlides pager={true} options={slideOpts}>
-                      {data &&
-                        data.community.feed.slice(0, 4).map((slide) => (
+                      {data?.community?.feed &&
+                        data.community.feed.items.slice(0, 4).map((slide) => (
                           <IonSlide key={slide.id} className="ion-text-left">
                             <LandingPost {...slide} />
                           </IonSlide>

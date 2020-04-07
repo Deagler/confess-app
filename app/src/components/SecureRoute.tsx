@@ -22,7 +22,7 @@ const SecureRoute: React.FC<any> = ({ component: Component, ...rest }) => {
         }
 
         if (!isAdmin) {
-          return <Redirect to="/landing" />;
+          return <Redirect to="/" />;
         }
 
         // authenticated

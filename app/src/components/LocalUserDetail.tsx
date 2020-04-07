@@ -1,4 +1,4 @@
-import { IonRow, IonCol, IonLabel, IonAvatar } from '@ionic/react';
+import { IonRow, IonCol, IonLabel, IonAvatar, IonNote } from '@ionic/react';
 import React from 'react';
 import { GetLocalUser_localUser } from '../types/GetLocalUser';
 import { css } from 'glamor';
@@ -11,7 +11,11 @@ const userInfoContainer = css({
   flexDirection: 'column',
   justifyItems: 'center',
   justifyContent: 'center',
-  padding: '10px',
+});
+
+const userAvatar = css({
+  width: '48px',
+  height: '48px',
 });
 
 export const LocalUserDetail: React.FC<{
@@ -19,14 +23,13 @@ export const LocalUserDetail: React.FC<{
 }> = ({ user }) => {
   return (
     <IonRow>
-      <IonCol className="ion-align-items-center ion-align-content-center ion-padding">
+      <IonCol className="ion-align-items-center ion-align-content-center">
         <div {...userDetailContainer}>
-          <IonAvatar>
-            <img
-              alt="user avatar"
-              src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-            />
-          </IonAvatar>
+          {user.community && (
+            <IonAvatar {...userAvatar}>
+              <img alt="user avatar" src={user.community.imageURI} />
+            </IonAvatar>
+          )}
           <div {...userInfoContainer}>
             <IonLabel>
               <strong>{`${user.firstName} ${user.lastName}`}</strong>
@@ -36,17 +39,16 @@ export const LocalUserDetail: React.FC<{
                 {user.community ? user.community.name : user.email}
               </strong>
             </IonLabel>
-            {!user.community && (
-              <IonRow>
-                <IonLabel>
-                  We aren't at your university just yet - but we'll be there
-                  soon!
-                </IonLabel>
-              </IonRow>
-            )}
           </div>
         </div>
       </IonCol>
+      {!user.community && (
+        <IonRow>
+          <IonNote>
+            <em>We'll be at your university soon!</em>
+          </IonNote>
+        </IonRow>
+      )}
     </IonRow>
   );
 };

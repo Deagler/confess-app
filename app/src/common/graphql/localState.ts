@@ -6,9 +6,11 @@ export const GET_SELECTED_COMMUNITY = gql`
       id
       name
       abbreviation
+      imageURI
       channels {
         id
         name
+        icon
       }
     }
   }
@@ -34,6 +36,7 @@ export const GET_LOCAL_USER = gql`
         id
         name
         abbreviation
+        imageURI
       }
       isAdmin
     }

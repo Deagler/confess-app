@@ -6,6 +6,7 @@ export const GET_COMMUNITIES = gql`
       id
       name
       abbreviation
+      imageURI
       channels {
         id
         name
@@ -21,6 +22,7 @@ export const GET_COMMUNITY_BY_ID = gql`
       id
       name
       abbreviation
+      imageURI
       channels {
         id
         name
