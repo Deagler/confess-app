@@ -70,6 +70,7 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
     throw new AuthenticationError('Only administrators can moderate posts');
   }
 
+  const { communityRef } = await verifyCommunity(communityId);
   const { postRef } = await verifyPost(communityId, postId);
 
   // update post
@@ -80,7 +81,32 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
       lastUpdated: moment().unix(),
     },
   };
-  await postRef.update(patch);
+
+  await firestore.runTransaction((t) =>
+    t
+      .getAll<FirebaseFirestore.DocumentData>(postRef, communityRef)
+      .then((docs) => {
+        const postDoc = docs[0];
+        const communityDoc = docs[1];
+
+        if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
+          throw new ApolloError(
+            `post ${postRef.id} has already been moderated`
+          );
+        }
+
+        t.set(
+          postRef,
+          { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
+          { merge: true }
+        );
+        t.update(communityRef, {
+          totalApprovedPosts: admin.firestore.FieldValue.increment(1),
+        });
+        t.update(postRef, patch);
+        return Promise.resolve();
+      })
+  );
 
   // success
   return {
@@ -115,7 +141,16 @@ async function rejectPost(
       reason,
     },
   };
-  await postRef.update(patch);
+
+  await firestore.runTransaction((t) =>
+    t.get(postRef).then((postDoc) => {
+      if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
+        throw new ApolloError(`post ${postRef.id} has already been moderated`);
+      }
+      t.update(postRef, patch);
+      return Promise.resolve();
+    })
+  );
 
   // success
   return {

@@ -77,6 +77,7 @@ const typeDefs = gql`
 
   type Post {
     id: ID!
+    postNumber: Int
     creationTimestamp: Int!
     authorAlias: String
 

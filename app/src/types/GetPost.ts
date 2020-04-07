@@ -46,6 +46,7 @@ export interface GetPost_post_comments {
 export interface GetPost_post {
   __typename: "Post";
   id: string;
+  postNumber: number | null;
   creationTimestamp: number;
   authorAlias: string | null;
   title: string;
