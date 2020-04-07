@@ -6,6 +6,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonToast,
 } from '@ionic/react';
 import React from 'react';
 import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
@@ -104,74 +105,86 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     });
   };
   return (
-    <IonItem>
-      <IonGrid>
-        <IonRow>
-          <IonCol size="12" size-sm="6">
-            <IonItem lines="none">
-              <IonLabel slot="start">
-                <h6>
-                  {authorDisplayName} <span>&middot;</span> {authorCommunity}
-                </h6>
-              </IonLabel>
-            </IonItem>
-          </IonCol>
-          <IonCol size="12" size-sm="6">
-            <IonItem lines="none">
-              <IonIcon color="medium" icon={timeOutline} size="medium" />
-              <IonLabel color="medium">
-                <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
-              </IonLabel>
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <p>{content}</p>
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonItem lines="none">
-              <LoginTooltip
-                loginOrSignUpTo="like this comment"
-                userLoggedIn={userLoggedIn}
-              >
-                <IonButton
-                  onClick={() => handleLikeButtonClick(postIdForComment, id)}
-                  fill="clear"
-                  expand="full"
-                  disabled={!userLoggedIn || serverLikeInfo.loading}
+    <>
+      <IonToast
+        isOpen={!!serverLikeInfo.error}
+        message={serverLikeInfo.error?.message}
+        duration={2000}
+      />
+      <IonItem>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-sm="6">
+              <IonItem lines="none">
+                <IonLabel slot="start">
+                  <h6>
+                    {authorDisplayName} <span>&middot;</span> {authorCommunity}
+                  </h6>
+                </IonLabel>
+              </IonItem>
+            </IonCol>
+            <IonCol size="12" size-sm="6">
+              <IonItem lines="none">
+                <IonIcon color="medium" icon={timeOutline} size="medium" />
+                <IonLabel color="medium">
+                  <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
+                </IonLabel>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <p>{content}</p>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonItem lines="none">
+                <LoginTooltip
+                  loginOrSignUpTo="like this comment"
+                  userLoggedIn={userLoggedIn}
                 >
-                  <IonIcon
-                    color={isCommentLikedByUser ? 'danger' : 'primary'}
-                    icon={heart}
-                  />
-                  <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
-                    {totalLikes}
-                  </IonLabel>
-                </IonButton>
-              </LoginTooltip>
+                  <IonButton
+                    onClick={() => handleLikeButtonClick(postIdForComment, id)}
+                    fill="clear"
+                    expand="full"
+                    disabled={!userLoggedIn || serverLikeInfo.loading}
+                  >
+                    <IonIcon
+                      color={isCommentLikedByUser ? 'danger' : 'primary'}
+                      icon={heart}
+                    />
+                    <IonLabel
+                      color={isCommentLikedByUser ? 'danger' : 'primary'}
+                    >
+                      {totalLikes}
+                    </IonLabel>
+                  </IonButton>
+                </LoginTooltip>
 
-              <LoginTooltip loginOrSignUpTo="reply" userLoggedIn={userLoggedIn}>
-                <IonButton
-                  fill="clear"
-                  expand="full"
-                  color="medium"
-                  disabled={!userLoggedIn}
-                  onClick={() => onReply(authorDisplayName)}
+                <LoginTooltip
+                  loginOrSignUpTo="reply"
+                  userLoggedIn={userLoggedIn}
                 >
-                  <IonIcon color="medium" icon={chatbox} />
+                  <IonButton
+                    fill="clear"
+                    expand="full"
+                    color="medium"
+                    disabled={!userLoggedIn}
+                    onClick={() => onReply(authorDisplayName)}
+                  >
+                    <IonIcon color="medium" icon={chatbox} />
+                  </IonButton>
+                </LoginTooltip>
+                <IonButton fill="clear" expand="full" color="medium">
+                  <IonIcon icon={shareSocial} />
                 </IonButton>
-              </LoginTooltip>
-              <IonButton fill="clear" expand="full" color="medium">
-                <IonIcon icon={shareSocial} />
-              </IonButton>
-            </IonItem>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonItem>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonItem>
+    </>
   );
 };
 
