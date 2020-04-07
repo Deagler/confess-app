@@ -1,3 +1,8 @@
+import {
+  ApolloError,
+  AuthenticationError,
+  UserInputError,
+} from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { User } from '../../typings';
@@ -10,12 +15,12 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
   const userRecord: UserRecord = context.req.user;
 
   if (!userRecord || !userRecord.email) {
-    return { code: 401, success: false, message: 'Unauthorised' };
+    throw new AuthenticationError('Unauthorised');
   }
 
   const userDoc = usersCollection.doc(userRecord.uid);
   if ((await userDoc.get()).exists) {
-    return { code: 400, success: false, message: 'Account already exists.' };
+    throw new UserInputError('Account already exists');
   }
 
   const communityInfo = userRecord.email.split('@');
@@ -53,14 +58,10 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
     };
   } catch (e) {
     console.error(e);
-    return {
-      code: 500,
-      success: false,
-      message: 'Unable to register user. Our team has been notified.',
-    };
+    throw new ApolloError(
+      'Unable to register user. Our team has been notified'
+    );
   }
-
-  // Return the user
 }
 
 export const authResolvers = {

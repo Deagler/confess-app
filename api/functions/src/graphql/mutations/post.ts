@@ -1,4 +1,4 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { ForbiddenError, UserInputError } from 'apollo-server-express';
 import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
@@ -24,9 +24,7 @@ async function submitPostForApproval(
 
   // can only post to your own community
   if (userDoc.data()!.communityRef.id !== communityId) {
-    throw new AuthenticationError(
-      'Forbidden: you can only post to your own community'
-    );
+    throw new ForbiddenError('You can only post to your own community');
   }
 
   const { communityRef } = await verifyCommunity(communityId);
@@ -67,7 +65,7 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
 
   // check moderator is admin
   if (!userDoc.data()!.isAdmin) {
-    throw new AuthenticationError('Only administrators can moderate posts');
+    throw new ForbiddenError('Only administrators can moderate posts');
   }
 
   const { communityRef } = await verifyCommunity(communityId);
@@ -90,7 +88,7 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
         const communityDoc = docs[1];
 
         if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
-          throw new ApolloError(
+          throw new UserInputError(
             `post ${postRef.id} has already been moderated`
           );
         }
@@ -127,7 +125,7 @@ async function rejectPost(
 
   // check moderator is admin
   if (!userDoc.data()!.isAdmin) {
-    throw new AuthenticationError('Only administrators can moderate posts');
+    throw new ForbiddenError('Only administrators can moderate posts');
   }
 
   const { postRef } = await verifyPost(communityId, postId);
@@ -145,7 +143,9 @@ async function rejectPost(
   await firestore.runTransaction((t) =>
     t.get(postRef).then((postDoc) => {
       if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
-        throw new ApolloError(`post ${postRef.id} has already been moderated`);
+        throw new UserInputError(
+          `post ${postRef.id} has already been moderated`
+        );
       }
       t.update(postRef, patch);
       return Promise.resolve();
@@ -165,16 +165,9 @@ async function toggleLikePost(_: any, { communityId, postId }, context) {
   const userRecord: UserRecord = context.req.user;
   const { userRef } = await verifyUser(userRecord);
 
-  const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
-  const post = await postRef.get();
+  const { postRef, postDoc } = await verifyPost(communityId, postId);
 
-  if (!post.exists) {
-    throw new ApolloError(
-      `post ${postId} does't exist in community ${communityId}`
-    );
-  }
-
-  const userHasLiked = await (post.data()! as Post).likeRefs.some(
+  const userHasLiked = (postDoc.data()! as Post).likeRefs.some(
     (likeRef) => likeRef.id == userRef.id
   );
 

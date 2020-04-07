@@ -1,5 +1,6 @@
 // verification middleware
 
+import { ForbiddenError } from 'apollo-server-express';
 import { firebaseApp } from '../firebase';
 
 let mockCachedToken;
@@ -67,12 +68,8 @@ export const attachFirebaseIdToken = async (req, res, next) => {
     return;
   } catch (error) {
     console.error('Error while verifying attached Firebase ID token', error);
-    res.status(403).send({
-      code: 401,
-      success: false,
-      message:
-        'Failed to authorise user. Our team has been notified. ' + error.code,
-    });
-    return;
+    throw new ForbiddenError(
+      'Failed to authorise user. Our team has been notified'
+    );
   }
 };
