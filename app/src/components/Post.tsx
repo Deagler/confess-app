@@ -12,6 +12,7 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonCardContent,
+  IonToast,
 } from '@ionic/react';
 import { heart, chatbox, shareSocial } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
@@ -104,73 +105,80 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   };
 
   return (
-    <IonCard className="ion-margin">
-      <Link to={`/page/posts/${id}`} className="Link">
-        <IonCardHeader>
-          <IonCardSubtitle>
-            {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
-          </IonCardSubtitle>
-          <IonCardTitle>{title}</IonCardTitle>
-          <IonCardSubtitle>
-            {moment.unix(creationTimestamp).fromNow()}
-          </IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <p>
-            {expanded || !collapsable
-              ? content
-              : truncateString(content, MAX_CONTENT_LENGTH)}
-          </p>
-        </IonCardContent>
-        <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
-      </Link>
+    <>
+      <IonToast
+        isOpen={!!serverLikeInfo.error}
+        message={serverLikeInfo.error?.message}
+        duration={2000}
+      />
+      <IonCard className="ion-margin">
+        <Link to={`/page/posts/${id}`} className="Link">
+          <IonCardHeader>
+            <IonCardSubtitle>
+              {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
+            </IonCardSubtitle>
+            <IonCardTitle>{title}</IonCardTitle>
+            <IonCardSubtitle>
+              {moment.unix(creationTimestamp).fromNow()}
+            </IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <p>
+              {expanded || !collapsable
+                ? content
+                : truncateString(content, MAX_CONTENT_LENGTH)}
+            </p>
+          </IonCardContent>
+          <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
+        </Link>
 
-      <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
-        {collapsable &&
-          content.length > MAX_CONTENT_LENGTH &&
-          (expanded ? 'See Less' : 'See More')}
-      </IonButton>
+        <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
+          {collapsable &&
+            content.length > MAX_CONTENT_LENGTH &&
+            (expanded ? 'See Less' : 'See More')}
+        </IonButton>
 
-      <IonItemDivider color="white" />
+        <IonItemDivider color="white" />
 
-      <IonGrid>
-        <IonRow className="ion-justify-content-center">
-          <IonCol>
-            <LoginTooltip
-              loginOrSignUpTo="like this confession"
-              userLoggedIn={userLoggedIn}
-            >
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol>
+              <LoginTooltip
+                loginOrSignUpTo="like this confession"
+                userLoggedIn={userLoggedIn}
+              >
+                <IonButton
+                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                  onClick={() => handleLikeButtonClick(id)}
+                  fill="clear"
+                  expand="full"
+                  color={isLikedByUser ? 'danger' : 'primary'}
+                >
+                  <IonIcon icon={heart} />
+                  <IonLabel>{totalLikes}</IonLabel>
+                </IonButton>
+              </LoginTooltip>
+            </IonCol>
+            <IonCol>
               <IonButton
-                disabled={!userLoggedIn || serverLikeInfo.loading}
-                onClick={() => handleLikeButtonClick(id)}
+                onClick={onCommentClick}
                 fill="clear"
                 expand="full"
-                color={isLikedByUser ? 'danger' : 'primary'}
+                color="primary"
               >
-                <IonIcon icon={heart} />
-                <IonLabel>{totalLikes}</IonLabel>
+                <IonIcon icon={chatbox} />
+                <IonLabel>{totalComments}</IonLabel>
               </IonButton>
-            </LoginTooltip>
-          </IonCol>
-          <IonCol>
-            <IonButton
-              onClick={onCommentClick}
-              fill="clear"
-              expand="full"
-              color="primary"
-            >
-              <IonIcon icon={chatbox} />
-              <IonLabel>{totalComments}</IonLabel>
-            </IonButton>
-          </IonCol>
-          <IonCol>
-            <IonButton fill="clear" expand="full" color="primary">
-              <IonIcon icon={shareSocial} />
-            </IonButton>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonCard>
+            </IonCol>
+            <IonCol>
+              <IonButton fill="clear" expand="full" color="primary">
+                <IonIcon icon={shareSocial} />
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonCard>
+    </>
   );
 };
 
