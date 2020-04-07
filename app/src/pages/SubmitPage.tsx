@@ -24,7 +24,6 @@ import {
   IonCol,
   IonCardContent,
 } from '@ionic/react';
-import { SelectChangeEventDetail } from '@ionic/core';
 import './SubmitPage.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
@@ -55,7 +54,6 @@ interface SubmitFormProps {
 }
 
 const SubmitForm: React.FC<SubmitFormProps> = ({
-  selectedChannel,
   setSelectedChannel,
   setTitle,
   title,
@@ -67,27 +65,15 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
   const channels = data && data.selectedCommunity!.channels;
 
-  const handleChannelChange = (e: CustomEvent<SelectChangeEventDetail>) => {
-    const channelId = e.detail.value;
-
-    const channelName = channels?.find((channel) => channel?.id === channelId)
-      ?.name;
-
-    setSelectedChannel(channelName);
-  };
-
   return (
     <IonList>
       <IonItem>
-        <IonLabel style={selectedChannel ? {} : { color: 'lightgrey' }}>
-          {selectedChannel || 'Choose a channel'}
-        </IonLabel>
+        <IonLabel position="stacked">Channel</IonLabel>
         <IonSelect
-          selectedText={' '}
           interfaceOptions={channelInterfaceOptions}
           interface="popover"
           multiple={false}
-          onIonChange={handleChannelChange}
+          onIonChange={(e) => setSelectedChannel(e.detail.value)}
         >
           {channels &&
             channels.map((channel, index) => (
