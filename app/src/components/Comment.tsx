@@ -150,6 +150,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 fill="clear"
                 expand="full"
                 color="medium"
+                disabled={!userLoggedIn}
                 onClick={() => onReply(authorDisplayName)}
               >
                 <IonIcon color="medium" icon={chatbox} />
