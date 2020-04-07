@@ -20,6 +20,7 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { Tooltip } from '@material-ui/core';
+import LoginTooltip from './LoginTooltip';
 interface CommunityData {
   abbreviation: string;
 }
@@ -133,56 +134,37 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
         <IonRow>
           <IonCol>
             <IonItem lines="none">
-              <Tooltip
-                arrow={true}
-                disableFocusListener={userLoggedIn}
-                disableHoverListener={userLoggedIn}
-                disableTouchListener={userLoggedIn}
-                enterTouchDelay={200}
-                title="Log in or sign up to like comments"
-                aria-label="Log in or sign up to like comments"
+              <LoginTooltip
+                loginOrSignUpTo="like this comment"
+                userLoggedIn={userLoggedIn}
               >
-                <span>
-                  <IonButton
-                    onClick={() => handleLikeButtonClick(postIdForComment, id)}
-                    fill="clear"
-                    expand="full"
-                    disabled={!userLoggedIn || serverLikeInfo.loading}
-                  >
-                    <IonIcon
-                      color={isCommentLikedByUser ? 'danger' : 'primary'}
-                      icon={heart}
-                    />
-                    <IonLabel
-                      color={isCommentLikedByUser ? 'danger' : 'primary'}
-                    >
-                      {totalLikes}
-                    </IonLabel>
-                  </IonButton>
-                </span>
-              </Tooltip>
+                <IonButton
+                  onClick={() => handleLikeButtonClick(postIdForComment, id)}
+                  fill="clear"
+                  expand="full"
+                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                >
+                  <IonIcon
+                    color={isCommentLikedByUser ? 'danger' : 'primary'}
+                    icon={heart}
+                  />
+                  <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
+                    {totalLikes}
+                  </IonLabel>
+                </IonButton>
+              </LoginTooltip>
 
-              <Tooltip
-                arrow={true}
-                disableFocusListener={userLoggedIn}
-                disableHoverListener={userLoggedIn}
-                disableTouchListener={userLoggedIn}
-                enterTouchDelay={200}
-                title="Log in or sign up to reply"
-                aria-label="Log in or sign up to reply"
-              >
-                <span>
-                  <IonButton
-                    fill="clear"
-                    expand="full"
-                    color="medium"
-                    disabled={!userLoggedIn}
-                    onClick={() => onReply(authorDisplayName)}
-                  >
-                    <IonIcon color="medium" icon={chatbox} />
-                  </IonButton>
-                </span>
-              </Tooltip>
+              <LoginTooltip loginOrSignUpTo="reply" userLoggedIn={userLoggedIn}>
+                <IonButton
+                  fill="clear"
+                  expand="full"
+                  color="medium"
+                  disabled={!userLoggedIn}
+                  onClick={() => onReply(authorDisplayName)}
+                >
+                  <IonIcon color="medium" icon={chatbox} />
+                </IonButton>
+              </LoginTooltip>
               <IonButton fill="clear" expand="full" color="medium">
                 <IonIcon icon={shareSocial} />
               </IonButton>

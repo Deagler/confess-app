@@ -28,6 +28,7 @@ import {
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { Tooltip } from '@material-ui/core';
+import LoginTooltip from './LoginTooltip';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -103,32 +104,26 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                 style={{ padding: '0px' }}
                 size="12"
               >
-                <Tooltip
-                  arrow={true}
-                  disableFocusListener={userLoggedIn}
-                  disableHoverListener={userLoggedIn}
-                  disableTouchListener={userLoggedIn}
-                  enterTouchDelay={200}
-                  title="Log in or sign up to leave a comment"
-                  aria-label="Log in or sign up to leave a comment"
+                <LoginTooltip
+                  loginOrSignUpTo={'leave a comment'}
+                  userLoggedIn={userLoggedIn}
+                  inline={true}
                 >
-                  <span>
-                    <IonButton
-                      size="small"
-                      disabled={
-                        isNullOrWhitespace(content) || !userLoggedIn || !postId
-                      }
-                      onClick={handleSubmit}
-                    >
-                      {(loading && <IonSpinner />) || (
-                        <>
-                          Submit
-                          <IonIcon size="small" slot="icon-only" icon={send} />
-                        </>
-                      )}
-                    </IonButton>
-                  </span>
-                </Tooltip>
+                  <IonButton
+                    size="small"
+                    disabled={
+                      isNullOrWhitespace(content) || !userLoggedIn || !postId
+                    }
+                    onClick={handleSubmit}
+                  >
+                    {(loading && <IonSpinner />) || (
+                      <>
+                        Submit
+                        <IonIcon size="small" slot="icon-only" icon={send} />
+                      </>
+                    )}
+                  </IonButton>
+                </LoginTooltip>
               </IonCol>
             </IonRow>
           </IonGrid>

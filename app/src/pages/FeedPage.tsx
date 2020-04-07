@@ -25,6 +25,7 @@ import { Tooltip } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
+import LoginTooltip from '../components/LoginTooltip';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -51,27 +52,17 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <Tooltip
-              arrow={true}
-              disableFocusListener={userLoggedIn}
-              disableHoverListener={userLoggedIn}
-              disableTouchListener={userLoggedIn}
-              enterTouchDelay={200}
-              title="Log in or sign up to confess"
-              aria-label="Log in or sign up to confess"
-            >
-              <div>
-                <IonButton
-                  expand="block"
-                  routerLink="/page/submit"
-                  routerDirection="forward"
-                  disabled={!userLoggedIn}
-                >
-                  <IonIcon color="white" slot="start" icon={chatbox} />
-                  New Confession
-                </IonButton>
-              </div>
-            </Tooltip>
+            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
+              <IonButton
+                expand="block"
+                routerLink="/page/submit"
+                routerDirection="forward"
+                disabled={!userLoggedIn}
+              >
+                <IonIcon color="white" slot="start" icon={chatbox} />
+                New Confession
+              </IonButton>
+            </LoginTooltip>
           </div>
 
           <h4 className="ion-hide-lg-down ion-margin-top">
