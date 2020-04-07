@@ -36,7 +36,13 @@ export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
         <SecureRoute path="/page/admin" component={AdminPage} exact={true} />
         <Route
           path="/page/submit"
-          render={(props) => <SubmitPage {...props} />}
+          render={(props) =>
+            !userLoggedIn ? (
+              <Redirect to="/page/posts" />
+            ) : (
+              <SubmitPage {...props} />
+            )
+          }
           exact={true}
         />
         <Route
