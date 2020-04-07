@@ -27,6 +27,7 @@ import {
 } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
+import { Tooltip } from '@material-ui/core';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -102,20 +103,32 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                 style={{ padding: '0px' }}
                 size="12"
               >
-                <IonButton
-                  size="small"
-                  disabled={
-                    isNullOrWhitespace(content) || !userLoggedIn || !postId
-                  }
-                  onClick={handleSubmit}
+                <Tooltip
+                  arrow={true}
+                  disableFocusListener={userLoggedIn}
+                  disableHoverListener={userLoggedIn}
+                  disableTouchListener={userLoggedIn}
+                  enterTouchDelay={200}
+                  title="Log in or sign up to leave a comment"
+                  aria-label="Log in or sign up to leave a comment"
                 >
-                  {(loading && <IonSpinner />) || (
-                    <>
-                      Submit
-                      <IonIcon size="small" slot="icon-only" icon={send} />
-                    </>
-                  )}
-                </IonButton>
+                  <span>
+                    <IonButton
+                      size="small"
+                      disabled={
+                        isNullOrWhitespace(content) || !userLoggedIn || !postId
+                      }
+                      onClick={handleSubmit}
+                    >
+                      {(loading && <IonSpinner />) || (
+                        <>
+                          Submit
+                          <IonIcon size="small" slot="icon-only" icon={send} />
+                        </>
+                      )}
+                    </IonButton>
+                  </span>
+                </Tooltip>
               </IonCol>
             </IonRow>
           </IonGrid>

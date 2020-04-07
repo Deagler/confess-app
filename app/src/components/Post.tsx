@@ -28,6 +28,7 @@ import {
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import { Tooltip } from '@material-ui/core';
 
 export interface PostData {
   id: string;
@@ -135,16 +136,28 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol>
-            <IonButton
-              disabled={!userLoggedIn || serverLikeInfo.loading}
-              onClick={() => handleLikeButtonClick(id)}
-              fill="clear"
-              expand="full"
-              color={isLikedByUser ? 'danger' : 'primary'}
+            <Tooltip
+              arrow={true}
+              disableFocusListener={userLoggedIn}
+              disableHoverListener={userLoggedIn}
+              disableTouchListener={userLoggedIn}
+              enterTouchDelay={200}
+              title="Log in or sign up to like confessions"
+              aria-label="Log in or sign up to like confessions"
             >
-              <IonIcon icon={heart} />
-              <IonLabel>{totalLikes}</IonLabel>
-            </IonButton>
+              <div>
+                <IonButton
+                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                  onClick={() => handleLikeButtonClick(id)}
+                  fill="clear"
+                  expand="full"
+                  color={isLikedByUser ? 'danger' : 'primary'}
+                >
+                  <IonIcon icon={heart} />
+                  <IonLabel>{totalLikes}</IonLabel>
+                </IonButton>
+              </div>
+            </Tooltip>
           </IonCol>
           <IonCol>
             <IonButton
