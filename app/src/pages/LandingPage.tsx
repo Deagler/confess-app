@@ -19,6 +19,7 @@ import {
   IonSlide,
   IonSkeletonText,
   IonItemDivider,
+  IonToast,
 } from '@ionic/react';
 
 import uoa from '../assets/uoa.svg';
@@ -50,7 +51,7 @@ const secondaryHero = css({
 });
 
 const LandingPage: React.FC = () => {
-  const { loading, data } = useQuery(GET_COMMUNITY_POSTS, {
+  const { loading, data, error } = useQuery(GET_COMMUNITY_POSTS, {
     variables: {
       id: 'HW6lY4kJOpqSpL39hbUV',
     },
@@ -67,6 +68,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <IonPage id="landing-page">
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonContent {...offWhiteCSS}>
         <div {...containerClass} className=" ion-align-self-center">
           <IonToolbar>
