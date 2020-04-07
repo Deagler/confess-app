@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -23,7 +24,6 @@ import {
   IonCol,
   IonCardContent,
 } from '@ionic/react';
-import React, { useState } from 'react';
 import './SubmitPage.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
@@ -42,17 +42,18 @@ const channelInterfaceOptions = {
   message: 'The post will be found in the selected channel',
 };
 
-const SubmitForm: React.FC<{
-  selectedChannel;
-  setSelectedChannel;
-  setTitle;
-  title;
-  setConfessionText;
-  confessionText;
-  authorAlias;
-  setAuthorAlias;
-}> = ({
-  selectedChannel,
+interface SubmitFormProps {
+  selectedChannel?: string;
+  setSelectedChannel(channel?: string): void;
+  title?: string;
+  setTitle(title?: string): void;
+  confessionText?: string;
+  setConfessionText(text?: string): void;
+  authorAlias?: string;
+  setAuthorAlias(alias?: string): void;
+}
+
+const SubmitForm: React.FC<SubmitFormProps> = ({
   setSelectedChannel,
   setTitle,
   title,
@@ -64,27 +65,15 @@ const SubmitForm: React.FC<{
   const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
   const channels = data && data.selectedCommunity!.channels;
 
-  const handleChannelChange = (e) => {
-    const channelId = e.detail.value;
-
-    const channelName = channels?.find((channel) => channel?.id === channelId)
-      ?.name;
-
-    setSelectedChannel(channelName);
-  };
-
   return (
     <IonList>
       <IonItem>
-        <IonLabel style={selectedChannel ? {} : { color: 'lightgrey' }}>
-          {selectedChannel || 'Choose a channel'}
-        </IonLabel>
+        <IonLabel position="stacked">Channel</IonLabel>
         <IonSelect
-          selectedText={' '}
           interfaceOptions={channelInterfaceOptions}
           interface="popover"
           multiple={false}
-          onIonChange={handleChannelChange}
+          onIonChange={(e) => setSelectedChannel(e.detail.value)}
         >
           {channels &&
             channels.map((channel, index) => (
@@ -154,7 +143,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   >(SUBMIT_POST_FOR_APPROVAL);
 
   const handleSubmit = async (
-    channel: string,
+    channelId: string,
     postTitle: string,
     content: string,
     authorAliasInput?: string
@@ -170,7 +159,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       await submitPostForApproval({
         variables: {
           communityId,
-          channel,
+          channelId,
           title: postTitle,
           content,
           authorAlias: authorAliasInput || '',

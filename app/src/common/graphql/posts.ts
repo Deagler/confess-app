@@ -89,14 +89,14 @@ export const GET_POST_COMMENTS_ONLY = gql`
 export const SUBMIT_POST_FOR_APPROVAL = gql`
   mutation SubmitPostForApproval(
     $communityId: ID!
-    $channel: String!
+    $channelId: String!
     $title: String!
     $content: String!
     $authorAlias: String!
   ) {
     submitPostForApproval(
       communityId: $communityId
-      channel: $channel
+      channelId: $channelId
       title: $title
       content: $content
       authorAlias: $authorAlias

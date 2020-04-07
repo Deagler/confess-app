@@ -49,4 +49,5 @@ export interface GetCommunityPostsVariables {
   sortBy?: SortByInput | null;
   cursor?: string | null;
   limit?: number | null;
+  channelId?: string | null;
 }

@@ -33,7 +33,7 @@ export interface SubmitPostForApproval {
 
 export interface SubmitPostForApprovalVariables {
   communityId: string;
-  channel: string;
+  channelId: string;
   title: string;
   content: string;
   authorAlias: string;

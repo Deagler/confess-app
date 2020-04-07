@@ -15,7 +15,7 @@ const firestore = firebaseApp.firestore();
 
 async function submitPostForApproval(
   _: any,
-  { communityId, channel, title, content, authorAlias },
+  { communityId, channelId, title, content, authorAlias },
   context: any
 ) {
   // pull user from request context
@@ -39,7 +39,7 @@ async function submitPostForApproval(
     creationTimestamp: moment().unix(),
     title,
     content,
-    channel,
+    channelId,
     authorAlias,
     authorRef: userRef,
     moderationStatus: ModerationStatus.PENDING,

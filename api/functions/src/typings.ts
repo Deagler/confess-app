@@ -31,7 +31,7 @@ export interface Post {
   authorRef: FirestoreDocRef;
   author: User;
   authorAlias?: string;
-  channel: string;
+  channelId: string;
   title: string;
   content: string;
   moderationStatus: ModerationStatus;
