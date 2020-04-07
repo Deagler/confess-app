@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -23,7 +24,7 @@ import {
   IonCol,
   IonCardContent,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import { SelectChangeEventDetail } from '@ionic/core';
 import './SubmitPage.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
@@ -42,16 +43,18 @@ const channelInterfaceOptions = {
   message: 'The post will be found in the selected channel',
 };
 
-const SubmitForm: React.FC<{
-  selectedChannel;
-  setSelectedChannel;
-  setTitle;
-  title;
-  setConfessionText;
-  confessionText;
-  authorAlias;
-  setAuthorAlias;
-}> = ({
+interface SubmitFormProps {
+  selectedChannel?: string;
+  setSelectedChannel(channel?: string): void;
+  title?: string;
+  setTitle(title?: string): void;
+  confessionText?: string;
+  setConfessionText(text?: string): void;
+  authorAlias?: string;
+  setAuthorAlias(alias?: string): void;
+}
+
+const SubmitForm: React.FC<SubmitFormProps> = ({
   selectedChannel,
   setSelectedChannel,
   setTitle,
@@ -64,7 +67,7 @@ const SubmitForm: React.FC<{
   const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
   const channels = data && data.selectedCommunity!.channels;
 
-  const handleChannelChange = (e) => {
+  const handleChannelChange = (e: CustomEvent<SelectChangeEventDetail>) => {
     const channelId = e.detail.value;
 
     const channelName = channels?.find((channel) => channel?.id === channelId)
