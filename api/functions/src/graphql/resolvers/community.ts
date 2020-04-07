@@ -9,7 +9,7 @@ import { addIdToDoc } from './utils';
 const firestore = firebaseApp.firestore();
 
 export const communityResolvers = {
-  async feed(parent: any, { sortBy, cursor, limit }) {
+  async feed(parent: any, { sortBy, cursor, limit, channelId }) {
     try {
       const postCollection = firestore.collection(
         `communities/${parent.id}/posts`
@@ -19,11 +19,14 @@ export const communityResolvers = {
         ? await postCollection.doc(cursor).get()
         : undefined;
 
-      const postQuery = postCollection.where(
+      let postQuery = postCollection.where(
         'moderationStatus',
         '==',
         ModerationStatus.APPROVED
       );
+      if (channelId) {
+        postQuery = postQuery.where('channelId', '==', channelId);
+      }
 
       const paginationResults = await paginateResults(
         postQuery,
@@ -49,7 +52,7 @@ export const communityResolvers = {
     }
 
     try {
-      const postCollection = await firestore.collection(
+      const postCollection = firestore.collection(
         `communities/${parent.id}/posts`
       );
 

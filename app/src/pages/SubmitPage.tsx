@@ -143,7 +143,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   >(SUBMIT_POST_FOR_APPROVAL);
 
   const handleSubmit = async (
-    channel: string,
+    channelId: string,
     postTitle: string,
     content: string,
     authorAliasInput?: string
@@ -159,7 +159,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       await submitPostForApproval({
         variables: {
           communityId,
-          channel,
+          channelId,
           title: postTitle,
           content,
           authorAlias: authorAliasInput || '',

@@ -60,7 +60,12 @@ const typeDefs = gql`
     name: String!
     abbreviation: String!
     imageURI: String!
-    feed(sortBy: SortByInput, limit: Int, cursor: String): PostConnection!
+    feed(
+      sortBy: SortByInput
+      limit: Int
+      cursor: String
+      channelId: ID
+    ): PostConnection!
     unapprovedPosts(
       sortBy: SortByInput
       limit: Int
@@ -81,7 +86,7 @@ const typeDefs = gql`
     creationTimestamp: Int!
     authorAlias: String
 
-    channel: String!
+    channelId: String!
     title: String!
     content: String!
 
@@ -149,7 +154,7 @@ const typeDefs = gql`
   type Mutation {
     submitPostForApproval(
       communityId: ID!
-      channel: String!
+      channelId: String!
       title: String!
       content: String!
       authorAlias: String
