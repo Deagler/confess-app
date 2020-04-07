@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonList,
   IonMenuToggle,
@@ -12,12 +12,14 @@ import { airplaneOutline } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import { useSelectedChannel } from '../customHooks/location';
 
 const ChannelList: React.FC<{}> = () => {
-  const [selectedChannel, setSelectedChannel] = useState<string>();
   const { data, loading, error } = useQuery<GetSelectedCommunity>(
     GET_SELECTED_COMMUNITY
   );
+
+  const channelId = useSelectedChannel();
 
   return (
     <>
@@ -29,12 +31,11 @@ const ChannelList: React.FC<{}> = () => {
           <>
             <IonMenuToggle autoHide={false}>
               <IonItem
-                className={selectedChannel === 'all' ? 'selected' : ''}
+                className={!channelId ? 'selected' : ''}
                 routerLink={`/page/posts`}
                 routerDirection="forward"
                 lines="none"
                 detail={false}
-                onClick={() => setSelectedChannel('all')}
               >
                 <IonIcon slot="start" icon={airplaneOutline} />
                 <IonLabel>All</IonLabel>
@@ -46,17 +47,14 @@ const ChannelList: React.FC<{}> = () => {
               data.selectedCommunity!.channels.map((channel, index: number) => (
                 <IonMenuToggle key={index} autoHide={false}>
                   <IonItem
-                    className={
-                      selectedChannel === channel!.name ? 'selected' : ''
-                    }
+                    className={channelId === channel?.id ? 'selected' : ''}
                     routerLink={`/page/posts?channel=${channel!.id}`}
                     routerDirection="forward"
                     lines="none"
                     detail={false}
-                    onClick={() => setSelectedChannel(channel!.name)}
                   >
                     <IonIcon slot="start" icon={airplaneOutline} />
-                    <IonLabel>{channel!.name}</IonLabel>
+                    <IonLabel>{channel?.name}</IonLabel>
                   </IonItem>
                 </IonMenuToggle>
               ))}
