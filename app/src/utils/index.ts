@@ -4,6 +4,10 @@ export function IsValidEmailFormat(emailToValidate: string): boolean {
   return emailRegexp.test(emailToValidate);
 }
 
+export function isNullOrWhitespace(input: string | null | undefined): boolean {
+  return !input || !input.trim();
+}
+
 export function truncateString(str: string, length: number): string {
   if (str.length <= length) {
     return str;

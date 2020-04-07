@@ -22,6 +22,7 @@ import {
 } from '../types/SubmitComment';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import { isNullOrWhitespace } from '../utils';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -64,13 +65,6 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonTextareaElement>) => {
-    if (e.keyCode === 13 && e.shiftKey === false && content) {
-      e.preventDefault();
-      handleSubmit();
-    }
-  };
-
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -83,7 +77,6 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                   <IonTextarea
                     placeholder="Write a comment..."
                     value={content}
-                    onKeyDown={handleKeyDown}
                     onIonChange={(e) => {
                       setContent(e.detail.value!);
                     }}
@@ -102,7 +95,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
               >
                 <IonButton
                   size="small"
-                  disabled={!content || !postId}
+                  disabled={isNullOrWhitespace(content) || !postId}
                   onClick={handleSubmit}
                 >
                   {(loading && <IonSpinner />) || (
