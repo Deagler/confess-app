@@ -11,6 +11,7 @@ export interface GetSelectedCommunity_selectedCommunity_channels {
   __typename: "Channel";
   id: string;
   name: string;
+  icon: string | null;
 }
 
 export interface GetSelectedCommunity_selectedCommunity {
@@ -18,6 +19,7 @@ export interface GetSelectedCommunity_selectedCommunity {
   id: string;
   name: string;
   abbreviation: string;
+  imageURI: string;
   channels: (GetSelectedCommunity_selectedCommunity_channels | null)[];
 }
 

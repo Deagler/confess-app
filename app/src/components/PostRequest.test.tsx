@@ -24,7 +24,7 @@ test('displays content properly', async () => {
   const { findByText } = render(
     wrapWithApolloProvider(<PostRequest {...props} />)
   );
-  await findByText('#10');
+  await findByText('Post ID: 10');
   await findByText('this is the title');
   await findByText('this is the content');
   await findByText('this is the author');

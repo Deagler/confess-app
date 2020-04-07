@@ -17,6 +17,7 @@ const mocks = [
           id: '123',
           name: 'university',
           abbreviation: 'uni',
+          imageURI: 'asdasd',
           channels: [
             {
               id: '456',
@@ -60,16 +61,4 @@ test('renders without crashing', () => {
     </MockedProvider>
   );
   expect(baseElement).toBeDefined();
-});
-
-test('displays content properly', async () => {
-  const { findByText } = render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter>
-        <Menu />
-      </MemoryRouter>
-    </MockedProvider>
-  );
-  await findByText('Confess');
-  await findByText('Login');
 });

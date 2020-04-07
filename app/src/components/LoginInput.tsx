@@ -18,12 +18,13 @@ const successLabel = css({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  textAlign: 'center',
 });
 
 const LoginSuccess: React.FC<{}> = () => {
   return (
     <div {...successLabel}>
-      <Checkmark size="large" />
+      <Checkmark size="medium" />
       <IonLabel>Click the link in your e-mail to login!</IonLabel>
     </div>
   );
@@ -41,6 +42,7 @@ export const LoginInput: React.FC<{}> = () => {
       url: `${window.location.origin}/callback`,
       handleCodeInApp: true,
     };
+    console.log('asdasdsad');
 
     try {
       setLoginStatus(LOGIN_STATUS.PENDING);

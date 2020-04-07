@@ -2,9 +2,6 @@ import { gql } from 'apollo-boost';
 
 export const SUBMIT_COMMENT = gql`
   mutation SubmitComment($communityId: ID!, $postId: ID!, $content: String!) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     submitComment(
       communityId: $communityId
       postId: $postId
@@ -47,9 +44,6 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
     $postId: ID!
     $commentId: ID!
   ) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     toggleLikeComment(
       communityId: $communityId
       postId: $postId

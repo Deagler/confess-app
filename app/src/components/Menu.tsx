@@ -2,12 +2,11 @@ import React from 'react';
 import {
   IonContent,
   IonMenu,
-  IonTitle,
-  IonToolbar,
   IonSpinner,
   IonFooter,
+  IonButton,
+  IonIcon,
 } from '@ionic/react';
-import { useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_LOCAL_USER } from '../common/graphql/localState';
@@ -20,6 +19,43 @@ import { LoginInput } from './LoginInput';
 import { LocalUserDetail } from './LocalUserDetail';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
+import { css } from 'glamor';
+import { AppLogo } from './AppLogo';
+import { useShouldBlockMenu } from '../utils/menus';
+import { appPageCSS, offWhiteCSS } from '../theme/global';
+import { chatbox } from 'ionicons/icons';
+
+const menuCSS = css({
+  borderRight: '0',
+  '@media(min-width:992px)': {
+    maxWidth: '300px',
+  },
+  scroll: 'none',
+});
+
+const sidebarContent = css({
+  height: '80%',
+  '& .MuiAutocomplete-root': {
+    backgroundColor: 'white',
+  },
+});
+
+const channelsContainer = css({
+  marginTop: '4px',
+  '& ion-list, ion-item': offWhiteCSS,
+  '& ion-list': {
+    padding: '0px !important',
+    maxHeight: '100%',
+    marginTop: '10px',
+  },
+  '& ion-item': {
+    borderLeft: 'solid 1px rgb(190,190,190)',
+    borderRadius: '0px !important',
+    '.selected': {
+      borderLeft: 'solid 1px var(--ion-color-primary)',
+    },
+  },
+});
 
 const Menu: React.FC<{}> = () => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
@@ -27,36 +63,50 @@ const Menu: React.FC<{}> = () => {
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
 
-  // cant put this in App because you cant have useLocation
-  // in the same component as the router is defined
-  const location = useLocation();
-  if (location.pathname === '/landing') {
+  const shouldBlockMenu = useShouldBlockMenu();
+  if (shouldBlockMenu) {
     return null;
   }
 
-  console.log(localUserQuery);
-
   return (
     <React.Fragment>
-      <IonMenu contentId="main" type="overlay">
-        <IonToolbar>
-          <IonTitle>Confess</IonTitle>
-        </IonToolbar>
+      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
         <IonContent>
-          <CommunitySelect />
+          <div className="ion-hide-lg-up">
+            <AppLogo />
+          </div>
 
-          {localUserQuery.loading || !localUserQuery.called ? (
-            <IonSpinner />
-          ) : localUserQuery.data?.localUser ? (
-            <LocalUserDetail user={localUserQuery.data?.localUser} />
-          ) : (
-            <LoginInput />
-          )}
-          <ChannelList />
+          <div {...sidebarContent} className="ion-padding">
+            <IonButton
+              expand="block"
+              routerLink="/page/submit"
+              routerDirection="forward"
+              className="ion-margin-bottom ion-hide-lg-down"
+            >
+              <IonIcon color="white" slot="start" icon={chatbox} />
+              New Confession
+            </IonButton>
+            <div className=" ion-padding-top ion-padding-bottom">
+              <CommunitySelect />
+            </div>
+
+            <div className="ion-hide-lg-up ion-margin-top ion-margin-bottom ion-text-center">
+              {localUserQuery.loading || !localUserQuery.called ? (
+                <IonSpinner />
+              ) : localUserQuery.data?.localUser ? (
+                <LocalUserDetail user={localUserQuery.data?.localUser} />
+              ) : (
+                <LoginInput />
+              )}
+            </div>
+            <div {...channelsContainer}>
+              <ChannelList />
+            </div>
+          </div>
         </IonContent>
         {userLoggedIn && (
-          <IonFooter>
-            <LogoutButton />
+          <IonFooter className="ion-hide-lg-up">
+            <LogoutButton showText={true} />
           </IonFooter>
         )}
       </IonMenu>
