@@ -31,7 +31,7 @@ const ChannelList: React.FC<{}> = () => {
               <IonItem
                 className={selectedChannel === 'all' ? 'selected' : ''}
                 routerLink={`/page/posts`}
-                routerDirection="none"
+                routerDirection="forward"
                 lines="none"
                 detail={false}
                 onClick={() => setSelectedChannel('all')}
@@ -49,8 +49,8 @@ const ChannelList: React.FC<{}> = () => {
                     className={
                       selectedChannel === channel!.name ? 'selected' : ''
                     }
-                    routerLink={`/page/posts?community=${channel!.name}`}
-                    routerDirection="none"
+                    routerLink={`/page/posts?channel=${channel!.id}`}
+                    routerDirection="forward"
                     lines="none"
                     detail={false}
                     onClick={() => setSelectedChannel(channel!.name)}
