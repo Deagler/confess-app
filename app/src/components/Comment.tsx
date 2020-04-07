@@ -19,7 +19,6 @@ import {
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import { Tooltip } from '@material-ui/core';
 import LoginTooltip from './LoginTooltip';
 interface CommunityData {
   abbreviation: string;

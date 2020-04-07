@@ -21,7 +21,6 @@ import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
 import { chatbox } from 'ionicons/icons';
-import { Tooltip } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';

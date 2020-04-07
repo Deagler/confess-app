@@ -28,7 +28,6 @@ import {
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import { Tooltip } from '@material-ui/core';
 import LoginTooltip from './LoginTooltip';
 
 export interface PostData {

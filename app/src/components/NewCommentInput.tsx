@@ -27,7 +27,6 @@ import {
 } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
-import { Tooltip } from '@material-ui/core';
 import LoginTooltip from './LoginTooltip';
 
 export interface NewCommentInputProps {
