@@ -21,8 +21,13 @@ import {
   SubmitComment_submitComment_comment,
 } from '../types/SubmitComment';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import {
+  GET_SELECTED_COMMUNITY,
+  GET_LOCAL_USER,
+} from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
+import { GetLocalUser } from '../types/GetLocalUser';
+import LoginTooltip from './LoginTooltip';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -45,6 +50,11 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     GET_SELECTED_COMMUNITY
   );
   const [content, setContent] = useState<string>();
+
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
+    fetchPolicy: 'network-only',
+  });
+  const userLoggedIn = !!localUserQuery.data?.localUser;
 
   const handleSubmit = async () => {
     // TODO: add input validation and retrieve communityId from somewhere
@@ -93,18 +103,26 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                 style={{ padding: '0px' }}
                 size="12"
               >
-                <IonButton
-                  size="small"
-                  disabled={isNullOrWhitespace(content) || !postId}
-                  onClick={handleSubmit}
+                <LoginTooltip
+                  loginOrSignUpTo={'leave a comment'}
+                  userLoggedIn={userLoggedIn}
+                  inline={true}
                 >
-                  {(loading && <IonSpinner />) || (
-                    <>
-                      Submit
-                      <IonIcon size="small" slot="icon-only" icon={send} />
-                    </>
-                  )}
-                </IonButton>
+                  <IonButton
+                    size="small"
+                    disabled={
+                      isNullOrWhitespace(content) || !userLoggedIn || !postId
+                    }
+                    onClick={handleSubmit}
+                  >
+                    {(loading && <IonSpinner />) || (
+                      <>
+                        Submit
+                        <IonIcon size="small" slot="icon-only" icon={send} />
+                      </>
+                    )}
+                  </IonButton>
+                </LoginTooltip>
               </IonCol>
             </IonRow>
           </IonGrid>

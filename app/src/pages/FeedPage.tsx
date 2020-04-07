@@ -21,6 +21,10 @@ import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
 import { chatbox } from 'ionicons/icons';
+import { useQuery } from '@apollo/react-hooks';
+import { GetLocalUser } from '../types/GetLocalUser';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
+import LoginTooltip from '../components/LoginTooltip';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -29,6 +33,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     hasMorePosts,
     fetchMorePosts,
   } = usePaginatedFeedQuery();
+
+  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
+  const userLoggedIn = !!localUserQuery.data?.localUser;
 
   return (
     <IonPage {...appPageCSS}>
@@ -44,14 +51,17 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <IonButton
-              expand="block"
-              routerLink="/page/submit"
-              routerDirection="forward"
-            >
-              <IonIcon color="white" slot="start" icon={chatbox} />
-              New Confession
-            </IonButton>
+            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
+              <IonButton
+                expand="block"
+                routerLink="/page/submit"
+                routerDirection="forward"
+                disabled={!userLoggedIn}
+              >
+                <IonIcon color="white" slot="start" icon={chatbox} />
+                New Confession
+              </IonButton>
+            </LoginTooltip>
           </div>
 
           <h4 className="ion-hide-lg-down ion-margin-top">

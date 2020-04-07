@@ -1,3 +1,8 @@
 .PostReadOnly {
   pointer-events: none;
 }
+
+/* Required for bottom row of buttons to be interactive */
+ion-grid {
+  pointer-events: auto;
+}

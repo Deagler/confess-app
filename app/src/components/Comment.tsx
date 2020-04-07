@@ -19,6 +19,7 @@ import {
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import LoginTooltip from './LoginTooltip';
 interface CommunityData {
   abbreviation: string;
 }
@@ -132,28 +133,37 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
         <IonRow>
           <IonCol>
             <IonItem lines="none">
-              <IonButton
-                onClick={() => handleLikeButtonClick(postIdForComment, id)}
-                fill="clear"
-                expand="full"
-                disabled={!userLoggedIn || serverLikeInfo.loading}
+              <LoginTooltip
+                loginOrSignUpTo="like this comment"
+                userLoggedIn={userLoggedIn}
               >
-                <IonIcon
-                  color={isCommentLikedByUser ? 'danger' : 'primary'}
-                  icon={heart}
-                />
-                <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
-                  {totalLikes}
-                </IonLabel>
-              </IonButton>
-              <IonButton
-                fill="clear"
-                expand="full"
-                color="medium"
-                onClick={() => onReply(authorDisplayName)}
-              >
-                <IonIcon color="medium" icon={chatbox} />
-              </IonButton>
+                <IonButton
+                  onClick={() => handleLikeButtonClick(postIdForComment, id)}
+                  fill="clear"
+                  expand="full"
+                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                >
+                  <IonIcon
+                    color={isCommentLikedByUser ? 'danger' : 'primary'}
+                    icon={heart}
+                  />
+                  <IonLabel color={isCommentLikedByUser ? 'danger' : 'primary'}>
+                    {totalLikes}
+                  </IonLabel>
+                </IonButton>
+              </LoginTooltip>
+
+              <LoginTooltip loginOrSignUpTo="reply" userLoggedIn={userLoggedIn}>
+                <IonButton
+                  fill="clear"
+                  expand="full"
+                  color="medium"
+                  disabled={!userLoggedIn}
+                  onClick={() => onReply(authorDisplayName)}
+                >
+                  <IonIcon color="medium" icon={chatbox} />
+                </IonButton>
+              </LoginTooltip>
               <IonButton fill="clear" expand="full" color="medium">
                 <IonIcon icon={shareSocial} />
               </IonButton>

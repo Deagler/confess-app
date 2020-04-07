@@ -24,6 +24,7 @@ import { AppLogo } from './AppLogo';
 import { useShouldBlockMenu } from '../utils/menus';
 import { appPageCSS, offWhiteCSS } from '../theme/global';
 import { chatbox } from 'ionicons/icons';
+import LoginTooltip from './LoginTooltip';
 
 const menuCSS = css({
   borderRight: '0',
@@ -77,15 +78,18 @@ const Menu: React.FC<{}> = () => {
           </div>
 
           <div {...sidebarContent} className="ion-padding">
-            <IonButton
-              expand="block"
-              routerLink="/page/submit"
-              routerDirection="forward"
-              className="ion-margin-bottom ion-hide-lg-down"
-            >
-              <IonIcon color="white" slot="start" icon={chatbox} />
-              New Confession
-            </IonButton>
+            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
+              <IonButton
+                expand="block"
+                routerLink="/page/submit"
+                routerDirection="forward"
+                className="ion-margin-bottom ion-hide-lg-down"
+                disabled={!userLoggedIn}
+              >
+                <IonIcon color="white" slot="start" icon={chatbox} />
+                New Confession
+              </IonButton>
+            </LoginTooltip>
             <div className=" ion-padding-top ion-padding-bottom">
               <CommunitySelect />
             </div>

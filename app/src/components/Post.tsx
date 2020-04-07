@@ -28,6 +28,7 @@ import {
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
+import LoginTooltip from './LoginTooltip';
 
 export interface PostData {
   id: string;
@@ -135,16 +136,21 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol>
-            <IonButton
-              disabled={!userLoggedIn || serverLikeInfo.loading}
-              onClick={() => handleLikeButtonClick(id)}
-              fill="clear"
-              expand="full"
-              color={isLikedByUser ? 'danger' : 'primary'}
+            <LoginTooltip
+              loginOrSignUpTo="like this confession"
+              userLoggedIn={userLoggedIn}
             >
-              <IonIcon icon={heart} />
-              <IonLabel>{totalLikes}</IonLabel>
-            </IonButton>
+              <IonButton
+                disabled={!userLoggedIn || serverLikeInfo.loading}
+                onClick={() => handleLikeButtonClick(id)}
+                fill="clear"
+                expand="full"
+                color={isLikedByUser ? 'danger' : 'primary'}
+              >
+                <IonIcon icon={heart} />
+                <IonLabel>{totalLikes}</IonLabel>
+              </IonButton>
+            </LoginTooltip>
           </IonCol>
           <IonCol>
             <IonButton
