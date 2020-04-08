@@ -23,6 +23,7 @@ import {
   IonRow,
   IonCol,
   IonCardContent,
+  IonModal,
 } from '@ionic/react';
 import './SubmitPage.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -35,6 +36,7 @@ import {
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import { appPageCSS } from '../theme/global';
+import SubmissionRulesModal from '../components/SubmissionRulesModal';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -134,6 +136,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
     false
   );
+  const [showModal, setShowModal] = useState(false);
 
   const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
 
@@ -172,6 +175,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setTitle(undefined);
       setSelectedChannel(undefined);
 
+      // close modal
+      setShowModal(false);
+
       // show success message
       setSuccessToastVisible(true);
 
@@ -190,6 +196,14 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         duration={2000}
         onDidDismiss={() => setSuccessToastVisible(false)}
       />
+      <SubmissionRulesModal
+        isOpen={showModal}
+        onDidDismiss={() => setShowModal(false)}
+        loadingSubmit={loading}
+        onSubmit={() =>
+          handleSubmit(selectedChannel!, title!, confessionText!, authorAlias)
+        }
+      />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
@@ -199,16 +213,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
           <IonButtons slot="primary">
             <IonButton
               disabled={!(selectedChannel && title && confessionText)}
-              onClick={() =>
-                handleSubmit(
-                  selectedChannel!,
-                  title!,
-                  confessionText!,
-                  authorAlias
-                )
-              }
+              onClick={() => setShowModal(true)}
             >
-              {loading ? <IonSpinner /> : 'Post'}
+              Submit
             </IonButton>
           </IonButtons>
           <IonTitle>Create Confession</IonTitle>
@@ -250,14 +257,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                   <IonCol>
                     <IonButton
                       disabled={!(selectedChannel && title && confessionText)}
-                      onClick={() =>
-                        handleSubmit(
-                          selectedChannel!,
-                          title!,
-                          confessionText!,
-                          authorAlias
-                        )
-                      }
+                      onClick={() => setShowModal(true)}
                       color="primary"
                       expand="block"
                     >
