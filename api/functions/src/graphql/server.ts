@@ -19,6 +19,15 @@ export function ConstructGraphQLServer() {
       // Debug the request context here if needed.
       return ctx;
     },
+    formatError: (err) => {
+      // don't expose implementation details to the client
+      if (err.message.startsWith('FirebaseError: ')) {
+        console.error(err);
+        return new Error('Internal Server Error');
+      }
+
+      return err;
+    },
   });
 
   apolloServer.applyMiddleware({ app, path: '/', cors: true });

@@ -1,4 +1,4 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, UserInputError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 
@@ -15,7 +15,7 @@ export async function verifyUser(userRecord: UserRecord) {
 
   const userDoc = await userRef.get();
   if (!userDoc.exists) {
-    throw new ApolloError(`No user document for ${userRecord.uid}`);
+    throw new UserInputError(`No user document for ${userRecord.uid}`);
   }
 
   return { userRef, userDoc };
@@ -25,7 +25,7 @@ export async function verifyCommunity(communityId: string) {
   const communityRef = communitiesCollection.doc(communityId);
   const communityDoc = await communityRef.get();
   if (!communityDoc.exists) {
-    throw new ApolloError(`Community with id ${communityId} not found`);
+    throw new UserInputError(`Community with id ${communityId} not found`);
   }
 
   return { communityRef, communityDoc };
@@ -35,7 +35,7 @@ export async function verifyPost(communityId: string, postId: string) {
   const postRef = firestore.doc(`/communities/${communityId}/posts/${postId}`);
   const postDoc = await postRef.get();
   if (!postDoc.exists) {
-    throw new ApolloError(
+    throw new UserInputError(
       `post ${postId} does't exist in community ${communityId}`
     );
   }
@@ -53,7 +53,7 @@ export async function verifyComment(
   );
   const commentDoc = await commentRef.get();
   if (!commentDoc.exists) {
-    throw new ApolloError(
+    throw new UserInputError(
       `post ${commentId} does't exist in community ${communityId}`
     );
   }
