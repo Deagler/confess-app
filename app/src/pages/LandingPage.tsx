@@ -1,6 +1,5 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,
@@ -27,6 +26,8 @@ import LandingPost from '../components/LandingPost';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
 import { offWhiteCSS } from '../theme/global';
+import { GET_LANDING_POSTS } from '../common/graphql/landingPosts';
+import { GetLandingPosts } from '../types/GetLandingPosts';
 
 const containerClass = css(
   {
@@ -51,11 +52,7 @@ const secondaryHero = css({
 });
 
 const LandingPage: React.FC = () => {
-  const { loading, data, error } = useQuery(GET_COMMUNITY_POSTS, {
-    variables: {
-      id: 'HW6lY4kJOpqSpL39hbUV',
-    },
-  });
+  const { loading, data, error } = useQuery<GetLandingPosts>(GET_LANDING_POSTS);
 
   const slideOpts = {
     direction: 'horizontal',
@@ -177,8 +174,8 @@ const LandingPage: React.FC = () => {
                     />
                   ) : (
                     <IonSlides pager={true} options={slideOpts}>
-                      {data?.community?.feed &&
-                        data.community.feed.items.slice(0, 4).map((slide) => (
+                      {data?.landingPosts &&
+                        data.landingPosts.slice(0, 4).map((slide) => (
                           <IonSlide key={slide.id} className="ion-text-left">
                             <LandingPost {...slide} />
                           </IonSlide>
