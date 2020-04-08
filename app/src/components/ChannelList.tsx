@@ -21,6 +21,9 @@ const ChannelList: React.FC<{}> = () => {
 
   const channelId = useSelectedChannel();
 
+  // NOTE: intentionally using href over routerLink in the IonItem components below.
+  // It is a workaround for the infinite loading of useQuery when navigating to
+  // a channel.
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -32,8 +35,7 @@ const ChannelList: React.FC<{}> = () => {
             <IonMenuToggle autoHide={false}>
               <IonItem
                 className={!channelId ? 'selected' : ''}
-                routerLink={`/page/posts`}
-                routerDirection="forward"
+                href="/page/posts"
                 lines="none"
                 detail={false}
               >
@@ -48,8 +50,7 @@ const ChannelList: React.FC<{}> = () => {
                 <IonMenuToggle key={index} autoHide={false}>
                   <IonItem
                     className={channelId === channel?.id ? 'selected' : ''}
-                    routerLink={`/page/posts?channel=${channel!.id}`}
-                    routerDirection="forward"
+                    href={`/page/posts?channel=${channel!.id}`}
                     lines="none"
                     detail={false}
                   >
