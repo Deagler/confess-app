@@ -1,21 +1,5 @@
 import gql from 'graphql-tag';
 
-export const GET_SELECTED_COMMUNITY = gql`
-  query GetSelectedCommunity {
-    selectedCommunity @client {
-      id
-      name
-      abbreviation
-      imageURI
-      channels {
-        id
-        name
-        icon
-      }
-    }
-  }
-`;
-
 export const GET_AUTH_STATE = gql`
   query GetAuthState {
     authState @client {

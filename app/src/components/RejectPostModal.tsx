@@ -15,12 +15,11 @@ import {
   IonSpinner,
   IonToast,
 } from '@ionic/react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import { REJECT_POST } from '../common/graphql/admin';
 import { RejectPost, RejectPostVariables } from '../types/RejectPost';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
+import { useSelectedCommunity } from '../customHooks/location';
 
 export interface RejectPostModalProps {
   postId: string;
@@ -39,9 +38,7 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
     RejectPost,
     RejectPostVariables
   >(REJECT_POST);
-  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
-    GET_SELECTED_COMMUNITY
-  );
+  const communityId = useSelectedCommunity();
   const [reason, setReason] = useState<string>('');
 
   const handleReject = async () => {
@@ -50,7 +47,7 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
       await rejectPost({
         variables: {
           postId,
-          communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
+          communityId: communityId!,
           reason,
         },
       });

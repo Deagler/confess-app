@@ -8,9 +8,6 @@ export const GET_COMMUNITY_POSTS = gql`
     $limit: Int
     $channelId: ID
   ) {
-    selectedCommunity @client {
-      id @export(as: "id")
-    }
     community(id: $id) {
       id
       feed(

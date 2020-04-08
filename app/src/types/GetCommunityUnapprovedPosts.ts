@@ -9,11 +9,6 @@ import { SortByInput } from "./globalTypes";
 // GraphQL query operation: GetCommunityUnapprovedPosts
 // ====================================================
 
-export interface GetCommunityUnapprovedPosts_selectedCommunity {
-  __typename: "Community";
-  id: string;
-}
-
 export interface GetCommunityUnapprovedPosts_community_unapprovedPosts_items {
   __typename: "Post";
   id: string;
@@ -36,7 +31,6 @@ export interface GetCommunityUnapprovedPosts_community {
 }
 
 export interface GetCommunityUnapprovedPosts {
-  selectedCommunity: GetCommunityUnapprovedPosts_selectedCommunity | null;
   community: GetCommunityUnapprovedPosts_community | null;
 }
 

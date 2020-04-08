@@ -9,11 +9,6 @@ import { SortByInput } from "./globalTypes";
 // GraphQL query operation: GetPostComments
 // ====================================================
 
-export interface GetPostComments_selectedCommunity {
-  __typename: "Community";
-  id: string;
-}
-
 export interface GetPostComments_post_comments_items_author_community {
   __typename: "Community";
   abbreviation: string;
@@ -50,7 +45,6 @@ export interface GetPostComments_post {
 }
 
 export interface GetPostComments {
-  selectedCommunity: GetPostComments_selectedCommunity | null;
   post: GetPostComments_post | null;
 }
 

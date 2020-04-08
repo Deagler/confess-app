@@ -8,9 +8,6 @@ export const GET_POST_BY_ID = gql`
     $commentsLimit: Int
     $commentsCursor: String
   ) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     post(communityId: $communityId, postId: $postId) {
       id
       postNumber
@@ -55,9 +52,6 @@ export const GET_POST_COMMENTS_ONLY = gql`
     $commentsLimit: Int
     $commentsCursor: String
   ) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
     post(communityId: $communityId, postId: $postId) {
       id
       comments(
@@ -112,18 +106,6 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
         moderationStatus
         creationTimestamp
       }
-    }
-  }
-`;
-
-export const GET_POST_LIKE_STATUS = gql`
-  query GetPostLikeData($communityId: ID!, $postId: ID!) {
-    selectedCommunity @client {
-      id @export(as: "communityId")
-    }
-    post(communityId: $communityId, postId: $postId) {
-      id
-      totalLikes
     }
   }
 `;

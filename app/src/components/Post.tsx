@@ -22,10 +22,7 @@ import { truncateString, buildLink } from '../utils';
 
 import './Post.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  GET_LOCAL_USER,
-  GET_SELECTED_COMMUNITY,
-} from '../common/graphql/localState';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
@@ -74,9 +71,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const [expanded, setExpanded] = useState<boolean>(false);
-  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
-    GET_SELECTED_COMMUNITY
-  );
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_POST
   );
@@ -90,7 +84,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
 
     await serverToggleLike({
       variables: {
-        communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
+        communityId: communityId!,
         postId,
       },
       optimisticResponse: {
