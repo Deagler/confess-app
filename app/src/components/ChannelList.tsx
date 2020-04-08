@@ -21,6 +21,9 @@ const ChannelList: React.FC<{}> = () => {
 
   const channelId = useSelectedChannel();
 
+  // NOTE: intentionally using href over routerLink in the IonItem components below.
+  // It is a workaround for the infinite loading of useQuery when navigating to
+  // a channel.
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
