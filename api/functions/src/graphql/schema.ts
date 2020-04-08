@@ -110,6 +110,7 @@ const typeDefs = gql`
     community(id: ID!): Community
     communities: [Community]!
     comment(communityId: ID!, postId: ID!, commentId: ID!): Comment
+    landingPosts: [Post!]!
   }
 
   interface MutationResponse {

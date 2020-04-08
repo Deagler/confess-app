@@ -11,10 +11,11 @@ import { css } from 'glamor';
 
 export interface PostProps {
   id: string;
+  postNumber: number | null;
   title: string;
   creationTimestamp: number;
   content: string;
-  authorAlias?: string;
+  authorAlias?: string | null;
 }
 
 const postCard = css({
@@ -29,15 +30,16 @@ const postContent = css({
   maxHeight: '100%',
   maxWidth: '100%',
   overflow: 'auto',
+  whitespace: 'pre-line',
 });
 
 const LandingPost: React.FC<PostProps> = (props: PostProps) => {
-  const { id, title, creationTimestamp, content, authorAlias } = props;
+  const { postNumber, title, creationTimestamp, content, authorAlias } = props;
 
   return (
     <IonCard {...postCard}>
       <IonCardHeader>
-        <IonCardSubtitle>{`#${id}`}</IonCardSubtitle>
+        <IonCardSubtitle>{`#${postNumber}`}</IonCardSubtitle>
         <IonCardTitle>{title}</IonCardTitle>
         <IonCardSubtitle>
           {moment.unix(creationTimestamp).fromNow()}

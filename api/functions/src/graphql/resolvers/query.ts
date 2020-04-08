@@ -48,4 +48,10 @@ export const queryResolvers = {
     commentWithId.communityId = args.communityId;
     return commentWithId;
   },
+  async landingPosts() {
+    const landingPostsQuery = await firestore.collection('landingPosts').get();
+
+    const landingPosts: Post[] = landingPostsQuery.docs.map(addIdToDoc);
+    return landingPosts;
+  },
 };
