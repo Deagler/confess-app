@@ -25,6 +25,11 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import LoginTooltip from '../components/LoginTooltip';
+import { buildLink } from '../utils';
+import {
+  useSelectedCommunity,
+  useSelectedChannel,
+} from '../customHooks/location';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -36,6 +41,10 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const communityId = useSelectedCommunity();
+  const channelId = useSelectedChannel();
+  console.log(communityId);
+  console.log(channelId);
 
   return (
     <IonPage {...appPageCSS}>
@@ -54,7 +63,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink="/page/submit"
+                routerLink={buildLink('/page/submit', communityId)}
                 routerDirection="forward"
                 disabled={!userLoggedIn}
               >
@@ -74,7 +83,15 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                 <Post
                   key={i}
                   {...post}
-                  onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+                  onCommentClick={() =>
+                    history.push(
+                      buildLink(
+                        `/page/posts/${post.id}`,
+                        communityId,
+                        channelId
+                      )
+                    )
+                  }
                   collapsable={true}
                 />
               )))}

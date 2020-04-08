@@ -25,6 +25,8 @@ import { useShouldBlockMenu } from '../utils/menus';
 import { appPageCSS, offWhiteCSS } from '../theme/global';
 import { chatbox } from 'ionicons/icons';
 import LoginTooltip from './LoginTooltip';
+import { useSelectedCommunity } from '../customHooks/location';
+import { buildLink } from '../utils';
 
 const menuCSS = css({
   borderRight: '0',
@@ -63,8 +65,9 @@ const Menu: React.FC<{}> = () => {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
-
   const shouldBlockMenu = useShouldBlockMenu();
+  const communityId = useSelectedCommunity();
+
   if (shouldBlockMenu) {
     return null;
   }
@@ -81,7 +84,7 @@ const Menu: React.FC<{}> = () => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink="/page/submit"
+                routerLink={buildLink('/page/submit', communityId)}
                 routerDirection="forward"
                 className="ion-margin-bottom ion-hide-lg-down"
                 disabled={!userLoggedIn}

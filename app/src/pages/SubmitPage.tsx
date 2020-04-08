@@ -223,7 +223,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/page/posts" text="Cancel" />
+            <IonBackButton text="Cancel" />
           </IonButtons>
           <IonButtons slot="primary">
             <IonButton

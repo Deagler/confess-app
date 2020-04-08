@@ -6,3 +6,10 @@ export const useSelectedChannel = () => {
 
   return query.get('channel');
 };
+
+export const useSelectedCommunity = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
+  return query.get('community');
+};

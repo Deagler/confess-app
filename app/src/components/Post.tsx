@@ -18,7 +18,7 @@ import { heart, chatbox, shareSocial } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-import { truncateString } from '../utils';
+import { truncateString, buildLink } from '../utils';
 
 import './Post.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -30,6 +30,10 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import LoginTooltip from './LoginTooltip';
+import {
+  useSelectedCommunity,
+  useSelectedChannel,
+} from '../customHooks/location';
 
 export interface PostData {
   id: string;
@@ -76,6 +80,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_POST
   );
+  const communityId = useSelectedCommunity();
+  const channelId = useSelectedChannel();
 
   const handleLikeButtonClick = async (postId: string) => {
     if (serverLikeInfo.loading) {
@@ -112,7 +118,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         duration={2000}
       />
       <IonCard className="ion-margin">
-        <Link to={`/page/posts/${id}`} className="Link">
+        <Link
+          to={buildLink(`/page/posts/${id}`, communityId, channelId)}
+          className="Link"
+        >
           <IonCardHeader>
             <IonCardSubtitle>
               {postNumber ? `#${postNumber}` : `Post ID: ${id}`}

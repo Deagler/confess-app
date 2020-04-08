@@ -12,7 +12,6 @@ import Postpage from './pages/PostPage';
 export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
   userLoggedIn,
 }) => {
-  console.log(userLoggedIn);
   return (
     <Switch>
       <IonRouterOutlet id="main">

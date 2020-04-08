@@ -12,7 +12,11 @@ import { airplaneOutline } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
-import { useSelectedChannel } from '../customHooks/location';
+import {
+  useSelectedChannel,
+  useSelectedCommunity,
+} from '../customHooks/location';
+import { buildLink } from '../utils';
 
 const ChannelList: React.FC<{}> = () => {
   const { data, loading, error } = useQuery<GetSelectedCommunity>(
@@ -20,6 +24,7 @@ const ChannelList: React.FC<{}> = () => {
   );
 
   const channelId = useSelectedChannel();
+  const communityId = useSelectedCommunity();
 
   // NOTE: intentionally using href over routerLink in the IonItem components below.
   // It is a workaround for the infinite loading of useQuery when navigating to
@@ -35,7 +40,7 @@ const ChannelList: React.FC<{}> = () => {
             <IonMenuToggle autoHide={false}>
               <IonItem
                 className={!channelId ? 'selected' : ''}
-                href="/page/posts"
+                href={buildLink('/page/posts', communityId)}
                 lines="none"
                 detail={false}
               >
@@ -50,7 +55,7 @@ const ChannelList: React.FC<{}> = () => {
                 <IonMenuToggle key={index} autoHide={false}>
                   <IonItem
                     className={channelId === channel?.id ? 'selected' : ''}
-                    href={`/page/posts?channel=${channel!.id}`}
+                    href={buildLink('/page/posts', communityId, channel?.id)}
                     lines="none"
                     detail={false}
                   >

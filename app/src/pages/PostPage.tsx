@@ -26,6 +26,11 @@ import update from 'immutability-helper';
 import PostSkeleton from '../components/PostSkeleton';
 import { usePaginatedPostQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
+import {
+  useSelectedCommunity,
+  useSelectedChannel,
+} from '../customHooks/location';
+import { buildLink } from '../utils';
 
 const Postpage: React.FC = () => {
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
@@ -60,6 +65,8 @@ const Postpage: React.FC = () => {
     newCommentElement.current!.setFocus();
     newCommentElement.current!.value = `@${author} `;
   };
+  const communityId = useSelectedCommunity();
+  const channelId = useSelectedChannel();
 
   return (
     <IonPage {...appPageCSS}>
@@ -67,7 +74,10 @@ const Postpage: React.FC = () => {
       <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/page/posts" text="Back" />
+            <IonBackButton
+              defaultHref={buildLink('/page/posts', communityId, channelId)}
+              text="Back"
+            />
           </IonButtons>
           <IonTitle className="ion-text-start">Post</IonTitle>
         </IonToolbar>
@@ -78,7 +88,10 @@ const Postpage: React.FC = () => {
             style={{ flex: 0, width: 'fit-content' }}
             className="ion-hide-lg-down ion-justify-self-start ion-margin-left"
           >
-            <IonBackButton defaultHref="/page/posts" text="Back To Feed" />
+            <IonBackButton
+              defaultHref={buildLink('/page/posts', communityId, channelId)}
+              text="Back To Feed"
+            />
           </div>
           <div className="PostReadOnly">
             {(loading && <PostSkeleton />) ||

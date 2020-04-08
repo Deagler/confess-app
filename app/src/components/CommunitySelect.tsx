@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { css } from 'glamor';
+import { useHistory, useLocation } from 'react-router';
 
 const communityThumbnail = css({
   width: '48px !important',
@@ -28,6 +29,8 @@ const CommunitySelect: React.FC<{}> = () => {
   } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
 
   const client = useApolloClient();
+  const history = useHistory();
+  const location = useLocation();
 
   const handleCommunityChange = (communityId) => {
     const selectedCommunity =
@@ -42,6 +45,8 @@ const CommunitySelect: React.FC<{}> = () => {
       query: GET_SELECTED_COMMUNITY,
       data: { selectedCommunity },
     });
+
+    history.push(`${location.pathname}?community=${communityId}`);
   };
 
   return (
