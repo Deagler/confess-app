@@ -74,15 +74,9 @@ export const queryResolvers = {
     }
   },
   async landingPosts() {
-    try {
-      const landingPostsQuery = await firestore
-        .collection('landingPosts')
-        .get();
+    const landingPostsQuery = await firestore.collection('landingPosts').get();
 
-      const landingPosts: Post[] = landingPostsQuery.docs.map(addIdToDoc);
-      return landingPosts;
-    } catch (error) {
-      throw new ApolloError(error);
-    }
+    const landingPosts: Post[] = landingPostsQuery.docs.map(addIdToDoc);
+    return landingPosts;
   },
 };
