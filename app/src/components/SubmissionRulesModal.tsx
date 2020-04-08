@@ -24,6 +24,7 @@ export interface SubmissionRulesModalProps {
   onDidDismiss: () => void;
   onSubmit?: () => void;
   loadingSubmit?: boolean;
+  infoOnly?: boolean;
 }
 
 const SubmissionRulesModal: React.FC<SubmissionRulesModalProps> = ({
@@ -31,13 +32,18 @@ const SubmissionRulesModal: React.FC<SubmissionRulesModalProps> = ({
   onDidDismiss,
   onSubmit,
   loadingSubmit,
+  infoOnly,
 }) => (
   <IonModal isOpen={isOpen} onDidDismiss={onDidDismiss}>
     <IonHeader>
       <IonToolbar>
-        <IonTitle>Submit Confession</IonTitle>
+        <IonTitle>
+          {infoOnly ? 'Submission Rules' : 'Submit Confession'}
+        </IonTitle>
         <IonButtons slot="end">
-          <IonButton onClick={onDidDismiss}>Cancel</IonButton>
+          <IonButton onClick={onDidDismiss}>
+            {infoOnly ? 'Close' : 'Cancel'}
+          </IonButton>
         </IonButtons>
       </IonToolbar>
     </IonHeader>
@@ -81,11 +87,13 @@ const SubmissionRulesModal: React.FC<SubmissionRulesModalProps> = ({
         </ol>
       </div>
     </IonContent>
-    <IonFooter>
-      <IonButton expand="block" type="submit" onClick={onSubmit}>
-        {loadingSubmit ? <IonSpinner /> : 'Submit Confession'}
-      </IonButton>
-    </IonFooter>
+    {!infoOnly && (
+      <IonFooter>
+        <IonButton expand="block" type="submit" onClick={onSubmit}>
+          {loadingSubmit ? <IonSpinner /> : 'Submit Confession'}
+        </IonButton>
+      </IonFooter>
+    )}
   </IonModal>
 );
 
