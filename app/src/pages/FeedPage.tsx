@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -37,14 +37,16 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     loading,
     hasMorePosts,
     fetchMorePosts,
+    setHasMorePosts,
   } = usePaginatedFeedQuery();
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
-  console.log(communityId);
-  console.log(channelId);
+
+  // looks for more posts when channel changes
+  useEffect(() => setHasMorePosts(true), [channelId]);
 
   return (
     <IonPage {...appPageCSS}>

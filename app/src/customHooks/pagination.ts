@@ -78,7 +78,12 @@ export const usePaginatedFeedQuery = () => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return { ...useQueryVariables, hasMorePosts, fetchMorePosts };
+  return {
+    ...useQueryVariables,
+    hasMorePosts,
+    fetchMorePosts,
+    setHasMorePosts,
+  };
 };
 
 export const usePaginatedUnapprovedPostsQuery = () => {

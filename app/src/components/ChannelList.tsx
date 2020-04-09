@@ -31,7 +31,7 @@ const ChannelList: React.FC<{}> = () => {
             <IonMenuToggle autoHide={false}>
               <IonItem
                 className={!channelId ? 'selected' : ''}
-                href={buildLink('/page/posts', communityId)}
+                routerLink={buildLink('/page/posts', communityId)}
                 lines="none"
                 detail={false}
               >
@@ -45,7 +45,11 @@ const ChannelList: React.FC<{}> = () => {
                 <IonMenuToggle key={index} autoHide={false}>
                   <IonItem
                     className={channelId === channel?.id ? 'selected' : ''}
-                    href={buildLink('/page/posts', communityId, channel?.id)}
+                    routerLink={buildLink(
+                      '/page/posts',
+                      communityId,
+                      channel?.id
+                    )}
                     lines="none"
                     detail={false}
                   >
