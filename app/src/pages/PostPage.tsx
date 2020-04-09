@@ -109,14 +109,14 @@ const Postpage: React.FC = () => {
             postId={postId}
           />
           {(loading && (
-            <IonCard>
+            <IonCard className="ion-margin">
               <IonCardContent className="ion-text-center">
                 <IonSpinner />
               </IonCardContent>
             </IonCard>
           )) ||
             (data?.post?.comments?.items.length !== 0 && (
-              <IonCard>
+              <IonCard className="ion-margin">
                 <IonList>
                   {data?.post?.comments?.items.map(
                     (comment: CommentData | null, i: number) => (
