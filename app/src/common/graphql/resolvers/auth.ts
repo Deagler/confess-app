@@ -117,10 +117,9 @@ async function attemptLoginWithEmailLink(
     }
 
     if (data.data.user.community) {
-      const { community } = data.data.user;
-
-      // automatically view their community after login
-      localStorage.setItem('selectedCommunityId', community.id);
+      localStorage.setItem('selectedCommunityId', data.data.user.community.id);
+    } else {
+      localStorage.setItem('selectedCommunityId', 'HW6lY4kJOpqSpL39hbUV');
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
@@ -130,7 +129,6 @@ async function attemptLoginWithEmailLink(
       success: true,
       message: 'Successfully logged in.',
       authState,
-      localUser: data.data.user,
       __typename: 'LoginResponse',
     };
   } catch (e) {
@@ -145,7 +143,6 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
   persistAuthState(cache, null);
   localStorage.setItem('authState', 'null');
-  localStorage.removeItem('selectedCommunityId');
   client.resetStore();
 
   return {

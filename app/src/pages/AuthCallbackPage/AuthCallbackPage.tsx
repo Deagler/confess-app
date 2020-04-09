@@ -20,7 +20,10 @@ import { css } from 'glamor';
 import { SignupCardContent } from './SignupCardContent';
 import { AttemptLogin } from '../../types/AttemptLogin';
 import { AttemptSignup } from '../../types/AttemptSignup';
-import { ATTEMPT_LOGIN_WITH_EMAIL_LINK, ATTEMPT_SIGNUP } from '../../common/auth';
+import {
+  ATTEMPT_LOGIN_WITH_EMAIL_LINK,
+  ATTEMPT_SIGNUP,
+} from '../../common/auth';
 
 const callbackPageCSS = css({
   height: '100vh',
@@ -40,7 +43,6 @@ const loginCard = css({
   alignContent: 'center',
   flexDirection: 'column',
 });
-
 
 const LoggingInCardContent: React.FC = () => {
   return (
@@ -95,8 +97,10 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
       onCompleted: (data) => {
         if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
           setTimeout(() => {
-            // TODO: pull this state from the signup flow
-            const communityId = 'HW6lY4kJOpqSpL39hbUV';
+            const communityId =
+              localStorage.getItem('selectedCommunityId') ||
+              'HW6lY4kJOpqSpL39hbUV';
+              
             window.location.href = `/${communityId}/posts`;
           }, 2000);
         }
@@ -116,10 +120,13 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           });
         }
       },
-      onCompleted: () => {
+      onCompleted: (data) => {
         setTimeout(() => {
-          // TODO: pull this state from the signup flow
-          const communityId = 'HW6lY4kJOpqSpL39hbUV';
+          const communityId = data.attemptSignUp?.user?.community
+            ? data.attemptSignUp.user.community.id
+            : 'HW6lY4kJOpqSpL39hbUV';
+          localStorage.setItem('selectedCommunityId', communityId);
+
           window.location.href = `/${communityId}/posts`;
         }, 2000);
       },

@@ -20,7 +20,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import Menu from './components/Menu';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import {
   apolloClient,
   refreshApolloAuthentication,
@@ -30,6 +30,8 @@ import { FullPageLoader } from './components/FullPageLoader';
 import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
+import { GetLocalUser } from './types/GetLocalUser';
+import { GET_LOCAL_USER } from './common/graphql/localState';
 
 const auth = firebaseApp.auth();
 
@@ -44,6 +46,7 @@ const App: React.FC = () => {
   const [authLocalUser, setAuthLocalUser] = useState<
     firebase.User | undefined | null
   >(undefined);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setAuthLocalUser(user!);

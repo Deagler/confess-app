@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { css } from 'glamor';
+import { css, select } from 'glamor';
 import { useHistory, useLocation } from 'react-router';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 
@@ -32,15 +32,14 @@ const CommunitySelect: React.FC<{}> = () => {
   const location = useLocation();
 
   const handleCommunityChange = (newId: string) => {
-    // cross session persistence
-    localStorage.setItem('selectedCommunityId', newId);
-
     let pathname = location.pathname;
+
+    localStorage.setItem('selectedCommunityId', newId);
     pathname = pathname.replace(communityId!, newId);
 
     history.push(pathname);
   };
-
+  console.log(selectedCommData, communityId);
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />

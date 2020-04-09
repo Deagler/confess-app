@@ -10,8 +10,6 @@ export const typeDefs = gql`
     authState: AuthState
     localUser: User
     selectedCommunity: Community
-    isLikedByUser: Boolean!
-    isCommentLikedByUser: Boolean!
   }
 
   type LoginResponse implements MutationResponse {
