@@ -20,6 +20,7 @@ import { css } from 'glamor';
 import { SignupCardContent } from './SignupCardContent';
 import { AttemptLogin } from '../../types/AttemptLogin';
 import { AttemptSignup } from '../../types/AttemptSignup';
+import { ATTEMPT_LOGIN_WITH_EMAIL_LINK, ATTEMPT_SIGNUP } from '../../common/auth';
 
 const callbackPageCSS = css({
   height: '100vh',
@@ -40,38 +41,6 @@ const loginCard = css({
   flexDirection: 'column',
 });
 
-const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
-  mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
-    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
-      @client {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const ATTEMPT_SIGNUP = gql`
-  mutation AttemptSignup($firstName: String!, $lastName: String!) {
-    attemptSignUp(firstName: $firstName, lastName: $lastName) {
-      code
-      success
-      message
-      user {
-        id
-        firstName
-        lastName
-        communityUsername
-        email
-        community {
-          id
-          name
-          abbreviation
-        }
-      }
-    }
-  }
-`;
 
 const LoggingInCardContent: React.FC = () => {
   return (

@@ -7,6 +7,7 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById } from '../../../types/GetUserById';
+import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../../utils';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -23,6 +24,40 @@ function persistAuthState(apolloCache, authState) {
   });
 
   localStorage.setItem('authState', JSON.stringify(authState));
+}
+
+async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
+  if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
+    throw new ApolloError({
+      errorMessage:
+        'Invalid Email. Sorry, we only support .ac.nz and .edu.au emails right now!',
+    });
+  }
+
+  const actionCodeSettings = {
+    // URL must be whitelisted in the Firebase Console.
+    url: `${window.location.origin}/callback`,
+    handleCodeInApp: true,
+  };
+
+  try {
+    await firebaseApp
+      .auth()
+      .sendSignInLinkToEmail(userEmail, actionCodeSettings);
+
+    localStorage.setItem('emailForSignIn', userEmail);
+    return {
+      code: 'auth/link_requested',
+      success: true,
+      message: 'Click the link in your e-mail to sign in!',
+      __typename: 'MutationResponse',
+    };
+  } catch (e) {
+    throw new ApolloError({
+      errorMessage:
+        'An error occurred while logging in. Our team has been notified.',
+    });
+  }
 }
 
 async function attemptLoginWithEmailLink(
@@ -124,5 +159,6 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
 export const authMutationResolvers = {
   attemptLoginWithEmailLink,
+  requestFirebaseLoginLink,
   doFirebaseLogout,
 };
