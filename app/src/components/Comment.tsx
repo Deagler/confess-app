@@ -9,7 +9,7 @@ import {
   IonToast,
 } from '@ionic/react';
 import React from 'react';
-import { timeOutline, heart, chatbox, shareSocial } from 'ionicons/icons';
+import { timeOutline, heart, chatbox } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
