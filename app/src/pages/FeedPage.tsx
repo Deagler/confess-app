@@ -64,7 +64,11 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn} userHasCommunity={userHasCommunity}>
+            <LoginTooltip
+              loginOrSignUpTo="confess"
+              userLoggedIn={userLoggedIn}
+              userHasCommunity={userHasCommunity}
+            >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}

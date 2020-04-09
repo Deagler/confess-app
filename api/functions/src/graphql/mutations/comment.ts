@@ -3,7 +3,12 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
-import { verifyComment, verifyPost, verifyUser, verifyCommunity } from '../common/verification';
+import {
+  verifyComment,
+  verifyCommunity,
+  verifyPost,
+  verifyUser,
+} from '../common/verification';
 import { addIdToDoc } from '../resolvers/utils';
 const firestore = firebaseApp.firestore();
 

@@ -31,7 +31,14 @@ export interface PostRequestProps {
 }
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
-  const { id, title, creationTimestamp, content, authorAlias, onModeration } = props;
+  const {
+    id,
+    title,
+    creationTimestamp,
+    content,
+    authorAlias,
+    onModeration,
+  } = props;
   const communityId = useSelectedCommunity();
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,

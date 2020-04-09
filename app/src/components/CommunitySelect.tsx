@@ -11,8 +11,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { css, select } from 'glamor';
-import { useHistory, useLocation } from 'react-router';
+import { css } from 'glamor';
+import { useHistory } from 'react-router';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
@@ -29,19 +29,19 @@ const CommunitySelect: React.FC<{}> = () => {
   const {
     data: selectedCommData,
     loading: selectedCommunityLoading,
-    communityId,
   } = useSelectedCommunityQuery();
   const history = useHistory();
-  const location = useLocation();
 
   const handleCommunityChange = (newId: string) => {
     localStorage.setItem('selectedCommunityId', newId);
     history.push(`/${newId}/posts`);
   };
-  let enabledCommunities = data?.communities?.filter((community) => community?.isEnabled) || [];
+
+  let enabledCommunities =
+    data?.communities?.filter((community) => community?.isEnabled) || [];
+
   if (localUserQuery.data?.localUser?.isAdmin) {
     enabledCommunities = data?.communities || [];
-      
   }
 
   return (

@@ -3,7 +3,7 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
 import { paginateResults } from '../../utils/pagination';
-import { verifyUser, verifyCommunity } from '../common/verification';
+import { verifyCommunity, verifyUser } from '../common/verification';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();

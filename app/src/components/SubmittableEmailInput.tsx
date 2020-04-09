@@ -1,6 +1,6 @@
-import { IonInput, IonButton, IonSpinner } from '@ionic/react';
+import { IonButton, IonSpinner } from '@ionic/react';
 import React from 'react';
-import { IsValidEmailFormat, IsSupportedEmailTLD } from '../utils';
+import { IsValidEmailFormat } from '../utils';
 import { css } from 'glamor';
 import { TextField } from '@material-ui/core';
 

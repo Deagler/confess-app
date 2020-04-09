@@ -1,7 +1,7 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
-import { User, Community } from '../../typings';
+import { Community, User } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const usersCollection = firestore.collection('users');

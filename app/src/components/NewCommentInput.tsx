@@ -52,7 +52,6 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
 
-
   const handleSubmit = async () => {
     // TODO: add input validation and retrieve communityId from somewhere
     try {
@@ -109,7 +108,10 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                   <IonButton
                     size="small"
                     disabled={
-                      isNullOrWhitespace(content) || !userLoggedIn || !postId || !userHasCommunity
+                      isNullOrWhitespace(content) ||
+                      !userLoggedIn ||
+                      !postId ||
+                      !userHasCommunity
                     }
                     onClick={handleSubmit}
                   >

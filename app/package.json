@@ -48,7 +48,8 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "eqeqeq": "off"
+      "eqeqeq": "off",
+      "no-control-regex": 0
     }
   },
   "lint-staged": {

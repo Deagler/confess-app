@@ -1,16 +1,7 @@
-import {
-  IonRow,
-  IonCol,
-  IonLabel,
-  IonAvatar,
-  IonNote,
-  IonButton,
-  IonIcon,
-} from '@ionic/react';
+import { IonRow, IonCol, IonLabel, IonAvatar } from '@ionic/react';
 import React from 'react';
 import { GetLocalUser_localUser } from '../types/GetLocalUser';
 import { css } from 'glamor';
-import { informationCircleOutline } from 'ionicons/icons';
 import { Tooltip } from '@material-ui/core';
 
 const userDetailContainer = css({ display: 'flex', flex: 1 });

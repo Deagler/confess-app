@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { firebaseApp } from '../services/firebase';
 import { IonToast, IonLabel } from '@ionic/react';
 import React from 'react';
 import { Checkmark } from 'react-checkmark';
@@ -8,8 +7,6 @@ import { css } from 'glamor';
 import { useMutation } from '@apollo/react-hooks';
 import { REQUEST_FIREBASE_LOGIN_LINK } from '../common/auth';
 import { RequestFirebaseLink } from '../types/RequestFirebaseLink';
-import { ApolloError } from 'apollo-boost';
-import { request } from 'https';
 
 export enum LOGIN_STATUS {
   NONE,

@@ -11,7 +11,6 @@ import {
 import { RouteComponentProps } from 'react-router';
 
 import { SubmittableEmailInput } from '../../components/SubmittableEmailInput';
-import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { GET_LOCAL_USER } from '../../common/graphql/localState';
@@ -24,7 +23,6 @@ import {
   ATTEMPT_LOGIN_WITH_EMAIL_LINK,
   ATTEMPT_SIGNUP,
 } from '../../common/auth';
-import { navigate } from 'ionicons/icons';
 
 const callbackPageCSS = css({
   height: '100vh',

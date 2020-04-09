@@ -99,7 +99,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       },
     });
   };
- 
 
   return (
     <>
@@ -146,7 +145,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                 userHasCommunity={userHasCommunity}
               >
                 <IonButton
-                  disabled={!userLoggedIn || serverLikeInfo.loading || !userHasCommunity}
+                  disabled={
+                    !userLoggedIn || serverLikeInfo.loading || !userHasCommunity
+                  }
                   onClick={() => handleLikeButtonClick(id)}
                   fill="clear"
                   expand="full"
