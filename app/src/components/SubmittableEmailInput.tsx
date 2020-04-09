@@ -47,7 +47,6 @@ export const SubmittableEmailInput: React.FC<{
             variant="outlined"
             label={placeholderText}
             value={email}
-            id="email"
             type="email"
             style={{ maxWidth: '400px', minWidth: '250px' }}
             onChange={(e) => setEmail(e.target.value)}
