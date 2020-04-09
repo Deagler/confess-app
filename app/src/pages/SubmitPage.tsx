@@ -26,18 +26,18 @@ import {
   IonIcon,
 } from '@ionic/react';
 import './SubmitPage.css';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { RouteComponentProps } from 'react-router';
 import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
 } from '../types/SubmitPostForApproval';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import { appPageCSS } from '../theme/global';
 import SubmissionRulesModal from '../components/SubmissionRulesModal';
 import { informationCircleOutline } from 'ionicons/icons';
+import { useSelectedCommunityQuery } from '../customHooks/community';
+import { useSelectedCommunity } from '../customHooks/location';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -67,71 +67,78 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   setAuthorAlias,
   onDisplayRules,
 }) => {
-  const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
-  const channels = data && data.selectedCommunity!.channels;
+  const { data, loading, error } = useSelectedCommunityQuery();
+  const channels = data?.community?.channels && data.community!.channels;
 
   return (
-    <IonList>
-      <IonItem>
-        <IonLabel position="stacked">Channel</IonLabel>
-        <IonSelect
-          interfaceOptions={channelInterfaceOptions}
-          interface="popover"
-          multiple={false}
-          onIonChange={(e) => setSelectedChannel(e.detail.value)}
-        >
-          {channels &&
-            channels.map((channel, index) => (
-              <IonSelectOption key={index} value={channel?.id}>
-                {channel?.name}
-              </IonSelectOption>
-            ))}
-        </IonSelect>
-      </IonItem>
-      <IonItem>
-        <IonLabel position="stacked">Title</IonLabel>
-        <IonInput
-          clearInput={true}
-          inputMode="text"
-          maxlength={255}
-          minlength={2}
-          placeholder="Enter confession title"
-          required={true}
-          onIonChange={(e) => setTitle(e.detail.value!)}
-          value={title}
-          spellCheck={true}
-        />
-      </IonItem>
-      <IonItem>
-        <IonLabel position="stacked">Your Confession</IonLabel>
-        <IonTextarea
-          rows={10}
-          required={true}
-          placeholder="Enter your confession. Make sure to follow the rules, all posts are moderated before they can be seen. "
-          onIonChange={(e) => setConfessionText(e.detail.value!)}
-          value={confessionText}
-          spellCheck={true}
-        />
-      </IonItem>
-      <IonItem>
-        <IonLabel position="stacked">Author (Optional)</IonLabel>
-        <IonInput
-          clearInput={true}
-          inputMode="text"
-          maxlength={255}
-          minlength={2}
-          placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
-          onIonChange={(e) => setAuthorAlias(e.detail.value!)}
-          value={authorAlias}
-        />
-      </IonItem>
-      <IonItem lines="none" className="ion-no-padding">
-        <IonButton fill="clear" slot="start" onClick={() => onDisplayRules()}>
-          Submission rules
-          <IonIcon slot="end" icon={informationCircleOutline} />
-        </IonButton>
-      </IonItem>
-    </IonList>
+    <>
+      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonList>
+        <IonItem>
+          <IonLabel position="stacked">Channel</IonLabel>
+          <IonSelect
+            interfaceOptions={channelInterfaceOptions}
+            interface="popover"
+            multiple={false}
+            onIonChange={(e) => setSelectedChannel(e.detail.value)}
+          >
+            {loading ? (
+              <IonSpinner />
+            ) : (
+              channels &&
+              channels.map((channel, index) => (
+                <IonSelectOption key={index} value={channel?.id}>
+                  {channel?.name}
+                </IonSelectOption>
+              ))
+            )}
+          </IonSelect>
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Title</IonLabel>
+          <IonInput
+            clearInput={true}
+            inputMode="text"
+            maxlength={255}
+            minlength={2}
+            placeholder="Enter confession title"
+            required={true}
+            onIonChange={(e) => setTitle(e.detail.value!)}
+            value={title}
+            spellCheck={true}
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Your Confession</IonLabel>
+          <IonTextarea
+            rows={10}
+            required={true}
+            placeholder="Enter your confession. Make sure to follow the rules, all posts are moderated before they can be seen. "
+            onIonChange={(e) => setConfessionText(e.detail.value!)}
+            value={confessionText}
+            spellCheck={true}
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Author (Optional)</IonLabel>
+          <IonInput
+            clearInput={true}
+            inputMode="text"
+            maxlength={255}
+            minlength={2}
+            placeholder="e.g. 'Depressed engineer' or 'Lonely arts student'"
+            onIonChange={(e) => setAuthorAlias(e.detail.value!)}
+            value={authorAlias}
+          />
+        </IonItem>
+        <IonItem lines="none" className="ion-no-padding">
+          <IonButton fill="clear" slot="start" onClick={() => onDisplayRules()}>
+            Submission rules
+            <IonIcon slot="end" icon={informationCircleOutline} />
+          </IonButton>
+        </IonItem>
+      </IonList>
+    </>
   );
 };
 
@@ -147,9 +154,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   );
   const [showSubmitModal, setSubmitShowModal] = useState(false);
   const [showInfoOnlyModal, setShowInfoOnlyModal] = useState(false);
-
-  const { data } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
-
+  const communityId = useSelectedCommunity();
   const [submitPostForApproval, { loading, error }] = useMutation<
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
@@ -161,7 +166,6 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     content: string,
     authorAliasInput?: string
   ) => {
-    const communityId = data?.selectedCommunity?.id;
     if (!communityId) {
       console.error('failed to submit post: communityId is not set');
       return;
@@ -223,7 +227,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/page/posts" text="Cancel" />
+            <IonBackButton text="Cancel" />
           </IonButtons>
           <IonButtons slot="primary">
             <IonButton

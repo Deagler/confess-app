@@ -7,8 +7,6 @@ import { HttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { gql } from 'apollo-boost';
 import { firebaseApp } from '../firebase';
-import { GET_COMMUNITY_BY_ID } from '../../common/graphql/communities';
-import { GET_SELECTED_COMMUNITY } from '../../common/graphql/localState';
 
 const cache = new InMemoryCache();
 
@@ -46,38 +44,6 @@ export const refreshApolloAuthentication = () => {
 
 // Define default values for local state here
 async function writeInitialData() {
-  const selectedCommunityId: string | null = localStorage.getItem(
-    'selectedCommunityId'
-  );
-
-  // set this to start with, avoids race conditions with the async query below
-  cache.writeQuery({
-    query: gql`
-      query getSelectedCommunityId {
-        selectedCommunity {
-          id
-        }
-      }
-    `,
-    data: {
-      selectedCommunity: { id: selectedCommunityId },
-    },
-  });
-
-  if (selectedCommunityId) {
-    const selectedCommunity = await apolloClient.query({
-      query: GET_COMMUNITY_BY_ID,
-      variables: {
-        communityId: selectedCommunityId,
-      },
-    });
-
-    cache.writeQuery({
-      query: GET_SELECTED_COMMUNITY,
-      data: { selectedCommunity: selectedCommunity?.data?.community },
-    });
-  }
-
   cache.writeQuery({
     query: gql`
       query getLocalState {

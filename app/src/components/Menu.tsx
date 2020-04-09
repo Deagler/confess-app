@@ -23,8 +23,10 @@ import { css } from 'glamor';
 import { AppLogo } from './AppLogo';
 import { useShouldBlockMenu } from '../utils/menus';
 import { appPageCSS, offWhiteCSS } from '../theme/global';
-import { chatbox } from 'ionicons/icons';
+import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import LoginTooltip from './LoginTooltip';
+import { useSelectedCommunity } from '../customHooks/location';
+import { buildLink } from '../utils';
 
 const menuCSS = css({
   borderRight: '0',
@@ -63,8 +65,10 @@ const Menu: React.FC<{}> = () => {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
-
   const shouldBlockMenu = useShouldBlockMenu();
+  const communityId = useSelectedCommunity();
+  const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
+
   if (shouldBlockMenu) {
     return null;
   }
@@ -81,7 +85,7 @@ const Menu: React.FC<{}> = () => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink="/page/submit"
+                routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 className="ion-margin-bottom ion-hide-lg-down"
                 disabled={!userLoggedIn}
@@ -106,6 +110,16 @@ const Menu: React.FC<{}> = () => {
             <div {...channelsContainer}>
               <ChannelList />
             </div>
+            {isAdmin && (
+              <IonButton
+                expand="block"
+                routerLink={buildLink('/admin', communityId)}
+                className="ion-margin-top"
+              >
+                <IonIcon icon={shieldCheckmark} />
+                Admin Portal
+              </IonButton>
+            )}
           </div>
         </IonContent>
         {userLoggedIn && (

@@ -29,3 +29,22 @@ export function removeDuplicatesById<T extends { id: string } | null>(
   });
   return newItems;
 }
+
+export function buildLink(
+  pathname: string,
+  community?: string | null,
+  channel?: string | null
+) {
+  let link: string = '/';
+
+  if (community) {
+    link = link.concat(community);
+  }
+
+  link = link.concat(pathname);
+
+  if (channel) {
+    link = link.concat(`?channel=${channel}`);
+  }
+  return link;
+}

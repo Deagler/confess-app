@@ -20,14 +20,11 @@ import {
   SubmitComment,
   SubmitComment_submitComment_comment,
 } from '../types/SubmitComment';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
-import {
-  GET_SELECTED_COMMUNITY,
-  GET_LOCAL_USER,
-} from '../common/graphql/localState';
+import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
 import LoginTooltip from './LoginTooltip';
+import { useSelectedCommunity } from '../customHooks/location';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -46,9 +43,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     SubmitComment,
     SubmitCommentVariables
   >(SUBMIT_COMMENT);
-  const selectedCommunityQuery = useQuery<GetSelectedCommunity>(
-    GET_SELECTED_COMMUNITY
-  );
+  const communityId = useSelectedCommunity();
   const [content, setContent] = useState<string>();
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
@@ -61,7 +56,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     try {
       const { data } = await submitComment({
         variables: {
-          communityId: selectedCommunityQuery.data!.selectedCommunity!.id,
+          communityId: communityId!,
           postId: postId!,
           content: content!,
         },

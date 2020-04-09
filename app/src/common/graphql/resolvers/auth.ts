@@ -7,7 +7,6 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById } from '../../../types/GetUserById';
-import { GET_SELECTED_COMMUNITY } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -84,18 +83,9 @@ async function attemptLoginWithEmailLink(
 
     if (data.data.user.community) {
       const { community } = data.data.user;
-      // persist selected community across sessions
-      localStorage.setItem('selectedCommunityId', community.id);
 
-      // update apollo cache
-      client.writeQuery({
-        query: GET_SELECTED_COMMUNITY,
-        data: {
-          selectedCommunity: {
-            id: community.id,
-          },
-        },
-      });
+      // automatically view their community after login
+      localStorage.setItem('selectedCommunityId', community.id);
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */

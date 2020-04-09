@@ -11,7 +11,6 @@ export interface GetCommunities_communities_channels {
   __typename: "Channel";
   id: string;
   name: string;
-  icon: string | null;
 }
 
 export interface GetCommunities_communities {

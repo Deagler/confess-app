@@ -10,7 +10,6 @@ export const GET_COMMUNITIES = gql`
       channels {
         id
         name
-        icon
       }
     }
   }

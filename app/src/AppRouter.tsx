@@ -12,15 +12,19 @@ import Postpage from './pages/PostPage';
 export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
   userLoggedIn,
 }) => {
-  console.log(userLoggedIn);
   return (
     <Switch>
       <IonRouterOutlet id="main">
         <Route
           path="/"
-          render={() =>
-            userLoggedIn ? <Redirect to="/page/posts" /> : <LandingPage />
-          }
+          render={() => {
+            const communityId = localStorage.getItem('selectedCommunityId');
+            return userLoggedIn ? (
+              <Redirect to={`/${communityId}/posts`} />
+            ) : (
+              <LandingPage />
+            );
+          }}
           exact={true}
         />
         <Route
@@ -29,24 +33,24 @@ export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
           exact={true}
         />
         <Route
-          path="/page/posts"
+          path="/:communityId/posts"
           render={(props) => <FeedPage {...props} />}
           exact={true}
         />
-        <SecureRoute path="/page/admin" component={AdminPage} exact={true} />
+        <SecureRoute
+          path="/:communityId/admin"
+          component={AdminPage}
+          exact={true}
+        />
         <Route
-          path="/page/submit"
+          path="/:communityId/submit"
           render={(props) =>
-            !userLoggedIn ? (
-              <Redirect to="/page/posts" />
-            ) : (
-              <SubmitPage {...props} />
-            )
+            !userLoggedIn ? <Redirect to="/" /> : <SubmitPage {...props} />
           }
           exact={true}
         />
         <Route
-          path="/page/posts/:id"
+          path="/:communityId/posts/:id"
           render={() => <Postpage />}
           exact={true}
         />

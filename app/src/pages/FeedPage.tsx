@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -25,6 +25,11 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import LoginTooltip from '../components/LoginTooltip';
+import { buildLink } from '../utils';
+import {
+  useSelectedCommunity,
+  useSelectedChannel,
+} from '../customHooks/location';
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -32,10 +37,16 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     loading,
     hasMorePosts,
     fetchMorePosts,
+    setHasMorePosts,
   } = usePaginatedFeedQuery();
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const communityId = useSelectedCommunity();
+  const channelId = useSelectedChannel();
+
+  // looks for more posts when channel changes
+  useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
 
   return (
     <IonPage {...appPageCSS}>
@@ -54,7 +65,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink="/page/submit"
+                routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 disabled={!userLoggedIn}
               >
@@ -74,7 +85,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                 <Post
                   key={i}
                   {...post}
-                  onCommentClick={() => history.push(`/page/posts/${post.id}`)}
+                  onCommentClick={() =>
+                    history.push(buildLink(`/posts/${post.id}`, communityId))
+                  }
                   collapsable={true}
                 />
               )))}

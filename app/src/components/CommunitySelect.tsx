@@ -7,13 +7,13 @@ import {
   IonToast,
 } from '@ionic/react';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { GetCommunities } from '../types/GetCommunities';
-import { GET_SELECTED_COMMUNITY } from '../common/graphql/localState';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { css } from 'glamor';
+import { useHistory, useLocation } from 'react-router';
+import { useSelectedCommunityQuery } from '../customHooks/community';
 
 const communityThumbnail = css({
   width: '48px !important',
@@ -22,26 +22,23 @@ const communityThumbnail = css({
 
 const CommunitySelect: React.FC<{}> = () => {
   const { loading, data, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
+
   const {
-    loading: selectedCommunityLoading,
     data: selectedCommData,
-  } = useQuery<GetSelectedCommunity>(GET_SELECTED_COMMUNITY);
+    loading: selectedCommunityLoading,
+    communityId,
+  } = useSelectedCommunityQuery();
+  const history = useHistory();
+  const location = useLocation();
 
-  const client = useApolloClient();
+  const handleCommunityChange = (newId: string) => {
+    // cross session persistence
+    localStorage.setItem('selectedCommunityId', newId);
 
-  const handleCommunityChange = (communityId) => {
-    const selectedCommunity =
-      data &&
-      data.communities.find((community) => community?.id === communityId);
+    let pathname = location.pathname;
+    pathname = pathname.replace(communityId!, newId);
 
-    // persist selected community across sessions
-    localStorage.setItem('selectedCommunityId', communityId);
-
-    // update apollo cache
-    client.writeQuery({
-      query: GET_SELECTED_COMMUNITY,
-      data: { selectedCommunity },
-    });
+    history.push(pathname);
   };
 
   return (
@@ -51,15 +48,11 @@ const CommunitySelect: React.FC<{}> = () => {
         id="community-selector"
         options={data?.communities || []}
         getOptionLabel={(option) => option?.abbreviation || ''}
-        value={
-          selectedCommData?.selectedCommunity
-            ? selectedCommData!.selectedCommunity
-            : null
-        }
+        value={selectedCommData?.community ? selectedCommData!.community : null}
         getOptionSelected={(option, value) => {
-          return option!.id == value!.id;
+          return option?.id === value?.id;
         }}
-        onChange={(e, val) => handleCommunityChange(val.id)}
+        onChange={(_e, val) => handleCommunityChange(val.id)}
         disableClearable={true}
         renderInput={(params) => (
           <TextField
@@ -70,7 +63,7 @@ const CommunitySelect: React.FC<{}> = () => {
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {loading ? <IonSpinner /> : null}
+                  {loading && <IonSpinner />}
                   {params.InputProps.endAdornment}
                 </React.Fragment>
               ),
