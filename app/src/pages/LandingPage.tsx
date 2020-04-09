@@ -25,7 +25,7 @@ import uoa from '../assets/uoa.svg';
 import LandingPost from '../components/LandingPost';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
-import { offWhiteCSS } from '../theme/global';
+import { backgroundColor } from '../theme/global';
 import { GET_LANDING_POSTS } from '../common/graphql/landingPosts';
 import { GetLandingPosts } from '../types/GetLandingPosts';
 
@@ -35,7 +35,7 @@ const containerClass = css(
     margin: 'auto',
     padding: '20px',
   },
-  offWhiteCSS
+  backgroundColor
 );
 
 const chipClass = css({
@@ -66,10 +66,10 @@ const LandingPage: React.FC = () => {
   return (
     <IonPage id="landing-page">
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonContent {...offWhiteCSS}>
+      <IonContent {...backgroundColor}>
         <div {...containerClass} className=" ion-align-self-center">
           <IonToolbar>
-            <IonItem {...offWhiteCSS} slot="start" lines="none">
+            <IonItem {...backgroundColor} slot="start" lines="none">
               <IonIcon icon={chatbox} color="primary" size="large" />
               <IonLabel style={{ fontSize: '24px' }}>Confess</IonLabel>
             </IonItem>
@@ -102,14 +102,14 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <IonList {...offWhiteCSS}>
-                  <IonItem {...offWhiteCSS}>
+                <IonList {...backgroundColor}>
+                  <IonItem {...backgroundColor}>
                     <IonAvatar slot="start">
                       <img alt="UoA" src={uoa} />
                     </IonAvatar>
                     <IonLabel>The University of Auckland</IonLabel>
                   </IonItem>
-                  <IonItem {...offWhiteCSS}>
+                  <IonItem {...backgroundColor}>
                     <IonAvatar slot="start">
                       <img alt="Other" src={school} />
                     </IonAvatar>
@@ -140,8 +140,8 @@ const LandingPage: React.FC = () => {
             </IonRow>
           </IonGrid>
 
-          <IonItemDivider {...offWhiteCSS} />
-          <IonGrid>
+          <IonItemDivider {...backgroundColor} />
+          <IonGrid className="ion-text-center">
             <IonRow {...secondaryHero}>
               <IonCol size-md="4" size-sm="12">
                 <IonRow>

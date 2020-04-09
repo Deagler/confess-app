@@ -15,7 +15,7 @@ import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { GET_LOCAL_USER } from '../../common/graphql/localState';
-import { offWhiteCSS } from '../../theme/global';
+import { backgroundColor } from '../../theme/global';
 import { css } from 'glamor';
 import { SignupCardContent } from './SignupCardContent';
 import { AttemptLogin } from '../../types/AttemptLogin';
@@ -242,7 +242,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <IonPage {...css(offWhiteCSS, callbackPageCSS)}>
+    <IonPage {...css(backgroundColor, callbackPageCSS)}>
       <div className="ion-text-center">
         <h4 className="ion-padding-top">You're almost in!</h4>
         <IonCard {...loginCard}>{renderAppropriateLoginCard()}</IonCard>
