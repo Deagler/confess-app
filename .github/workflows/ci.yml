@@ -37,11 +37,6 @@ jobs:
         run: npm run build
         env:
           EXTEND_ESLINT: true
-      - name: Upload Build
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: confess-app
-          path: ./app/build/
 
   api-functions:
     runs-on: ubuntu-latest
