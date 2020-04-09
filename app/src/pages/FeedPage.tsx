@@ -86,9 +86,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                   key={i}
                   {...post}
                   onCommentClick={() =>
-                    history.push(
-                      buildLink(`/posts/${post.id}`, communityId, channelId)
-                    )
+                    history.push(buildLink(`/posts/${post.id}`, communityId))
                   }
                   collapsable={true}
                 />

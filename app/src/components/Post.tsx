@@ -111,10 +111,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         duration={2000}
       />
       <IonCard className="ion-margin">
-        <Link
-          to={buildLink(`/posts/${id}`, communityId, channelId)}
-          className="Link"
-        >
+        <Link to={buildLink(`/posts/${id}`, communityId)} className="Link">
           <IonCardHeader>
             <IonCardSubtitle>
               {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
