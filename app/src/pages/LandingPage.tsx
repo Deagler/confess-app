@@ -1,14 +1,12 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { chatbox, school, checkmarkCircleSharp } from 'ionicons/icons';
+import { chatbox, checkmarkCircleSharp } from 'ionicons/icons';
 import {
   IonPage,
   IonIcon,
   IonToolbar,
-  IonList,
   IonContent,
   IonRow,
-  IonAvatar,
   IonCol,
   IonItem,
   IonLabel,
@@ -21,13 +19,13 @@ import {
   IonToast,
 } from '@ionic/react';
 
-import uoa from '../assets/uoa.svg';
 import LandingPost from '../components/LandingPost';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
 import { backgroundColor } from '../theme/global';
 import { GET_LANDING_POSTS } from '../common/graphql/landingPosts';
 import { GetLandingPosts } from '../types/GetLandingPosts';
+import CommunityList from '../components/CommunityList';
 
 const containerClass = css(
   {
@@ -88,12 +86,6 @@ const LandingPage: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {/* <IonRow className="ion-justify-content-center">
-              <IonCol size-xs="12" size-sm="6" size-md="4">
-                <IonButton fill="clear">Log In</IonButton>
-              </IonCol>
-            </IonRow> */}
-
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
                 <p>Or check out some confessions as a guest.</p>
@@ -102,20 +94,7 @@ const LandingPage: React.FC = () => {
 
             <IonRow className="ion-justify-content-center">
               <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <IonList {...backgroundColor}>
-                  <IonItem {...backgroundColor}>
-                    <IonAvatar slot="start">
-                      <img alt="UoA" src={uoa} />
-                    </IonAvatar>
-                    <IonLabel>The University of Auckland</IonLabel>
-                  </IonItem>
-                  <IonItem {...backgroundColor}>
-                    <IonAvatar slot="start">
-                      <img alt="Other" src={school} />
-                    </IonAvatar>
-                    <IonLabel>More universities coming soon.</IonLabel>
-                  </IonItem>
-                </IonList>
+                <CommunityList />
               </IonCol>
             </IonRow>
 
