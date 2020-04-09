@@ -1,7 +1,7 @@
 import { css } from 'glamor';
 import { IonSpinner } from '@ionic/react';
 import React from 'react';
-import { offWhiteCSS } from '../theme/global';
+import { backgroundColor } from '../theme/global';
 
 const loadingContainer = css(
   {
@@ -13,7 +13,7 @@ const loadingContainer = css(
     alignItems: 'center',
     zIndex: -1,
   },
-  offWhiteCSS
+  backgroundColor
 );
 
 const largeSpinner = css({

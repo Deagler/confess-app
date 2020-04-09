@@ -1,8 +1,14 @@
 import { css } from 'glamor';
 
-export const offWhiteCSS = css({
-  '--background': 'rgb(250, 250, 250)',
-  backgroundColor: 'rgb(250, 250, 250)',
+export const backgroundColor = css({
+  '@media(prefers-color-scheme: light)': {
+    '--background': 'rgb(250, 250, 250)',
+    backgroundColor: 'rgb(250, 250, 250)',
+  },
+  '@media(prefers-color-scheme: dark)': {
+    '--background': 'rgb(0, 0, 0)',
+    backgroundColor: 'rgb(0, 0, 0)',
+  },
 });
 
 export const appPageCSS = css(
@@ -11,9 +17,9 @@ export const appPageCSS = css(
       marginTop: '82px',
     },
   },
-  offWhiteCSS,
+  backgroundColor,
   {
-    '& ion-content': offWhiteCSS,
+    '& ion-content': backgroundColor,
   },
   {
     '& .contentContainer': {

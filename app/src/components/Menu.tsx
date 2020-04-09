@@ -22,7 +22,7 @@ import { LogoutButton } from './LogoutButton';
 import { css } from 'glamor';
 import { AppLogo } from './AppLogo';
 import { useShouldBlockMenu } from '../utils/menus';
-import { appPageCSS, offWhiteCSS } from '../theme/global';
+import { appPageCSS, backgroundColor } from '../theme/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import LoginTooltip from './LoginTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
@@ -45,7 +45,7 @@ const sidebarContent = css({
 
 const channelsContainer = css({
   marginTop: '4px',
-  '& ion-list, ion-item': offWhiteCSS,
+  '& ion-list, ion-item': backgroundColor,
   '& ion-list': {
     padding: '0px !important',
     maxHeight: '100%',
