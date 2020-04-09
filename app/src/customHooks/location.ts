@@ -11,5 +11,6 @@ export const useSelectedCommunity = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
 
-  return query.get('community');
+  // persist selected community across sessions
+  return query.get('community') || localStorage.getItem('selectedCommunityId');
 };

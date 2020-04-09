@@ -7,6 +7,7 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById } from '../../../types/GetUserById';
+import { select } from 'glamor';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -82,8 +83,10 @@ async function attemptLoginWithEmailLink(
     }
 
     if (data.data.user.community) {
-      // const { community } = data.data.user;
-      // TODO: Set selected community to users community
+      const { community } = data.data.user;
+
+      // automatically view their community after login
+      localStorage.setItem('selectedCommunityId', community.id);
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */

@@ -30,7 +30,10 @@ const CommunitySelect: React.FC<{}> = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const handleCommunityChange = (communityId) => {
+  const handleCommunityChange = (communityId: string) => {
+    // cross session persistence
+    localStorage.setItem('selectedCommunityId', communityId);
+
     history.push(`${location.pathname}?community=${communityId}`);
   };
 
@@ -41,11 +44,11 @@ const CommunitySelect: React.FC<{}> = () => {
         id="community-selector"
         options={data?.communities || []}
         getOptionLabel={(option) => option?.abbreviation || ''}
-        value={selectedCommData?.community}
+        value={selectedCommData?.community ? selectedCommData!.community : null}
         getOptionSelected={(option, value) => {
-          return option!.id == value!.id;
+          return option?.id === value?.id;
         }}
-        onChange={(e, val) => handleCommunityChange(val.id)}
+        onChange={(_e, val) => handleCommunityChange(val.id)}
         disableClearable={true}
         renderInput={(params) => (
           <TextField
@@ -56,7 +59,7 @@ const CommunitySelect: React.FC<{}> = () => {
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {loading ? <IonSpinner /> : null}
+                  {loading && <IonSpinner />}
                   {params.InputProps.endAdornment}
                 </React.Fragment>
               ),
