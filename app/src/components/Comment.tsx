@@ -66,6 +66,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
   const communityId = useSelectedCommunity();
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   // TODO: Add liking mutation, and fetch liked status
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_COMMENT
@@ -139,12 +140,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <LoginTooltip
                   loginOrSignUpTo="like this comment"
                   userLoggedIn={userLoggedIn}
+                  userHasCommunity={userHasCommunity}
                 >
                   <IonButton
                     onClick={() => handleLikeButtonClick(postIdForComment, id)}
                     fill="clear"
                     expand="full"
-                    disabled={!userLoggedIn || serverLikeInfo.loading}
+                    disabled={!userLoggedIn || serverLikeInfo.loading || !userHasCommunity}
                   >
                     <IonIcon
                       color={isCommentLikedByUser ? 'danger' : 'primary'}
@@ -161,12 +163,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <LoginTooltip
                   loginOrSignUpTo="reply"
                   userLoggedIn={userLoggedIn}
+                  userHasCommunity={userHasCommunity}
                 >
                   <IonButton
                     fill="clear"
                     expand="full"
                     color="medium"
-                    disabled={!userLoggedIn}
+                    disabled={!userLoggedIn || !userHasCommunity}
                     onClick={() => onReply(authorDisplayName)}
                   >
                     <IonIcon color="medium" icon={chatbox} />

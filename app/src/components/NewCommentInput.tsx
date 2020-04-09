@@ -50,6 +50,8 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
+
 
   const handleSubmit = async () => {
     // TODO: add input validation and retrieve communityId from somewhere
@@ -101,12 +103,13 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                 <LoginTooltip
                   loginOrSignUpTo={'leave a comment'}
                   userLoggedIn={userLoggedIn}
+                  userHasCommunity={userHasCommunity}
                   inline={true}
                 >
                   <IonButton
                     size="small"
                     disabled={
-                      isNullOrWhitespace(content) || !userLoggedIn || !postId
+                      isNullOrWhitespace(content) || !userLoggedIn || !postId || !userHasCommunity
                     }
                     onClick={handleSubmit}
                   >

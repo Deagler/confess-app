@@ -32,12 +32,9 @@ const CommunitySelect: React.FC<{}> = () => {
   const location = useLocation();
 
   const handleCommunityChange = (newId: string) => {
-    let pathname = location.pathname;
 
     localStorage.setItem('selectedCommunityId', newId);
-    pathname = pathname.replace(communityId!, newId);
-
-    history.push(pathname);
+    history.push(`/${newId}/posts`);
   };
   console.log(selectedCommData, communityId);
   return (

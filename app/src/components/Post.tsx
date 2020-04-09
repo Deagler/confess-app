@@ -67,6 +67,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const [expanded, setExpanded] = useState<boolean>(false);
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_POST
@@ -142,9 +143,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               <LoginTooltip
                 loginOrSignUpTo="like this confession"
                 userLoggedIn={userLoggedIn}
+                userHasCommunity={userHasCommunity}
               >
                 <IonButton
-                  disabled={!userLoggedIn || serverLikeInfo.loading}
+                  disabled={!userLoggedIn || serverLikeInfo.loading || !userHasCommunity}
                   onClick={() => handleLikeButtonClick(id)}
                   fill="clear"
                   expand="full"

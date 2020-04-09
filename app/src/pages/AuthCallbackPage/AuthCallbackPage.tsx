@@ -24,6 +24,7 @@ import {
   ATTEMPT_LOGIN_WITH_EMAIL_LINK,
   ATTEMPT_SIGNUP,
 } from '../../common/auth';
+import { navigate } from 'ionicons/icons';
 
 const callbackPageCSS = css({
   height: '100vh',
@@ -90,19 +91,28 @@ const EmailInputCardContent: React.FC<any> = ({
   );
 };
 
+const navigateToFeed = (communityId?) => {
+  setTimeout(() => {
+    const navCommunity =
+      communityId ||
+      localStorage.getItem('selectedCommunityId') ||
+      'HW6lY4kJOpqSpL39hbUV';
+
+    if (navCommunity != localStorage.getItem('selectedCommunityId')) {
+      localStorage.setItem('selectedCommunityId', navCommunity); // temp hack for community state issue.
+    }
+
+    window.location.href = `/${navCommunity}/posts`;
+  }, 2000);
+};
+
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [attemptLoginMutation, attemptLoginInfo] = useMutation<AttemptLogin>(
     ATTEMPT_LOGIN_WITH_EMAIL_LINK,
     {
       onCompleted: (data) => {
         if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
-          setTimeout(() => {
-            const communityId =
-              localStorage.getItem('selectedCommunityId') ||
-              'HW6lY4kJOpqSpL39hbUV';
-              
-            window.location.href = `/${communityId}/posts`;
-          }, 2000);
+          setTimeout(navigateToFeed, 2000);
         }
       },
     }
@@ -127,7 +137,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
             : 'HW6lY4kJOpqSpL39hbUV';
           localStorage.setItem('selectedCommunityId', communityId);
 
-          window.location.href = `/${communityId}/posts`;
+          navigateToFeed(communityId);
         }, 2000);
       },
     }
@@ -137,15 +147,18 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     localStorage.getItem('emailForSignIn')!
   );
 
-  const attemptLogin = () => {
+  const attemptLogin = async () => {
     const emailLink = window.location.href;
-
-    attemptLoginMutation({
-      variables: {
-        userEmail,
-        emailLink,
-      },
-    });
+    try {
+      await attemptLoginMutation({
+        variables: {
+          userEmail,
+          emailLink,
+        },
+      });
+    } catch (e) {
+      navigateToFeed();
+    }
   };
 
   const attemptLoginCallback = useCallback(attemptLogin, []);
@@ -171,8 +184,14 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           return (
             <SignupCardContent
               mutationInfo={attemptSignupInfo}
-              submit={(firstName, lastName) => {
-                attemptSignupMutation({ variables: { firstName, lastName } });
+              submit={async (firstName, lastName) => {
+                try {
+                  await attemptSignupMutation({
+                    variables: { firstName, lastName },
+                  });
+                } catch (e) {
+                  navigateToFeed();
+                }
               }}
             />
           );
