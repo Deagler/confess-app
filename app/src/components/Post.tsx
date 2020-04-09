@@ -167,7 +167,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               </IonButton>
             </IonCol>
             <IonCol>
-              <ShareButton target={`/page/posts/${id}`} />
+              <ShareButton
+                title={title}
+                target={buildLink(`/posts/${id}`, communityId)}
+              />
             </IonCol>
           </IonRow>
         </IonGrid>
