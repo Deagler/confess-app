@@ -7,7 +7,6 @@ import { HttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { gql } from 'apollo-boost';
 import { firebaseApp } from '../firebase';
-import { GET_COMMUNITY_BY_ID } from '../../common/graphql/communities';
 
 const cache = new InMemoryCache();
 

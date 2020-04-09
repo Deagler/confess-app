@@ -14,7 +14,7 @@ import {
   IonSpinner,
 } from '@ionic/react';
 import moment from 'moment';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import { APPROVE_POST } from '../common/graphql/admin';
 import { ApprovePost, ApprovePostVariables } from '../types/ApprovePost';

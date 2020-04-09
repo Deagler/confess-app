@@ -25,7 +25,6 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import LoginTooltip from './LoginTooltip';
 import {
   useSelectedCommunity,

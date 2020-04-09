@@ -26,14 +26,13 @@ import {
   IonIcon,
 } from '@ionic/react';
 import './SubmitPage.css';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
 import { RouteComponentProps } from 'react-router';
 import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
 } from '../types/SubmitPostForApproval';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import { appPageCSS } from '../theme/global';
 import SubmissionRulesModal from '../components/SubmissionRulesModal';
 import { informationCircleOutline } from 'ionicons/icons';

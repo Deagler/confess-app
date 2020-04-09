@@ -16,9 +16,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
-import { GetSelectedCommunity } from '../types/GetSelectedCommunity';
 import LoginTooltip from './LoginTooltip';
-import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
 interface CommunityData {
   abbreviation: string;
