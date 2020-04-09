@@ -11,7 +11,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ title, target }) => {
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const host: string = window.location.host;
 
-  const url: string = `${host}${target}`;
+  const url: string = `https://${host}${target}`;
 
   const handleShare = () => {
     // not supported by desktop browsers or language servers yet :(
@@ -21,7 +21,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ title, target }) => {
       navigator.share({
         title: `Confess: ${title}`,
         text: 'Check out this confession on confess.co.nz',
-        url,
+        url: target, // webshare will automatically append host
       });
     } else {
       // copy link to clipboard
