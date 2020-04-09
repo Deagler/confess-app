@@ -1,7 +1,8 @@
-import { IonInput, IonButton, IonSpinner } from '@ionic/react';
+import { IonButton, IonSpinner } from '@ionic/react';
 import React from 'react';
 import { IsValidEmailFormat } from '../utils';
 import { css } from 'glamor';
+import { TextField } from '@material-ui/core';
 
 const lightPadding = css({
   padding: '4px',
@@ -15,13 +16,6 @@ const lightPadding = css({
 });
 
 const inputBoxStyling = css({
-  '& ion-input': {
-    border: 'solid 1px rgba(196, 196, 196, 1)',
-    borderRadius: '4px',
-  },
-  '& ion-input:focus-within': {
-    border: 'solid 1px #4f8ef7',
-  },
   margin: '0px 4px',
 });
 
@@ -33,11 +27,14 @@ export const SubmittableEmailInput: React.FC<{
   submit: any;
   submitText: string;
 }> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
+  const submitButtonDisabled = !email || !IsValidEmailFormat(email) || loading;
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         const isValid = email && IsValidEmailFormat(email) && !loading;
+
         if (!isValid) {
           return;
         }
@@ -46,22 +43,18 @@ export const SubmittableEmailInput: React.FC<{
     >
       <div {...lightPadding}>
         <div {...inputBoxStyling}>
-          <IonInput
+          <TextField
+            variant="outlined"
+            label={placeholderText}
             value={email}
-            inputmode="email"
             type="email"
             style={{ maxWidth: '400px', minWidth: '250px' }}
-            placeholder={placeholderText}
-            onIonChange={(e) => setEmail(e.detail.value!)}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <div>
-          <IonButton
-            disabled={!email || !IsValidEmailFormat(email) || loading}
-            fill="solid"
-            type="submit"
-          >
+          <IonButton disabled={submitButtonDisabled} fill="solid" type="submit">
             {loading ? <IonSpinner /> : submitText}
           </IonButton>
         </div>

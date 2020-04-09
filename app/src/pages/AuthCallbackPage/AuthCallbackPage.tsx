@@ -11,7 +11,6 @@ import {
 import { RouteComponentProps } from 'react-router';
 
 import { SubmittableEmailInput } from '../../components/SubmittableEmailInput';
-import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { GET_LOCAL_USER } from '../../common/graphql/localState';
@@ -20,6 +19,10 @@ import { css } from 'glamor';
 import { SignupCardContent } from './SignupCardContent';
 import { AttemptLogin } from '../../types/AttemptLogin';
 import { AttemptSignup } from '../../types/AttemptSignup';
+import {
+  ATTEMPT_LOGIN_WITH_EMAIL_LINK,
+  ATTEMPT_SIGNUP,
+} from '../../common/auth';
 
 const callbackPageCSS = css({
   height: '100vh',
@@ -39,39 +42,6 @@ const loginCard = css({
   alignContent: 'center',
   flexDirection: 'column',
 });
-
-const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
-  mutation AttemptLogin($userEmail: String!, $emailLink: String!) {
-    attemptLoginWithEmailLink(userEmail: $userEmail, emailLink: $emailLink)
-      @client {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const ATTEMPT_SIGNUP = gql`
-  mutation AttemptSignup($firstName: String!, $lastName: String!) {
-    attemptSignUp(firstName: $firstName, lastName: $lastName) {
-      code
-      success
-      message
-      user {
-        id
-        firstName
-        lastName
-        communityUsername
-        email
-        community {
-          id
-          name
-          abbreviation
-        }
-      }
-    }
-  }
-`;
 
 const LoggingInCardContent: React.FC = () => {
   return (
@@ -119,17 +89,28 @@ const EmailInputCardContent: React.FC<any> = ({
   );
 };
 
+const navigateToFeed = (communityId?) => {
+  setTimeout(() => {
+    const navCommunity =
+      communityId ||
+      localStorage.getItem('selectedCommunityId') ||
+      'O0jkcLwMRy77krkmAT2q';
+
+    if (navCommunity != localStorage.getItem('selectedCommunityId')) {
+      localStorage.setItem('selectedCommunityId', navCommunity); // temp hack for community state issue.
+    }
+
+    window.location.href = `/${navCommunity}/posts`;
+  }, 2000);
+};
+
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [attemptLoginMutation, attemptLoginInfo] = useMutation<AttemptLogin>(
     ATTEMPT_LOGIN_WITH_EMAIL_LINK,
     {
       onCompleted: (data) => {
         if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
-          setTimeout(() => {
-            // TODO: pull this state from the signup flow
-            const communityId = 'HW6lY4kJOpqSpL39hbUV';
-            window.location.href = `/${communityId}/posts`;
-          }, 2000);
+          setTimeout(navigateToFeed, 2000);
         }
       },
     }
@@ -147,11 +128,14 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           });
         }
       },
-      onCompleted: () => {
+      onCompleted: (data) => {
         setTimeout(() => {
-          // TODO: pull this state from the signup flow
-          const communityId = 'HW6lY4kJOpqSpL39hbUV';
-          window.location.href = `/${communityId}/posts`;
+          const communityId = data.attemptSignUp?.user?.community
+            ? data.attemptSignUp.user.community.id
+            : 'O0jkcLwMRy77krkmAT2q';
+          localStorage.setItem('selectedCommunityId', communityId);
+
+          navigateToFeed(communityId);
         }, 2000);
       },
     }
@@ -161,15 +145,18 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
     localStorage.getItem('emailForSignIn')!
   );
 
-  const attemptLogin = () => {
+  const attemptLogin = async () => {
     const emailLink = window.location.href;
-
-    attemptLoginMutation({
-      variables: {
-        userEmail,
-        emailLink,
-      },
-    });
+    try {
+      await attemptLoginMutation({
+        variables: {
+          userEmail,
+          emailLink,
+        },
+      });
+    } catch (e) {
+      navigateToFeed();
+    }
   };
 
   const attemptLoginCallback = useCallback(attemptLogin, []);
@@ -195,8 +182,14 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           return (
             <SignupCardContent
               mutationInfo={attemptSignupInfo}
-              submit={(firstName, lastName) => {
-                attemptSignupMutation({ variables: { firstName, lastName } });
+              submit={async (firstName, lastName) => {
+                try {
+                  await attemptSignupMutation({
+                    variables: { firstName, lastName },
+                  });
+                } catch (e) {
+                  navigateToFeed();
+                }
               }}
             />
           );

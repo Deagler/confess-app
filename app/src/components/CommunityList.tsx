@@ -17,6 +17,8 @@ import { buildLink } from '../utils';
 const CommunityList: React.FC<{}> = () => {
   const { data, loading, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
 
+  const communities = data?.communities?.filter((e) => e?.isEnabled);
+
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -24,8 +26,8 @@ const CommunityList: React.FC<{}> = () => {
         {loading ? (
           <IonSpinner />
         ) : (
-          data &&
-          data.communities.map((community, i) => (
+          communities &&
+          communities.map((community, i) => (
             <IonItem
               key={i}
               {...backgroundColor}

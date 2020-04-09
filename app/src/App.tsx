@@ -44,6 +44,7 @@ const App: React.FC = () => {
   const [authLocalUser, setAuthLocalUser] = useState<
     firebase.User | undefined | null
   >(undefined);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setAuthLocalUser(user!);

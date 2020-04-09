@@ -59,8 +59,6 @@ const LandingPage: React.FC = () => {
     },
   };
 
-  console.log(data);
-
   return (
     <IonPage id="landing-page">
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />

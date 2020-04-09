@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { firebaseApp } from '../services/firebase';
 import { IonToast, IonLabel } from '@ionic/react';
 import React from 'react';
 import { Checkmark } from 'react-checkmark';
 import { SubmittableEmailInput } from './SubmittableEmailInput';
 import { css } from 'glamor';
+import { useMutation } from '@apollo/react-hooks';
+import { REQUEST_FIREBASE_LOGIN_LINK } from '../common/auth';
+import { RequestFirebaseLink } from '../types/RequestFirebaseLink';
 
 export enum LOGIN_STATUS {
   NONE,
@@ -32,35 +34,21 @@ const LoginSuccess: React.FC<{}> = () => {
 
 export const LoginInput: React.FC<{}> = () => {
   const [loginEmail, setLoginEmail] = useState<string>();
-  const [loginStatus, setLoginStatus] = useState<LOGIN_STATUS>(
-    LOGIN_STATUS.NONE
+  const [requestFirebaseLink, requestInfo] = useMutation<RequestFirebaseLink>(
+    REQUEST_FIREBASE_LOGIN_LINK
   );
   const [loginError, setLoginError] = useState<string>();
   const handleLogin = async (inputEmail) => {
-    const actionCodeSettings = {
-      // URL must be whitelisted in the Firebase Console.
-      url: `${window.location.origin}/callback`,
-      handleCodeInApp: true,
-    };
-    console.log('asdasdsad');
-
     try {
-      setLoginStatus(LOGIN_STATUS.PENDING);
-      await firebaseApp
-        .auth()
-        .sendSignInLinkToEmail(inputEmail, actionCodeSettings);
-      setLoginStatus(LOGIN_STATUS.SUCCESS);
-      localStorage.setItem('emailForSignIn', inputEmail);
+      await requestFirebaseLink({ variables: { userEmail: inputEmail } });
     } catch (e) {
-      setLoginError(
-        'An error occurred while logging in. Our team has been notified.'
-      );
       setLoginEmail('');
-      setLoginStatus(LOGIN_STATUS.FAILED);
+      setLoginError(e.message);
     }
   };
 
-  return loginStatus == LOGIN_STATUS.SUCCESS ? (
+  return !requestInfo.loading &&
+    requestInfo.data?.requestFirebaseLoginLink?.success ? (
     <LoginSuccess />
   ) : (
     <React.Fragment>
@@ -69,7 +57,7 @@ export const LoginInput: React.FC<{}> = () => {
         email={loginEmail}
         setEmail={setLoginEmail}
         placeholderText="Enter your university e-mail"
-        loading={loginStatus == LOGIN_STATUS.PENDING}
+        loading={requestInfo.loading}
         submit={handleLogin}
         submitText="Login"
       />

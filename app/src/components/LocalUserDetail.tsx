@@ -1,7 +1,8 @@
-import { IonRow, IonCol, IonLabel, IonAvatar, IonNote } from '@ionic/react';
+import { IonRow, IonCol, IonLabel, IonAvatar } from '@ionic/react';
 import React from 'react';
 import { GetLocalUser_localUser } from '../types/GetLocalUser';
 import { css } from 'glamor';
+import { Tooltip } from '@material-ui/core';
 
 const userDetailContainer = css({ display: 'flex', flex: 1 });
 
@@ -25,30 +26,37 @@ export const LocalUserDetail: React.FC<{
     <IonRow>
       <IonCol className="ion-align-items-center ion-align-content-center">
         <div {...userDetailContainer}>
-          {user.community && (
-            <IonAvatar {...userAvatar}>
-              <img alt="user avatar" src={user.community.imageURI} />
-            </IonAvatar>
-          )}
+          <IonAvatar {...userAvatar}>
+            <img
+              alt="user avatar"
+              src={
+                user.community
+                  ? user.community.imageURI
+                  : 'https://i.imgur.com/GiOdlWc.png'
+              }
+            />
+          </IonAvatar>
+
           <div {...userInfoContainer}>
             <IonLabel>
               <strong>{`${user.firstName} ${user.lastName}`}</strong>
             </IonLabel>
-            <IonLabel>
-              <strong>
-                {user.community ? user.community.name : user.email}
-              </strong>
-            </IonLabel>
+            <Tooltip
+              arrow={true}
+              disableFocusListener={!!user.community}
+              disableHoverListener={!!user.community}
+              disableTouchListener={!!user.community}
+              title={"We'll be at your university soon!"}
+            >
+              <IonLabel>
+                <strong>
+                  {user.community ? user.community.name : user.email}
+                </strong>
+              </IonLabel>
+            </Tooltip>
           </div>
         </div>
       </IonCol>
-      {!user.community && (
-        <IonRow>
-          <IonNote>
-            <em>We'll be at your university soon!</em>
-          </IonNote>
-        </IonRow>
-      )}
     </IonRow>
   );
 };

@@ -9,7 +9,7 @@ const props: PostRequestProps = {
   title: 'this is the title',
   creationTimestamp: moment().unix(),
   content: 'this is the content',
-  author: 'this is the author',
+  authorAlias: 'this is the author',
   onModeration: () => {},
 };
 
@@ -27,7 +27,7 @@ test('displays content properly', async () => {
   await findByText('Post ID: 10');
   await findByText('this is the title');
   await findByText('this is the content');
-  await findByText('this is the author');
+  await findByText('~ this is the author');
   await findByText('Approve');
   await findByText('Reject');
 });
@@ -35,8 +35,8 @@ test('displays content properly', async () => {
 test('displays author as anonymous if omitted', async () => {
   const { findByText } = render(
     wrapWithApolloProvider(
-      wrapWithRouter(<PostRequest {...props} author={undefined} />)
+      wrapWithRouter(<PostRequest {...props} authorAlias={null} />)
     )
   );
-  await findByText('Anonymous');
+  await findByText('~ Anonymous');
 });

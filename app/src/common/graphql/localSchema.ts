@@ -10,8 +10,6 @@ export const typeDefs = gql`
     authState: AuthState
     localUser: User
     selectedCommunity: Community
-    isLikedByUser: Boolean!
-    isCommentLikedByUser: Boolean!
   }
 
   type LoginResponse implements MutationResponse {
@@ -26,6 +24,7 @@ export const typeDefs = gql`
       userEmail: String!
       emailLink: String!
     ): LoginResponse
+    requestFirebaseLoginLink(userEmail: String!): MutationResponse
     doFirebaseLogout: LoginResponse
   }
 `;

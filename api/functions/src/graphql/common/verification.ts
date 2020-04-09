@@ -1,6 +1,7 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
+import { Community, User } from '../../typings';
 
 const firestore = firebaseApp.firestore();
 const usersCollection = firestore.collection('users');
@@ -18,14 +19,25 @@ export async function verifyUser(userRecord: UserRecord) {
     throw new UserInputError(`No user document for ${userRecord.uid}`);
   }
 
+  if (!(userDoc.data() as User).communityRef) {
+    throw new UserInputError('You need to be in a community to do that!');
+  }
+
   return { userRef, userDoc };
 }
 
-export async function verifyCommunity(communityId: string) {
+export async function verifyCommunity(
+  communityId: string,
+  communityMustBeEnabled: boolean
+) {
   const communityRef = communitiesCollection.doc(communityId);
   const communityDoc = await communityRef.get();
   if (!communityDoc.exists) {
     throw new UserInputError(`Community with id ${communityId} not found`);
+  }
+
+  if (communityMustBeEnabled && !(communityDoc.data() as Community).isEnabled) {
+    throw new UserInputError(`Community with id ${communityId} not enabled.`);
   }
 
   return { communityRef, communityDoc };

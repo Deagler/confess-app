@@ -3,7 +3,12 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment } from '../../typings';
-import { verifyComment, verifyPost, verifyUser } from '../common/verification';
+import {
+  verifyComment,
+  verifyCommunity,
+  verifyPost,
+  verifyUser,
+} from '../common/verification';
 import { addIdToDoc } from '../resolvers/utils';
 const firestore = firebaseApp.firestore();
 
@@ -14,7 +19,10 @@ async function submitComment(
 ) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  const { userRef } = await verifyUser(userRecord);
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  const communityMustBeEnabled = !userDoc.data()!.isAdmin;
+  await verifyCommunity(communityId, communityMustBeEnabled);
 
   const newComment: Partial<Comment> = {
     creationTimestamp: moment().unix(),
@@ -54,7 +62,10 @@ async function toggleLikeComment(
 ) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  const { userRef } = await verifyUser(userRecord);
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  const communityMustBeEnabled = !userDoc.data()!.isAdmin;
+  await verifyCommunity(communityId, communityMustBeEnabled);
 
   const { commentRef, commentDoc } = await verifyComment(
     communityId,

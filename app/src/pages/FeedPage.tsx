@@ -42,6 +42,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
+
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
 
@@ -62,12 +64,16 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
+            <LoginTooltip
+              loginOrSignUpTo="confess"
+              userLoggedIn={userLoggedIn}
+              userHasCommunity={userHasCommunity}
+            >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
-                disabled={!userLoggedIn}
+                disabled={!userLoggedIn || !userHasCommunity}
               >
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession

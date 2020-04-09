@@ -27,7 +27,11 @@ async function submitPostForApproval(
     throw new ForbiddenError('You can only post to your own community');
   }
 
-  const { communityRef } = await verifyCommunity(communityId);
+  const communityMustBeEnabled = !userDoc.data()!.isAdmin;
+  const { communityRef } = await verifyCommunity(
+    communityId,
+    communityMustBeEnabled
+  );
 
   // TODO: verify channel exists in community
 
@@ -68,7 +72,7 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
     throw new ForbiddenError('Only administrators can moderate posts');
   }
 
-  const { communityRef } = await verifyCommunity(communityId);
+  const { communityRef } = await verifyCommunity(communityId, false);
   const { postRef } = await verifyPost(communityId, postId);
 
   // update post
@@ -128,6 +132,7 @@ async function rejectPost(
     throw new ForbiddenError('Only administrators can moderate posts');
   }
 
+  await verifyCommunity(communityId, false);
   const { postRef } = await verifyPost(communityId, postId);
 
   // update post
@@ -163,8 +168,10 @@ async function rejectPost(
 async function toggleLikePost(_: any, { communityId, postId }, context) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  const { userRef } = await verifyUser(userRecord);
+  const { userRef, userDoc } = await verifyUser(userRecord);
 
+  const communityMustBeEnabled = !userDoc.data()!.isAdmin;
+  await verifyCommunity(communityId, communityMustBeEnabled);
   const { postRef, postDoc } = await verifyPost(communityId, postId);
 
   const userHasLiked = (postDoc.data()! as Post).likeRefs.some(

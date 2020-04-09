@@ -12,6 +12,7 @@ export interface GetUserById_user_community {
   id: string;
   name: string;
   abbreviation: string;
+  isEnabled: boolean;
 }
 
 export interface GetUserById_user {

@@ -3,13 +3,23 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
 import { paginateResults } from '../../utils/pagination';
-import { verifyUser } from '../common/verification';
+import { verifyCommunity, verifyUser } from '../common/verification';
 import { addIdToDoc } from './utils';
 
 const firestore = firebaseApp.firestore();
 
 export const communityResolvers = {
-  async feed(parent: any, { sortBy, cursor, limit, channelId }) {
+  async feed(parent: any, { sortBy, cursor, limit, channelId }, context: any) {
+    const userRecord: UserRecord = context.req.user;
+    let communityMustBeEnabled = true;
+
+    if (userRecord) {
+      const { userDoc } = await verifyUser(userRecord);
+      communityMustBeEnabled = !userDoc.data()!.isAdmin;
+    }
+
+    await verifyCommunity(parent.id, communityMustBeEnabled);
+
     const postCollection = firestore.collection(
       `communities/${parent.id}/posts`
     );

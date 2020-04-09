@@ -7,6 +7,7 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById } from '../../../types/GetUserById';
+import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../../utils';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -25,12 +26,45 @@ function persistAuthState(apolloCache, authState) {
   localStorage.setItem('authState', JSON.stringify(authState));
 }
 
+async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
+  if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
+    throw new ApolloError({
+      errorMessage:
+        'Invalid Email. Sorry, we only support .ac.nz, .edu.au and .edu emails right now!',
+    });
+  }
+
+  const actionCodeSettings = {
+    // URL must be whitelisted in the Firebase Console.
+    url: `${window.location.origin}/callback`,
+    handleCodeInApp: true,
+  };
+
+  try {
+    await firebaseApp
+      .auth()
+      .sendSignInLinkToEmail(userEmail, actionCodeSettings);
+
+    localStorage.setItem('emailForSignIn', userEmail);
+    return {
+      code: 'auth/link_requested',
+      success: true,
+      message: 'Click the link in your e-mail to sign in!',
+      __typename: 'MutationResponse',
+    };
+  } catch (e) {
+    throw new ApolloError({
+      errorMessage:
+        'An error occurred while logging in. Our team has been notified.',
+    });
+  }
+}
+
 async function attemptLoginWithEmailLink(
   _,
   { userEmail, emailLink },
   { cache, client }
 ) {
-  console.log(emailLink, userEmail);
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 
@@ -81,11 +115,10 @@ async function attemptLoginWithEmailLink(
       };
     }
 
-    if (data.data.user.community) {
-      const { community } = data.data.user;
-
-      // automatically view their community after login
-      localStorage.setItem('selectedCommunityId', community.id);
+    if (data.data.user.community?.isEnabled) {
+      localStorage.setItem('selectedCommunityId', data.data.user.community.id);
+    } else {
+      localStorage.setItem('selectedCommunityId', 'O0jkcLwMRy77krkmAT2q');
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
@@ -95,7 +128,6 @@ async function attemptLoginWithEmailLink(
       success: true,
       message: 'Successfully logged in.',
       authState,
-      localUser: data.data.user,
       __typename: 'LoginResponse',
     };
   } catch (e) {
@@ -124,5 +156,6 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 
 export const authMutationResolvers = {
   attemptLoginWithEmailLink,
+  requestFirebaseLoginLink,
   doFirebaseLogout,
 };

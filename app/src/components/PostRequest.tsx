@@ -26,12 +26,19 @@ export interface PostRequestProps {
   title: string;
   creationTimestamp: number;
   content: string;
-  author?: string;
+  authorAlias: string | null;
   onModeration(): void;
 }
 
 const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
-  const { id, title, creationTimestamp, content, author, onModeration } = props;
+  const {
+    id,
+    title,
+    creationTimestamp,
+    content,
+    authorAlias,
+    onModeration,
+  } = props;
   const communityId = useSelectedCommunity();
   const [approvePost, { loading, error }] = useMutation<
     ApprovePost,
@@ -75,7 +82,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         </IonCardHeader>
 
         <IonCardContent>{content}</IonCardContent>
-        <IonCardContent>{author || 'Anonymous'}</IonCardContent>
+        <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
 
         <IonItemDivider color="white" />
 

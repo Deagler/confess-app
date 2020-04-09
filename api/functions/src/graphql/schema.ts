@@ -60,6 +60,7 @@ const typeDefs = gql`
     name: String!
     abbreviation: String!
     imageURI: String!
+    isEnabled: Boolean!
     feed(
       sortBy: SortByInput
       limit: Int

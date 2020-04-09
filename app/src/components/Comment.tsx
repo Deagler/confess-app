@@ -18,6 +18,7 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
 import LoginTooltip from './LoginTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
+import { css } from 'glamor';
 interface CommunityData {
   abbreviation: string;
 }
@@ -44,6 +45,15 @@ export interface CommentProps extends CommentData {
   postIdForComment: string | undefined;
 }
 
+const timeLabelContainer = css({
+  display: 'flex',
+  flexDirection: 'row',
+  '@media(min-width: 768px)': {
+    position: 'absolute',
+    right: '10px',
+  },
+});
+
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const {
     id,
@@ -66,6 +76,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
   const communityId = useSelectedCommunity();
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   // TODO: Add liking mutation, and fetch liked status
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_COMMENT
@@ -110,22 +121,25 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol size="12" size-sm="6">
-              <IonItem lines="none">
+            <IonCol size-md="6" size-xs="12">
+              <div>
                 <IonLabel>
                   <h6>
                     {authorDisplayName} <span>&middot;</span> {authorCommunity}
                   </h6>
                 </IonLabel>
-              </IonItem>
+              </div>
             </IonCol>
-            <IonCol size="12" size-sm="6">
-              <IonItem lines="none">
-                <IonIcon color="medium" icon={timeOutline} size="medium" />
-                <IonLabel color="medium">
-                  <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
-                </IonLabel>
-              </IonItem>
+            <IonCol
+              {...timeLabelContainer}
+              size-md="auto"
+              size-xs="12"
+              offset-xs="0"
+            >
+              <IonIcon color="medium" icon={timeOutline} size="medium" />
+              <IonLabel color="medium">
+                <h6>{moment.unix(creationTimestamp).fromNow()} </h6>
+              </IonLabel>
             </IonCol>
           </IonRow>
           <IonRow>
@@ -139,12 +153,17 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <LoginTooltip
                   loginOrSignUpTo="like this comment"
                   userLoggedIn={userLoggedIn}
+                  userHasCommunity={userHasCommunity}
                 >
                   <IonButton
                     onClick={() => handleLikeButtonClick(postIdForComment, id)}
                     fill="clear"
                     expand="full"
-                    disabled={!userLoggedIn || serverLikeInfo.loading}
+                    disabled={
+                      !userLoggedIn ||
+                      serverLikeInfo.loading ||
+                      !userHasCommunity
+                    }
                   >
                     <IonIcon
                       color={isCommentLikedByUser ? 'danger' : 'primary'}
@@ -161,12 +180,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <LoginTooltip
                   loginOrSignUpTo="reply"
                   userLoggedIn={userLoggedIn}
+                  userHasCommunity={userHasCommunity}
                 >
                   <IonButton
                     fill="clear"
                     expand="full"
                     color="medium"
-                    disabled={!userLoggedIn}
+                    disabled={!userLoggedIn || !userHasCommunity}
                     onClick={() => onReply(authorDisplayName)}
                   >
                     <IonIcon color="medium" icon={chatbox} />

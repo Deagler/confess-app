@@ -65,6 +65,7 @@ const Menu: React.FC<{}> = () => {
     fetchPolicy: 'network-only',
   });
   const userLoggedIn = !!localUserQuery.data?.localUser;
+  const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const shouldBlockMenu = useShouldBlockMenu();
   const communityId = useSelectedCommunity();
   const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
@@ -82,13 +83,17 @@ const Menu: React.FC<{}> = () => {
           </div>
 
           <div {...sidebarContent} className="ion-padding">
-            <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
+            <LoginTooltip
+              loginOrSignUpTo="confess"
+              userLoggedIn={userLoggedIn}
+              userHasCommunity={userHasCommunity}
+            >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 className="ion-margin-bottom ion-hide-lg-down"
-                disabled={!userLoggedIn}
+                disabled={!userLoggedIn || !userHasCommunity}
               >
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession

@@ -11,6 +11,17 @@ import { addIdToDoc } from '../resolvers/utils';
 const usersCollection = firebaseApp.firestore().collection('users');
 const communitiesCollection = firebaseApp.firestore().collection('communities');
 
+/** Temporary until Auth is moved to Serverside completely. */
+const supportedEmailTLDS = ['.ac.nz', '.edu.au', '.edu'];
+function IsSupportedEmailTLD(emailToValidate: string): boolean {
+  if (!emailToValidate) {
+    return false;
+  }
+  return supportedEmailTLDS.some((TLD) =>
+    emailToValidate.endsWith(TLD.toLowerCase())
+  );
+}
+
 async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
   const userRecord: UserRecord = context.req.user;
 
@@ -21,6 +32,12 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
   const userDoc = usersCollection.doc(userRecord.uid);
   if ((await userDoc.get()).exists) {
     throw new UserInputError('Account already exists');
+  }
+
+  if (!IsSupportedEmailTLD(userRecord.email)) {
+    throw new UserInputError(
+      'Sorry! We only support .ac.nz, .edu.au and .edu emails right now.'
+    );
   }
 
   const communityInfo = userRecord.email.split('@');

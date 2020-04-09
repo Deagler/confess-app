@@ -9,18 +9,20 @@ import AdminPage from './pages/AdminPage';
 import SubmitPage from './pages/SubmitPage';
 import Postpage from './pages/PostPage';
 
-export const AppRouter: React.FC<{ userLoggedIn: boolean }> = ({
-  userLoggedIn,
-}) => {
+export const AppRouter: React.FC<{
+  userLoggedIn: boolean;
+}> = ({ userLoggedIn }) => {
   return (
     <Switch>
       <IonRouterOutlet id="main">
         <Route
           path="/"
           render={() => {
-            const communityId = localStorage.getItem('selectedCommunityId');
+            const defaultCommunity =
+              localStorage.getItem('selectedCommunityId') ||
+              'O0jkcLwMRy77krkmAT2q';
             return userLoggedIn ? (
-              <Redirect to={`/${communityId}/posts`} />
+              <Redirect to={`/${defaultCommunity}/posts`} />
             ) : (
               <LandingPage />
             );

@@ -19,6 +19,7 @@ export interface GetCommunities_communities {
   name: string;
   abbreviation: string;
   imageURI: string;
+  isEnabled: boolean;
   channels: (GetCommunities_communities_channels | null)[];
 }
 
