@@ -14,7 +14,7 @@ import {
   IonCardContent,
   IonToast,
 } from '@ionic/react';
-import { heart, chatbox, shareSocial } from 'ionicons/icons';
+import { heart, chatbox } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -27,6 +27,7 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import LoginTooltip from './LoginTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
+import ShareButton from './ShareButton';
 
 export interface PostData {
   id: string;
@@ -166,9 +167,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               </IonButton>
             </IonCol>
             <IonCol>
-              <IonButton fill="clear" expand="full" color="primary">
-                <IonIcon icon={shareSocial} />
-              </IonButton>
+              <ShareButton
+                title={title}
+                target={buildLink(`/posts/${id}`, communityId)}
+              />
             </IonCol>
           </IonRow>
         </IonGrid>

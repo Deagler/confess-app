@@ -73,7 +73,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonCard>
+      <IonCard className="ion-margin">
         <IonCardContent>
           <IonGrid>
             <IonRow>
