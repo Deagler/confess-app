@@ -40,7 +40,7 @@ test('displays content properly', async () => {
   await findByText('#1');
   await findByText('this is the title');
   await findByText('this is the content');
-  await findByText('this is the author');
+  await findByText('~ this is the author');
   await findByText('7');
   await findByText('56');
 });
@@ -53,5 +53,5 @@ test('displays author as anonymous if omitted', async () => {
       </MemoryRouter>
     )
   );
-  await findByText('Anonymous');
+  await findByText('~ Anonymous');
 });
