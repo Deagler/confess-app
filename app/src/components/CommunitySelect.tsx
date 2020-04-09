@@ -26,15 +26,19 @@ const CommunitySelect: React.FC<{}> = () => {
   const {
     data: selectedCommData,
     loading: selectedCommunityLoading,
+    communityId,
   } = useSelectedCommunityQuery();
   const history = useHistory();
   const location = useLocation();
 
-  const handleCommunityChange = (communityId: string) => {
+  const handleCommunityChange = (newId: string) => {
     // cross session persistence
-    localStorage.setItem('selectedCommunityId', communityId);
+    localStorage.setItem('selectedCommunityId', newId);
 
-    history.push(`${location.pathname}?community=${communityId}`);
+    let pathname = location.pathname;
+    pathname = pathname.replace(communityId!, newId);
+
+    history.push(pathname);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export const useSelectedChannel = () => {
   const location = useLocation();
@@ -8,9 +8,8 @@ export const useSelectedChannel = () => {
 };
 
 export const useSelectedCommunity = () => {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
+  const { communityId } = useParams();
 
   // persist selected community across sessions
-  return query.get('community') || localStorage.getItem('selectedCommunityId');
+  return communityId || localStorage.getItem('selectedCommunityId');
 };

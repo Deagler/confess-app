@@ -126,7 +126,9 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
       onCompleted: (data) => {
         if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
           setTimeout(() => {
-            window.location.href = '/page/posts';
+            // TODO: pull this state from the signup flow
+            const communityId = 'HW6lY4kJOpqSpL39hbUV';
+            window.location.href = `/${communityId}/posts`;
           }, 2000);
         }
       },
@@ -147,7 +149,9 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
       },
       onCompleted: () => {
         setTimeout(() => {
-          window.location.href = '/page/posts';
+          // TODO: pull this state from the signup flow
+          const communityId = 'HW6lY4kJOpqSpL39hbUV';
+          window.location.href = `/${communityId}/posts`;
         }, 2000);
       },
     }

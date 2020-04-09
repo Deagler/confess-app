@@ -65,7 +65,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink={buildLink('/page/submit', communityId)}
+                routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 disabled={!userLoggedIn}
               >
@@ -87,11 +87,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                   {...post}
                   onCommentClick={() =>
                     history.push(
-                      buildLink(
-                        `/page/posts/${post.id}`,
-                        communityId,
-                        channelId
-                      )
+                      buildLink(`/posts/${post.id}`, communityId, channelId)
                     )
                   }
                   collapsable={true}

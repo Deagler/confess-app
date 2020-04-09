@@ -112,7 +112,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       />
       <IonCard className="ion-margin">
         <Link
-          to={buildLink(`/page/posts/${id}`, communityId, channelId)}
+          to={buildLink(`/posts/${id}`, communityId, channelId)}
           className="Link"
         >
           <IonCardHeader>

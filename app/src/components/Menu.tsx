@@ -85,7 +85,7 @@ const Menu: React.FC<{}> = () => {
             <LoginTooltip loginOrSignUpTo="confess" userLoggedIn={userLoggedIn}>
               <IonButton
                 expand="block"
-                routerLink={buildLink('/page/submit', communityId)}
+                routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 className="ion-margin-bottom ion-hide-lg-down"
                 disabled={!userLoggedIn}
@@ -113,7 +113,7 @@ const Menu: React.FC<{}> = () => {
             {isAdmin && (
               <IonButton
                 expand="block"
-                routerLink={buildLink('/page/admin', communityId)}
+                routerLink={buildLink('/admin', communityId)}
                 className="ion-margin-top"
               >
                 <IonIcon icon={shieldCheckmark} />

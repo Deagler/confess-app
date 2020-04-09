@@ -75,7 +75,7 @@ const Postpage: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton
-              defaultHref={buildLink('/page/posts', communityId, channelId)}
+              defaultHref={buildLink('/posts', communityId, channelId)}
               text="Back"
             />
           </IonButtons>
@@ -89,7 +89,7 @@ const Postpage: React.FC = () => {
             className="ion-hide-lg-down ion-justify-self-start ion-margin-left"
           >
             <IonBackButton
-              defaultHref={buildLink('/page/posts', communityId, channelId)}
+              defaultHref={buildLink('/posts', communityId, channelId)}
               text="Back To Feed"
             />
           </div>
