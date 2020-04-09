@@ -112,7 +112,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           <IonRow>
             <IonCol size="12" size-sm="6">
               <IonItem lines="none">
-                <IonLabel slot="start">
+                <IonLabel>
                   <h6>
                     {authorDisplayName} <span>&middot;</span> {authorCommunity}
                   </h6>
@@ -172,9 +172,6 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                     <IonIcon color="medium" icon={chatbox} />
                   </IonButton>
                 </LoginTooltip>
-                <IonButton fill="clear" expand="full" color="medium">
-                  <IonIcon icon={shareSocial} />
-                </IonButton>
               </IonItem>
             </IonCol>
           </IonRow>
