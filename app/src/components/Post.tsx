@@ -26,10 +26,7 @@ import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import LoginTooltip from './LoginTooltip';
-import {
-  useSelectedCommunity,
-  useSelectedChannel,
-} from '../customHooks/location';
+import { useSelectedCommunity } from '../customHooks/location';
 
 export interface PostData {
   id: string;
@@ -74,7 +71,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     SERVER_TOGGLE_LIKE_POST
   );
   const communityId = useSelectedCommunity();
-  const channelId = useSelectedChannel();
 
   const handleLikeButtonClick = async (postId: string) => {
     if (serverLikeInfo.loading) {
