@@ -31,13 +31,6 @@ import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
 
-export const GlobalAppUtils = {
-  showLoading: () => {},
-  hideLoading: () => {},
-  showToast: () => {},
-  hideToast: () => {},
-};
-
 const auth = firebaseApp.auth();
 
 const appContainer = css({

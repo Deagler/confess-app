@@ -29,10 +29,12 @@ const CommunityList: React.FC<{}> = () => {
             <IonItem
               key={i}
               {...backgroundColor}
-              routerLink={buildLink(`/posts`, community?.id)}
+              // not router link, issue where menu component isnt showing
+              // TODO: change to routerLink
+              href={buildLink(`/posts`, community?.id)}
             >
               <IonAvatar slot="start">
-                <img src={community?.imageURI} />
+                <img src={community?.imageURI} alt={community?.name} />
               </IonAvatar>
               <IonLabel>{community?.name}</IonLabel>
             </IonItem>
