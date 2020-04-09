@@ -24,7 +24,7 @@ import { chatbox } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
-import LoginTooltip from '../components/LoginTooltip';
+import ButtonDisabledTooltip from '../components/ButtonDisabledTooltip';
 import { buildLink } from '../utils';
 import {
   useSelectedCommunity,
@@ -50,6 +50,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
 
+  const userFromSelectedComm: boolean =
+    communityId === localUserQuery.data?.localUser?.community?.id;
+
   return (
     <IonPage {...appPageCSS}>
       <IonHeader id="header" className="ion-hide-lg-up">
@@ -64,21 +67,24 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <LoginTooltip
-              loginOrSignUpTo="confess"
+            <ButtonDisabledTooltip
+              action="confess"
               userLoggedIn={userLoggedIn}
               userHasCommunity={userHasCommunity}
+              userNotFromSelectedComm={!userFromSelectedComm}
             >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
-                disabled={!userLoggedIn || !userHasCommunity}
+                disabled={
+                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                }
               >
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession
               </IonButton>
-            </LoginTooltip>
+            </ButtonDisabledTooltip>
           </div>
 
           <h4 className="ion-hide-lg-down ion-margin-top">

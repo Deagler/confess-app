@@ -23,7 +23,7 @@ import {
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
-import LoginTooltip from './LoginTooltip';
+import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 
 export interface NewCommentInputProps {
@@ -99,8 +99,8 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                 style={{ padding: '0px' }}
                 size="12"
               >
-                <LoginTooltip
-                  loginOrSignUpTo={'leave a comment'}
+                <ButtonDisabledTooltip
+                  action={'leave a comment'}
                   userLoggedIn={userLoggedIn}
                   userHasCommunity={userHasCommunity}
                   inline={true}
@@ -122,7 +122,7 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                       </>
                     )}
                   </IonButton>
-                </LoginTooltip>
+                </ButtonDisabledTooltip>
               </IonCol>
             </IonRow>
           </IonGrid>

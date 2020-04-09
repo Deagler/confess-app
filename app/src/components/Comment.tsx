@@ -16,7 +16,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
-import LoginTooltip from './LoginTooltip';
+import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
 interface CommunityData {
@@ -150,8 +150,8 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           <IonRow>
             <IonCol>
               <IonItem lines="none">
-                <LoginTooltip
-                  loginOrSignUpTo="like this comment"
+                <ButtonDisabledTooltip
+                  action="like this comment"
                   userLoggedIn={userLoggedIn}
                   userHasCommunity={userHasCommunity}
                 >
@@ -175,10 +175,10 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                       {totalLikes}
                     </IonLabel>
                   </IonButton>
-                </LoginTooltip>
+                </ButtonDisabledTooltip>
 
-                <LoginTooltip
-                  loginOrSignUpTo="reply"
+                <ButtonDisabledTooltip
+                  action="reply"
                   userLoggedIn={userLoggedIn}
                   userHasCommunity={userHasCommunity}
                 >
@@ -191,7 +191,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                   >
                     <IonIcon color="medium" icon={chatbox} />
                   </IonButton>
-                </LoginTooltip>
+                </ButtonDisabledTooltip>
               </IonItem>
             </IonCol>
           </IonRow>
