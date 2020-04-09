@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
-import { ModerationStatus, Post } from '../../typings';
+import { ModerationStatus, Post, User } from '../../typings';
 import {
   verifyCommunity,
   verifyPost,
@@ -163,8 +163,11 @@ async function rejectPost(
 async function toggleLikePost(_: any, { communityId, postId }, context) {
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
-  const { userRef } = await verifyUser(userRecord);
-
+  const { userRef, userDoc } = await verifyUser(userRecord);
+  if (!(userDoc.data() as User).communityRef) {
+    throw new UserInputError('You need to be in a community to do that!');
+  }
+  
   const { postRef, postDoc } = await verifyPost(communityId, postId);
 
   const userHasLiked = (postDoc.data()! as Post).likeRefs.some(
