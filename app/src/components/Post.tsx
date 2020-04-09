@@ -62,7 +62,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     isLikedByUser,
     collapsable,
   } = props;
-
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
@@ -100,6 +99,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       },
     });
   };
+ 
 
   return (
     <>
@@ -126,7 +126,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                 : truncateString(content, MAX_CONTENT_LENGTH)}
             </p>
           </IonCardContent>
-          <IonCardContent>{authorAlias || 'Anonymous'}</IonCardContent>
+          <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
         </Link>
 
         <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>

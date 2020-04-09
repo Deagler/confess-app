@@ -30,7 +30,7 @@ async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
   if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
     throw new ApolloError({
       errorMessage:
-        'Invalid Email. Sorry, we only support .ac.nz and .edu.au emails right now!',
+        'Invalid Email. Sorry, we only support .ac.nz, .edu.au and .edu emails right now!',
     });
   }
 
@@ -65,7 +65,7 @@ async function attemptLoginWithEmailLink(
   { userEmail, emailLink },
   { cache, client }
 ) {
-  console.log(emailLink, userEmail);
+
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 

@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
     },
   };
 
-  console.log(data);
+
 
   return (
     <IonPage id="landing-page">

@@ -14,10 +14,10 @@ export const communityResolvers = {
     let communityMustBeEnabled = true;
 
     if (userRecord) {
-      const { userRef, userDoc } = await verifyUser(userRecord);
+      const { userDoc } = await verifyUser(userRecord);
       communityMustBeEnabled = !userDoc.data()!.isAdmin;
     }
-    
+
     await verifyCommunity(parent.id, communityMustBeEnabled);
 
     const postCollection = firestore.collection(

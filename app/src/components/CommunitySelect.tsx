@@ -38,7 +38,6 @@ const CommunitySelect: React.FC<{}> = () => {
     localStorage.setItem('selectedCommunityId', newId);
     history.push(`/${newId}/posts`);
   };
-  console.log(selectedCommData, communityId);
   let enabledCommunities = data?.communities?.filter((community) => community?.isEnabled) || [];
   if (localUserQuery.data?.localUser?.isAdmin) {
     enabledCommunities = data?.communities || [];

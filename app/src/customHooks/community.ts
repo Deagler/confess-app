@@ -8,7 +8,7 @@ import { GET_COMMUNITY_BY_ID } from '../common/graphql/communities';
 
 export const useSelectedCommunityQuery = () => {
   const communityId = useSelectedCommunity();
-  console.log("Retrieving", communityId)
+
   const useQueryVariables = useQuery<
     GetCommunityById,
     GetCommunityByIdVariables

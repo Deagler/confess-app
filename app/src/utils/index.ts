@@ -4,7 +4,7 @@ export function IsValidEmailFormat(emailToValidate: string): boolean {
   return emailRegexp.test(emailToValidate);
 }
 
-const supportedEmailTLDS = ['.ac.nz', '.edu.au'];
+const supportedEmailTLDS = ['.ac.nz', '.edu.au', '.edu'];
 export function IsSupportedEmailTLD(emailToValidate: string): boolean {
   if (!emailToValidate) {
     return false;

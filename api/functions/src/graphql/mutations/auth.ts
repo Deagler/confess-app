@@ -12,7 +12,7 @@ const usersCollection = firebaseApp.firestore().collection('users');
 const communitiesCollection = firebaseApp.firestore().collection('communities');
 
 /** Temporary until Auth is moved to Serverside completely. */
-const supportedEmailTLDS = ['.ac.nz', '.edu.au'];
+const supportedEmailTLDS = ['.ac.nz', '.edu.au', '.edu'];
 function IsSupportedEmailTLD(emailToValidate: string): boolean {
   if (!emailToValidate) {
     return false;
@@ -36,7 +36,7 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
 
   if (!IsSupportedEmailTLD(userRecord.email)) {
     throw new UserInputError(
-      'Sorry! We only support .ac.nz and .edu.au emails right now.'
+      'Sorry! We only support .ac.nz, .edu.au and .edu emails right now.'
     );
   }
 
