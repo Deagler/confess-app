@@ -3,12 +3,7 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { Comment, User } from '../../typings';
-import {
-  verifyComment,
-  verifyCommunity,
-  verifyPost,
-  verifyUser,
-} from '../common/verification';
+import { verifyComment, verifyPost, verifyUser } from '../common/verification';
 import { addIdToDoc } from '../resolvers/utils';
 import { UserInputError } from 'apollo-server-express';
 const firestore = firebaseApp.firestore();
@@ -21,10 +16,6 @@ async function submitComment(
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
   const { userRef, userDoc } = await verifyUser(userRecord);
-
-  if (!(userDoc.data() as User).communityRef) {
-    throw new UserInputError('You need to be in a community to do that!');
-  }
 
   const newComment: Partial<Comment> = {
     creationTimestamp: moment().unix(),
@@ -65,10 +56,6 @@ async function toggleLikeComment(
   // pull user from request context
   const userRecord: UserRecord = context.req.user;
   const { userRef, userDoc } = await verifyUser(userRecord);
-
-  if (!(userDoc.data() as User).communityRef) {
-    throw new UserInputError('You need to be in a community to do that!');
-  }
 
   const { commentRef, commentDoc } = await verifyComment(
     communityId,

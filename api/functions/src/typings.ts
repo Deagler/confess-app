@@ -49,6 +49,7 @@ export interface Community {
   id: string;
   title: string;
   abbreviation: string;
+  isEnabled: boolean;
 }
 
 export interface Comment {

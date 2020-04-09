@@ -116,10 +116,10 @@ async function attemptLoginWithEmailLink(
       };
     }
 
-    if (data.data.user.community) {
+    if (data.data.user.community?.isEnabled) {
       localStorage.setItem('selectedCommunityId', data.data.user.community.id);
     } else {
-      localStorage.setItem('selectedCommunityId', 'HW6lY4kJOpqSpL39hbUV');
+      localStorage.setItem('selectedCommunityId', 'O0jkcLwMRy77krkmAT2q');
     }
 
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */

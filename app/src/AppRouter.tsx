@@ -20,7 +20,7 @@ export const AppRouter: React.FC<{
           render={() => {
             const defaultCommunity =
               localStorage.getItem('selectedCommunityId') ||
-              'HW6lY4kJOpqSpL39hbUV';
+              'O0jkcLwMRy77krkmAT2q';
             return userLoggedIn ? (
               <Redirect to={`/${defaultCommunity}/posts`} />
             ) : (

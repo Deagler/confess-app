@@ -96,7 +96,7 @@ const navigateToFeed = (communityId?) => {
     const navCommunity =
       communityId ||
       localStorage.getItem('selectedCommunityId') ||
-      'HW6lY4kJOpqSpL39hbUV';
+      'O0jkcLwMRy77krkmAT2q';
 
     if (navCommunity != localStorage.getItem('selectedCommunityId')) {
       localStorage.setItem('selectedCommunityId', navCommunity); // temp hack for community state issue.
@@ -134,7 +134,7 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
         setTimeout(() => {
           const communityId = data.attemptSignUp?.user?.community
             ? data.attemptSignUp.user.community.id
-            : 'HW6lY4kJOpqSpL39hbUV';
+            : 'O0jkcLwMRy77krkmAT2q';
           localStorage.setItem('selectedCommunityId', communityId);
 
           navigateToFeed(communityId);

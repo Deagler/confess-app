@@ -23,7 +23,7 @@ export const queryResolvers = {
     return addIdToDoc(user) as User | undefined;
   },
   async community(_: null, args: { id: string }) {
-    const { communityDoc } = await verifyCommunity(args.id);
+    const { communityDoc } = await verifyCommunity(args.id, false);
 
     return addIdToDoc(communityDoc) as Community | undefined;
   },
