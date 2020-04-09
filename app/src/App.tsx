@@ -30,6 +30,7 @@ import { FullPageLoader } from './components/FullPageLoader';
 import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
+import { useMediaQuery, createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 const auth = firebaseApp.auth();
 
@@ -44,6 +45,18 @@ const App: React.FC = () => {
   const [authLocalUser, setAuthLocalUser] = useState<
     firebase.User | undefined | null
   >(undefined);
+
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode]
+  );
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -67,14 +80,17 @@ const App: React.FC = () => {
       ) : (
         <IonReactRouter>
           <ApolloProvider client={apolloClient}>
-            <div {...appContainer}>
-              <WebHeader />
+            <ThemeProvider theme={theme}>
+              <div {...appContainer}>
+                <WebHeader />
 
-              <IonSplitPane contentId="main">
-                <Menu />
-                <AppRouter userLoggedIn={!!authLocalUser} />
-              </IonSplitPane>
-            </div>
+                <IonSplitPane contentId="main">
+                  <Menu />
+
+                  <AppRouter userLoggedIn={!!authLocalUser} />
+                </IonSplitPane>
+              </div>
+            </ThemeProvider>
           </ApolloProvider>
         </IonReactRouter>
       )}

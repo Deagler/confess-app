@@ -28,6 +28,7 @@ import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
 import LoginTooltip from './LoginTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import ShareButton from './ShareButton';
+import { css } from 'glamor';
 
 export interface PostData {
   id: string;
@@ -47,6 +48,10 @@ export interface PostProps extends PostData {
 }
 
 const MAX_CONTENT_LENGTH: number = 600;
+
+const textColorCSS = css({
+  color: 'var(--ion-text-color)'
+})
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
@@ -113,12 +118,12 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             <IonCardSubtitle>
               {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
             </IonCardSubtitle>
-            <IonCardTitle>{title}</IonCardTitle>
+            <IonCardTitle {...textColorCSS}>{title}</IonCardTitle>
             <IonCardSubtitle>
               {moment.unix(creationTimestamp).fromNow()}
             </IonCardSubtitle>
           </IonCardHeader>
-          <IonCardContent>
+          <IonCardContent {...textColorCSS}>
             <p>
               {expanded || !collapsable
                 ? content
