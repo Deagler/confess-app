@@ -7,7 +7,6 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById } from '../../../types/GetUserById';
-import { select } from 'glamor';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({

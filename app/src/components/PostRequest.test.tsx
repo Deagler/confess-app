@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PostRequest, { PostRequestProps } from './PostRequest';
-import { wrapWithApolloProvider } from '../utils/testing';
+import { wrapWithApolloProvider, wrapWithRouter } from '../utils/testing';
 import moment from 'moment';
 
 const props: PostRequestProps = {
@@ -15,14 +15,14 @@ const props: PostRequestProps = {
 
 test('renders without crashing', () => {
   const { baseElement } = render(
-    wrapWithApolloProvider(<PostRequest {...props} />)
+    wrapWithApolloProvider(wrapWithRouter(<PostRequest {...props} />))
   );
   expect(baseElement).toBeDefined();
 });
 
 test('displays content properly', async () => {
   const { findByText } = render(
-    wrapWithApolloProvider(<PostRequest {...props} />)
+    wrapWithApolloProvider(wrapWithRouter(<PostRequest {...props} />))
   );
   await findByText('Post ID: 10');
   await findByText('this is the title');
@@ -34,7 +34,9 @@ test('displays content properly', async () => {
 
 test('displays author as anonymous if omitted', async () => {
   const { findByText } = render(
-    wrapWithApolloProvider(<PostRequest {...props} author={undefined} />)
+    wrapWithApolloProvider(
+      wrapWithRouter(<PostRequest {...props} author={undefined} />)
+    )
   );
   await findByText('Anonymous');
 });

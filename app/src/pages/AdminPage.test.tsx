@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import AdminPage from './AdminPage';
-import { wrapWithApolloProvider } from '../utils/testing';
+import { wrapWithApolloProvider, wrapWithRouter } from '../utils/testing';
 
 test('renders without crashing', () => {
-  const tree = wrapWithApolloProvider(<AdminPage />);
+  const tree = wrapWithApolloProvider(wrapWithRouter(<AdminPage />));
 
   const { baseElement } = render(tree);
   expect(baseElement).toBeDefined();

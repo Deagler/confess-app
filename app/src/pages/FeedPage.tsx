@@ -46,7 +46,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const channelId = useSelectedChannel();
 
   // looks for more posts when channel changes
-  useEffect(() => setHasMorePosts(true), [channelId]);
+  useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
 
   return (
     <IonPage {...appPageCSS}>
