@@ -50,6 +50,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
 
+  const userFromSelectedComm: boolean =
+    communityId === localUserQuery.data?.localUser?.community?.id;
+
   return (
     <IonPage {...appPageCSS}>
       <IonHeader id="header" className="ion-hide-lg-up">
@@ -68,12 +71,15 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
               action="confess"
               userLoggedIn={userLoggedIn}
               userHasCommunity={userHasCommunity}
+              userNotFromSelectedComm={!userFromSelectedComm}
             >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
-                disabled={!userLoggedIn || !userHasCommunity}
+                disabled={
+                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                }
               >
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession

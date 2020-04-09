@@ -5,7 +5,7 @@ export interface ButtonDisabledTooltipProps {
   action: string;
   userLoggedIn: boolean;
   userHasCommunity: boolean;
-  userNotFromCommunity?: boolean;
+  userNotFromSelectedComm?: boolean;
   children: ReactNode;
   inline?: boolean;
 }
@@ -14,7 +14,7 @@ const ButtonDisabledTooltip: React.FC<ButtonDisabledTooltipProps> = ({
   action,
   userLoggedIn,
   userHasCommunity,
-  userNotFromCommunity,
+  userNotFromSelectedComm,
   children,
   inline,
 }) => {
@@ -28,13 +28,13 @@ const ButtonDisabledTooltip: React.FC<ButtonDisabledTooltipProps> = ({
     <Tooltip
       arrow={true}
       disableFocusListener={
-        userLoggedIn && userHasCommunity && !userNotFromCommunity
+        userLoggedIn && userHasCommunity && !userNotFromSelectedComm
       }
       disableHoverListener={
-        userLoggedIn && userHasCommunity && !userNotFromCommunity
+        userLoggedIn && userHasCommunity && !userNotFromSelectedComm
       }
       disableTouchListener={
-        userLoggedIn && userHasCommunity && !userNotFromCommunity
+        userLoggedIn && userHasCommunity && !userNotFromSelectedComm
       }
       enterTouchDelay={200}
       title={tooltipText}

@@ -69,6 +69,8 @@ const Menu: React.FC<{}> = () => {
   const shouldBlockMenu = useShouldBlockMenu();
   const communityId = useSelectedCommunity();
   const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
+  const userFromSelectedComm: boolean =
+    communityId === localUserQuery.data?.localUser?.community?.id;
 
   if (shouldBlockMenu) {
     return null;
@@ -87,13 +89,16 @@ const Menu: React.FC<{}> = () => {
               action="confess"
               userLoggedIn={userLoggedIn}
               userHasCommunity={userHasCommunity}
+              userNotFromSelectedComm={!userFromSelectedComm}
             >
               <IonButton
                 expand="block"
                 routerLink={buildLink('/submit', communityId)}
                 routerDirection="forward"
                 className="ion-margin-bottom ion-hide-lg-down"
-                disabled={!userLoggedIn || !userHasCommunity}
+                disabled={
+                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                }
               >
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession
