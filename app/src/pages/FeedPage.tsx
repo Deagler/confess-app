@@ -24,7 +24,7 @@ import { chatbox } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
-import LoginTooltip from '../components/LoginTooltip';
+import ButtonDisabledTooltip from '../components/ButtonDisabledTooltip';
 import { buildLink } from '../utils';
 import {
   useSelectedCommunity,
@@ -64,8 +64,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
       <IonContent>
         <div className="contentContainer">
           <div className="ion-hide-lg-up ion-margin ion-padding">
-            <LoginTooltip
-              loginOrSignUpTo="confess"
+            <ButtonDisabledTooltip
+              action="confess"
               userLoggedIn={userLoggedIn}
               userHasCommunity={userHasCommunity}
             >
@@ -78,7 +78,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession
               </IonButton>
-            </LoginTooltip>
+            </ButtonDisabledTooltip>
           </div>
 
           <h4 className="ion-hide-lg-down ion-margin-top">

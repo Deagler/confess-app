@@ -25,7 +25,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { SERVER_TOGGLE_LIKE_POST } from '../common/graphql/posts';
-import LoginTooltip from './LoginTooltip';
+import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import ShareButton from './ShareButton';
 
@@ -139,8 +139,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol>
-              <LoginTooltip
-                loginOrSignUpTo="like this confession"
+              <ButtonDisabledTooltip
+                action="like this confession"
                 userLoggedIn={userLoggedIn}
                 userHasCommunity={userHasCommunity}
               >
@@ -156,7 +156,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                   <IonIcon icon={heart} />
                   <IonLabel>{totalLikes}</IonLabel>
                 </IonButton>
-              </LoginTooltip>
+              </ButtonDisabledTooltip>
             </IonCol>
             <IonCol>
               <IonButton

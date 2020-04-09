@@ -24,7 +24,7 @@ import { AppLogo } from './AppLogo';
 import { useShouldBlockMenu } from '../utils/menus';
 import { appPageCSS, backgroundColor } from '../theme/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
-import LoginTooltip from './LoginTooltip';
+import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { buildLink } from '../utils';
 
@@ -83,8 +83,8 @@ const Menu: React.FC<{}> = () => {
           </div>
 
           <div {...sidebarContent} className="ion-padding">
-            <LoginTooltip
-              loginOrSignUpTo="confess"
+            <ButtonDisabledTooltip
+              action="confess"
               userLoggedIn={userLoggedIn}
               userHasCommunity={userHasCommunity}
             >
@@ -98,7 +98,7 @@ const Menu: React.FC<{}> = () => {
                 <IonIcon color="white" slot="start" icon={chatbox} />
                 New Confession
               </IonButton>
-            </LoginTooltip>
+            </ButtonDisabledTooltip>
             <div className=" ion-padding-top ion-padding-bottom">
               <CommunitySelect />
             </div>
