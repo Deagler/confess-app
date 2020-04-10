@@ -1,5 +1,5 @@
-import { Switch, Route, Redirect, useLocation } from 'react-router';
-import React, { useEffect } from 'react';
+import { Switch, Route, Redirect } from 'react-router';
+import React from 'react';
 import { IonRouterOutlet } from '@ionic/react';
 import AuthCallbackPage from './pages/AuthCallbackPage/AuthCallbackPage';
 import LandingPage from './pages/LandingPage';
