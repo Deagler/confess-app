@@ -15,9 +15,9 @@ const webHeader = css(
   {
     width: '100%',
     height: '80px',
-    WebKitShadow: '0 4px 6px -6px #222',
-    MozBoxShadow: '0 4px 6px -6px #222',
-    boxShadow: '0 4px 6px -6px #222',
+    WebKitShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
+    MozBoxShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
+    boxShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
     zIndex: 100,
   },
   backgroundColor
@@ -38,6 +38,11 @@ const spinnerContainer = css({
   zIndex: 9999999,
 });
 
+const appLogoCSS = css({
+  backgroundColor: 'transparent',
+  '--background': 'transparent',
+});
+
 export const WebHeader: React.FC<{}> = () => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
@@ -54,7 +59,7 @@ export const WebHeader: React.FC<{}> = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="4">
-            <IonToolbar>
+            <IonToolbar {...appLogoCSS}>
               <AppLogo />
             </IonToolbar>
           </IonCol>

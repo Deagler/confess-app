@@ -136,7 +136,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                 : truncateString(content, MAX_CONTENT_LENGTH)}
             </p>
           </IonCardContent>
-          <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
+          <IonCardContent {...textColorCSS}>
+            <p>~ {authorAlias || 'Anonymous'}</p>
+          </IonCardContent>
         </Link>
 
         <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>

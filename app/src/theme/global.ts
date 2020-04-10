@@ -6,8 +6,8 @@ export const backgroundColor = css({
     backgroundColor: 'rgb(250, 250, 250)',
   },
   '@media(prefers-color-scheme: dark)': {
-    '--background': 'rgb(0, 0, 0)',
-    backgroundColor: 'rgb(0, 0, 0)',
+    '--background': 'rgb(3, 3, 3)',
+    backgroundColor: 'rgb(3, 3, 3)',
   },
 });
 
