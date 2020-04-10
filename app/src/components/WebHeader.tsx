@@ -35,6 +35,12 @@ const spinnerContainer = css({
   zIndex: 9999999,
 });
 
+const appLogoCSS = css({
+  backgroundColor: 'transparent',
+  '--background': 'transparent',
+});
+
+
 export const WebHeader: React.FC<{}> = () => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
@@ -51,7 +57,7 @@ export const WebHeader: React.FC<{}> = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="4">
-            <IonToolbar>
+            <IonToolbar {...appLogoCSS}>
               <AppLogo />
             </IonToolbar>
           </IonCol>
