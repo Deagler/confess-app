@@ -17,3 +17,9 @@ const firebaseConfig = {
 export const firebaseApp = rawFirebase.initializeApp(firebaseConfig);
 
 export const firebaseAnalytics = firebaseApp.analytics();
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  firebaseAnalytics.setAnalyticsCollectionEnabled(false);
+} else {
+  firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+}
