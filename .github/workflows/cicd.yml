@@ -1,4 +1,4 @@
-name: confess-ci
+name: confess-cicd
 
 on:
   push:
@@ -37,6 +37,15 @@ jobs:
         run: npm run build
         env:
           EXTEND_ESLINT: true
+      - name: Deploy App to Firebase
+        if: github.event_name == 'push'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./app
+          PROJECT_ID: confess-api
 
   api-functions:
     runs-on: ubuntu-latest
@@ -64,3 +73,12 @@ jobs:
       - name: NPM Build
         working-directory: ./api/functions
         run: npm run build
+      - name: Deploy Api to Firebase
+        if: github.event_name == 'push'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./api
+          PROJECT_ID: confess-api
