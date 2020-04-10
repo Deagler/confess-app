@@ -50,8 +50,8 @@ export interface PostProps extends PostData {
 const MAX_CONTENT_LENGTH: number = 600;
 
 const textColorCSS = css({
-  color: 'var(--ion-text-color)'
-})
+  color: 'var(--ion-text-color)',
+});
 
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
@@ -130,7 +130,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                 : truncateString(content, MAX_CONTENT_LENGTH)}
             </p>
           </IonCardContent>
-          <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
+          <IonCardContent {...textColorCSS}>
+            ~ {authorAlias || 'Anonymous'}
+          </IonCardContent>
         </Link>
 
         <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
