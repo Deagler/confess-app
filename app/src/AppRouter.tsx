@@ -8,16 +8,10 @@ import SecureRoute from './components/SecureRoute';
 import AdminPage from './pages/AdminPage';
 import SubmitPage from './pages/SubmitPage';
 import Postpage from './pages/PostPage';
-import { firebaseAnalytics } from './services/firebase';
 
 export const AppRouter: React.FC<{
   userLoggedIn: boolean;
 }> = ({ userLoggedIn }) => {
-  const location = useLocation();
-
-  useEffect(() => {
-    firebaseAnalytics.setCurrentScreen(location.pathname);
-  }, [location]);
 
   return (
     <Switch>

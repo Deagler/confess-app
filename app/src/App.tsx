@@ -30,8 +30,11 @@ import { FullPageLoader } from './components/FullPageLoader';
 import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
-import { useMediaQuery, createMuiTheme, ThemeProvider } from '@material-ui/core';
-import { analytics } from 'firebase';
+import {
+  useMediaQuery,
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core';
 
 const auth = firebaseApp.auth();
 
