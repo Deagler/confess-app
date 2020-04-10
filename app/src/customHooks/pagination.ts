@@ -19,6 +19,7 @@ import {
 import { GET_COMMUNITY_UNAPPROVED_POSTS } from '../common/graphql/admin';
 import { removeDuplicatesById } from '../utils';
 import { useSelectedChannel, useSelectedCommunity } from './location';
+import { firebaseAnalytics } from '../services/firebase';
 
 // TODO: Refactor these hooks into a single hook to reduce duplicate code
 
@@ -109,6 +110,9 @@ export const usePaginatedUnapprovedPostsQuery = () => {
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {
+    firebaseAnalytics.logEvent('fetch_more_posts', {
+      ...feedVariables,
+    });
     await useQueryVariables.fetchMore({
       query: GET_COMMUNITY_UNAPPROVED_POSTS,
       variables: {
@@ -167,6 +171,9 @@ export const usePaginatedPostQuery = (postId: string) => {
   );
 
   const fetchMoreComments = async (e: CustomEvent<void>) => {
+    firebaseAnalytics.logEvent('fetch_more_comments', {
+      ...postVariables,
+    });
     await useQueryVariables.fetchMore({
       query: GET_POST_COMMENTS_ONLY,
       variables: {

@@ -31,6 +31,7 @@ import {
   useSelectedChannel,
 } from '../customHooks/location';
 import { buildLink } from '../utils';
+import { firebaseAnalytics } from '../services/firebase';
 
 const Postpage: React.FC = () => {
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
@@ -60,13 +61,17 @@ const Postpage: React.FC = () => {
       return newResult;
     });
   };
-
+  const communityId = useSelectedCommunity();
+  const channelId = useSelectedChannel();
   const handleReply = (author: string) => {
+    firebaseAnalytics.logEvent('comment_reply_clicked', {
+      author,
+      postId,
+      communityId,
+    });
     newCommentElement.current!.setFocus();
     newCommentElement.current!.value = `@${author} `;
   };
-  const communityId = useSelectedCommunity();
-  const channelId = useSelectedChannel();
 
   return (
     <IonPage {...appPageCSS}>

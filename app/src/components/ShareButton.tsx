@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IonButton, IonIcon, IonToast } from '@ionic/react';
 import { shareSocial } from 'ionicons/icons';
+import { firebaseAnalytics } from '../services/firebase';
 
 export interface ShareButtonProps {
   title: string;
@@ -20,8 +21,13 @@ const ShareButton: React.FC<ShareButtonProps> = ({ title, target }) => {
     if (navigator.share) {
       navigator.share({
         title: `Confess: ${title}`,
-        text: 'Check out this confession on confess.co.nz',
+        text: 'Check out this confession',
         url: target, // webshare will automatically append host
+      });
+      firebaseAnalytics.logEvent('share', {
+        method: 'web_share',
+        content_type: 'post',
+        content_id: url,
       });
     } else {
       // copy link to clipboard
@@ -32,7 +38,11 @@ const ShareButton: React.FC<ShareButtonProps> = ({ title, target }) => {
       dummyInput.select();
       document.execCommand('copy');
       document.body.removeChild(dummyInput);
-
+      firebaseAnalytics.logEvent('share', {
+        method: 'clipboard',
+        content_type: 'post',
+        content_id: url,
+      });
       setToastVisible(true);
     }
   };

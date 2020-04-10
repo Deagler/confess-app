@@ -69,6 +69,10 @@ async function attemptLoginWithEmailLink(
   { userEmail, emailLink },
   { cache, client }
 ) {
+  firebaseAnalytics.logEvent('login_attempt', {
+    email: userEmail,
+  });
+
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 

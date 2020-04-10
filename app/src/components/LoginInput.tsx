@@ -7,6 +7,7 @@ import { css } from 'glamor';
 import { useMutation } from '@apollo/react-hooks';
 import { REQUEST_FIREBASE_LOGIN_LINK } from '../common/auth';
 import { RequestFirebaseLink } from '../types/RequestFirebaseLink';
+import { firebaseAnalytics } from '../services/firebase';
 
 export enum LOGIN_STATUS {
   NONE,
@@ -44,6 +45,9 @@ export const LoginInput: React.FC<{}> = () => {
     } catch (e) {
       setLoginEmail('');
       setLoginError(e.message);
+      firebaseAnalytics.logEvent('exception', {
+        description: `login_input/${e.message}`,
+      });
     }
   };
 

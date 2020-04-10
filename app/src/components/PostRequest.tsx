@@ -20,6 +20,7 @@ import { APPROVE_POST } from '../common/graphql/admin';
 import { ApprovePost, ApprovePostVariables } from '../types/ApprovePost';
 import RejectPostModal from '../components/RejectPostModal';
 import { useSelectedCommunity } from '../customHooks/location';
+import { firebaseAnalytics } from '../services/firebase';
 
 export interface PostRequestProps {
   id: string;
@@ -54,10 +55,17 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         },
       });
 
+      firebaseAnalytics.logEvent('post_approved', {
+        communityId,
+        postId: id,
+      });
       // callback
       onModeration();
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
+      firebaseAnalytics.logEvent('exception', {
+        description: `post_request_approve/${e.message}`,
+      });
     }
   };
 
