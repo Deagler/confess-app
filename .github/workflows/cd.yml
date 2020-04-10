@@ -2,7 +2,7 @@ name: confess-cd
 
 on:
   push:
-    branches: [feature/ci-deploy]
+    branches: [master]
 
 jobs:
   firebase-deploy-app:
