@@ -11,14 +11,17 @@ import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
 import { backgroundColor } from '../theme/global';
 
-const webHeader = css({
-  width: '100%',
-  height: '80px',
-  WebKitShadow: '0 4px 6px -6px #222',
-  MozBoxShadow: '0 4px 6px -6px #222',
-  boxShadow: '0 4px 6px -6px #222',
-  zIndex: 100
-}, backgroundColor);
+const webHeader = css(
+  {
+    width: '100%',
+    height: '80px',
+    WebKitShadow: '0 4px 6px -6px #222',
+    MozBoxShadow: '0 4px 6px -6px #222',
+    boxShadow: '0 4px 6px -6px #222',
+    zIndex: 100,
+  },
+  backgroundColor
+);
 
 const loginInputContainer = css({
   display: 'flex',

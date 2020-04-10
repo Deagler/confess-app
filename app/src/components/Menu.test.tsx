@@ -30,6 +30,16 @@ const mocks = [
   },
 ];
 
+jest.mock('../services/firebase', () => {
+  return {
+    firebaseAnalytics: {
+      logEvent: () => {},
+      setScreenName: () => {},
+      setUserId: () => {},
+    },
+  };
+});
+
 test('renders without crashing', () => {
   const { baseElement } = render(
     <MockedProvider mocks={mocks} addTypename={false}>
