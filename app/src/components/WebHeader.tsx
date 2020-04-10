@@ -11,14 +11,17 @@ import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
 import { backgroundColor } from '../theme/global';
 
-const webHeader = css({
-  width: '100%',
-  height: '80px',
-  WebKitShadow: '0 4px 6px -6px #222',
-  MozBoxShadow: '0 4px 6px -6px #222',
-  boxShadow: '0 4px 6px -6px #222',
-  zIndex: 100
-}, backgroundColor);
+const webHeader = css(
+  {
+    width: '100%',
+    height: '80px',
+    WebKitShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
+    MozBoxShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
+    boxShadow: '0 4px 6px -6px var(--ion-color-dark-shade)',
+    zIndex: 100,
+  },
+  backgroundColor
+);
 
 const loginInputContainer = css({
   display: 'flex',
@@ -33,6 +36,11 @@ const spinnerContainer = css({
   height: '100%',
   width: '250px',
   zIndex: 9999999,
+});
+
+const appLogoCSS = css({
+  backgroundColor: 'transparent',
+  '--background': 'transparent',
 });
 
 export const WebHeader: React.FC<{}> = () => {
@@ -51,7 +59,7 @@ export const WebHeader: React.FC<{}> = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="4">
-            <IonToolbar>
+            <IonToolbar {...appLogoCSS}>
               <AppLogo />
             </IonToolbar>
           </IonCol>

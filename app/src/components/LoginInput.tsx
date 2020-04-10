@@ -18,16 +18,18 @@ export enum LOGIN_STATUS {
 const successLabel = css({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
   alignItems: 'center',
+  justifyContent: 'center',
   textAlign: 'center',
+  width: 'fit-content',
+  color: 'var(--ion-text-color)',
 });
 
-const LoginSuccess: React.FC<{}> = () => {
+const LoginSuccess: React.FC<{ email: string }> = ({ email }) => {
   return (
     <div {...successLabel}>
       <Checkmark size="medium" />
-      <IonLabel>Click the link in your e-mail to login!</IonLabel>
+      <IonLabel>Click the link in your email ({email}) to login!</IonLabel>
     </div>
   );
 };
@@ -49,7 +51,7 @@ export const LoginInput: React.FC<{}> = () => {
 
   return !requestInfo.loading &&
     requestInfo.data?.requestFirebaseLoginLink?.success ? (
-    <LoginSuccess />
+    <LoginSuccess email={loginEmail || ''} />
   ) : (
     <React.Fragment>
       <IonToast isOpen={!!loginError} message={loginError} duration={2000} />
