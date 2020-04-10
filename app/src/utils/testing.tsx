@@ -13,5 +13,3 @@ export function wrapWithRouter(children: JSX.Element, historyConf = {}) {
 export function wrapWithApolloProvider(children: JSX.Element) {
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }
-
-
