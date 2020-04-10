@@ -39,7 +39,7 @@ const menuCSS = css({
 const sidebarContent = css({
   height: '80%',
   '& .MuiAutocomplete-root': {
-    backgroundColor: 'white',
+    backgroundColor: 'var(--ion-background-color)',
   },
 });
 

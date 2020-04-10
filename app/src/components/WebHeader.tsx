@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
+import { backgroundColor } from '../theme/global';
 
 const webHeader = css({
   width: '100%',
@@ -16,10 +17,8 @@ const webHeader = css({
   WebKitShadow: '0 4px 6px -6px #222',
   MozBoxShadow: '0 4px 6px -6px #222',
   boxShadow: '0 4px 6px -6px #222',
-  zIndex: 100,
-  backgroundColor: 'white',
-  '--background': 'white',
-});
+  zIndex: 100
+}, backgroundColor);
 
 const loginInputContainer = css({
   display: 'flex',
