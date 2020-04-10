@@ -131,7 +131,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </p>
           </IonCardContent>
           <IonCardContent {...textColorCSS}>
-            ~ {authorAlias || 'Anonymous'}
+            <p>~ {authorAlias || 'Anonymous'}</p>
           </IonCardContent>
         </Link>
 

@@ -84,7 +84,7 @@ const Menu: React.FC<{}> = () => {
             <AppLogo />
           </div>
 
-          <div {...sidebarContent} className="ion-padding">
+          <div {...sidebarContent} className="ion-margin-bottom ion-padding">
             <ButtonDisabledTooltip
               action="confess"
               userLoggedIn={userLoggedIn}
@@ -117,7 +117,10 @@ const Menu: React.FC<{}> = () => {
                 <LoginInput />
               )}
             </div>
-            <div {...channelsContainer}>
+            <div
+              className="ion-margin-bottom ion-padding-bottom"
+              {...channelsContainer}
+            >
               <ChannelList />
             </div>
             {isAdmin && (
