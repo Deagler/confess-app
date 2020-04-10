@@ -1,0 +1,76 @@
+name: confess-cd
+
+on:
+  push:
+    branches: [feature/ci-deploy]
+
+jobs:
+  firebase-deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('./app/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: NPM Install
+        working-directory: ./app
+        run: npm ci
+      - name: NPM Test
+        working-directory: ./app
+        run: npm test --passWithNoTests
+        env:
+          CI: true
+      - name: NPM Build
+        working-directory: ./app
+        run: npm run build
+        env:
+          EXTEND_ESLINT: true
+      - uses: w9jds/firebase-action@master
+        working-directory: ./app
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+    firebase-deploy-api:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+            node-version: 12.x
+        - name: Cache node_modules
+          uses: actions/cache@v1
+          with:
+            path: ~/.npm
+            key: ${{ runner.OS }}-node-${{ hashFiles('./api/functions/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.OS }}-node-
+              ${{ runner.OS }}-
+        - name: NPM Install
+          working-directory: ./api/functions
+          run: npm ci
+        - name: NPM Lint
+          working-directory: ./api/functions
+          run: npm run lint
+        - name: NPM Build
+          working-directory: ./api/functions
+          run: npm run build
+        - uses: w9jds/firebase-action@master
+          working-directory: ./api
+          with:
+            args: deploy --only functions
+          env:
+            FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
