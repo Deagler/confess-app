@@ -25,12 +25,16 @@ import {
   apolloClient,
   refreshApolloAuthentication,
 } from './services/api/apolloClient';
-import { firebaseApp } from './services/firebase';
+import { firebaseApp, firebaseAnalytics } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
 import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
 import { AppRouter } from './AppRouter';
-import { useMediaQuery, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import {
+  useMediaQuery,
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core';
 
 const auth = firebaseApp.auth();
 
@@ -63,6 +67,7 @@ const App: React.FC = () => {
       setAuthLocalUser(user!);
 
       if (user) {
+        firebaseAnalytics.setUserId(user.uid);
         apolloClient.reFetchObservableQueries();
         refreshApolloAuthentication();
       }

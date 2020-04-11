@@ -29,6 +29,7 @@ import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import ShareButton from './ShareButton';
 import { css } from 'glamor';
+import { firebaseAnalytics } from '../services/firebase';
 
 export interface PostData {
   id: string;
@@ -102,6 +103,11 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           __typename: 'PostUpdatedResponse',
         },
       },
+    });
+
+    firebaseAnalytics.logEvent('post_liked', {
+      communityId,
+      postId,
     });
   };
 

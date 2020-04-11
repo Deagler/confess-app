@@ -13,6 +13,16 @@ const props: PostRequestProps = {
   onModeration: () => {},
 };
 
+jest.mock('../services/firebase', () => {
+  return {
+    firebaseAnalytics: {
+      logEvent: () => {},
+      setScreenName: () => {},
+      setUserId: () => {},
+    },
+  };
+});
+
 test('renders without crashing', () => {
   const { baseElement } = render(
     wrapWithApolloProvider(wrapWithRouter(<PostRequest {...props} />))

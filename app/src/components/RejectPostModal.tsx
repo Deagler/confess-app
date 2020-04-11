@@ -20,6 +20,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { REJECT_POST } from '../common/graphql/admin';
 import { RejectPost, RejectPostVariables } from '../types/RejectPost';
 import { useSelectedCommunity } from '../customHooks/location';
+import { firebaseAnalytics } from '../services/firebase';
 
 export interface RejectPostModalProps {
   postId: string;
@@ -52,11 +53,19 @@ const RejectPostModal: React.FC<RejectPostModalProps> = ({
         },
       });
 
+      firebaseAnalytics.logEvent('post_rejected', {
+        communityId,
+        postId,
+        reason,
+      });
+
       // close dialog
       onDidDismiss();
       onReject();
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      firebaseAnalytics.logEvent('exception', {
+        description: `reject_post_modal/${e.message}`,
+      });
     }
   };
 

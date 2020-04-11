@@ -1,4 +1,4 @@
-import { firebaseApp } from '../../../services/firebase';
+import { firebaseApp, firebaseAnalytics } from '../../../services/firebase';
 import {
   gql,
   ApolloError,
@@ -27,6 +27,10 @@ function persistAuthState(apolloCache, authState) {
 }
 
 async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
+  firebaseAnalytics.logEvent('login_requested', {
+    email: userEmail,
+  });
+
   if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
     throw new ApolloError({
       errorMessage:
@@ -65,6 +69,10 @@ async function attemptLoginWithEmailLink(
   { userEmail, emailLink },
   { cache, client }
 ) {
+  firebaseAnalytics.logEvent('login_attempt', {
+    email: userEmail,
+  });
+
   localStorage.removeItem('emailForSignIn');
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 
@@ -121,6 +129,8 @@ async function attemptLoginWithEmailLink(
       localStorage.setItem('selectedCommunityId', 'O0jkcLwMRy77krkmAT2q');
     }
 
+    firebaseAnalytics.logEvent('login', { method: 'passwordless' });
+
     /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
 
     return {
@@ -144,6 +154,8 @@ async function doFirebaseLogout(_, __, { cache, client }) {
   localStorage.setItem('authState', 'null');
   localStorage.removeItem('selectedCommunityId');
   client.resetStore();
+
+  firebaseAnalytics.logEvent('logout');
 
   return {
     code: 'auth/logged_out',

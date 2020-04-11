@@ -25,6 +25,7 @@ import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
+import { firebaseAnalytics } from '../services/firebase';
 
 export interface NewCommentInputProps {
   onCommentCreated: (
@@ -62,12 +63,19 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
           content: content!,
         },
       });
-
+      firebaseAnalytics.logEvent('comment_created', {
+        communityId,
+        postId,
+        commentId: data!.submitComment!.comment!.id,
+      });
       // success
       setContent('');
       onCommentCreated(data!.submitComment!.comment!);
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
+      firebaseAnalytics.logEvent('exception', {
+        description: `submit_comment/${e.message}`,
+      });
     }
   };
 

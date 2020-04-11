@@ -19,6 +19,7 @@ import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
+import { firebaseAnalytics } from '../services/firebase';
 interface CommunityData {
   abbreviation: string;
 }
@@ -109,6 +110,12 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           __typename: 'CommentUpdatedResponse',
         },
       },
+    });
+
+    firebaseAnalytics.logEvent('comment_liked', {
+      communityId,
+      postId,
+      commentId,
     });
   };
   return (

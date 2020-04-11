@@ -16,6 +16,7 @@ import { useHistory } from 'react-router';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
+import { firebaseAnalytics } from '../services/firebase';
 
 const communityThumbnail = css({
   width: '48px !important',
@@ -33,6 +34,9 @@ const CommunitySelect: React.FC<{}> = () => {
   const history = useHistory();
 
   const handleCommunityChange = (newId: string) => {
+    firebaseAnalytics.logEvent('community_change', {
+      communityId: newId,
+    });
     localStorage.setItem('selectedCommunityId', newId);
     history.push(`/${newId}/posts`);
   };

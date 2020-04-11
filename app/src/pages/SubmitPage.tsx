@@ -38,6 +38,7 @@ import SubmissionRulesModal from '../components/SubmissionRulesModal';
 import { informationCircleOutline } from 'ionicons/icons';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
+import { firebaseAnalytics } from '../services/firebase';
 
 const channelInterfaceOptions = {
   header: 'Channel',
@@ -194,11 +195,21 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
       // show success message
       setSuccessToastVisible(true);
-
+      firebaseAnalytics.logEvent('submit_post', {
+        communityId,
+        channelId,
+        title,
+        content,
+        authorAlias: authorAliasInput || '',
+      });
       history.goBack();
       return;
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      firebaseAnalytics.logEvent('exception', {
+        description: `submit_page/${e.message}`,
+        channelId,
+        communityId,
+      });
     }
   };
 

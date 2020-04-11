@@ -12,7 +12,7 @@ const userInfoContainer = css({
   flexDirection: 'column',
   justifyItems: 'center',
   justifyContent: 'center',
-  color:  'var(--ion-text-color)'
+  color: 'var(--ion-text-color)',
 });
 
 const userAvatar = css({
