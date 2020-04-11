@@ -38,6 +38,7 @@ const containerClass = css(
 
 const chipClass = css({
   backgroundColor: 'transparent',
+  pointerEvents: 'none',
 });
 
 const loginInput = css({
