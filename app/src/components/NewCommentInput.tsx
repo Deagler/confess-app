@@ -23,10 +23,8 @@ import {
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
-import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
-import { LoginInput } from './LoginInput';
 
 export interface NewCommentInputProps {
   onCommentCreated: (

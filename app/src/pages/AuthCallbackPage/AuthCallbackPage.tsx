@@ -33,8 +33,10 @@ const callbackPageCSS = css({
 });
 
 const loginCard = css({
-  maxWidth: '500px',
-  minWidth: '250px',
+  '@media(min-width:992px)': {
+    width: '500px',
+  },
+  width: '350px',
   padding: '16px',
   minHeight: '400px',
   display: 'flex',
