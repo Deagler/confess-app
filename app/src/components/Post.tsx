@@ -59,6 +59,11 @@ const topBorderCSS = css({
   borderTop: 'solid 5px var(--ion-color-primary)',
 });
 
+const highlightAuthorCSS = css({
+  fontWeight: 'bold !important',
+  color: 'var(--ion-color-primary)',
+});
+
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
@@ -146,7 +151,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </p>
           </IonCardContent>
           <IonCardContent {...textColorCSS}>
-            <p>
+            <p {...css(isOriginalPoster && highlightAuthorCSS)}>
               ~ {authorAlias || 'Anonymous'}
               {isOriginalPoster && ' (Your Confession)'}
             </p>
