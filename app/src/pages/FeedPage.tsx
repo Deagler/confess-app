@@ -87,7 +87,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             </ButtonDisabledTooltip>
           </div>
 
-          <h4 className="ion-hide-lg-down ion-margin-top">
+          <h4 className="ion-hide-lg-down ion-margin-top ion-margin-horizontal">
             <strong>Feed</strong>
           </h4>
 
