@@ -1,3 +1,4 @@
+import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { Comment, Community, Post, User } from '../../typings';
 import {
@@ -5,16 +6,25 @@ import {
   verifyCommunity,
   verifyPost,
 } from '../common/verification';
-import { addIdToDoc } from './utils';
+import { addIdToDoc, addIsOP } from './utils';
 
 const firestore = firebaseApp.firestore();
 
 export const queryResolvers = {
-  async post(_: null, args: { communityId: string; postId: string }) {
+  async post(
+    _: null,
+    args: { communityId: string; postId: string },
+    context: any
+  ) {
     const { postDoc } = await verifyPost(args.communityId, args.postId);
 
-    const postWithId = addIdToDoc(postDoc) as Post;
+    let postWithId = addIdToDoc(postDoc) as Post;
     postWithId.communityId = args.communityId;
+
+    // check is original poster
+    const userRecord: UserRecord = context.req.user;
+    postWithId = addIsOP(userRecord?.uid, postWithId);
+
     return postWithId;
   },
   async user(_: null, args: { id: string }) {

@@ -20,6 +20,7 @@ export interface GetCommunityPosts_community_feed_items {
   totalLikes: number;
   totalComments: number;
   isLikedByUser: boolean;
+  isOriginalPoster: boolean;
 }
 
 export interface GetCommunityPosts_community_feed {

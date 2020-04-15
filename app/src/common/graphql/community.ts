@@ -26,6 +26,7 @@ export const GET_COMMUNITY_POSTS = gql`
           totalLikes
           totalComments
           isLikedByUser
+          isOriginalPoster
         }
         cursor
       }

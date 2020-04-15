@@ -17,6 +17,7 @@ export const GET_POST_BY_ID = gql`
       content
       totalLikes
       isLikedByUser
+      isOriginalPoster
       totalComments
       comments(
         sortBy: $sortCommentsBy
