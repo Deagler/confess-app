@@ -9,3 +9,11 @@ export const useShouldBlockMenu = () => {
 
   return false;
 };
+
+export const useShouldBlockConfess = () => {
+  const location = useLocation();
+  if (location.pathname.endsWith('submit')) {
+    return true;
+  }
+  return false;
+};
