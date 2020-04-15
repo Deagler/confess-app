@@ -72,13 +72,14 @@ const Menu: React.FC<{}> = () => {
   const userFromSelectedComm: boolean =
     communityId === localUserQuery.data?.localUser?.community?.id;
 
-  if (shouldBlockMenu) {
-    return null;
-  }
-
   return (
     <React.Fragment>
-      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
+      <IonMenu
+        {...css(menuCSS, appPageCSS)}
+        contentId="main"
+        type="overlay"
+        disabled={shouldBlockMenu}
+      >
         <IonContent>
           <div className="ion-hide-lg-up">
             <AppLogo />

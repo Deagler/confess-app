@@ -13,11 +13,20 @@ import { GET_COMMUNITIES } from '../common/graphql/communities';
 import { GetCommunities } from '../types/GetCommunities';
 import { useQuery } from '@apollo/react-hooks';
 import { buildLink } from '../utils';
+import { useHistory } from 'react-router';
 
 const CommunityList: React.FC<{}> = () => {
   const { data, loading, error } = useQuery<GetCommunities>(GET_COMMUNITIES);
+  const history = useHistory();
 
   const communities = data?.communities?.filter((e) => e?.isEnabled);
+
+  const handleCommunityChange = (newId?: string) => {
+    if (newId) {
+      localStorage.setItem('selectedCommunityId', newId);
+    }
+    history.push(buildLink(`/posts`, newId));
+  };
 
   return (
     <>
@@ -29,11 +38,10 @@ const CommunityList: React.FC<{}> = () => {
           communities &&
           communities.map((community, i) => (
             <IonItem
+              button={true}
               key={i}
               {...backgroundColor}
-              // not router link, issue where menu component isnt showing
-              // TODO: change to routerLink
-              href={buildLink(`/posts`, community?.id)}
+              onClick={() => handleCommunityChange(community?.id)}
             >
               <IonAvatar slot="start">
                 <img src={community?.imageURI} alt={community?.name} />
