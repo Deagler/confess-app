@@ -48,6 +48,8 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
       <div {...postContent}>
         <IonCardContent>
           <p>{content}</p>
+        </IonCardContent>
+        <IonCardContent>
           <p>{authorAlias || 'Anonymous'}</p>
         </IonCardContent>
       </div>
