@@ -34,6 +34,7 @@ export interface Post {
   channelId: string;
   title: string;
   content: string;
+  isOriginalPoster: boolean;
   moderationStatus: ModerationStatus;
   moderationInfo: ModerationInfo | null;
   totalLikes: number;

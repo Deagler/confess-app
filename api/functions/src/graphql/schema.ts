@@ -94,6 +94,7 @@ const typeDefs = gql`
     moderationStatus: ModerationStatus!
     moderationInfo: ModerationInfo
 
+    isOriginalPoster: Boolean!
     totalLikes: Int!
     likes: [User]!
     isLikedByUser: Boolean!

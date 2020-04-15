@@ -4,7 +4,7 @@ import { firebaseApp } from '../../firebase';
 import { ModerationStatus, Post } from '../../typings';
 import { paginateResults } from '../../utils/pagination';
 import { verifyCommunity, verifyUser } from '../common/verification';
-import { addIdToDoc } from './utils';
+import { addIdToDoc, addIsOP } from './utils';
 
 const firestore = firebaseApp.firestore();
 
@@ -43,7 +43,9 @@ export const communityResolvers = {
       cursorDocument,
       limit
     );
-    const posts: Post[] = paginationResults.items.map(addIdToDoc);
+    const posts: Post[] = paginationResults.items
+      .map(addIdToDoc)
+      .map((post) => addIsOP(userRecord?.uid, post));
 
     return { items: posts, cursor: paginationResults.newCursorDocumentId };
   },

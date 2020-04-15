@@ -48,6 +48,7 @@ export interface GetPost_post {
   content: string;
   totalLikes: number;
   isLikedByUser: boolean;
+  isOriginalPoster: boolean;
   totalComments: number;
   comments: GetPost_post_comments;
 }
