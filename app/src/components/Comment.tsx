@@ -67,7 +67,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     postIdForComment,
   } = props;
   const authorDisplayName = author
-    ? `${author.firstName} ${author.lastName} (${author.communityUsername})`
+    ? `${author.firstName} ${author.lastName}`
     : 'unknown';
   const authorCommunity = author?.community?.abbreviation ?? '';
 
