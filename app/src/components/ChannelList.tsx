@@ -8,7 +8,6 @@ import {
   IonSpinner,
   IonToast,
 } from '@ionic/react';
-import { airplaneOutline } from 'ionicons/icons';
 import { useSelectedChannel } from '../customHooks/location';
 import { buildLink } from '../utils';
 import { useSelectedCommunityQuery } from '../customHooks/community';
@@ -32,7 +31,7 @@ const ChannelList: React.FC<{}> = () => {
                 lines="none"
                 detail={false}
               >
-                <IonIcon slot="start" icon={airplaneOutline} />
+                <IonIcon slot="start" name="grid-outline" />
                 <IonLabel>All</IonLabel>
               </IonItem>
             </IonMenuToggle>
@@ -46,7 +45,10 @@ const ChannelList: React.FC<{}> = () => {
                     lines="none"
                     detail={false}
                   >
-                    <IonIcon slot="start" icon={airplaneOutline} />
+                    <IonIcon
+                      slot="start"
+                      name={channel?.icon || 'help-outline'}
+                    />
                     <IonLabel>{channel?.name}</IonLabel>
                   </IonItem>
                 </IonMenuToggle>
