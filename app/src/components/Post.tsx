@@ -40,6 +40,7 @@ export interface PostData {
   totalLikes: number;
   totalComments: number;
   isLikedByUser: boolean | null;
+  isOriginalPoster: boolean;
   authorAlias?: string | null;
 }
 
@@ -54,6 +55,10 @@ const textColorCSS = css({
   color: 'var(--ion-text-color)',
 });
 
+const topBorderCSS = css({
+  borderTop: 'solid 5px var(--ion-color-primary)',
+});
+
 const Post: React.FC<PostProps> = (props: PostProps) => {
   const {
     id,
@@ -66,6 +71,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     totalComments,
     onCommentClick,
     isLikedByUser,
+    isOriginalPoster,
     collapsable,
   } = props;
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
@@ -118,7 +124,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         message={serverLikeInfo.error?.message}
         duration={2000}
       />
-      <IonCard className="ion-margin">
+      <IonCard
+        className="ion-margin"
+        {...css(isOriginalPoster && topBorderCSS)}
+      >
         <Link to={buildLink(`/posts/${id}`, communityId)} className="Link">
           <IonCardHeader>
             <IonCardSubtitle>
@@ -137,7 +146,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </p>
           </IonCardContent>
           <IonCardContent {...textColorCSS}>
-            <p>~ {authorAlias || 'Anonymous'}</p>
+            <p>
+              ~ {authorAlias || 'Anonymous'}
+              {isOriginalPoster && ' (Your Confession)'}
+            </p>
           </IonCardContent>
         </Link>
 
