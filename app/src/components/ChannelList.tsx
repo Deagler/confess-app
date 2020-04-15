@@ -4,13 +4,20 @@ import {
   IonMenuToggle,
   IonItem,
   IonLabel,
-  IonIcon,
   IonSpinner,
   IonToast,
 } from '@ionic/react';
 import { useSelectedChannel } from '../customHooks/location';
 import { buildLink } from '../utils';
 import { useSelectedCommunityQuery } from '../customHooks/community';
+import { css } from 'glamor';
+
+const icon = css({
+  color: 'var(--ion-text-color)',
+  fontSize: '24px',
+  marginInlineEnd: '16px',
+  marginInlineStart: '4px',
+});
 
 const ChannelList: React.FC<{}> = () => {
   const channelId = useSelectedChannel();
@@ -31,7 +38,11 @@ const ChannelList: React.FC<{}> = () => {
                 lines="none"
                 detail={false}
               >
-                <IonIcon slot="start" name="grid-outline" />
+                <i
+                  className="icon ion-md-apps"
+                  {...icon}
+                  style={{ marginInlineEnd: '22px' }}
+                />
                 <IonLabel>All</IonLabel>
               </IonItem>
             </IonMenuToggle>
@@ -45,9 +56,9 @@ const ChannelList: React.FC<{}> = () => {
                     lines="none"
                     detail={false}
                   >
-                    <IonIcon
-                      slot="start"
-                      name={channel?.icon || 'help-outline'}
+                    <i
+                      className={`icon ion-md-${channel?.icon || 'help'}`}
+                      {...icon}
                     />
                     <IonLabel>{channel?.name}</IonLabel>
                   </IonItem>
