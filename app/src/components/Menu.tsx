@@ -68,7 +68,6 @@ const Menu: React.FC<{}> = () => {
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const shouldBlockMenu = useShouldBlockMenu();
   const shouldBlockConfess = useShouldBlockConfess();
-  console.log('should block confess: ' + shouldBlockConfess);
   const communityId = useSelectedCommunity();
   const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
   const userFromSelectedComm: boolean =
