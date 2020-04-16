@@ -50,7 +50,7 @@ const LandingPost: React.FC<PostProps> = (props: PostProps) => {
           <p>{content}</p>
         </IonCardContent>
         <IonCardContent>
-          <p>{authorAlias || '~ Anonymous'}</p>
+          <p>~ {authorAlias || 'Anonymous'}</p>
         </IonCardContent>
       </div>
     </IonCard>
