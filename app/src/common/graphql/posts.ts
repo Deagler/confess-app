@@ -38,6 +38,7 @@ export const GET_POST_BY_ID = gql`
           }
           totalLikes
           isCommentLikedByUser
+          isStarred
         }
         cursor
       }
@@ -74,6 +75,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
           content
           totalLikes
           isCommentLikedByUser
+          isStarred
         }
         cursor
       }

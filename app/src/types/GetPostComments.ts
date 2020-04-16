@@ -30,6 +30,7 @@ export interface GetPostComments_post_comments_items {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
+  isStarred: boolean | null;
 }
 
 export interface GetPostComments_post_comments {

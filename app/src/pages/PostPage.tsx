@@ -15,7 +15,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
 } from '@ionic/react';
-import Comment, { CommentData } from '../components/Comment';
+import Comment from '../components/Comment';
 import Post from '../components/Post';
 import NewCommentInput from '../components/NewCommentInput';
 import './Page.css';
@@ -32,6 +32,7 @@ import {
 } from '../customHooks/location';
 import { buildLink } from '../utils';
 import { firebaseAnalytics } from '../services/firebase';
+import { GetPost_post_comments_items } from '../types/GetPost';
 
 const Postpage: React.FC = () => {
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
@@ -122,9 +123,12 @@ const Postpage: React.FC = () => {
           )) ||
             (data?.post?.comments?.items.length !== 0 && (
               <IonCard className="ion-margin">
-                <IonList>
+                <IonList style={{ paddingTop: 0 }}>
                   {data?.post?.comments?.items.map(
-                    (comment: CommentData | null, i: number) => (
+                    (
+                      comment: GetPost_post_comments_items | null,
+                      i: number
+                    ) => (
                       <Comment
                         key={i}
                         {...comment!}

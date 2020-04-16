@@ -15,7 +15,10 @@ import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
-import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
+import {
+  SERVER_TOGGLE_LIKE_COMMENT,
+  TOGGLE_STAR_COMMENT,
+} from '../common/graphql/comments';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
@@ -40,6 +43,7 @@ export interface CommentData {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean | null;
+  isStarred: boolean | null;
 }
 
 export interface CommentProps extends CommentData {
@@ -68,6 +72,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     isCommentLikedByUser,
     postIdForComment,
     isOriginalPoster,
+    isStarred,
   } = props;
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName}`
@@ -106,7 +111,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           success: true,
           comment: {
             id,
-            isCommentLikedByUser: isCommentLikedByUser!,
+            isCommentLikedByUser: !isCommentLikedByUser,
             totalLikes: isCommentLikedByUser ? totalLikes - 1 : totalLikes + 1,
             __typename: 'Comment',
           },
@@ -121,14 +126,54 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
       commentId,
     });
   };
+
+  const [toggleStar, toggleStarInfo] = useMutation(TOGGLE_STAR_COMMENT);
+  const handleStar = async () => {
+    if (toggleStarInfo.loading) {
+      return;
+    }
+
+    if (!communityId || !postIdForComment) {
+      console.error(
+        'communityId and postIdForComment must be defined to star a post'
+      );
+      return;
+    }
+
+    await toggleStar({
+      variables: {
+        communityId,
+        postId: postIdForComment,
+        commentId: id,
+      },
+      optimisticResponse: {
+        toggleStarComment: {
+          code: '200',
+          message: 'Comment starred.',
+          success: true,
+          comment: {
+            id,
+            isStarred: !isStarred,
+            __typename: 'Comment',
+          },
+          __typename: 'CommentUpdatedResponse',
+        },
+      },
+    });
+  };
+
   return (
     <>
       <IonToast
-        isOpen={!!serverLikeInfo.error}
+        isOpen={!!serverLikeInfo.error || !!toggleStarInfo.error}
         message={serverLikeInfo.error?.message}
         duration={2000}
       />
-      <IonItem>
+      <IonItem
+        style={{
+          borderTop: isStarred ? 'solid 5px var(--ion-color-warning)' : 'none',
+        }}
+      >
         <IonGrid>
           <IonRow>
             <IonCol size-md="6" size-xs="12">
@@ -157,6 +202,17 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
               <p>{content}</p>
             </IonCol>
           </IonRow>
+          {isStarred && (
+            <IonRow>
+              <IonCol>
+                <p>
+                  <em>
+                    The Original Poster has marked this comment as helpful.
+                  </em>
+                </p>
+              </IonCol>
+            </IonRow>
+          )}
           <IonRow>
             <IonCol>
               <IonItem lines="none">
@@ -210,7 +266,12 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                     title="Original Posters can star comments to mark them as helpful."
                     aria-label="star"
                   >
-                    <IonButton fill="clear" expand="full">
+                    <IonButton
+                      fill="clear"
+                      expand="full"
+                      onClick={handleStar}
+                      disabled={toggleStarInfo.loading}
+                    >
                       <IonIcon color="warning" icon={star} />
                     </IonButton>
                   </Tooltip>

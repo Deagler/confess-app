@@ -24,16 +24,8 @@ export const SUBMIT_COMMENT = gql`
         content
         totalLikes
         isCommentLikedByUser
+        isStarred
       }
-    }
-  }
-`;
-
-export const GET_COMMENT_LIKE_STATUS = gql`
-  query getCommentLikeData($communityId: ID!, $postId: ID!, $commentId: ID!) {
-    comment(communityId: $communityId, postId: $postId, commentId: $commentId) {
-      id
-      totalLikes
     }
   }
 `;
@@ -66,6 +58,37 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
         content
         totalLikes
         isCommentLikedByUser
+        isStarred
+      }
+    }
+  }
+`;
+
+export const TOGGLE_STAR_COMMENT = gql`
+  mutation ToggleStarComment($communityId: ID!, $postId: ID!, $commentId: ID!) {
+    toggleStarComment(
+      communityId: $communityId
+      postId: $postId
+      commentId: $commentId
+    ) {
+      code
+      success
+      message
+      comment {
+        id
+        author {
+          firstName
+          lastName
+          communityUsername
+          community {
+            abbreviation
+          }
+        }
+        creationTimestamp
+        content
+        totalLikes
+        isCommentLikedByUser
+        isStarred
       }
     }
   }

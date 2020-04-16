@@ -28,6 +28,7 @@ export interface ServerToggleLikeComment_toggleLikeComment_comment {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
+  isStarred: boolean | null;
 }
 
 export interface ServerToggleLikeComment_toggleLikeComment {

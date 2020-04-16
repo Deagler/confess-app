@@ -30,6 +30,7 @@ export interface GetPost_post_comments_items {
   author: GetPost_post_comments_items_author | null;
   totalLikes: number;
   isCommentLikedByUser: boolean;
+  isStarred: boolean | null;
 }
 
 export interface GetPost_post_comments {

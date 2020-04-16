@@ -4,47 +4,47 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: SubmitComment
+// GraphQL mutation operation: ToggleStarComment
 // ====================================================
 
-export interface SubmitComment_submitComment_comment_author_community {
+export interface ToggleStarComment_toggleStarComment_comment_author_community {
   __typename: "Community";
   abbreviation: string;
 }
 
-export interface SubmitComment_submitComment_comment_author {
+export interface ToggleStarComment_toggleStarComment_comment_author {
   __typename: "User";
   firstName: string;
   lastName: string;
   communityUsername: string;
-  community: SubmitComment_submitComment_comment_author_community | null;
+  community: ToggleStarComment_toggleStarComment_comment_author_community | null;
 }
 
-export interface SubmitComment_submitComment_comment {
+export interface ToggleStarComment_toggleStarComment_comment {
   __typename: "Comment";
   id: string;
+  author: ToggleStarComment_toggleStarComment_comment_author | null;
   creationTimestamp: number;
-  author: SubmitComment_submitComment_comment_author | null;
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
   isStarred: boolean | null;
 }
 
-export interface SubmitComment_submitComment {
+export interface ToggleStarComment_toggleStarComment {
   __typename: "CommentUpdatedResponse";
   code: string;
   success: boolean;
   message: string;
-  comment: SubmitComment_submitComment_comment | null;
+  comment: ToggleStarComment_toggleStarComment_comment | null;
 }
 
-export interface SubmitComment {
-  submitComment: SubmitComment_submitComment | null;
+export interface ToggleStarComment {
+  toggleStarComment: ToggleStarComment_toggleStarComment | null;
 }
 
-export interface SubmitCommentVariables {
+export interface ToggleStarCommentVariables {
   communityId: string;
   postId: string;
-  content: string;
+  commentId: string;
 }
