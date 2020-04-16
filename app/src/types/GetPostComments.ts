@@ -20,6 +20,7 @@ export interface GetPostComments_post_comments_items_author {
   lastName: string;
   communityUsername: string;
   community: GetPostComments_post_comments_items_author_community | null;
+  starCount: number | null;
 }
 
 export interface GetPostComments_post_comments_items {

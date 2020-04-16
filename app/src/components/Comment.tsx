@@ -33,6 +33,7 @@ export interface UserData {
   lastName: string;
   communityUsername: string;
   community: CommunityData | null;
+  starCount?: number | null;
 }
 
 export interface CommentData {
@@ -181,6 +182,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <IonLabel>
                   <h6>
                     {authorDisplayName} <span>&middot;</span> {authorCommunity}
+                    <span>&middot;</span> {`${author?.starCount} Stars`}
                   </h6>
                 </IonLabel>
               </div>

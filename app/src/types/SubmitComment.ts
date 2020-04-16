@@ -18,6 +18,7 @@ export interface SubmitComment_submitComment_comment_author {
   lastName: string;
   communityUsername: string;
   community: SubmitComment_submitComment_comment_author_community | null;
+  starCount: number | null;
 }
 
 export interface SubmitComment_submitComment_comment {

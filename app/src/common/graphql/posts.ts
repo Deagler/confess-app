@@ -35,6 +35,7 @@ export const GET_POST_BY_ID = gql`
             community {
               abbreviation
             }
+            starCount
           }
           totalLikes
           isCommentLikedByUser
@@ -71,6 +72,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
             community {
               abbreviation
             }
+            starCount
           }
           content
           totalLikes

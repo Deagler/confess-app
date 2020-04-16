@@ -22,6 +22,7 @@ export interface User {
   communityRef: FirestoreDocRef | null;
   community?: Community | null;
   isAdmin?: boolean;
+  starCount?: number;
 }
 
 export interface Post {

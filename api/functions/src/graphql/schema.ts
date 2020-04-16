@@ -31,6 +31,7 @@ const typeDefs = gql`
     email: String!
     community: Community
     isAdmin: Boolean
+    starCount: Int
   }
 
   type Comment {

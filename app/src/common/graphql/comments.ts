@@ -20,6 +20,7 @@ export const SUBMIT_COMMENT = gql`
           community {
             abbreviation
           }
+          starCount
         }
         content
         totalLikes
@@ -83,6 +84,7 @@ export const TOGGLE_STAR_COMMENT = gql`
           community {
             abbreviation
           }
+          starCount
         }
         creationTimestamp
         content
