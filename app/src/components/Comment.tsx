@@ -167,7 +167,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     <>
       <IonToast
         isOpen={!!serverLikeInfo.error || !!toggleStarInfo.error}
-        message={serverLikeInfo.error?.message}
+        message={serverLikeInfo.error?.message || toggleStarInfo.error?.message}
         duration={2000}
       />
       <IonItem
