@@ -65,6 +65,7 @@ export interface Comment {
   >;
   postId?: string;
   communityId?: string;
+  isStarred?: boolean;
 }
 
 export interface CommentsInput {

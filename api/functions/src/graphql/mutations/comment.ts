@@ -1,3 +1,4 @@
+import { ForbiddenError } from 'apollo-server-express';
 import admin from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import moment from 'moment';
@@ -99,7 +100,63 @@ async function toggleLikeComment(
   };
 }
 
+async function toggleStarComment(
+  _: any,
+  { communityId, postId, commentId },
+  context: any
+) {
+  // pull user from request context
+  const userRecord: UserRecord = context.req.user;
+  const { userRef, userDoc } = await verifyUser(userRecord);
+
+  const communityMustBeEnabled = !userDoc.data()!.isAdmin;
+  await verifyCommunity(communityId, communityMustBeEnabled);
+
+  // verify user is OP
+  const { postDoc } = await verifyPost(communityId, postId);
+  if (userDoc?.id !== postDoc.data()?.authorRef.id) {
+    throw new ForbiddenError('Only original posters can star comments');
+  }
+
+  const { commentRef, commentDoc } = await verifyComment(
+    communityId,
+    postId,
+    commentId
+  );
+
+  const isStarred = commentDoc.data()?.isStarred;
+
+  // star comment
+  await commentRef.update({
+    isStarred: !isStarred,
+  });
+
+  // increment users stars
+  await userRef.update({
+    starCount: isStarred
+      ? admin.firestore.FieldValue.increment(-1)
+      : admin.firestore.FieldValue.increment(1),
+  });
+
+  const userHasLiked: boolean = (commentDoc.data()! as Comment).likeRefs.some(
+    (likeRef) => likeRef.id === userRef.id
+  );
+
+  // refetch comment for updated values
+  const comment = addIdToDoc(await commentRef.get());
+  comment.isCommentLikedByUser = userHasLiked;
+
+  // success
+  return {
+    code: 200,
+    message: 'comment starred.',
+    success: true,
+    comment,
+  };
+}
+
 export const commentMutations = {
   submitComment,
   toggleLikeComment,
+  toggleStarComment,
 };

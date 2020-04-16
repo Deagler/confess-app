@@ -43,6 +43,7 @@ const typeDefs = gql`
     isCommentLikedByUser: Boolean!
     communityId: String
     postId: String
+    isStarred: Boolean
   }
 
   type CommentConnection {
@@ -182,6 +183,12 @@ const typeDefs = gql`
     toggleLikePost(communityId: ID!, postId: ID!): PostUpdatedResponse
 
     toggleLikeComment(
+      communityId: ID!
+      postId: ID!
+      commentId: ID!
+    ): CommentUpdatedResponse
+
+    toggleStarComment(
       communityId: ID!
       postId: ID!
       commentId: ID!
