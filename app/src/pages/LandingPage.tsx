@@ -85,8 +85,8 @@ const LandingPage: React.FC = () => {
             </IonRow>
 
             <IonRow className="ion-justify-content-center">
-              <IonCol size="5" size-xs="12" size-sm="6" size-md="4">
-                <p>Or check out some confessions as a guest.</p>
+              <IonCol size="6" size-xs="12" size-sm="6" size-md="6">
+                <h5>Or check out some confessions as a guest:</h5>
               </IonCol>
             </IonRow>
 

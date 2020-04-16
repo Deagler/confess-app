@@ -23,7 +23,6 @@ import {
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { isNullOrWhitespace } from '../utils';
 import { GetLocalUser } from '../types/GetLocalUser';
-import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
 
@@ -84,43 +83,33 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonCard className="ion-margin">
         <IonCardContent>
-          <IonGrid>
-            <IonRow>
-              <IonCol size="12">
-                <IonItem>
-                  <IonTextarea
-                    placeholder="Write a comment..."
-                    value={content}
-                    onIonChange={(e) => {
-                      setContent(e.detail.value!);
-                    }}
-                    autofocus={true}
-                    rows={5}
-                    ref={inputRef}
-                  />
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol
-                className="ion-text-end"
-                style={{ padding: '0px' }}
-                size="12"
-              >
-                <ButtonDisabledTooltip
-                  action={'leave a comment'}
-                  userLoggedIn={userLoggedIn}
-                  userHasCommunity={userHasCommunity}
-                  inline={true}
+          {userLoggedIn && userHasCommunity ? (
+            <IonGrid>
+              <IonRow>
+                <IonCol size="12">
+                  <IonItem>
+                    <IonTextarea
+                      placeholder="Write a comment..."
+                      value={content}
+                      onIonChange={(e) => {
+                        setContent(e.detail.value!);
+                      }}
+                      autofocus={true}
+                      rows={5}
+                      ref={inputRef}
+                    />
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol
+                  className="ion-text-end"
+                  style={{ padding: '0px' }}
+                  size="12"
                 >
                   <IonButton
                     size="small"
-                    disabled={
-                      isNullOrWhitespace(content) ||
-                      !userLoggedIn ||
-                      !postId ||
-                      !userHasCommunity
-                    }
+                    disabled={isNullOrWhitespace(content) || !postId}
                     onClick={handleSubmit}
                   >
                     {(loading && <IonSpinner />) || (
@@ -130,10 +119,22 @@ const NewCommentInput: React.FC<NewCommentInputProps> = ({
                       </>
                     )}
                   </IonButton>
-                </ButtonDisabledTooltip>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonGrid>
+              <IonRow className="ion-align-items-center">
+                <IonCol size="12" className="">
+                  <h2>
+                    {!userLoggedIn
+                      ? 'You must be logged in to comment'
+                      : "Sorry you can't comment yet. We'll be at your university soon though!"}
+                  </h2>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          )}
         </IonCardContent>
       </IonCard>
     </>

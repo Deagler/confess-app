@@ -150,19 +150,18 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                 : truncateString(content, MAX_CONTENT_LENGTH)}
             </p>
           </IonCardContent>
-          <IonCardContent {...textColorCSS}>
-            <p {...css(isOriginalPoster && highlightAuthorCSS)}>
-              ~ {authorAlias || 'Anonymous'}
-              {isOriginalPoster && ' (Your Confession)'}
-            </p>
-          </IonCardContent>
         </Link>
-
-        <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
-          {collapsable &&
-            content.length > MAX_CONTENT_LENGTH &&
-            (expanded ? 'See Less' : 'See More')}
-        </IonButton>
+        {collapsable && content.length > MAX_CONTENT_LENGTH && (
+          <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
+            {expanded ? 'See Less' : 'See More'}
+          </IonButton>
+        )}
+        <IonCardContent {...textColorCSS}>
+          <p {...css(isOriginalPoster && highlightAuthorCSS)}>
+            ~ {authorAlias || 'Anonymous'}
+            {isOriginalPoster && ' (Your Confession)'}
+          </p>
+        </IonCardContent>
 
         <IonItemDivider color="white" />
 

@@ -10,6 +10,7 @@
 export interface GetCommunityById_community_channels {
   __typename: "Channel";
   id: string;
+  icon: string | null;
   name: string;
 }
 

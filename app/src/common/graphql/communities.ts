@@ -26,6 +26,7 @@ export const GET_COMMUNITY_BY_ID = gql`
       isEnabled
       channels {
         id
+        icon
         name
       }
     }

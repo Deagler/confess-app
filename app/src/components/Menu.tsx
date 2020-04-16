@@ -21,7 +21,7 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
 import { css } from 'glamor';
 import { AppLogo } from './AppLogo';
-import { useShouldBlockMenu } from '../utils/menus';
+import { useShouldBlockMenu, useShouldBlockConfess } from '../utils/menus';
 import { appPageCSS, backgroundColor } from '../theme/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
@@ -67,43 +67,47 @@ const Menu: React.FC<{}> = () => {
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const shouldBlockMenu = useShouldBlockMenu();
+  const shouldBlockConfess = useShouldBlockConfess();
   const communityId = useSelectedCommunity();
   const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
   const userFromSelectedComm: boolean =
     communityId === localUserQuery.data?.localUser?.community?.id;
 
-  if (shouldBlockMenu) {
-    return null;
-  }
-
   return (
     <React.Fragment>
-      <IonMenu {...css(menuCSS, appPageCSS)} contentId="main" type="overlay">
+      <IonMenu
+        {...css(menuCSS, appPageCSS)}
+        contentId="main"
+        type="overlay"
+        disabled={shouldBlockMenu}
+      >
         <IonContent>
           <div className="ion-hide-lg-up">
             <AppLogo />
           </div>
 
           <div {...sidebarContent} className="ion-margin-bottom ion-padding">
-            <ButtonDisabledTooltip
-              action="confess"
-              userLoggedIn={userLoggedIn}
-              userHasCommunity={userHasCommunity}
-              userNotFromSelectedComm={!userFromSelectedComm}
-            >
-              <IonButton
-                expand="block"
-                routerLink={buildLink('/submit', communityId)}
-                routerDirection="forward"
-                className="ion-margin-bottom ion-hide-lg-down"
-                disabled={
-                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
-                }
+            {!shouldBlockConfess && (
+              <ButtonDisabledTooltip
+                action="confess"
+                userLoggedIn={userLoggedIn}
+                userHasCommunity={userHasCommunity}
+                userNotFromSelectedComm={!userFromSelectedComm}
               >
-                <IonIcon color="white" slot="start" icon={chatbox} />
-                New Confession
-              </IonButton>
-            </ButtonDisabledTooltip>
+                <IonButton
+                  expand="block"
+                  routerLink={buildLink('/submit', communityId)}
+                  routerDirection="forward"
+                  className="ion-margin-bottom ion-hide-lg-down"
+                  disabled={
+                    !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                  }
+                >
+                  <IonIcon color="white" slot="start" icon={chatbox} />
+                  New Confession
+                </IonButton>
+              </ButtonDisabledTooltip>
+            )}
             <div className=" ion-padding-top ion-padding-bottom">
               <CommunitySelect />
             </div>
