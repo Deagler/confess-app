@@ -9,7 +9,7 @@ import {
   IonToast,
 } from '@ionic/react';
 import React from 'react';
-import { timeOutline, heart, chatbox } from 'ionicons/icons';
+import { timeOutline, heart, chatbox, star } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -20,6 +20,7 @@ import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
 import { firebaseAnalytics } from '../services/firebase';
+import { Tooltip } from '@material-ui/core';
 interface CommunityData {
   abbreviation: string;
 }
@@ -44,6 +45,7 @@ export interface CommentData {
 export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
   postIdForComment: string | undefined;
+  isOriginalPoster?: boolean;
 }
 
 const timeLabelContainer = css({
@@ -65,6 +67,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     totalLikes,
     isCommentLikedByUser,
     postIdForComment,
+    isOriginalPoster,
   } = props;
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName}`
@@ -199,6 +202,19 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                     <IonIcon color="medium" icon={chatbox} />
                   </IonButton>
                 </ButtonDisabledTooltip>
+
+                {isOriginalPoster && (
+                  <Tooltip
+                    arrow={true}
+                    enterTouchDelay={200}
+                    title="Original Posters can star comments to mark them as helpful."
+                    aria-label="star"
+                  >
+                    <IonButton fill="clear" expand="full">
+                      <IonIcon color="warning" icon={star} />
+                    </IonButton>
+                  </Tooltip>
+                )}
               </IonItem>
             </IonCol>
           </IonRow>
