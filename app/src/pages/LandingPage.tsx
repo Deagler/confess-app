@@ -38,6 +38,7 @@ const containerClass = css(
 
 const chipClass = css({
   backgroundColor: 'transparent',
+  pointerEvents: 'none',
 });
 
 const loginInput = css({
@@ -143,22 +144,24 @@ const LandingPage: React.FC = () => {
                     <p>Curated each day just for you.</p>
                   </IonCol>
                 </IonRow>
-                <IonRow>
-                  {loading ? (
-                    <IonSkeletonText
-                      animated={true}
-                      style={{ height: '450px' }}
-                    />
-                  ) : (
-                    <IonSlides pager={true} options={slideOpts}>
-                      {data?.landingPosts &&
-                        data.landingPosts.slice(0, 4).map((slide) => (
-                          <IonSlide key={slide.id} className="ion-text-left">
-                            <LandingPost {...slide} />
-                          </IonSlide>
-                        ))}
-                    </IonSlides>
-                  )}
+                <IonRow style={{ height: '450px' }}>
+                  <IonCol>
+                    {loading ? (
+                      <IonSkeletonText
+                        animated={true}
+                        style={{ height: '450px' }}
+                      />
+                    ) : (
+                      <IonSlides pager={true} options={slideOpts}>
+                        {data?.landingPosts &&
+                          data.landingPosts.slice(0, 4).map((slide) => (
+                            <IonSlide key={slide.id} className="ion-text-left">
+                              <LandingPost {...slide} />
+                            </IonSlide>
+                          ))}
+                      </IonSlides>
+                    )}
+                  </IonCol>
                 </IonRow>
               </IonCol>
             </IonRow>
