@@ -14,10 +14,12 @@ export const SUBMIT_COMMENT = gql`
         id
         creationTimestamp
         author {
+          id
           firstName
           lastName
           communityUsername
           community {
+            id
             abbreviation
           }
           starCount
@@ -48,10 +50,12 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
       comment {
         id
         author {
+          id
           firstName
           lastName
           communityUsername
           community {
+            id
             abbreviation
           }
         }
@@ -78,10 +82,12 @@ export const TOGGLE_STAR_COMMENT = gql`
       comment {
         id
         author {
+          id
           firstName
           lastName
           communityUsername
           community {
+            id
             abbreviation
           }
           starCount

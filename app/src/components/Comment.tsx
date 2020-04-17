@@ -24,23 +24,13 @@ import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
 import { firebaseAnalytics } from '../services/firebase';
 import { Tooltip } from '@material-ui/core';
-interface CommunityData {
-  abbreviation: string;
-}
-
-export interface UserData {
-  firstName: string;
-  lastName: string;
-  communityUsername: string;
-  community: CommunityData | null;
-  starCount?: number | null;
-}
+import { GetUserById, GetUserByIdVariables } from '../types/GetUserById';
+import { GET_USER_BY_ID } from '../common/graphql/users';
 
 export interface CommentData {
   id: string;
   creationTimestamp: number;
   // TODO: Update once user resolvers are written
-  author?: UserData | null;
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean | null;
@@ -51,6 +41,7 @@ export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
   postIdForComment: string | undefined;
   isOriginalPoster?: boolean;
+  authorId?: string | null;
 }
 
 const timeLabelContainer = css({
@@ -66,7 +57,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const {
     id,
     content,
-    author,
+    authorId,
     onReply,
     creationTimestamp,
     totalLikes,
@@ -75,6 +66,14 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     isOriginalPoster,
     isStarred,
   } = props;
+
+  const getAuthorQuery = useQuery<GetUserById, GetUserByIdVariables>(
+    GET_USER_BY_ID,
+    { variables: { id: authorId! }, skip: !authorId }
+  );
+
+  const author = getAuthorQuery.data?.user;
+
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName}`
     : 'unknown';
@@ -166,8 +165,16 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   return (
     <>
       <IonToast
-        isOpen={!!serverLikeInfo.error || !!toggleStarInfo.error}
-        message={serverLikeInfo.error?.message || toggleStarInfo.error?.message}
+        isOpen={
+          !!serverLikeInfo.error ||
+          !!toggleStarInfo.error ||
+          !!getAuthorQuery.error
+        }
+        message={
+          serverLikeInfo.error?.message ||
+          toggleStarInfo.error?.message ||
+          getAuthorQuery.error?.message
+        }
         duration={2000}
       />
       <IonItem

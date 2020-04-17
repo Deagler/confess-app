@@ -11,11 +11,13 @@ import { SortByInput } from "./globalTypes";
 
 export interface GetPostComments_post_comments_items_author_community {
   __typename: "Community";
+  id: string;
   abbreviation: string;
 }
 
 export interface GetPostComments_post_comments_items_author {
   __typename: "User";
+  id: string;
   firstName: string;
   lastName: string;
   communityUsername: string;

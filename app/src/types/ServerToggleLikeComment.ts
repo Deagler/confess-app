@@ -9,11 +9,13 @@
 
 export interface ServerToggleLikeComment_toggleLikeComment_comment_author_community {
   __typename: "Community";
+  id: string;
   abbreviation: string;
 }
 
 export interface ServerToggleLikeComment_toggleLikeComment_comment_author {
   __typename: "User";
+  id: string;
   firstName: string;
   lastName: string;
   communityUsername: string;

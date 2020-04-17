@@ -29,10 +29,12 @@ export const GET_POST_BY_ID = gql`
           creationTimestamp
           content
           author {
+            id
             firstName
             lastName
             communityUsername
             community {
+              id
               abbreviation
             }
             starCount
@@ -66,10 +68,12 @@ export const GET_POST_COMMENTS_ONLY = gql`
           id
           creationTimestamp
           author {
+            id
             firstName
             lastName
             communityUsername
             community {
+              id
               abbreviation
             }
             starCount

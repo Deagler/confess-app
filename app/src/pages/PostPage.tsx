@@ -135,6 +135,7 @@ const Postpage: React.FC = () => {
                         onReply={handleReply}
                         postIdForComment={data?.post?.id}
                         isOriginalPoster={data?.post?.isOriginalPoster}
+                        authorId={comment?.author?.id}
                       />
                     )
                   )}
