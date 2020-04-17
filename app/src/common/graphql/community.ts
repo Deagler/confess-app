@@ -27,6 +27,7 @@ export const GET_COMMUNITY_POSTS = gql`
           totalComments
           isLikedByUser
           isOriginalPoster
+          channelId
         }
         cursor
       }

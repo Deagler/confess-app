@@ -32,3 +32,16 @@ export const GET_COMMUNITY_BY_ID = gql`
     }
   }
 `;
+
+export const GET_COMMUNITY_CHANNELS = gql`
+  query GetCommunityChannels($communityId: ID!) {
+    community(id: $communityId) {
+      id
+      channels {
+        id
+        icon
+        name
+      }
+    }
+  }
+`;
