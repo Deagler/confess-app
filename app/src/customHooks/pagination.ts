@@ -106,8 +106,7 @@ export const usePaginatedUnapprovedPostsQuery = () => {
     GetCommunityUnapprovedPostsVariables
   >(GET_COMMUNITY_UNAPPROVED_POSTS, {
     variables: feedVariables,
-    skip: !communityId,
-    fetchPolicy: 'cache-and-network',
+    skip: !communityId
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {
