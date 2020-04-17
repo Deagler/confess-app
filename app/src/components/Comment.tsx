@@ -182,7 +182,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <IonLabel>
                   <h6>
                     {authorDisplayName} <span>&middot;</span> {authorCommunity}
-                    <span>&middot;</span> {`${author?.starCount || 0} Stars`}
+                    <span> &middot;</span> {`${author?.starCount || 0} Stars`}
                   </h6>
                 </IonLabel>
               </div>
