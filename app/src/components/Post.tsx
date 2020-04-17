@@ -16,6 +16,7 @@ import {
 } from '@ionic/react';
 import { heart, chatbox } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
+import MaterialUILink from '@material-ui/core/Link';
 import moment from 'moment';
 
 import { truncateString, buildLink } from '../utils';
@@ -143,19 +144,27 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               {moment.unix(creationTimestamp).fromNow()}
             </IonCardSubtitle>
           </IonCardHeader>
-          <IonCardContent {...textColorCSS}>
-            <p>
-              {expanded || !collapsable
-                ? content
-                : truncateString(content, MAX_CONTENT_LENGTH)}
-            </p>
-          </IonCardContent>
         </Link>
-        {collapsable && content.length > MAX_CONTENT_LENGTH && (
-          <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
-            {expanded ? 'See Less' : 'See More'}
-          </IonButton>
-        )}
+        <IonCardContent {...textColorCSS}>
+          <p>
+            {expanded || !collapsable
+              ? content
+              : truncateString(content, MAX_CONTENT_LENGTH)}
+            {'  '}
+            {collapsable && content.length > MAX_CONTENT_LENGTH && (
+              <MaterialUILink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setExpanded(!expanded);
+                }}
+              >
+                {expanded ? '\nSee Less' : 'See More'}
+              </MaterialUILink>
+            )}
+          </p>
+        </IonCardContent>
+
         <IonCardContent {...textColorCSS}>
           <p {...css(isOriginalPoster && highlightAuthorCSS)}>
             ~ {authorAlias || 'Anonymous'}
