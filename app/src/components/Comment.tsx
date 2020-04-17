@@ -140,26 +140,30 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
       return;
     }
 
-    await toggleStar({
-      variables: {
-        communityId,
-        postId: postIdForComment,
-        commentId: id,
-      },
-      optimisticResponse: {
-        toggleStarComment: {
-          code: '200',
-          message: 'Comment starred.',
-          success: true,
-          comment: {
-            id,
-            isStarred: !isStarred,
-            __typename: 'Comment',
-          },
-          __typename: 'CommentUpdatedResponse',
+    try {
+      await toggleStar({
+        variables: {
+          communityId,
+          postId: postIdForComment,
+          commentId: id,
         },
-      },
-    });
+        optimisticResponse: {
+          toggleStarComment: {
+            code: '200',
+            message: 'Comment starred.',
+            success: true,
+            comment: {
+              id,
+              isStarred: !isStarred,
+              __typename: 'Comment',
+            },
+            __typename: 'CommentUpdatedResponse',
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

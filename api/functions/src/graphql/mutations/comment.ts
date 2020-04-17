@@ -124,6 +124,10 @@ async function toggleStarComment(
     commentId
   );
 
+  if (userDoc?.id === commentDoc.data()?.authorRef.id) {
+    throw new ForbiddenError('You cannot star your own comment');
+  }
+
   const isStarred = commentDoc.data()?.isStarred;
 
   // star comment
