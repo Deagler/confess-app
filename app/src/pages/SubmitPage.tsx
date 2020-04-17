@@ -51,6 +51,8 @@ interface SubmitFormProps {
   setSelectedChannel(channel?: string): void;
   title?: string;
   setTitle(title?: string): void;
+  image?: string;
+  setImage(image?: string): void;
   confessionText?: string;
   setConfessionText(text?: string): void;
   authorAlias?: string;
@@ -62,6 +64,8 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   setSelectedChannel,
   setTitle,
   title,
+  setImage,
+  image,
   setConfessionText,
   confessionText,
   authorAlias,
@@ -70,7 +74,9 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
-
+  const imageUploadHandler = (event: any) => {
+    console.log(event.target.files[0].name);
+  };
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -108,6 +114,10 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
             value={title}
             spellCheck={true}
           />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Image</IonLabel>
+          <input type="file" onChange={imageUploadHandler} />
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>
@@ -148,6 +158,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
+  const [image, setImage] = useState<string>(); // url or something else?
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
   const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
@@ -164,6 +175,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const handleSubmit = async (
     channelId: string,
     postTitle: string,
+    _image: string,
     content: string,
     authorAliasInput?: string
   ) => {
@@ -189,7 +201,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setAuthorAlias(undefined);
       setTitle(undefined);
       setSelectedChannel(undefined);
-
+      setImage(undefined);
       // close modal
       setSubmitShowModal(false);
 
@@ -227,7 +239,13 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         onDidDismiss={() => setSubmitShowModal(false)}
         loadingSubmit={loading}
         onSubmit={() =>
-          handleSubmit(selectedChannel!, title!, confessionText!, authorAlias)
+          handleSubmit(
+            selectedChannel!,
+            title!,
+            image!,
+            confessionText!,
+            authorAlias
+          )
         }
       />
       <SubmissionRulesModal
@@ -263,6 +281,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                 setSelectedChannel={setSelectedChannel}
                 setTitle={setTitle}
                 title={title}
+                setImage={setImage}
+                image={image}
                 setConfessionText={setConfessionText}
                 confessionText={confessionText}
                 authorAlias={authorAlias}
@@ -305,6 +325,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               setSelectedChannel={setSelectedChannel}
               setTitle={setTitle}
               title={title}
+              setImage={setImage}
+              image={image}
               setConfessionText={setConfessionText}
               confessionText={confessionText}
               authorAlias={authorAlias}
