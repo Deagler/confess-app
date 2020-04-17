@@ -14,26 +14,21 @@ export const SUBMIT_COMMENT = gql`
         id
         creationTimestamp
         author {
+          id
           firstName
           lastName
           communityUsername
           community {
+            id
             abbreviation
           }
+          starCount
         }
         content
         totalLikes
         isCommentLikedByUser
+        isStarred
       }
-    }
-  }
-`;
-
-export const GET_COMMENT_LIKE_STATUS = gql`
-  query getCommentLikeData($communityId: ID!, $postId: ID!, $commentId: ID!) {
-    comment(communityId: $communityId, postId: $postId, commentId: $commentId) {
-      id
-      totalLikes
     }
   }
 `;
@@ -55,10 +50,12 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
       comment {
         id
         author {
+          id
           firstName
           lastName
           communityUsername
           community {
+            id
             abbreviation
           }
         }
@@ -66,6 +63,40 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
         content
         totalLikes
         isCommentLikedByUser
+        isStarred
+      }
+    }
+  }
+`;
+
+export const TOGGLE_STAR_COMMENT = gql`
+  mutation ToggleStarComment($communityId: ID!, $postId: ID!, $commentId: ID!) {
+    toggleStarComment(
+      communityId: $communityId
+      postId: $postId
+      commentId: $commentId
+    ) {
+      code
+      success
+      message
+      comment {
+        id
+        author {
+          id
+          firstName
+          lastName
+          communityUsername
+          community {
+            id
+            abbreviation
+          }
+          starCount
+        }
+        creationTimestamp
+        content
+        totalLikes
+        isCommentLikedByUser
+        isStarred
       }
     }
   }

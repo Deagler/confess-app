@@ -9,41 +9,39 @@ import {
   IonToast,
 } from '@ionic/react';
 import React from 'react';
-import { timeOutline, heart, chatbox } from 'ionicons/icons';
+import { timeOutline, heart, chatbox, star } from 'ionicons/icons';
 import moment from 'moment';
 import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
-import { SERVER_TOGGLE_LIKE_COMMENT } from '../common/graphql/comments';
+import {
+  SERVER_TOGGLE_LIKE_COMMENT,
+  TOGGLE_STAR_COMMENT,
+} from '../common/graphql/comments';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
-import { firebaseAnalytics } from '../services/firebase';
-interface CommunityData {
-  abbreviation: string;
-}
-
-export interface UserData {
-  firstName: string;
-  lastName: string;
-  communityUsername: string;
-  community: CommunityData | null;
-}
+import { firebaseAnalytics, firebaseApp } from '../services/firebase';
+import { Tooltip } from '@material-ui/core';
+import { GetUserById, GetUserByIdVariables } from '../types/GetUserById';
+import { GET_USER_BY_ID } from '../common/graphql/users';
 
 export interface CommentData {
   id: string;
   creationTimestamp: number;
   // TODO: Update once user resolvers are written
-  author?: UserData | null;
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean | null;
+  isStarred: boolean | null;
 }
 
 export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
   postIdForComment: string | undefined;
+  isOriginalPoster?: boolean;
+  authorId?: string | null;
 }
 
 const timeLabelContainer = css({
@@ -59,13 +57,23 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const {
     id,
     content,
-    author,
+    authorId,
     onReply,
     creationTimestamp,
     totalLikes,
     isCommentLikedByUser,
     postIdForComment,
+    isOriginalPoster,
+    isStarred,
   } = props;
+
+  const getAuthorQuery = useQuery<GetUserById, GetUserByIdVariables>(
+    GET_USER_BY_ID,
+    { variables: { id: authorId! }, skip: !authorId }
+  );
+
+  const author = getAuthorQuery.data?.user;
+
   const authorDisplayName = author
     ? `${author.firstName} ${author.lastName}`
     : 'unknown';
@@ -103,7 +111,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           success: true,
           comment: {
             id,
-            isCommentLikedByUser: isCommentLikedByUser!,
+            isCommentLikedByUser: !isCommentLikedByUser,
             totalLikes: isCommentLikedByUser ? totalLikes - 1 : totalLikes + 1,
             __typename: 'Comment',
           },
@@ -118,14 +126,68 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
       commentId,
     });
   };
+
+  const [toggleStar, toggleStarInfo] = useMutation(TOGGLE_STAR_COMMENT);
+  const handleStar = async () => {
+    if (toggleStarInfo.loading) {
+      return;
+    }
+
+    if (!communityId || !postIdForComment) {
+      console.error(
+        'communityId and postIdForComment must be defined to star a post'
+      );
+      return;
+    }
+
+    try {
+      await toggleStar({
+        variables: {
+          communityId,
+          postId: postIdForComment,
+          commentId: id,
+        },
+        optimisticResponse: {
+          toggleStarComment: {
+            code: '200',
+            message: 'Comment starred.',
+            success: true,
+            comment: {
+              id,
+              isStarred: !isStarred,
+              __typename: 'Comment',
+            },
+            __typename: 'CommentUpdatedResponse',
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const currentUser = firebaseApp.auth().currentUser;
+
   return (
     <>
       <IonToast
-        isOpen={!!serverLikeInfo.error}
-        message={serverLikeInfo.error?.message}
+        isOpen={
+          !!serverLikeInfo.error ||
+          !!toggleStarInfo.error ||
+          !!getAuthorQuery.error
+        }
+        message={
+          serverLikeInfo.error?.message ||
+          toggleStarInfo.error?.message ||
+          getAuthorQuery.error?.message
+        }
         duration={2000}
       />
-      <IonItem>
+      <IonItem
+        style={{
+          borderTop: isStarred ? 'solid 5px var(--ion-color-warning)' : 'none',
+        }}
+      >
         <IonGrid>
           <IonRow>
             <IonCol size-md="6" size-xs="12">
@@ -133,6 +195,10 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <IonLabel>
                   <h6>
                     {authorDisplayName} <span>&middot;</span> {authorCommunity}
+                    <span> &middot; </span>
+                    {`${author?.starCount || 0} Star${
+                      author?.starCount === 1 ? '' : 's'
+                    }`}
                   </h6>
                 </IonLabel>
               </div>
@@ -154,6 +220,17 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
               <p>{content}</p>
             </IonCol>
           </IonRow>
+          {isStarred && (
+            <IonRow>
+              <IonCol>
+                <p>
+                  <em>
+                    The Original Poster has marked this comment as helpful.
+                  </em>
+                </p>
+              </IonCol>
+            </IonRow>
+          )}
           <IonRow>
             <IonCol>
               <IonItem lines="none">
@@ -199,6 +276,26 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                     <IonIcon color="medium" icon={chatbox} />
                   </IonButton>
                 </ButtonDisabledTooltip>
+
+                {isOriginalPoster && (
+                  <Tooltip
+                    arrow={true}
+                    enterTouchDelay={200}
+                    title="Original Posters can star comments to mark them as helpful."
+                    aria-label="star"
+                  >
+                    <IonButton
+                      fill="clear"
+                      expand="full"
+                      onClick={handleStar}
+                      disabled={
+                        toggleStarInfo.loading || currentUser?.uid === authorId
+                      }
+                    >
+                      <IonIcon color="warning" icon={star} />
+                    </IonButton>
+                  </Tooltip>
+                )}
               </IonItem>
             </IonCol>
           </IonRow>

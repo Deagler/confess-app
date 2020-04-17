@@ -29,15 +29,19 @@ export const GET_POST_BY_ID = gql`
           creationTimestamp
           content
           author {
+            id
             firstName
             lastName
             communityUsername
             community {
+              id
               abbreviation
             }
+            starCount
           }
           totalLikes
           isCommentLikedByUser
+          isStarred
         }
         cursor
       }
@@ -64,16 +68,20 @@ export const GET_POST_COMMENTS_ONLY = gql`
           id
           creationTimestamp
           author {
+            id
             firstName
             lastName
             communityUsername
             community {
+              id
               abbreviation
             }
+            starCount
           }
           content
           totalLikes
           isCommentLikedByUser
+          isStarred
         }
         cursor
       }

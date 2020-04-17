@@ -11,15 +11,18 @@ import { SortByInput } from "./globalTypes";
 
 export interface GetPostComments_post_comments_items_author_community {
   __typename: "Community";
+  id: string;
   abbreviation: string;
 }
 
 export interface GetPostComments_post_comments_items_author {
   __typename: "User";
+  id: string;
   firstName: string;
   lastName: string;
   communityUsername: string;
   community: GetPostComments_post_comments_items_author_community | null;
+  starCount: number | null;
 }
 
 export interface GetPostComments_post_comments_items {
@@ -30,6 +33,7 @@ export interface GetPostComments_post_comments_items {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
+  isStarred: boolean | null;
 }
 
 export interface GetPostComments_post_comments {

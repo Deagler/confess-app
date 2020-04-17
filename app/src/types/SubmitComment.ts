@@ -9,15 +9,18 @@
 
 export interface SubmitComment_submitComment_comment_author_community {
   __typename: "Community";
+  id: string;
   abbreviation: string;
 }
 
 export interface SubmitComment_submitComment_comment_author {
   __typename: "User";
+  id: string;
   firstName: string;
   lastName: string;
   communityUsername: string;
   community: SubmitComment_submitComment_comment_author_community | null;
+  starCount: number | null;
 }
 
 export interface SubmitComment_submitComment_comment {
@@ -28,6 +31,7 @@ export interface SubmitComment_submitComment_comment {
   content: string;
   totalLikes: number;
   isCommentLikedByUser: boolean;
+  isStarred: boolean | null;
 }
 
 export interface SubmitComment_submitComment {

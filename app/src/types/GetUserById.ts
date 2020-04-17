@@ -24,6 +24,7 @@ export interface GetUserById_user {
   email: string;
   community: GetUserById_user_community | null;
   isAdmin: boolean | null;
+  starCount: number | null;
 }
 
 export interface GetUserById {

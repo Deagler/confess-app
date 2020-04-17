@@ -4,28 +4,29 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ServerToggleLikeComment
+// GraphQL mutation operation: ToggleStarComment
 // ====================================================
 
-export interface ServerToggleLikeComment_toggleLikeComment_comment_author_community {
+export interface ToggleStarComment_toggleStarComment_comment_author_community {
   __typename: "Community";
   id: string;
   abbreviation: string;
 }
 
-export interface ServerToggleLikeComment_toggleLikeComment_comment_author {
+export interface ToggleStarComment_toggleStarComment_comment_author {
   __typename: "User";
   id: string;
   firstName: string;
   lastName: string;
   communityUsername: string;
-  community: ServerToggleLikeComment_toggleLikeComment_comment_author_community | null;
+  community: ToggleStarComment_toggleStarComment_comment_author_community | null;
+  starCount: number | null;
 }
 
-export interface ServerToggleLikeComment_toggleLikeComment_comment {
+export interface ToggleStarComment_toggleStarComment_comment {
   __typename: "Comment";
   id: string;
-  author: ServerToggleLikeComment_toggleLikeComment_comment_author | null;
+  author: ToggleStarComment_toggleStarComment_comment_author | null;
   creationTimestamp: number;
   content: string;
   totalLikes: number;
@@ -33,19 +34,19 @@ export interface ServerToggleLikeComment_toggleLikeComment_comment {
   isStarred: boolean | null;
 }
 
-export interface ServerToggleLikeComment_toggleLikeComment {
+export interface ToggleStarComment_toggleStarComment {
   __typename: "CommentUpdatedResponse";
   code: string;
   success: boolean;
   message: string;
-  comment: ServerToggleLikeComment_toggleLikeComment_comment | null;
+  comment: ToggleStarComment_toggleStarComment_comment | null;
 }
 
-export interface ServerToggleLikeComment {
-  toggleLikeComment: ServerToggleLikeComment_toggleLikeComment | null;
+export interface ToggleStarComment {
+  toggleStarComment: ToggleStarComment_toggleStarComment | null;
 }
 
-export interface ServerToggleLikeCommentVariables {
+export interface ToggleStarCommentVariables {
   communityId: string;
   postId: string;
   commentId: string;

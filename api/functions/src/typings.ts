@@ -22,6 +22,7 @@ export interface User {
   communityRef: FirestoreDocRef | null;
   community?: Community | null;
   isAdmin?: boolean;
+  starCount?: number;
 }
 
 export interface Post {
@@ -65,6 +66,7 @@ export interface Comment {
   >;
   postId?: string;
   communityId?: string;
+  isStarred?: boolean;
 }
 
 export interface CommentsInput {
