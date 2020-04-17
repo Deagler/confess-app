@@ -22,7 +22,7 @@ import {
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
-import { firebaseAnalytics } from '../services/firebase';
+import { firebaseAnalytics, firebaseApp } from '../services/firebase';
 import { Tooltip } from '@material-ui/core';
 import { GetUserById, GetUserByIdVariables } from '../types/GetUserById';
 import { GET_USER_BY_ID } from '../common/graphql/users';
@@ -166,6 +166,8 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     }
   };
 
+  const currentUser = firebaseApp.auth().currentUser;
+
   return (
     <>
       <IonToast
@@ -286,7 +288,9 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                       fill="clear"
                       expand="full"
                       onClick={handleStar}
-                      disabled={toggleStarInfo.loading}
+                      disabled={
+                        toggleStarInfo.loading || currentUser?.uid === authorId
+                      }
                     >
                       <IonIcon color="warning" icon={star} />
                     </IonButton>
