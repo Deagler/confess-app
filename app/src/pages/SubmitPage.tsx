@@ -117,7 +117,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Image</IonLabel>
-          <input type="file" onChange={imageUploadHandler} />
+          <input type="file" onChange={imageUploadHandler} accept="image/*" />
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>
