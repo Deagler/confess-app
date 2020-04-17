@@ -136,7 +136,8 @@ async function toggleStarComment(
   });
 
   // increment users stars
-  await userRef.update({
+  const commentAuthorRef = commentDoc.data()?.authorRef;
+  await commentAuthorRef.update({
     starCount: isStarred
       ? admin.firestore.FieldValue.increment(-1)
       : admin.firestore.FieldValue.increment(1),
