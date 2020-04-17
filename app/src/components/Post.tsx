@@ -15,7 +15,7 @@ import {
   IonToast,
 } from '@ionic/react';
 import { heart, chatbox } from 'ionicons/icons';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MaterialUILink from '@material-ui/core/Link';
 import moment from 'moment';
 
@@ -114,7 +114,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     }
   );
 
-  const postChannel = communityChannels.data?.community?.channels!.find(
+  const postChannel = communityChannels.data?.community?.channels?.find(
     (val) => val?.id == channelId
   );
 

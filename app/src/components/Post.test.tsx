@@ -16,6 +16,9 @@ const props: PostProps = {
   onCommentClick: () => null,
   isLikedByUser: false,
   collapsable: false,
+  isOriginalPoster: false,
+  showChannel: false,
+  channelId: 'mockChannel',
 };
 
 jest.mock('../services/firebase', () => {
