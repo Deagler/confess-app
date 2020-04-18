@@ -3,7 +3,6 @@ import React from 'react';
 import { chatbox } from 'ionicons/icons';
 import { css } from 'glamor';
 
-
 const appLogoCSS = css({
   backgroundColor: 'transparent',
   '--background': 'transparent',

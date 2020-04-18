@@ -25,7 +25,6 @@ function persistAuthState(apolloCache, authState) {
   localStorage.setItem('authState', JSON.stringify(authState));
 }
 
-
 async function attemptLoginWithEmailLink(
   _,
   { userEmail, emailLink },
