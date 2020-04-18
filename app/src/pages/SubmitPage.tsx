@@ -59,7 +59,8 @@ interface SubmitFormProps {
   authorAlias?: string;
   setAuthorAlias(alias?: string): void;
   onDisplayRules(): void;
-  imageUrl?: string;
+  imageURL?: string;
+  setImageURL(url?: string): void;
 }
 
 const SubmitForm: React.FC<SubmitFormProps> = ({
@@ -67,21 +68,23 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   setTitle,
   title,
   setImage,
-  image,
-  imageUrl,
   setConfessionText,
   confessionText,
   authorAlias,
   setAuthorAlias,
   onDisplayRules,
+  imageURL,
+  setImageURL,
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
+
   const imageUploadHandler = (event: any) => {
-    const file = event.target.files[0];
+    const file: File = event.target.files[0];
     setImage(file);
-    imageUrl = URL.createObjectURL(file);
-    console.log(imageUrl);
+
+    const url: string = URL.createObjectURL(file);
+    setImageURL(url);
   };
 
   return (
@@ -130,10 +133,10 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
             onChange={imageUploadHandler}
             accept="image/*"
           />
-          {imageUrl && (
+          {imageURL && (
             <IonImg
               style={{ width: '300px', height: '300px' }}
-              src={imageUrl}
+              src={imageURL}
             />
           )}
         </IonItem>
@@ -177,7 +180,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [image, setImage] = useState<File>();
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageURL, setImageURL] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
   const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
@@ -247,6 +250,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setTitle(undefined);
       setSelectedChannel(undefined);
       setImage(undefined);
+      setImageURL(undefined);
       // close modal
       setSubmitShowModal(false);
 
@@ -328,6 +332,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                 title={title}
                 setImage={setImage}
                 image={image}
+                imageURL={imageURL}
+                setImageURL={setImageURL}
                 setConfessionText={setConfessionText}
                 confessionText={confessionText}
                 authorAlias={authorAlias}
@@ -372,6 +378,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               title={title}
               setImage={setImage}
               image={image}
+              imageURL={imageURL}
+              setImageURL={setImageURL}
               setConfessionText={setConfessionText}
               confessionText={confessionText}
               authorAlias={authorAlias}
