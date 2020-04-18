@@ -26,7 +26,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     communityUsername: String!
-    displayName: String!
+    displayName: String
     email: String!
     community: Community
     isAdmin: Boolean

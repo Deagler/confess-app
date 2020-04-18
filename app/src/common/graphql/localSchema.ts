@@ -8,7 +8,8 @@ export const typeDefs = gql`
 
   extend type Query {
     authState: AuthState
-    localUser: User
+    loginInfo: LoginResponse
+    localUser(disableSafeMode: Boolean): User
     selectedCommunity: Community
   }
 
@@ -19,6 +20,7 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
+    attemptLogin: LoginResponse
     attemptLoginWithEmailLink(
       userEmail: String!
       emailLink: String!

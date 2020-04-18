@@ -18,7 +18,7 @@ export interface GetPostComments_post_comments_items_author_community {
 export interface GetPostComments_post_comments_items_author {
   __typename: "User";
   id: string;
-  displayName: string;
+  displayName: string | null;
   communityUsername: string;
   community: GetPostComments_post_comments_items_author_community | null;
   starCount: number | null;

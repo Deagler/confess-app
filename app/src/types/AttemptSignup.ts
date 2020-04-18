@@ -17,7 +17,7 @@ export interface AttemptSignup_attemptSignUp_user_community {
 export interface AttemptSignup_attemptSignUp_user {
   __typename: "User";
   id: string;
-  displayName: string;
+  displayName: string | null;
   communityUsername: string;
   email: string;
   community: AttemptSignup_attemptSignUp_user_community | null;

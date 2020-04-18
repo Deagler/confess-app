@@ -13,6 +13,7 @@ const props: PostProps = {
   authorAlias: 'this is the author',
   totalLikes: 7,
   totalComments: 56,
+  isOriginalPoster: false,
   onCommentClick: () => null,
   isLikedByUser: false,
   collapsable: false,

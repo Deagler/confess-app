@@ -9,8 +9,8 @@ export const GET_AUTH_STATE = gql`
 `;
 
 export const GET_LOCAL_USER = gql`
-  query GetLocalUser {
-    localUser @client {
+  query GetLocalUser($disableSafeMode: Boolean = false) {
+    localUser(disableSafeMode: $disableSafeMode) @client {
       id
       communityUsername
       displayName

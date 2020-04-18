@@ -5,7 +5,7 @@ import { Checkmark } from 'react-checkmark';
 import { SubmittableEmailInput } from './SubmittableEmailInput';
 import { css } from 'glamor';
 import { useMutation } from '@apollo/react-hooks';
-import { REQUEST_FIREBASE_LOGIN_LINK } from '../common/auth';
+import { REQUEST_FIREBASE_LOGIN_LINK } from '../common/graphql/auth';
 import { RequestFirebaseLink } from '../types/RequestFirebaseLink';
 import { firebaseAnalytics } from '../services/firebase';
 

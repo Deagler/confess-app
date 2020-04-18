@@ -35,6 +35,8 @@ import {
   createMuiTheme,
   ThemeProvider,
 } from '@material-ui/core';
+import { ATTEMPT_LOGIN } from './common/graphql/auth';
+import { AttemptLogin, AttemptLogin_attemptLogin } from './types/AttemptLogin';
 
 const auth = firebaseApp.auth();
 
@@ -46,9 +48,10 @@ const appContainer = css({
 });
 
 const App: React.FC = () => {
-  const [authLocalUser, setAuthLocalUser] = useState<
-    firebase.User | undefined | null
-  >(undefined);
+  const [
+    attemptLoginInfo,
+    setAttemptLoginInfo,
+  ] = useState<AttemptLogin_attemptLogin | null>();
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -63,24 +66,33 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setAuthLocalUser(user!);
-
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         firebaseAnalytics.setUserId(user.uid);
         apolloClient.reFetchObservableQueries();
+        const loginMutation = await apolloClient.mutate<AttemptLogin>({
+          mutation: ATTEMPT_LOGIN,
+        });
+
+        setAttemptLoginInfo(
+          loginMutation.data?.attemptLogin
+            ? loginMutation.data.attemptLogin
+            : undefined
+        );
         refreshApolloAuthentication();
+      } else {
+        setAttemptLoginInfo(null);
       }
     });
 
     return () => {
       unsubscribe();
     };
-  });
+  }, []);
 
   return (
     <IonApp>
-      {authLocalUser === undefined ? (
+      {attemptLoginInfo === undefined ? (
         <FullPageLoader />
       ) : (
         <IonReactRouter>
@@ -92,7 +104,10 @@ const App: React.FC = () => {
                 <IonSplitPane contentId="main">
                   <Menu />
 
-                  <AppRouter userLoggedIn={!!authLocalUser} />
+                  <AppRouter
+                    redirectToSignup={attemptLoginInfo?.code == 'auth/new_user'}
+                    userLoggedIn={!!attemptLoginInfo?.success}
+                  />
                 </IonSplitPane>
               </div>
             </ThemeProvider>

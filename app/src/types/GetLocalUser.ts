@@ -19,7 +19,7 @@ export interface GetLocalUser_localUser {
   __typename: "User";
   id: string;
   communityUsername: string;
-  displayName: string;
+  displayName: string | null;
   email: string;
   community: GetLocalUser_localUser_community | null;
   isAdmin: boolean | null;

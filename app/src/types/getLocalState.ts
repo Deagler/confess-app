@@ -23,7 +23,7 @@ export interface getLocalState_localUser {
   __typename: "User";
   id: string;
   communityUsername: string;
-  displayName: string;
+  displayName: string | null;
   email: string;
   community: getLocalState_localUser_community | null;
 }

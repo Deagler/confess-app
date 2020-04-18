@@ -8,6 +8,7 @@ import {
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById, GetUserById_user } from '../../../types/GetUserById';
 import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../../utils';
+import { GET_LOCAL_USER } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
@@ -26,6 +27,23 @@ function persistAuthState(apolloCache, authState) {
   localStorage.setItem('authState', JSON.stringify(authState));
 }
 
+function persistLoginInfo(apolloCache, loginInfo) {
+  apolloCache.writeQuery({
+    query: gql`
+      query getLoginInfo {
+        loginInfo {
+          code
+          success
+          message
+        }
+      }
+    `,
+    data: {
+      loginInfo,
+    },
+  });
+}
+
 const supportedSignupFields = ['displayName'];
 function isUserMissingFields(userData: GetUserById_user) {
   return supportedSignupFields.some((val) => !userData[val]);
@@ -33,7 +51,15 @@ function isUserMissingFields(userData: GetUserById_user) {
 
 async function attemptLogin(_, __, { cache, client }) {
   const apolloClient: ApolloClient<NormalizedCacheObject> = client;
-  const currentUser = firebaseApp.auth().currentUser!;
+  const currentUser = firebaseApp.auth().currentUser;
+  let resp;
+
+  if (!currentUser) {
+    persistLoginInfo(cache, null);
+    throw new ApolloError({
+      errorMessage: 'Error logging in. Redirecting to Confess.',
+    });
+  }
 
   // Existing user: let's retrieve data from backend.
   const data = await apolloClient.query<GetUserById>({
@@ -44,13 +70,31 @@ async function attemptLogin(_, __, { cache, client }) {
     },
   });
 
-  if (!data.data.user || isUserMissingFields(data.data.user)) {
-    return {
+  if (!data.data.user) {
+    resp = {
       code: 'auth/new_user',
       success: true,
-      message: "Logged in. Let's take you to the signup page.",
+      message: 'Welcome to Confess! Taking you to the signup page.',
       __typename: 'LoginResponse',
     };
+    persistLoginInfo(cache, resp);
+    return resp;
+  }
+
+  if (isUserMissingFields(data.data.user)) {
+    cache.writeQuery({
+      query: GET_LOCAL_USER,
+      data: { localUser: data.data.user },
+    });
+
+    resp = {
+      code: 'auth/new_user',
+      success: true,
+      message: 'Logged in! We just need a bit of info from you!',
+      __typename: 'LoginResponse',
+    };
+    persistLoginInfo(cache, resp);
+    return resp;
   }
 
   if (data.data.user.community?.isEnabled) {
@@ -61,14 +105,14 @@ async function attemptLogin(_, __, { cache, client }) {
 
   firebaseAnalytics.logEvent('login', { method: 'passwordless' });
 
-  /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
-
-  return {
+  resp = {
     code: 'auth/logged_in',
     success: true,
     message: 'Successfully logged in.',
     __typename: 'LoginResponse',
   };
+  persistLoginInfo(cache, resp);
+  return resp;
 }
 
 async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
@@ -119,7 +163,6 @@ async function attemptLoginWithEmailLink(
   });
 
   localStorage.removeItem('emailForSignIn');
-  const apolloClient: ApolloClient<NormalizedCacheObject> = client;
 
   if (!firebaseApp.auth().isSignInWithEmailLink(emailLink)) {
     throw new ApolloError({
@@ -141,14 +184,18 @@ async function attemptLoginWithEmailLink(
     persistAuthState(cache, authState);
 
     if (credential.additionalUserInfo!.isNewUser) {
-      return {
+      const resp = {
         code: 'auth/new_user',
         success: true,
         message: "Logged in. Let's take you to the signup page.",
         authState,
         __typename: 'LoginResponse',
       };
+      persistLoginInfo(cache, resp);
+      return resp;
     }
+
+    return attemptLogin(undefined, undefined, { cache, client });
   } catch (e) {
     throw new ApolloError({
       errorMessage: 'Error logging in. Redirecting to Confess.',
@@ -176,6 +223,7 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 }
 
 export const authMutationResolvers = {
+  attemptLogin,
   attemptLoginWithEmailLink,
   requestFirebaseLoginLink,
   doFirebaseLogout,

@@ -13,42 +13,17 @@ import { RouteComponentProps } from 'react-router';
 import { SubmittableEmailInput } from '../../components/SubmittableEmailInput';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
-import { GET_LOCAL_USER } from '../../common/graphql/localState';
 import { backgroundColor } from '../../theme/global';
 import { css } from 'glamor';
-import { SignupCardContent } from './SignupCardContent';
 import { AttemptLogin } from '../../types/AttemptLogin';
-import { AttemptSignup } from '../../types/AttemptSignup';
-import {
-  ATTEMPT_LOGIN_WITH_EMAIL_LINK,
-  ATTEMPT_SIGNUP,
-} from '../../common/auth';
+import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../../common/graphql/auth';
+import { authPageCSS, authCenterCardCSS } from './authCSS';
+import { AttemptLoginWithEmailLink } from '../../types/AttemptLoginWithEmailLink';
 
-const callbackPageCSS = css({
-  height: '100vh',
-  width: '100wh',
-  justifyContent: 'center',
-  alignContent: 'center',
-  alignItems: 'center',
-});
-
-const loginCard = css({
-  '@media(min-width:992px)': {
-    width: '500px',
-  },
-  width: '350px',
-  padding: '16px',
-  minHeight: '400px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignContent: 'center',
-  flexDirection: 'column',
-});
-
-const LoggingInCardContent: React.FC = () => {
+const StatusTextCardContent: React.FC<{ status: string }> = ({ status }) => {
   return (
     <IonCardContent>
-      <IonCardTitle>Logging in...</IonCardTitle>
+      <IonCardTitle>{status}</IonCardTitle>
       <IonSpinner />
     </IonCardContent>
   );
@@ -59,14 +34,6 @@ const LoginSuccessCard: React.FC = () => {
     <IonCardContent>
       <Checkmark size="large" />
       <IonCardTitle>Logged in! Taking you to Confess.</IonCardTitle>
-    </IonCardContent>
-  );
-};
-
-const LoginErrorCard: React.FC = () => {
-  return (
-    <IonCardContent>
-      <IonCardTitle>Failed to login :( Taking you to Confess.</IonCardTitle>
     </IonCardContent>
   );
 };
@@ -91,7 +58,7 @@ const EmailInputCardContent: React.FC<any> = ({
   );
 };
 
-const navigateToFeed = (communityId?) => {
+export const navigateToFeed = (communityId?) => {
   setTimeout(() => {
     const navCommunity =
       communityId ||
@@ -106,39 +73,21 @@ const navigateToFeed = (communityId?) => {
   }, 2000);
 };
 
+const navigateToSignupPage = () => {
+  window.location.href = `/signup`;
+};
+
+
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const [attemptLoginMutation, attemptLoginInfo] = useMutation<AttemptLogin>(
+  const [attemptLoginMutation, attemptLoginInfo] = useMutation<AttemptLoginWithEmailLink>(
     ATTEMPT_LOGIN_WITH_EMAIL_LINK,
     {
       onCompleted: (data) => {
         if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
           setTimeout(navigateToFeed, 2000);
+        } else {
+          setTimeout(navigateToSignupPage, 2000);
         }
-      },
-    }
-  );
-
-  const [attemptSignupMutation, attemptSignupInfo] = useMutation<AttemptSignup>(
-    ATTEMPT_SIGNUP,
-    {
-      update: (cache, result) => {
-        if (result.data?.attemptSignUp?.success) {
-          const user = result.data.attemptSignUp.user;
-          cache.writeQuery({
-            query: GET_LOCAL_USER,
-            data: { localUser: user },
-          });
-        }
-      },
-      onCompleted: (data) => {
-        setTimeout(() => {
-          const communityId = data.attemptSignUp?.user?.community
-            ? data.attemptSignUp.user.community.id
-            : 'O0jkcLwMRy77krkmAT2q';
-          localStorage.setItem('selectedCommunityId', communityId);
-
-          navigateToFeed(communityId);
-        }, 2000);
       },
     }
   );
@@ -172,28 +121,17 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   }, [attemptLoginCallback]);
 
   const renderAppropriateLoginCard = () => {
-    if (attemptLoginInfo.loading || attemptSignupInfo.loading) {
-      return <LoggingInCardContent />;
+    if (attemptLoginInfo.loading) {
+      return <StatusTextCardContent status="Logging in..." />;
     }
 
     if (attemptLoginInfo.called) {
       const data = attemptLoginInfo.data?.attemptLoginWithEmailLink;
 
-      if (data && data.success && !attemptSignupInfo.called) {
+      if (data && data.success) {
         if (data.code == 'auth/new_user') {
           return (
-            <SignupCardContent
-              mutationInfo={attemptSignupInfo}
-              submit={async (displayName) => {
-                try {
-                  await attemptSignupMutation({
-                    variables: { displayName },
-                  });
-                } catch (e) {
-                  navigateToFeed();
-                }
-              }}
-            />
+            <StatusTextCardContent status="We need some info from you. Redirecting to signup page." />
           );
         } else {
           return (
@@ -207,21 +145,10 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
       if (attemptLoginInfo.error || (data && !data.success)) {
         return (
           <React.Fragment>
-            <LoginErrorCard />
+            <StatusTextCardContent status="Failed to login :( Taking you to Confess." />
           </React.Fragment>
         );
       }
-    }
-
-    if (
-      attemptSignupInfo.called &&
-      attemptSignupInfo.data?.attemptSignUp?.success
-    ) {
-      return (
-        <React.Fragment>
-          <LoginSuccessCard />
-        </React.Fragment>
-      );
     }
 
     return !localStorage.getItem('emailForSignIn') ? (
@@ -232,15 +159,15 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
         submit={attemptLogin}
       />
     ) : (
-      <LoggingInCardContent />
+      <StatusTextCardContent status="Logging in..." />
     );
   };
 
   return (
-    <IonPage {...css(backgroundColor, callbackPageCSS)}>
+    <IonPage {...css(backgroundColor, authPageCSS)}>
       <div className="ion-text-center">
         <h4 className="ion-padding-top">You're almost in!</h4>
-        <IonCard {...loginCard}>{renderAppropriateLoginCard()}</IonCard>
+        <IonCard {...authCenterCardCSS}>{renderAppropriateLoginCard()}</IonCard>
       </div>
     </IonPage>
   );
