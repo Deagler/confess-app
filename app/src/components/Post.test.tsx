@@ -15,6 +15,7 @@ const props: PostProps = {
   totalComments: 56,
   onCommentClick: () => null,
   isLikedByUser: false,
+  isOriginalPoster: false,
   collapsable: false,
 };
 
