@@ -29,7 +29,7 @@ const StatusTextCardContent: React.FC<{ status: string }> = ({ status }) => {
   );
 };
 
-const LoginSuccessCard: React.FC = () => {
+export const LoginSuccessCard: React.FC = () => {
   return (
     <IonCardContent>
       <Checkmark size="large" />
@@ -49,7 +49,7 @@ const EmailInputCardContent: React.FC<any> = ({
       <SubmittableEmailInput
         email={email}
         setEmail={setEmail}
-        placeholderText="Enter your university e-mail again."
+        placeholderText="Enter your university e-mail again"
         submitText="Login"
         submit={submit}
         loading={loading}
@@ -77,20 +77,18 @@ const navigateToSignupPage = () => {
   window.location.href = `/signup`;
 };
 
-
 const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const [attemptLoginMutation, attemptLoginInfo] = useMutation<AttemptLoginWithEmailLink>(
-    ATTEMPT_LOGIN_WITH_EMAIL_LINK,
-    {
-      onCompleted: (data) => {
-        if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
-          setTimeout(navigateToFeed, 2000);
-        } else {
-          setTimeout(navigateToSignupPage, 2000);
-        }
-      },
-    }
-  );
+  const [attemptLoginMutation, attemptLoginInfo] = useMutation<
+    AttemptLoginWithEmailLink
+  >(ATTEMPT_LOGIN_WITH_EMAIL_LINK, {
+    onCompleted: (data) => {
+      if (data?.attemptLoginWithEmailLink?.code != 'auth/new_user') {
+        setTimeout(navigateToFeed, 2000);
+      } else {
+        setTimeout(navigateToSignupPage, 2000);
+      }
+    },
+  });
 
   const [userEmail, setUserEmail] = useState<string>(
     localStorage.getItem('emailForSignIn')!

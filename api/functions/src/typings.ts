@@ -17,6 +17,7 @@ export interface User {
   id: string;
   communityUsername: string;
   displayName: string;
+  displayNameId: string;
   email: string;
   communityRef: FirestoreDocRef | null;
   community?: Community | null;

@@ -18,38 +18,51 @@ import { AttemptSignup } from '../../types/AttemptSignup';
 import { ATTEMPT_SIGNUP } from '../../common/graphql/auth';
 import { GET_LOCAL_USER } from '../../common/graphql/localState';
 import { authPageCSS, authCenterCardCSS } from './authCSS';
-import { navigateToFeed } from './AuthCallbackPage';
+import { navigateToFeed, LoginSuccessCard } from './AuthCallbackPage';
 import { GetLocalUser } from '../../types/GetLocalUser';
+import { TextField } from '@material-ui/core';
+import { firebaseAnalytics } from '../../services/firebase';
 
 const SignupCardContent: React.FC<{ mutationInfo; submit }> = ({
   mutationInfo,
   submit,
 }) => {
   const [displayName, setDisplayName] = useState<string>();
+
   return (
     <IonCardContent>
       <IonGrid>
-        <IonRow>
-          <IonCol>
-            <IonInput
-              style={{ maxWidth: '400px', minWidth: '250px' }}
-              placeholder={'Enter a display name.'}
-              value={displayName}
-              onIonChange={(e) => setDisplayName(e.detail.value!)}
-            />
-          </IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol>
-            <IonButton
-              disabled={!displayName}
-              onClick={() => submit(displayName)}
-              fill="solid"
-            >
-              {mutationInfo.loading ? <IonSpinner /> : 'Signup'}
-            </IonButton>
-          </IonCol>
-        </IonRow>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit(displayName);
+          }}
+        >
+          <IonRow>
+            <IonCol>
+              <TextField
+                error={!!mutationInfo.error?.message}
+                helperText={mutationInfo.error?.message}
+                variant="outlined"
+                label={'Enter a display name'}
+                value={displayName}
+                style={{ maxWidth: '400px', minWidth: '250px' }}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonButton
+                disabled={!displayName || mutationInfo.loading}
+                fill="solid"
+                type="submit"
+              >
+                {mutationInfo.loading ? <IonSpinner /> : 'Signup'}
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </form>
       </IonGrid>
     </IonCardContent>
   );
@@ -69,14 +82,16 @@ const SignUpPage: React.FC<RouteComponentProps> = ({ history }) => {
         }
       },
       onCompleted: (data) => {
-        setTimeout(() => {
-          const communityId = data.attemptSignUp?.user?.community
-            ? data.attemptSignUp.user.community.id
-            : 'O0jkcLwMRy77krkmAT2q';
-          localStorage.setItem('selectedCommunityId', communityId);
+        if (data?.attemptSignUp?.success == true) {
+          setTimeout(() => {
+            const communityId = data.attemptSignUp?.user?.community
+              ? data.attemptSignUp.user.community.id
+              : 'O0jkcLwMRy77krkmAT2q';
+            localStorage.setItem('selectedCommunityId', communityId);
 
-          navigateToFeed(communityId);
-        }, 2000);
+            navigateToFeed(communityId);
+          }, 2000);
+        }
       },
     }
   );
@@ -94,7 +109,9 @@ const SignUpPage: React.FC<RouteComponentProps> = ({ history }) => {
       <div className="ion-text-center">
         <h4 className="ion-padding-top">You're almost in!</h4>
         <IonCard {...authCenterCardCSS}>
-          {
+          {attemptSignupInfo.data?.attemptSignUp?.success ? (
+            <LoginSuccessCard />
+          ) : (
             <SignupCardContent
               mutationInfo={attemptSignupInfo}
               submit={async (displayName) => {
@@ -103,11 +120,13 @@ const SignUpPage: React.FC<RouteComponentProps> = ({ history }) => {
                     variables: { displayName },
                   });
                 } catch (e) {
-                  navigateToFeed();
+                  firebaseAnalytics.logEvent('exception', {
+                    description: `signup_page/${e.message}`,
+                  });
                 }
               }}
             />
-          }
+          )}
         </IonCard>
       </div>
     </IonPage>

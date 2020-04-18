@@ -6,10 +6,25 @@ import {
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { User } from '../../typings';
-import { addIdToDoc } from '../resolvers/utils';
 
 const usersCollection = firebaseApp.firestore().collection('users');
 const communitiesCollection = firebaseApp.firestore().collection('communities');
+
+async function getCommunityForEmailDomain(emailDomain) {
+  const communityDoc = await communitiesCollection
+    .where('domains', 'array-contains', emailDomain)
+    .get();
+
+  return !communityDoc.empty ? communityDoc.docs[0].ref : null;
+}
+
+async function IsDisplayNameUnique(displayName) {
+  const userDocs = await usersCollection
+    .where('displayNameId', '==', displayName.toLowerCase())
+    .get();
+  console.log(userDocs);
+  return userDocs.empty;
+}
 
 /** Temporary until Auth is moved to Serverside completely. */
 const supportedEmailTLDS = ['.ac.nz', '.edu.au', '.edu'];
@@ -22,7 +37,8 @@ function IsSupportedEmailTLD(emailToValidate: string): boolean {
   );
 }
 
-async function attemptSignUp(_: any, { displayName }, context: any) {
+async function attemptSignUp(_: any, args, context: any) {
+  const displayName: string = args.displayName;
   const userRecord: UserRecord = context.req.user;
 
   if (!userRecord || !userRecord.email) {
@@ -30,9 +46,6 @@ async function attemptSignUp(_: any, { displayName }, context: any) {
   }
 
   const userDoc = usersCollection.doc(userRecord.uid);
-  if ((await userDoc.get()).exists) {
-    throw new UserInputError('Account already exists');
-  }
 
   if (!IsSupportedEmailTLD(userRecord.email)) {
     throw new UserInputError(
@@ -40,31 +53,29 @@ async function attemptSignUp(_: any, { displayName }, context: any) {
     );
   }
 
+  if (!displayName || !displayName.trim() || displayName.length > 24) {
+    throw new UserInputError('Invalid display name');
+  }
+
+  if (!(await IsDisplayNameUnique(displayName))) {
+    throw new UserInputError('This display name is not available.');
+  }
+
   const communityInfo = userRecord.email.split('@');
   const communityUsername = communityInfo[0];
   const emailDomain = communityInfo[1];
 
-  const communityDoc = await communitiesCollection
-    .where('domains', 'array-contains', emailDomain)
-    .get();
-
   const newUserData: Partial<User> = {
     communityUsername,
     displayName,
+    displayNameId: displayName.toLowerCase(),
     email: userRecord.email,
-    communityRef: null,
+    communityRef: await getCommunityForEmailDomain(emailDomain),
   };
 
-  if (!communityDoc.empty) {
-    newUserData.communityRef = communityDoc.docs[0].ref;
-  }
-
   try {
-    await userDoc.set(newUserData);
+    await userDoc.set(newUserData, { merge: true });
     newUserData.id = userDoc.id;
-    newUserData.community = !communityDoc.empty
-      ? addIdToDoc(communityDoc.docs[0])
-      : null;
 
     return {
       code: 200,
