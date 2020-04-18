@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect, useLocation } from 'react-router';
+import { Switch, Route, Redirect } from 'react-router';
 import React from 'react';
 import { IonRouterOutlet } from '@ionic/react';
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
@@ -14,7 +14,6 @@ export const AppRouter: React.FC<{
   userLoggedIn: boolean;
   redirectToSignup: boolean;
 }> = ({ userLoggedIn, redirectToSignup }) => {
-  const location = useLocation();
   return userLoggedIn && redirectToSignup ? (
     <Switch>
       <IonRouterOutlet id="main">

@@ -15,7 +15,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
 import { backgroundColor } from '../../theme/global';
 import { css } from 'glamor';
-import { AttemptLogin } from '../../types/AttemptLogin';
 import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../../common/graphql/auth';
 import { authPageCSS, authCenterCardCSS } from './authCSS';
 import { AttemptLoginWithEmailLink } from '../../types/AttemptLoginWithEmailLink';

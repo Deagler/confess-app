@@ -6,7 +6,6 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonInput,
   IonButton,
   IonSpinner,
 } from '@ionic/react';

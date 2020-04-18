@@ -74,9 +74,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 
   const author = getAuthorQuery.data?.user;
 
-  const authorDisplayName = author
-    ? `${author.displayName}`
-    : 'unknown';
+  const authorDisplayName = author ? `${author.displayName}` : 'unknown';
   const authorCommunity = author?.community?.abbreviation ?? '';
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {

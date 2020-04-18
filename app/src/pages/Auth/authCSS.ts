@@ -1,4 +1,4 @@
-import { css } from "glamor";
+import { css } from 'glamor';
 
 export const authPageCSS = css({
   height: '100vh',

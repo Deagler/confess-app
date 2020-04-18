@@ -39,9 +39,9 @@ export interface Post {
   moderationStatus: ModerationStatus;
   moderationInfo: ModerationInfo | null;
   totalLikes: number;
-  likeRefs: Array<
-    FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
-  >;
+  likeRefs: FirebaseFirestore.DocumentReference<
+    FirebaseFirestore.DocumentData
+  >[];
   totalComments: number;
   comments: Comment[];
   communityId?: string;
@@ -61,9 +61,9 @@ export interface Comment {
   authorRef: FirestoreDocRef | null;
   content: string;
   totalLikes: number;
-  likeRefs: Array<
-    FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>
-  >;
+  likeRefs: FirebaseFirestore.DocumentReference<
+    FirebaseFirestore.DocumentData
+  >[];
   postId?: string;
   communityId?: string;
   isStarred?: boolean;
