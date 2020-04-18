@@ -1,13 +1,13 @@
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { Comment, Community, Post, User } from '../../typings';
+import { fillCriticalFieldsOnUser } from '../../utils/users';
 import {
   verifyComment,
   verifyCommunity,
   verifyPost,
 } from '../common/verification';
 import { addIdToDoc, addIsOP } from './utils';
-import { fillCriticalFieldsOnUser } from '../../utils/users';
 
 const firestore = firebaseApp.firestore();
 

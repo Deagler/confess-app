@@ -1,8 +1,8 @@
 import { UserInputError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { Comment, User } from '../../typings';
-import { addIdToDoc } from './utils';
 import { fillCriticalFieldsOnUser } from '../../utils/users';
+import { addIdToDoc } from './utils';
 
 export const commentResolvers = {
   async author(parent: any) {
