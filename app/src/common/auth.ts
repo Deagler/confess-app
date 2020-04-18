@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 export const REQUEST_FIREBASE_LOGIN_LINK = gql`
   mutation RequestFirebaseLink($userEmail: String!) {
-    requestFirebaseLoginLink(userEmail: $userEmail) @client {
+    requestFirebaseLoginLink(userEmail: $userEmail) {
       code
       success
       message
