@@ -24,6 +24,7 @@ import {
   IonCol,
   IonCardContent,
   IonIcon,
+  IonImg,
 } from '@ionic/react';
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
@@ -39,7 +40,7 @@ import { informationCircleOutline } from 'ionicons/icons';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
-
+import { storage } from '../services/firebase';
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -51,13 +52,14 @@ interface SubmitFormProps {
   setSelectedChannel(channel?: string): void;
   title?: string;
   setTitle(title?: string): void;
-  image?: string;
-  setImage(image?: string): void;
+  image?: File;
+  setImage(image?: File): void;
   confessionText?: string;
   setConfessionText(text?: string): void;
   authorAlias?: string;
   setAuthorAlias(alias?: string): void;
   onDisplayRules(): void;
+  imageUrl?: string;
 }
 
 const SubmitForm: React.FC<SubmitFormProps> = ({
@@ -66,6 +68,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   title,
   setImage,
   image,
+  imageUrl,
   setConfessionText,
   confessionText,
   authorAlias,
@@ -75,8 +78,12 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
   const imageUploadHandler = (event: any) => {
-    console.log(event.target.files[0].name);
+    const file = event.target.files[0];
+    setImage(file);
+    imageUrl = URL.createObjectURL(file);
+    console.log(imageUrl);
   };
+
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
@@ -117,7 +124,18 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Image</IonLabel>
-          <input type="file" onChange={imageUploadHandler} accept="image/*" />
+          <input
+            id="img"
+            type="file"
+            onChange={imageUploadHandler}
+            accept="image/*"
+          />
+          {imageUrl && (
+            <IonImg
+              style={{ width: '300px', height: '300px' }}
+              src={imageUrl}
+            />
+          )}
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>
@@ -158,7 +176,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
-  const [image, setImage] = useState<string>(); // url or something else?
+  const [image, setImage] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
   const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
@@ -175,7 +194,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const handleSubmit = async (
     channelId: string,
     postTitle: string,
-    _image: string,
+    _image: File,
     content: string,
     authorAliasInput?: string
   ) => {
@@ -195,6 +214,32 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
           authorAlias: authorAliasInput || '',
         },
       });
+      // TODO: Upload image to firestore
+      if (_image.name !== '') {
+        const uploadTask = storage.ref(`/images/${_image.name}`).put(_image);
+        uploadTask.on(
+          'state_changed',
+          (snapShot) => {
+            // takes a snap shot of the process as it is happening
+            console.log(snapShot);
+          },
+          (err) => {
+            // catches the errors
+            console.log(err);
+          },
+          () => {
+            // gets the functions from storage refences the image storage in firebase by the children
+            // gets the download url then sets the image from firebase as the value for the imgUrl key:
+            storage
+              .ref('images')
+              .child(_image.name)
+              .getDownloadURL()
+              .then((fireBaseUrl) => {
+                //  setImageUrl(prevObject => ({...prevObject, imageUrl: fireBaseUrl}))
+              });
+          }
+        );
+      }
 
       // success
       setConfessionText(undefined);
