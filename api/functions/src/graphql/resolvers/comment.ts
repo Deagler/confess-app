@@ -2,6 +2,7 @@ import { UserInputError } from 'apollo-server-express';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { Comment, User } from '../../typings';
 import { addIdToDoc } from './utils';
+import { fillCriticalFieldsOnUser } from '../../utils/users';
 
 export const commentResolvers = {
   async author(parent: any) {
@@ -10,8 +11,15 @@ export const commentResolvers = {
     if (!author.exists) {
       throw new UserInputError(`user with id ${parent.authorRef.id} not found`);
     }
+    let authorData = addIdToDoc(author) as User | undefined;
 
-    return addIdToDoc(author) as User | undefined;
+    if (!authorData) {
+      return undefined;
+    }
+
+    authorData = fillCriticalFieldsOnUser(authorData);
+
+    return authorData;
   },
   async isCommentLikedByUser(parent: any, _, context) {
     // pull user from request context

@@ -7,16 +7,9 @@ import {
   verifyPost,
 } from '../common/verification';
 import { addIdToDoc, addIsOP } from './utils';
+import { fillCriticalFieldsOnUser } from '../../utils/users';
 
 const firestore = firebaseApp.firestore();
-
-function fillCriticalFieldsOnUser(userData: User) {
-  if (!userData.displayName) {
-    userData.displayName = userData['firstName'] || '#Unknown#';
-  }
-
-  return userData;
-}
 
 export const queryResolvers = {
   async post(
