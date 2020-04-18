@@ -40,7 +40,7 @@ export const LocalUserDetail: React.FC<{
 
           <div {...userInfoContainer}>
             <IonLabel>
-              <strong>{`${user.firstName} ${user.lastName}`}</strong>
+              <strong>{`${user.displayName}`}</strong>
             </IonLabel>
             <Tooltip
               arrow={true}

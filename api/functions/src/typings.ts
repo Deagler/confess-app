@@ -16,8 +16,7 @@ export type FirestoreDocRef = FirebaseFirestore.DocumentReference<
 export interface User {
   id: string;
   communityUsername: string;
-  firstName: string;
-  lastName: string;
+  displayName: string;
   email: string;
   communityRef: FirestoreDocRef | null;
   community?: Community | null;

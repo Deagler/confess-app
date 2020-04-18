@@ -10,8 +10,7 @@ import {
 import React, { useState } from 'react';
 
 export const SignupCardContent: React.FC<any> = ({ mutationInfo, submit }) => {
-  const [firstName, setFirstName] = useState<string>();
-  const [lastName, setLastName] = useState<string>();
+  const [displayName, setDisplayName] = useState<string>();
   return (
     <IonCardContent>
       <IonGrid>
@@ -19,24 +18,17 @@ export const SignupCardContent: React.FC<any> = ({ mutationInfo, submit }) => {
           <IonCol>
             <IonInput
               style={{ maxWidth: '400px', minWidth: '250px' }}
-              placeholder={'Enter your first name.'}
-              value={firstName}
-              onIonChange={(e) => setFirstName(e.detail.value!)}
-            />
-          </IonCol>
-          <IonCol>
-            <IonInput
-              style={{ maxWidth: '400px', minWidth: '250px' }}
-              placeholder={'Enter your last name.'}
-              onIonChange={(e) => setLastName(e.detail.value!)}
+              placeholder={'Enter a display name.'}
+              value={displayName}
+              onIonChange={(e) => setDisplayName(e.detail.value!)}
             />
           </IonCol>
         </IonRow>
         <IonRow>
           <IonCol>
             <IonButton
-              disabled={!firstName && !lastName}
-              onClick={() => submit(firstName, lastName)}
+              disabled={!displayName}
+              onClick={() => submit(displayName)}
               fill="solid"
             >
               {mutationInfo.loading ? <IonSpinner /> : 'Signup'}

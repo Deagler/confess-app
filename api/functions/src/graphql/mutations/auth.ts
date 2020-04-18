@@ -22,7 +22,7 @@ function IsSupportedEmailTLD(emailToValidate: string): boolean {
   );
 }
 
-async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
+async function attemptSignUp(_: any, { displayName }, context: any) {
   const userRecord: UserRecord = context.req.user;
 
   if (!userRecord || !userRecord.email) {
@@ -50,8 +50,7 @@ async function attemptSignUp(_: any, { firstName, lastName }, context: any) {
 
   const newUserData: Partial<User> = {
     communityUsername,
-    firstName,
-    lastName,
+    displayName,
     email: userRecord.email,
     communityRef: null,
   };

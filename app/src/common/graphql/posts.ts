@@ -30,8 +30,7 @@ export const GET_POST_BY_ID = gql`
           content
           author {
             id
-            firstName
-            lastName
+            displayName
             communityUsername
             community {
               id
@@ -69,8 +68,7 @@ export const GET_POST_COMMENTS_ONLY = gql`
           creationTimestamp
           author {
             id
-            firstName
-            lastName
+            displayName
             communityUsername
             community {
               id

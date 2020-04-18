@@ -29,7 +29,7 @@ export const queryResolvers = {
   },
   async user(_: null, args: { id: string }) {
     const user = await firestore.doc(`users/${args.id}`).get();
-
+  
     return addIdToDoc(user) as User | undefined;
   },
   async community(_: null, args: { id: string }) {

@@ -26,8 +26,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     communityUsername: String!
-    firstName: String!
-    lastName: String!
+    displayName: String!
     email: String!
     community: Community
     isAdmin: Boolean
@@ -165,7 +164,7 @@ const typeDefs = gql`
       authorAlias: String
     ): PostUpdatedResponse
 
-    attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse
+    attemptSignUp(displayName: String!): AttemptSignupResponse
 
     submitComment(
       communityId: ID!

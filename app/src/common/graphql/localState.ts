@@ -13,8 +13,7 @@ export const GET_LOCAL_USER = gql`
     localUser @client {
       id
       communityUsername
-      firstName
-      lastName
+      displayName
       email
       community {
         id

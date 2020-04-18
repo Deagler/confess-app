@@ -9,4 +9,11 @@ export const userResolvers = {
 
     return addIdToDoc(await parent.communityRef.get()) as Community | undefined;
   },
+  async displayName(parent: User) {
+    if (!parent.displayName) {
+      return parent['firstName'] || '#Unknown#';
+    }
+
+    return parent.displayName;
+  },
 };

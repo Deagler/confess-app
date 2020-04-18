@@ -22,15 +22,14 @@ export const ATTEMPT_LOGIN_WITH_EMAIL_LINK = gql`
 `;
 
 export const ATTEMPT_SIGNUP = gql`
-  mutation AttemptSignup($firstName: String!, $lastName: String!) {
-    attemptSignUp(firstName: $firstName, lastName: $lastName) {
+  mutation AttemptSignup($displayName: String!) {
+    attemptSignUp(displayName: $displayName) {
       code
       success
       message
       user {
         id
-        firstName
-        lastName
+        displayName
         communityUsername
         email
         community {

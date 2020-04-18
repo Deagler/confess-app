@@ -184,10 +184,10 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           return (
             <SignupCardContent
               mutationInfo={attemptSignupInfo}
-              submit={async (firstName, lastName) => {
+              submit={async (displayName) => {
                 try {
                   await attemptSignupMutation({
-                    variables: { firstName, lastName },
+                    variables: { displayName },
                   });
                 } catch (e) {
                   navigateToFeed();

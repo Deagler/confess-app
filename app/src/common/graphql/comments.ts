@@ -15,8 +15,7 @@ export const SUBMIT_COMMENT = gql`
         creationTimestamp
         author {
           id
-          firstName
-          lastName
+          displayName
           communityUsername
           community {
             id
@@ -51,8 +50,7 @@ export const SERVER_TOGGLE_LIKE_COMMENT = gql`
         id
         author {
           id
-          firstName
-          lastName
+          displayName
           communityUsername
           community {
             id
@@ -83,8 +81,7 @@ export const TOGGLE_STAR_COMMENT = gql`
         id
         author {
           id
-          firstName
-          lastName
+          displayName
           communityUsername
           community {
             id

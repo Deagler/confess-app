@@ -16,8 +16,7 @@ export interface SubmitComment_submitComment_comment_author_community {
 export interface SubmitComment_submitComment_comment_author {
   __typename: "User";
   id: string;
-  firstName: string;
-  lastName: string;
+  displayName: string;
   communityUsername: string;
   community: SubmitComment_submitComment_comment_author_community | null;
   starCount: number | null;
