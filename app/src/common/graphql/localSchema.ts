@@ -16,7 +16,6 @@ export const typeDefs = gql`
     code: String!
     success: Boolean!
     message: String!
-    authState: AuthState
   }
 
   extend type Mutation {

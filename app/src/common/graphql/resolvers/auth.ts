@@ -6,7 +6,7 @@ import {
   NormalizedCacheObject,
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
-import { GetUserById } from '../../../types/GetUserById';
+import { GetUserById, GetUserById_user } from '../../../types/GetUserById';
 import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../../utils';
 
 function persistAuthState(apolloCache, authState) {
@@ -24,6 +24,51 @@ function persistAuthState(apolloCache, authState) {
   });
 
   localStorage.setItem('authState', JSON.stringify(authState));
+}
+
+const supportedSignupFields = ['displayName'];
+function isUserMissingFields(userData: GetUserById_user) {
+  return supportedSignupFields.some((val) => !userData[val]);
+}
+
+async function attemptLogin(_, __, { cache, client }) {
+  const apolloClient: ApolloClient<NormalizedCacheObject> = client;
+  const currentUser = firebaseApp.auth().currentUser!;
+
+  // Existing user: let's retrieve data from backend.
+  const data = await apolloClient.query<GetUserById>({
+    query: GET_USER_BY_ID,
+    variables: {
+      id: currentUser.uid,
+      disableSafeMode: true,
+    },
+  });
+
+  if (!data.data.user || isUserMissingFields(data.data.user)) {
+    return {
+      code: 'auth/new_user',
+      success: true,
+      message: "Logged in. Let's take you to the signup page.",
+      __typename: 'LoginResponse',
+    };
+  }
+
+  if (data.data.user.community?.isEnabled) {
+    localStorage.setItem('selectedCommunityId', data.data.user.community.id);
+  } else {
+    localStorage.setItem('selectedCommunityId', 'O0jkcLwMRy77krkmAT2q');
+  }
+
+  firebaseAnalytics.logEvent('login', { method: 'passwordless' });
+
+  /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
+
+  return {
+    code: 'auth/logged_in',
+    success: true,
+    message: 'Successfully logged in.',
+    __typename: 'LoginResponse',
+  };
 }
 
 async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
@@ -104,42 +149,6 @@ async function attemptLoginWithEmailLink(
         __typename: 'LoginResponse',
       };
     }
-
-    // Existing user: let's retrieve data from backend.
-    const data = await apolloClient.query<GetUserById>({
-      query: GET_USER_BY_ID,
-      variables: {
-        id: currentUser.uid,
-      },
-    });
-
-    if (!data.data.user) {
-      return {
-        code: 'auth/new_user',
-        success: true,
-        message: "Logged in. Let's take you to the signup page.",
-        authState,
-        __typename: 'LoginResponse',
-      };
-    }
-
-    if (data.data.user.community?.isEnabled) {
-      localStorage.setItem('selectedCommunityId', data.data.user.community.id);
-    } else {
-      localStorage.setItem('selectedCommunityId', 'O0jkcLwMRy77krkmAT2q');
-    }
-
-    firebaseAnalytics.logEvent('login', { method: 'passwordless' });
-
-    /** DO CHECK FOR MISSING FIELDS HERE WITH SIGNUP DIALOG VALIDATOR */
-
-    return {
-      code: 'auth/logged_in',
-      success: true,
-      message: 'Successfully logged in.',
-      authState,
-      __typename: 'LoginResponse',
-    };
   } catch (e) {
     throw new ApolloError({
       errorMessage: 'Error logging in. Redirecting to Confess.',

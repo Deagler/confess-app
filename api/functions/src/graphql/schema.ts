@@ -109,7 +109,7 @@ const typeDefs = gql`
 
   type Query {
     post(communityId: ID!, postId: ID!): Post
-    user(id: ID!): User
+    user(id: ID!, disableSafeMode: Boolean): User
     community(id: ID!): Community
     communities: [Community]!
     comment(communityId: ID!, postId: ID!, commentId: ID!): Comment

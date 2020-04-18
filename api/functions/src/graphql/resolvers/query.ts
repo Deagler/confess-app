@@ -10,6 +10,14 @@ import { addIdToDoc, addIsOP } from './utils';
 
 const firestore = firebaseApp.firestore();
 
+function fillCriticalFieldsOnUser(userData: User) {
+  if (!userData.displayName) {
+    userData.displayName = userData['firstName'] || '#Unknown#';
+  }
+
+  return userData;
+}
+
 export const queryResolvers = {
   async post(
     _: null,
@@ -27,10 +35,20 @@ export const queryResolvers = {
 
     return postWithId;
   },
-  async user(_: null, args: { id: string }) {
+  async user(_: null, args: { id: string; disableSafeMode: boolean }) {
     const user = await firestore.doc(`users/${args.id}`).get();
-  
-    return addIdToDoc(user) as User | undefined;
+
+    let userData = addIdToDoc(user) as User | undefined;
+
+    if (!userData) {
+      return undefined;
+    }
+
+    if (!args.disableSafeMode) {
+      userData = fillCriticalFieldsOnUser(userData);
+    }
+
+    return userData;
   },
   async community(_: null, args: { id: string }) {
     const { communityDoc } = await verifyCommunity(args.id, false);
