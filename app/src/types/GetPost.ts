@@ -54,6 +54,7 @@ export interface GetPost_post {
   isLikedByUser: boolean;
   isOriginalPoster: boolean;
   totalComments: number;
+  channelId: string;
   comments: GetPost_post_comments;
 }
 

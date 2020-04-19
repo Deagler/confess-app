@@ -56,7 +56,7 @@ const AdminPage: React.FC = () => {
 
         <IonContent>
           <div className="contentContainer">
-            <h4 className="ion-hide-lg-down ion-margin-top">
+            <h4 className="ion-hide-lg-down ion-margin-top ion-margin-horizontal">
               <strong>Admin Portal</strong>
             </h4>
             {loading ? (

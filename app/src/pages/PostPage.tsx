@@ -39,12 +39,13 @@ const Postpage: React.FC = () => {
   const { id: postId } = useParams();
   const {
     data,
-    loading,
+    loading: postLoading,
     error,
     hasMoreComments,
     fetchMoreComments,
     updateQuery,
   } = usePaginatedPostQuery(postId!);
+  const loading = !data?.post && postLoading;
 
   const handleCommentCreated = (
     newComment: SubmitComment_submitComment_comment
@@ -106,6 +107,7 @@ const Postpage: React.FC = () => {
                   {...data.post}
                   onCommentClick={() => newCommentElement.current!.setFocus()}
                   collapsable={false}
+                  showChannel={true}
                 />
               ))}
           </div>
@@ -123,7 +125,7 @@ const Postpage: React.FC = () => {
           )) ||
             (data?.post?.comments?.items.length !== 0 && (
               <IonCard className="ion-margin">
-                <IonList style={{ paddingTop: 0 }}>
+                <IonList style={{ paddingTop: 0, paddingBottom: 0 }}>
                   {data?.post?.comments?.items.map(
                     (
                       comment: GetPost_post_comments_items | null,
@@ -140,9 +142,9 @@ const Postpage: React.FC = () => {
                     )
                   )}
                 </IonList>
-                <br />
                 <IonInfiniteScroll
                   threshold="100px"
+                  className="ion-padding-top"
                   disabled={!hasMoreComments}
                   onIonInfinite={fetchMoreComments}
                 >

@@ -46,6 +46,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
+  console.log(channelId)
 
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
@@ -101,6 +102,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
                     history.push(buildLink(`/posts/${post.id}`, communityId))
                   }
                   collapsable={true}
+                  showChannel={!channelId}
                 />
               )))}
           <br />

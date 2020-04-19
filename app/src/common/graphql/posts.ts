@@ -19,6 +19,7 @@ export const GET_POST_BY_ID = gql`
       isLikedByUser
       isOriginalPoster
       totalComments
+      channelId
       comments(
         sortBy: $sortCommentsBy
         limit: $commentsLimit

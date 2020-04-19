@@ -21,6 +21,7 @@ export interface GetCommunityPosts_community_feed_items {
   totalComments: number;
   isLikedByUser: boolean;
   isOriginalPoster: boolean;
+  channelId: string;
 }
 
 export interface GetCommunityPosts_community_feed {
