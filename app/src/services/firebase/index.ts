@@ -1,7 +1,6 @@
 import * as rawFirebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/analytics';
-import firebase from 'firebase/app';
 import 'firebase/storage';
 const firebaseConfig = {
   apiKey: 'AIzaSyDHHKY6qm3nAznBa8hj3XDqJGZXowu6rxU',
@@ -18,7 +17,6 @@ const firebaseConfig = {
 export const firebaseApp = rawFirebase.initializeApp(firebaseConfig);
 
 export const firebaseAnalytics = firebaseApp.analytics();
-export const storage = firebase.storage();
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   firebaseAnalytics.setAnalyticsCollectionEnabled(false);
 } else {

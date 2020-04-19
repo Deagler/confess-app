@@ -40,7 +40,7 @@ import { informationCircleOutline } from 'ionicons/icons';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
-import { storage } from '../services/firebase';
+import { uploadImageToCloudStorage } from '../common/firebase/cloudStorage';
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -193,6 +193,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
   >(SUBMIT_POST_FOR_APPROVAL);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<Error>();
 
   const handleSubmit = async (
     channelId: string,
@@ -208,6 +210,11 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     // TODO: add input validation
     try {
+      setUploadLoading(true);
+      const uploadKey: string = await uploadImageToCloudStorage(_image);
+      console.log('successfully uploaded to', uploadKey);
+      setUploadLoading(false);
+
       await submitPostForApproval({
         variables: {
           communityId,
@@ -217,32 +224,6 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
           authorAlias: authorAliasInput || '',
         },
       });
-      // TODO: Upload image to firestore
-      if (_image.name !== '') {
-        const uploadTask = storage.ref(`/images/${_image.name}`).put(_image);
-        uploadTask.on(
-          'state_changed',
-          (snapShot) => {
-            // takes a snap shot of the process as it is happening
-            console.log(snapShot);
-          },
-          (err) => {
-            // catches the errors
-            console.log(err);
-          },
-          () => {
-            // gets the functions from storage refences the image storage in firebase by the children
-            // gets the download url then sets the image from firebase as the value for the imgUrl key:
-            storage
-              .ref('images')
-              .child(_image.name)
-              .getDownloadURL()
-              .then((fireBaseUrl) => {
-                //  setImageUrl(prevObject => ({...prevObject, imageUrl: fireBaseUrl}))
-              });
-          }
-        );
-      }
 
       // success
       setConfessionText(undefined);
@@ -266,6 +247,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       history.goBack();
       return;
     } catch (e) {
+      console.error(e);
+      setUploadLoading(false);
+      setUploadError(e);
+      setSubmitShowModal(false);
       firebaseAnalytics.logEvent('exception', {
         description: `submit_page/${e.message}`,
         channelId,
@@ -282,11 +267,15 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         duration={2000}
         onDidDismiss={() => setSuccessToastVisible(false)}
       />
-      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonToast
+        isOpen={!!error || !!uploadError}
+        message={error?.message || uploadError?.message}
+        duration={2000}
+      />
       <SubmissionRulesModal
         isOpen={showSubmitModal}
         onDidDismiss={() => setSubmitShowModal(false)}
-        loadingSubmit={loading}
+        loadingSubmit={loading || uploadLoading}
         onSubmit={() =>
           handleSubmit(
             selectedChannel!,
@@ -363,7 +352,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                       color="primary"
                       expand="block"
                     >
-                      {loading ? <IonSpinner /> : 'Submit'}
+                      {loading || uploadLoading ? <IonSpinner /> : 'Submit'}
                     </IonButton>
                   </IonCol>
                 </IonRow>
