@@ -126,7 +126,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="stacked">Image</IonLabel>
+          <IonLabel position="stacked">Image (optional)</IonLabel>
           <input
             id="img"
             type="file"
@@ -210,6 +210,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     // TODO: add input validation
     try {
+      setUploadError(undefined);
       setUploadLoading(true);
       const uploadKey: string = await uploadImageToCloudStorage(_image);
       console.log('successfully uploaded to', uploadKey);
