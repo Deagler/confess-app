@@ -92,6 +92,7 @@ const typeDefs = gql`
     channelId: String!
     title: String!
     content: String!
+    imageRef: String
 
     moderationStatus: ModerationStatus!
     moderationInfo: ModerationInfo
@@ -169,6 +170,7 @@ const typeDefs = gql`
       title: String!
       content: String!
       authorAlias: String
+      imageRef: String
     ): PostUpdatedResponse
 
     attemptSignUp(firstName: String, lastName: String): AttemptSignupResponse

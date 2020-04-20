@@ -223,6 +223,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
           title: postTitle,
           content,
           authorAlias: authorAliasInput || '',
+          imageRef: uploadKey,
         },
       });
 
