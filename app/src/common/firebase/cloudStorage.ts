@@ -18,3 +18,7 @@ export async function uploadImageToCloudStorage(image: File): Promise<string> {
 
   return key;
 }
+
+export async function getDownloadUrl(key: string): Promise<string> {
+  return await firebaseApp.storage().ref(key).getDownloadURL();
+}

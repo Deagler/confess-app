@@ -20,6 +20,7 @@ export const GET_POST_BY_ID = gql`
       isOriginalPoster
       totalComments
       channelId
+      imageRef
       comments(
         sortBy: $sortCommentsBy
         limit: $commentsLimit

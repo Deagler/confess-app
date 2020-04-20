@@ -22,6 +22,7 @@ export interface GetCommunityPosts_community_feed_items {
   isLikedByUser: boolean;
   isOriginalPoster: boolean;
   channelId: string;
+  imageRef: string | null;
 }
 
 export interface GetCommunityPosts_community_feed {

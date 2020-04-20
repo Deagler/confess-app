@@ -28,6 +28,7 @@ export const GET_COMMUNITY_POSTS = gql`
           isLikedByUser
           isOriginalPoster
           channelId
+          imageRef
         }
         cursor
       }
