@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -20,12 +20,7 @@ import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
-import {
-  chatbox,
-  heartOutline,
-  timeOutline,
-  chatboxOutline,
-} from 'ionicons/icons';
+import { chatbox } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
@@ -35,13 +30,8 @@ import {
   useSelectedCommunity,
   useSelectedChannel,
 } from '../customHooks/location';
-import { Select, MenuItem } from '@material-ui/core';
 import { css } from 'glamor';
-
-const iconStyles = css({
-  marginRight: '12px',
-  fontSize: '22px',
-});
+import FeedPageSortSelect from '../components/FeedPageSortSelect';
 
 const feedInfoItems = css({
   flex: 1,
@@ -69,7 +59,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
 
-  const handleSortChange = (e) => {
+  const handleSortPropertyChange = (e) => {
     setSortProperty(e.target.value);
   };
 
@@ -92,25 +82,32 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
       <IonContent>
         <div className="contentContainer">
-          <div className="ion-hide-lg-up ion-margin ion-padding">
-            <ButtonDisabledTooltip
-              action="confess"
-              userLoggedIn={userLoggedIn}
-              userHasCommunity={userHasCommunity}
-              userNotFromSelectedComm={!userFromSelectedComm}
-            >
-              <IonButton
-                expand="block"
-                routerLink={buildLink('/submit', communityId)}
-                routerDirection="forward"
-                disabled={
-                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
-                }
+          <div className="ion-hide-lg-up">
+            <div className="ion-margin">
+              <ButtonDisabledTooltip
+                action="confess"
+                userLoggedIn={userLoggedIn}
+                userHasCommunity={userHasCommunity}
+                userNotFromSelectedComm={!userFromSelectedComm}
               >
-                <IonIcon color="white" slot="start" icon={chatbox} />
-                New Confession
-              </IonButton>
-            </ButtonDisabledTooltip>
+                <IonButton
+                  expand="block"
+                  routerLink={buildLink('/submit', communityId)}
+                  routerDirection="forward"
+                  disabled={
+                    !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                  }
+                >
+                  <IonIcon color="white" slot="start" icon={chatbox} />
+                  New Confession
+                </IonButton>
+              </ButtonDisabledTooltip>
+            </div>
+            <FeedPageSortSelect
+              className="ion-margin-horizontal"
+              sortProperty={sortProperty}
+              onSortPropertyChange={handleSortPropertyChange}
+            />
           </div>
           <div
             className="ion-hide-lg-down ion-margin-top ion-margin-horizontal"
@@ -119,28 +116,10 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
             <h4>
               <strong>Feed</strong>
             </h4>
-
-            <Select
-              value={sortProperty}
-              onChange={handleSortChange}
-              disableUnderline={true}
-              SelectDisplayProps={{
-                style: { display: 'flex', alignItems: 'center' },
-              }}
-            >
-              <MenuItem value="postNumber">
-                <IonIcon slot="start" icon={timeOutline} {...iconStyles} />
-                Newest
-              </MenuItem>
-              <MenuItem value="totalLikes">
-                <IonIcon slot="start" icon={heartOutline} {...iconStyles} />
-                Most likes
-              </MenuItem>
-              <MenuItem value="totalComments">
-                <IonIcon slot="start" icon={chatboxOutline} {...iconStyles} />
-                Most comments
-              </MenuItem>
-            </Select>
+            <FeedPageSortSelect
+              sortProperty={sortProperty}
+              onSortPropertyChange={handleSortPropertyChange}
+            />
           </div>
           {(loading && <FeedSkeleton />) ||
             (data?.community?.feed?.items &&
