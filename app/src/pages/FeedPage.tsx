@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -20,7 +20,12 @@ import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
 import { appPageCSS } from '../theme/global';
-import { chatbox } from 'ionicons/icons';
+import {
+  chatbox,
+  heartOutline,
+  timeOutline,
+  chatboxOutline,
+} from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
@@ -30,6 +35,13 @@ import {
   useSelectedCommunity,
   useSelectedChannel,
 } from '../customHooks/location';
+import { Select, MenuItem } from '@material-ui/core';
+import { css } from 'glamor';
+
+const iconStyles = css({
+  marginRight: '12px',
+  fontSize: '22px',
+});
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -46,7 +58,12 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
-  console.log(channelId)
+  const [sortOrder, setSortOrder] = useState<string>('Newest');
+
+  const handleSortChange = (e) => {
+    console.log(e.target.value);
+    setSortOrder(e.target.value);
+  };
 
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
@@ -87,11 +104,42 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
               </IonButton>
             </ButtonDisabledTooltip>
           </div>
+          <div
+            className="ion-hide-lg-down ion-margin-top ion-margin-horizontal"
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+            }}
+          >
+            <h4>
+              <strong>Feed</strong>
+            </h4>
 
-          <h4 className="ion-hide-lg-down ion-margin-top ion-margin-horizontal">
-            <strong>Feed</strong>
-          </h4>
-
+            <Select
+              value={sortOrder}
+              onChange={handleSortChange}
+              disableUnderline={true}
+              SelectDisplayProps={{
+                style: { display: 'flex', alignItems: 'center' },
+              }}
+            >
+              <MenuItem value="Newest">
+                <IonIcon slot="start" icon={timeOutline} {...iconStyles} />
+                Newest
+              </MenuItem>
+              <MenuItem value="Most likes">
+                <IonIcon slot="start" icon={heartOutline} {...iconStyles} />
+                Most likes
+              </MenuItem>
+              <MenuItem value="Most comments">
+                <IonIcon slot="start" icon={chatboxOutline} {...iconStyles} />
+                Most comments
+              </MenuItem>
+            </Select>
+          </div>
           {(loading && <FeedSkeleton />) ||
             (data?.community?.feed?.items &&
               data?.community?.feed?.items.map((post, i: number) => (
