@@ -28,13 +28,13 @@ const COMMENT_PAGE_LIMIT = 5;
 
 export const usePaginatedFeedQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
+  const [sortProperty, setSortProperty] = useState<string>('postNumber');
   const communityId = useSelectedCommunity();
 
   const feedVariables: GetCommunityPostsVariables = {
     id: communityId!,
     sortBy: {
-      // TODO: Add sorting to the UI
-      property: 'creationTimestamp',
+      property: sortProperty,
       direction: Direction.DESC,
     },
     limit: POST_PAGE_LIMIT,
@@ -84,6 +84,8 @@ export const usePaginatedFeedQuery = () => {
     hasMorePosts,
     fetchMorePosts,
     setHasMorePosts,
+    sortProperty,
+    setSortProperty,
   };
 };
 
@@ -106,7 +108,7 @@ export const usePaginatedUnapprovedPostsQuery = () => {
     GetCommunityUnapprovedPostsVariables
   >(GET_COMMUNITY_UNAPPROVED_POSTS, {
     variables: feedVariables,
-    skip: !communityId
+    skip: !communityId,
   });
 
   const fetchMorePosts = async (e: CustomEvent<void>) => {

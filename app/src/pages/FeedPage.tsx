@@ -43,6 +43,14 @@ const iconStyles = css({
   fontSize: '22px',
 });
 
+const feedInfoItems = css({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+});
+
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
     data,
@@ -50,6 +58,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     hasMorePosts,
     fetchMorePosts,
     setHasMorePosts,
+    sortProperty,
+    setSortProperty,
   } = usePaginatedFeedQuery();
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
@@ -58,11 +68,9 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
-  const [sortOrder, setSortOrder] = useState<string>('Newest');
 
   const handleSortChange = (e) => {
-    console.log(e.target.value);
-    setSortOrder(e.target.value);
+    setSortProperty(e.target.value);
   };
 
   // looks for more posts when channel changes
@@ -106,35 +114,29 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
           </div>
           <div
             className="ion-hide-lg-down ion-margin-top ion-margin-horizontal"
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-            }}
+            {...feedInfoItems}
           >
             <h4>
               <strong>Feed</strong>
             </h4>
 
             <Select
-              value={sortOrder}
+              value={sortProperty}
               onChange={handleSortChange}
               disableUnderline={true}
               SelectDisplayProps={{
                 style: { display: 'flex', alignItems: 'center' },
               }}
             >
-              <MenuItem value="Newest">
+              <MenuItem value="postNumber">
                 <IonIcon slot="start" icon={timeOutline} {...iconStyles} />
                 Newest
               </MenuItem>
-              <MenuItem value="Most likes">
+              <MenuItem value="totalLikes">
                 <IonIcon slot="start" icon={heartOutline} {...iconStyles} />
                 Most likes
               </MenuItem>
-              <MenuItem value="Most comments">
+              <MenuItem value="totalComments">
                 <IonIcon slot="start" icon={chatboxOutline} {...iconStyles} />
                 Most comments
               </MenuItem>
