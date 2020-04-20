@@ -156,6 +156,12 @@ const typeDefs = gql`
     message: String!
   }
 
+  type LinkRequestedResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type Mutation {
     submitPostForApproval(
       communityId: ID!
@@ -194,6 +200,8 @@ const typeDefs = gql`
       postId: ID!
       commentId: ID!
     ): CommentUpdatedResponse
+
+    requestFirebaseLoginLink(userEmail: String!): LinkRequestedResponse
   }
 `;
 

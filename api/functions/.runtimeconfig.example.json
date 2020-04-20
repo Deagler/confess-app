@@ -1,0 +1,8 @@
+{
+  "confess": {
+    "appurl": "http://localhost:3000/"
+  },
+  "sendgrid": {
+    "apikey": "<ask sukhans for key>"
+  }
+}
