@@ -150,14 +150,15 @@ export const usePaginatedUnapprovedPostsQuery = () => {
 
 export const usePaginatedPostQuery = (postId: string) => {
   const communityId = useSelectedCommunity();
+  const [sortCommentsBy, setSortCommentsBy] = useState<string>('totalLikes');
 
   const postVariables: GetPostVariables = {
     communityId: communityId!,
     postId,
     // TODO: Connect sorting to UI
     sortCommentsBy: {
-      property: 'creationTimestamp',
-      direction: Direction.ASC,
+      property: sortCommentsBy,
+      direction: Direction.DESC,
     },
     commentsLimit: COMMENT_PAGE_LIMIT,
   };
@@ -212,5 +213,11 @@ export const usePaginatedPostQuery = (postId: string) => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return { ...useQueryVariables, hasMoreComments, fetchMoreComments };
+  return {
+    ...useQueryVariables,
+    hasMoreComments,
+    fetchMoreComments,
+    sortCommentsBy,
+    setSortCommentsBy,
+  };
 };
