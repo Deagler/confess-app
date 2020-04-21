@@ -6,7 +6,6 @@ import { css } from 'glamor';
 
 const iconStyles = css({
   marginRight: '12px',
-  marginLeft: '12px',
   fontSize: '22px',
 });
 
@@ -33,7 +32,7 @@ const CommentSortSelect: React.FC<CommentSortSelectProps> = ({
     onChange={onSortPropertyChange}
     disableUnderline={true}
     SelectDisplayProps={{
-      style: { display: 'flex', alignItems: 'center' },
+      style: { display: 'flex', alignItems: 'center', paddingLeft: '12px' },
     }}
   >
     <MenuItem value="totalLikes">
