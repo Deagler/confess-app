@@ -11,10 +11,14 @@ export async function uploadImageToCloudStorage(image: File): Promise<string> {
     );
   }
 
-  const key = `${uuid()}.${fileExtension}`;
+  const key = `images/${uuid()}.${fileExtension}`;
 
-  const imageRef = firebaseApp.storage().ref(`images/${key}`);
+  const imageRef = firebaseApp.storage().ref(key);
   await imageRef.put(image);
 
   return key;
+}
+
+export async function getDownloadUrl(key: string): Promise<string> {
+  return await firebaseApp.storage().ref(key).getDownloadURL();
 }

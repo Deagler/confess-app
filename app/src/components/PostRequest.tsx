@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -21,6 +21,7 @@ import { ApprovePost, ApprovePostVariables } from '../types/ApprovePost';
 import RejectPostModal from '../components/RejectPostModal';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
+import { getDownloadUrl } from '../common/firebase/cloudStorage';
 
 export interface PostRequestProps {
   id: string;
@@ -28,6 +29,7 @@ export interface PostRequestProps {
   creationTimestamp: number;
   content: string;
   authorAlias: string | null;
+  imageRef?: string | null;
   onModeration(): void;
 }
 
@@ -38,6 +40,7 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
     creationTimestamp,
     content,
     authorAlias,
+    imageRef,
     onModeration,
   } = props;
   const communityId = useSelectedCommunity();
@@ -45,6 +48,15 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
     ApprovePost,
     ApprovePostVariables
   >(APPROVE_POST);
+
+  const [imageURL, setImageURL] = useState<string>();
+  useEffect(() => {
+    if (imageRef) {
+      getDownloadUrl(imageRef)
+        .then((url) => setImageURL(url))
+        .catch((e) => console.error(e));
+    }
+  }, [imageRef]);
 
   const approveHandler = async () => {
     try {
@@ -89,7 +101,10 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
           </IonCardSubtitle>
         </IonCardHeader>
 
-        <IonCardContent>{content}</IonCardContent>
+        <IonCardContent>
+          {imageRef && <img src={imageURL} alt="post content" />}
+          <p>{content}</p>
+        </IonCardContent>
         <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
 
         <IonItemDivider color="white" />

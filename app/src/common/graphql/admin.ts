@@ -16,6 +16,7 @@ export const GET_COMMUNITY_UNAPPROVED_POSTS = gql`
           authorAlias
           creationTimestamp
           content
+          imageRef
         }
         cursor
       }

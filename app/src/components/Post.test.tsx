@@ -17,7 +17,6 @@ const props: PostProps = {
   isLikedByUser: false,
   isOriginalPoster: false,
   collapsable: false,
-  isOriginalPoster: false,
   showChannel: false,
   channelId: 'mockChannel',
 };

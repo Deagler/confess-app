@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -34,6 +34,7 @@ import { firebaseAnalytics } from '../services/firebase';
 import { Chip } from '@material-ui/core';
 import { GET_COMMUNITY_CHANNELS } from '../common/graphql/communities';
 import { GetCommunityChannels } from '../types/GetCommunityChannels';
+import { getDownloadUrl } from '../common/firebase/cloudStorage';
 
 export interface PostData {
   id: string;
@@ -48,6 +49,7 @@ export interface PostData {
   authorAlias?: string | null;
   channelId: string;
   showChannel: boolean;
+  imageRef?: string | null;
 }
 
 export interface PostProps extends PostData {
@@ -91,8 +93,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     isLikedByUser,
     isOriginalPoster,
     collapsable,
-    showChannel
+    showChannel,
+    imageRef,
   } = props;
+
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
@@ -100,6 +104,14 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [imageURL, setImageURL] = useState<string>();
+  useEffect(() => {
+    if (imageRef) {
+      getDownloadUrl(imageRef)
+        .then((url) => setImageURL(url))
+        .catch((e) => console.error(e));
+    }
+  }, [imageRef]);
 
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_POST
@@ -168,7 +180,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               <IonCardSubtitle>
                 {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
               </IonCardSubtitle>
-              <div style={{ flex: 1 }}></div>
+
+              <div style={{ flex: 1 }} />
 
               {showChannel && (
                 <Chip
@@ -186,11 +199,11 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           </IonCardHeader>
 
           <IonCardContent {...textColorCSS}>
+            {imageRef && <img src={imageURL} alt="post content" />}
             <p>
               {expanded || !collapsable
                 ? content
                 : truncateString(content, MAX_CONTENT_LENGTH)}
-              {'  '}
               {collapsable && content.length > MAX_CONTENT_LENGTH && (
                 <MaterialUILink
                   href="#"

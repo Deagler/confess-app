@@ -16,6 +16,7 @@ export interface GetCommunityUnapprovedPosts_community_unapprovedPosts_items {
   authorAlias: string | null;
   creationTimestamp: number;
   content: string;
+  imageRef: string | null;
 }
 
 export interface GetCommunityUnapprovedPosts_community_unapprovedPosts {

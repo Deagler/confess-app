@@ -15,6 +15,7 @@ export interface SubmitPostForApproval_submitPostForApproval_post {
   title: string;
   content: string;
   authorAlias: string | null;
+  imageRef: string | null;
   moderationStatus: ModerationStatus;
   creationTimestamp: number;
 }
@@ -37,4 +38,5 @@ export interface SubmitPostForApprovalVariables {
   title: string;
   content: string;
   authorAlias: string;
+  imageRef?: string | null;
 }

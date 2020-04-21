@@ -15,7 +15,7 @@ const firestore = firebaseApp.firestore();
 
 async function submitPostForApproval(
   _: any,
-  { communityId, channelId, title, content, authorAlias },
+  { communityId, channelId, title, content, authorAlias, imageRef },
   context: any
 ) {
   // pull user from request context
@@ -49,6 +49,7 @@ async function submitPostForApproval(
     totalComments: 0,
     totalLikes: 0,
     likeRefs: [],
+    imageRef,
   };
   const newPostRef = communityPosts.doc();
   await newPostRef.set(newPost);
