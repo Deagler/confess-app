@@ -27,7 +27,11 @@ const SignupCardContent: React.FC<{ mutationInfo; submit }> = ({
   submit,
 }) => {
   const [displayName, setDisplayName] = useState<string>();
-
+  const [revalidate, setRevalidate] = useState<boolean>();
+  function handleEnterDisplayName(e) {
+    setDisplayName(e.target.value);
+    setRevalidate(true);
+  }
   return (
     <IonCardContent>
       <IonGrid>
@@ -35,18 +39,22 @@ const SignupCardContent: React.FC<{ mutationInfo; submit }> = ({
           onSubmit={(e) => {
             e.preventDefault();
             submit(displayName);
+            setRevalidate(false);
           }}
         >
           <IonRow>
             <IonCol>
               <TextField
-                error={!!mutationInfo.error?.message}
-                helperText={mutationInfo.error?.message}
+                id="input"
+                error={revalidate ? undefined : !!mutationInfo.error?.message}
+                helperText={
+                  revalidate ? undefined : mutationInfo.error?.message
+                }
                 variant="outlined"
                 label={'Enter a display name'}
                 value={displayName}
                 style={{ maxWidth: '400px', minWidth: '250px' }}
-                onChange={(e) => setDisplayName(e.target.value)}
+                onChange={handleEnterDisplayName}
               />
             </IonCol>
           </IonRow>

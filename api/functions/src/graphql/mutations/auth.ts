@@ -6,7 +6,7 @@ import {
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { User } from '../../typings';
-
+import { validateDisplayName } from '../common/validation';
 const usersCollection = firebaseApp.firestore().collection('users');
 const communitiesCollection = firebaseApp.firestore().collection('communities');
 
@@ -16,14 +16,6 @@ async function getCommunityForEmailDomain(emailDomain) {
     .get();
 
   return !communityDoc.empty ? communityDoc.docs[0].ref : null;
-}
-
-async function IsDisplayNameUnique(displayName) {
-  const userDocs = await usersCollection
-    .where('displayNameId', '==', displayName.toLowerCase())
-    .get();
-  console.log(userDocs);
-  return userDocs.empty;
 }
 
 /** Temporary until Auth is moved to Serverside completely. */
@@ -52,14 +44,7 @@ async function attemptSignUp(_: any, args, context: any) {
       'Sorry! We only support .ac.nz, .edu.au and .edu emails right now.'
     );
   }
-
-  if (!displayName || !displayName.trim() || displayName.length > 24) {
-    throw new UserInputError('Invalid display name');
-  }
-
-  if (!(await IsDisplayNameUnique(displayName))) {
-    throw new UserInputError('This display name is not available.');
-  }
+  await validateDisplayName(displayName);
 
   const communityInfo = userRecord.email.split('@');
   const communityUsername = communityInfo[0];
