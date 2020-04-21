@@ -37,15 +37,15 @@ const FeedPageSortSelect: React.FC<FeedPageSortSelectProps> = ({
   >
     <MenuItem value="postNumber">
       <IonIcon slot="start" icon={timeOutline} {...iconStyles} />
-      Newest
+      New
     </MenuItem>
     <MenuItem value="totalLikes">
       <IonIcon slot="start" icon={heartOutline} {...iconStyles} />
-      Most likes
+      Top
     </MenuItem>
     <MenuItem value="totalComments">
       <IonIcon slot="start" icon={chatboxOutline} {...iconStyles} />
-      Most comments
+      Controversial
     </MenuItem>
   </Select>
 );
