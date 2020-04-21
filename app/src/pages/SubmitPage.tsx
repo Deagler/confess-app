@@ -196,13 +196,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<Error>();
 
-  const handleSubmit = async (
-    channelId: string,
-    postTitle: string,
-    _image: File,
-    content: string,
-    authorAliasInput?: string
-  ) => {
+  const handleSubmit = async () => {
     if (!communityId) {
       console.error('failed to submit post: communityId is not set');
       return;
@@ -212,17 +206,19 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     try {
       setUploadError(undefined);
       setUploadLoading(true);
-      const uploadKey: string = await uploadImageToCloudStorage(_image);
-      console.log('successfully uploaded to', uploadKey);
+      let uploadKey: string | null = null;
+      if (image) {
+        uploadKey = await uploadImageToCloudStorage(image);
+      }
       setUploadLoading(false);
 
       await submitPostForApproval({
         variables: {
           communityId,
-          channelId,
-          title: postTitle,
-          content,
-          authorAlias: authorAliasInput || '',
+          channelId: selectedChannel!,
+          title: title!,
+          content: confessionText!,
+          authorAlias: authorAlias || '',
           imageRef: uploadKey,
         },
       });
@@ -241,10 +237,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setSuccessToastVisible(true);
       firebaseAnalytics.logEvent('submit_post', {
         communityId,
-        channelId,
+        channelId: selectedChannel,
         title,
-        content,
-        authorAlias: authorAliasInput || '',
+        content: confessionText,
+        authorAlias,
       });
       history.goBack();
       return;
@@ -255,7 +251,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setSubmitShowModal(false);
       firebaseAnalytics.logEvent('exception', {
         description: `submit_page/${e.message}`,
-        channelId,
+        channelId: selectedChannel,
         communityId,
       });
     }
@@ -278,15 +274,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         isOpen={showSubmitModal}
         onDidDismiss={() => setSubmitShowModal(false)}
         loadingSubmit={loading || uploadLoading}
-        onSubmit={() =>
-          handleSubmit(
-            selectedChannel!,
-            title!,
-            image!,
-            confessionText!,
-            authorAlias
-          )
-        }
+        onSubmit={handleSubmit}
       />
       <SubmissionRulesModal
         isOpen={showInfoOnlyModal}
