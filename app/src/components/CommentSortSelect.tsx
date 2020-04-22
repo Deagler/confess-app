@@ -1,7 +1,7 @@
 import { Select, MenuItem } from '@material-ui/core';
 import React from 'react';
 import { IonIcon } from '@ionic/react';
-import { timeOutline, heartOutline, chatboxOutline } from 'ionicons/icons';
+import { timeOutline, heartOutline } from 'ionicons/icons';
 import { css } from 'glamor';
 
 const iconStyles = css({

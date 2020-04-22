@@ -33,7 +33,6 @@ import {
 import { buildLink } from '../utils';
 import { firebaseAnalytics } from '../services/firebase';
 import { GetPost_post_comments_items } from '../types/GetPost';
-import FeedPageSortSelect from '../components/FeedPageSortSelect';
 import CommentSortSelect from '../components/CommentSortSelect';
 
 const Postpage: React.FC = () => {
