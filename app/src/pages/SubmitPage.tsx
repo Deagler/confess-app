@@ -29,7 +29,7 @@ import {
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
-import { RouteComponentProps, useHistory } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
@@ -82,15 +82,12 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
-  const history = useHistory();
-  const [removeTrigger, setRemoveTrigger] = useState<boolean>();
   async function imageUploadHandler(event: any) {
     const file: File = event.target.files[0];
     if (file.size < 5242880) {
       setImage(file);
       const url: string = URL.createObjectURL(file);
       setImageURL(url);
-      setRemoveTrigger(false);
     } else {
       alert('Too large Image. Only image smaller than 2MB can be uploaded.');
     }
