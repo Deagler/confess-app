@@ -29,7 +29,7 @@ import {
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
 import { SUBMIT_POST_FOR_APPROVAL } from '../common/graphql/posts';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory } from 'react-router';
 import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
@@ -43,6 +43,8 @@ import { firebaseAnalytics } from '../services/firebase';
 import { uploadImageToCloudStorage } from '../common/firebase/cloudStorage';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 import { buildLink } from '../utils';
+import { css } from 'glamor';
+
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -80,14 +82,55 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
-
-  const imageUploadHandler = (event: any) => {
+  const history = useHistory();
+  const [removeTrigger, setRemoveTrigger] = useState<boolean>();
+  async function imageUploadHandler(event: any) {
     const file: File = event.target.files[0];
-    setImage(file);
+    if (file.size < 5242880) {
+      setImage(file);
+      const url: string = URL.createObjectURL(file);
+      setImageURL(url);
+      setRemoveTrigger(false);
+    } else {
+      alert('Too large Image. Only image smaller than 2MB can be uploaded.');
+    }
+  }
 
-    const url: string = URL.createObjectURL(file);
-    setImageURL(url);
-  };
+  const loadingContainer = css({
+    margin: '0',
+    padding: '2rem 1.5rem',
+  });
+
+  const closeButton = css({
+    position: 'absolute',
+    top: '15px',
+    right: '35px',
+    color: '#f1f1f1',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    transition: '0.3s',
+    ':hover': {
+      color: '#bbb',
+      textDecoration: 'none',
+      cursor: 'pointer',
+    },
+  });
+
+  const imagePreview = css({
+    animationName: 'zoom',
+    animationDuration: '0.6s',
+    display: 'block',
+    width: '300px',
+  });
+
+  const model = css({
+    margin: '0',
+    padding: '2rem 1.5rem',
+    zIndex: '1' /* Sit on top */,
+    width: '100%' /* Full width */,
+    height: '100%' /* Full height */,
+    overflow: 'auto' /* Enable scroll if needed */,
+  });
 
   return (
     <>
@@ -128,19 +171,35 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="stacked">Image (optional)</IonLabel>
-          <input
-            id="img"
-            type="file"
-            onChange={imageUploadHandler}
-            accept="image/*"
-          />
-          {imageURL && (
-            <IonImg
-              style={{ width: '300px', height: '300px' }}
-              src={imageURL}
-            />
-          )}
+          <IonRow>
+            <IonLabel position="stacked">Image (optional)</IonLabel>
+          </IonRow>
+          <IonRow>
+            <div className="upload-btn-wrapper">
+              <button className="btn">Upload a file</button>
+              <input
+                type="file"
+                name="myfile"
+                onChange={imageUploadHandler}
+                accept="image/*"
+              />
+            </div>
+            {imageURL && (
+              <div id="myModal" {...model}>
+                <span
+                  {...closeButton}
+                  onClick={(e) => {
+                    // setRemoveTrigger(true);
+                    setImage(undefined);
+                    setImageURL(undefined);
+                  }}
+                >
+                  &times;
+                </span>
+                <IonImg {...imagePreview} src={imageURL} />
+              </div>
+            )}
+          </IonRow>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>

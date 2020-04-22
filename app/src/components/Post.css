@@ -17,3 +17,17 @@ ion-card-content {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.imageThumbnail {
+  max-width: 250px;
+  margin: auto;
+  padding-bottom: 15px;
+  max-height: 250px;
+}
+
+.image {
+  max-width: 600px;
+  margin: auto;
+  padding-bottom: 15px;
+  max-height: 600px;
+}
