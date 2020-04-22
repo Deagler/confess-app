@@ -50,11 +50,17 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
   >(APPROVE_POST);
 
   const [imageURL, setImageURL] = useState<string>();
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   useEffect(() => {
     if (imageRef) {
+      setImageLoading(true);
       getDownloadUrl(imageRef)
         .then((url) => setImageURL(url))
-        .catch((e) => console.error(e));
+        .then(() => setImageLoading(false))
+        .catch((e) => {
+          console.error(e);
+          setImageLoading(false);
+        });
     }
   }, [imageRef]);
 
@@ -102,7 +108,8 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         </IonCardHeader>
 
         <IonCardContent>
-          {imageRef && <img src={imageURL} alt="post content" />}
+          {imageLoading && <IonSpinner />}
+          {imageURL && <img src={imageURL} alt="post content" />}
           <p>{content}</p>
         </IonCardContent>
         <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>
