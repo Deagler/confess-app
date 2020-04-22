@@ -86,14 +86,12 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   async function imageUploadHandler(event: any) {
     const file: File = event.target.files[0];
     if (file?.size < 5242880) {
-      console.log(file.size);
       setImage(file);
       const url: string = URL.createObjectURL(file);
       setImageURL(url);
     } else {
-      // alert('Too large Image. Only image smaller than 5MB can be uploaded.');
       setAlertMessage(
-        'Too large Image. Only image smaller than 5MB can be uploaded.'
+        'Image exceeds maximum file size of 5 MB. Please try again with a smaller image.'
       );
     }
   }
