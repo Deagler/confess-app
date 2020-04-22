@@ -82,14 +82,19 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
+  const [alertMessage, setAlertMessage] = useState<string>();
   async function imageUploadHandler(event: any) {
     const file: File = event.target.files[0];
-    if (file.size < 5242880) {
+    if (file?.size < 5242880) {
+      console.log(file.size);
       setImage(file);
       const url: string = URL.createObjectURL(file);
       setImageURL(url);
     } else {
-      alert('Too large Image. Only image smaller than 2MB can be uploaded.');
+      // alert('Too large Image. Only image smaller than 5MB can be uploaded.');
+      setAlertMessage(
+        'Too large Image. Only image smaller than 5MB can be uploaded.'
+      );
     }
   }
 
@@ -126,6 +131,11 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 
   return (
     <>
+      <IonToast
+        isOpen={!!alertMessage}
+        message={alertMessage}
+        duration={2000}
+      />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonList>
         <IonItem>
