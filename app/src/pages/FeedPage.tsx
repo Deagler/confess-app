@@ -30,6 +30,16 @@ import {
   useSelectedCommunity,
   useSelectedChannel,
 } from '../customHooks/location';
+import { css } from 'glamor';
+import FeedPageSortSelect from '../components/FeedPageSortSelect';
+
+const feedInfoItems = css({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+});
 
 const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const {
@@ -38,6 +48,8 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     hasMorePosts,
     fetchMorePosts,
     setHasMorePosts,
+    sortProperty,
+    setSortProperty,
   } = usePaginatedFeedQuery();
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
@@ -46,7 +58,10 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
-  console.log(channelId)
+
+  const handleSortPropertyChange = (e) => {
+    setSortProperty(e.target.value);
+  };
 
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
@@ -67,31 +82,45 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
 
       <IonContent>
         <div className="contentContainer">
-          <div className="ion-hide-lg-up ion-margin ion-padding">
-            <ButtonDisabledTooltip
-              action="confess"
-              userLoggedIn={userLoggedIn}
-              userHasCommunity={userHasCommunity}
-              userNotFromSelectedComm={!userFromSelectedComm}
-            >
-              <IonButton
-                expand="block"
-                routerLink={buildLink('/submit', communityId)}
-                routerDirection="forward"
-                disabled={
-                  !userLoggedIn || !userHasCommunity || !userFromSelectedComm
-                }
+          <div className="ion-hide-lg-up">
+            <div className="ion-margin">
+              <ButtonDisabledTooltip
+                action="confess"
+                userLoggedIn={userLoggedIn}
+                userHasCommunity={userHasCommunity}
+                userNotFromSelectedComm={!userFromSelectedComm}
               >
-                <IonIcon color="white" slot="start" icon={chatbox} />
-                New Confession
-              </IonButton>
-            </ButtonDisabledTooltip>
+                <IonButton
+                  expand="block"
+                  routerLink={buildLink('/submit', communityId)}
+                  routerDirection="forward"
+                  disabled={
+                    !userLoggedIn || !userHasCommunity || !userFromSelectedComm
+                  }
+                >
+                  <IonIcon color="white" slot="start" icon={chatbox} />
+                  New Confession
+                </IonButton>
+              </ButtonDisabledTooltip>
+            </div>
+            <FeedPageSortSelect
+              className="ion-margin-horizontal"
+              sortProperty={sortProperty}
+              onSortPropertyChange={handleSortPropertyChange}
+            />
           </div>
-
-          <h4 className="ion-hide-lg-down ion-margin-top ion-margin-horizontal">
-            <strong>Feed</strong>
-          </h4>
-
+          <div
+            className="ion-hide-lg-down ion-margin-top ion-margin-horizontal"
+            {...feedInfoItems}
+          >
+            <h4>
+              <strong>Feed</strong>
+            </h4>
+            <FeedPageSortSelect
+              sortProperty={sortProperty}
+              onSortPropertyChange={handleSortPropertyChange}
+            />
+          </div>
           {(loading && <FeedSkeleton />) ||
             (data?.community?.feed?.items &&
               data?.community?.feed?.items.map((post, i: number) => (

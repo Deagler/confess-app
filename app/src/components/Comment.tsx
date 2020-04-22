@@ -47,6 +47,7 @@ export interface CommentProps extends CommentData {
 const timeLabelContainer = css({
   display: 'flex',
   flexDirection: 'row',
+  alignItems: 'center',
   '@media(min-width: 768px)': {
     position: 'absolute',
     right: '10px',
