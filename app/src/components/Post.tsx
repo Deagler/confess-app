@@ -206,14 +206,18 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           </IonCardHeader>
 
           <IonCardContent {...textColorCSS}>
-            {imageLoading && <IonSpinner />}
-            {imageURL && (
-              <img
-                className={collapsable ? 'imageThumbnail' : 'image'}
-                src={imageURL}
-                alt="post content"
-              />
-            )}
+            <div
+              className={
+                collapsable
+                  ? 'collapsed-image-container'
+                  : 'expanded-image-container'
+              }
+            >
+              {imageLoading && <IonSpinner />}
+              {imageURL && (
+                <img className="post-image" src={imageURL} alt="post content" />
+              )}
+            </div>
             <p>
               {expanded || !collapsable
                 ? content
