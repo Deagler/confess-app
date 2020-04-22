@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonButton,
   IonCard,
+  IonSpinner,
   IonCardHeader,
   IonCardTitle,
   IonCardSubtitle,
@@ -105,11 +106,17 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const [expanded, setExpanded] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string>();
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   useEffect(() => {
     if (imageRef) {
+      setImageLoading(true);
       getDownloadUrl(imageRef)
         .then((url) => setImageURL(url))
-        .catch((e) => console.error(e));
+        .then(() => setImageLoading(false))
+        .catch((e) => {
+          setImageLoading(false);
+          console.error(e);
+        });
     }
   }, [imageRef]);
 
@@ -199,7 +206,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           </IonCardHeader>
 
           <IonCardContent {...textColorCSS}>
-            {imageRef && (
+            {imageLoading && <IonSpinner />}
+            {imageURL && (
               <img
                 className={collapsable ? 'imageThumbnail' : 'image'}
                 src={imageURL}
