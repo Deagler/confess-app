@@ -93,11 +93,6 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
     }
   }
 
-  const loadingContainer = css({
-    margin: '0',
-    padding: '2rem 1.5rem',
-  });
-
   const closeButton = css({
     position: 'absolute',
     top: '15px',

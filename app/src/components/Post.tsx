@@ -130,19 +130,6 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     (val) => val?.id == channelId
   );
 
-  const image = css({
-    maxWidth: '100px',
-    margin: 'auto',
-    paddingBottom: '15px',
-    maxHeight: '100px',
-  });
-
-  const imageThumbnail = css({
-    maxWidth: '500px',
-    margin: 'auto',
-    paddingBottom: '15px',
-    maxHeight: '500px',
-  });
   const handleLikeButtonClick = async (postId: string) => {
     if (serverLikeInfo.loading) {
       return;
