@@ -55,14 +55,12 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER);
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
-
   const communityId = useSelectedCommunity();
   const channelId = useSelectedChannel();
 
   const handleSortPropertyChange = (e) => {
     setSortProperty(e.target.value);
   };
-
   // looks for more posts when channel changes
   useEffect(() => setHasMorePosts(true), [channelId, setHasMorePosts]);
 
