@@ -19,6 +19,8 @@ export const GET_POST_BY_ID = gql`
       isLikedByUser
       isOriginalPoster
       totalComments
+      channelId
+      imageRef
       comments(
         sortBy: $sortCommentsBy
         limit: $commentsLimit
@@ -94,6 +96,7 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
     $title: String!
     $content: String!
     $authorAlias: String!
+    $imageRef: String
   ) {
     submitPostForApproval(
       communityId: $communityId
@@ -101,6 +104,7 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
       title: $title
       content: $content
       authorAlias: $authorAlias
+      imageRef: $imageRef
     ) {
       code
       success
@@ -110,6 +114,7 @@ export const SUBMIT_POST_FOR_APPROVAL = gql`
         title
         content
         authorAlias
+        imageRef
         moderationStatus
         creationTimestamp
       }

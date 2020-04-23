@@ -33,18 +33,26 @@ import {
 import { buildLink } from '../utils';
 import { firebaseAnalytics } from '../services/firebase';
 import { GetPost_post_comments_items } from '../types/GetPost';
+import CommentSortSelect from '../components/CommentSortSelect';
 
 const Postpage: React.FC = () => {
   const newCommentElement = useRef<HTMLIonTextareaElement>(null);
   const { id: postId } = useParams();
   const {
     data,
-    loading,
+    loading: postLoading,
     error,
     hasMoreComments,
     fetchMoreComments,
+    sortCommentsBy,
+    setSortCommentsBy,
     updateQuery,
   } = usePaginatedPostQuery(postId!);
+  const loading = !data?.post && postLoading;
+
+  const handleSortCommentsChange = (e) => {
+    setSortCommentsBy(e.target.value);
+  };
 
   const handleCommentCreated = (
     newComment: SubmitComment_submitComment_comment
@@ -106,6 +114,7 @@ const Postpage: React.FC = () => {
                   {...data.post}
                   onCommentClick={() => newCommentElement.current!.setFocus()}
                   collapsable={false}
+                  showChannel={true}
                 />
               ))}
           </div>
@@ -122,33 +131,40 @@ const Postpage: React.FC = () => {
             </IonCard>
           )) ||
             (data?.post?.comments?.items.length !== 0 && (
-              <IonCard className="ion-margin">
-                <IonList style={{ paddingTop: 0 }}>
-                  {data?.post?.comments?.items.map(
-                    (
-                      comment: GetPost_post_comments_items | null,
-                      i: number
-                    ) => (
-                      <Comment
-                        key={i}
-                        {...comment!}
-                        onReply={handleReply}
-                        postIdForComment={data?.post?.id}
-                        isOriginalPoster={data?.post?.isOriginalPoster}
-                        authorId={comment?.author?.id}
-                      />
-                    )
-                  )}
-                </IonList>
-                <br />
-                <IonInfiniteScroll
-                  threshold="100px"
-                  disabled={!hasMoreComments}
-                  onIonInfinite={fetchMoreComments}
-                >
-                  <IonInfiniteScrollContent loadingText="Loading more comments..." />
-                </IonInfiniteScroll>
-              </IonCard>
+              <>
+                <CommentSortSelect
+                  className="ion-margin-horizontal"
+                  sortProperty={sortCommentsBy}
+                  onSortPropertyChange={handleSortCommentsChange}
+                />
+                <IonCard className="ion-margin">
+                  <IonList style={{ paddingTop: 0, paddingBottom: 0 }}>
+                    {data?.post?.comments?.items.map(
+                      (
+                        comment: GetPost_post_comments_items | null,
+                        i: number
+                      ) => (
+                        <Comment
+                          key={i}
+                          {...comment!}
+                          onReply={handleReply}
+                          postIdForComment={data?.post?.id}
+                          isOriginalPoster={data?.post?.isOriginalPoster}
+                          authorId={comment?.author?.id}
+                        />
+                      )
+                    )}
+                  </IonList>
+                  <IonInfiniteScroll
+                    threshold="100px"
+                    className="ion-padding-top"
+                    disabled={!hasMoreComments}
+                    onIonInfinite={fetchMoreComments}
+                  >
+                    <IonInfiniteScrollContent loadingText="Loading more comments..." />
+                  </IonInfiniteScroll>
+                </IonCard>
+              </>
             ))}
         </div>
       </IonContent>

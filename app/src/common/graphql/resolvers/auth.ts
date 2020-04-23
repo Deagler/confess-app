@@ -225,6 +225,5 @@ async function doFirebaseLogout(_, __, { cache, client }) {
 export const authMutationResolvers = {
   attemptLogin,
   attemptLoginWithEmailLink,
-  requestFirebaseLoginLink,
   doFirebaseLogout,
 };

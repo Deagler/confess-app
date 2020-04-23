@@ -28,13 +28,13 @@ const COMMENT_PAGE_LIMIT = 5;
 
 export const usePaginatedFeedQuery = () => {
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
+  const [sortProperty, setSortProperty] = useState<string>('postNumber');
   const communityId = useSelectedCommunity();
 
   const feedVariables: GetCommunityPostsVariables = {
     id: communityId!,
     sortBy: {
-      // TODO: Add sorting to the UI
-      property: 'creationTimestamp',
+      property: sortProperty,
       direction: Direction.DESC,
     },
     limit: POST_PAGE_LIMIT,
@@ -84,6 +84,8 @@ export const usePaginatedFeedQuery = () => {
     hasMorePosts,
     fetchMorePosts,
     setHasMorePosts,
+    sortProperty,
+    setSortProperty,
   };
 };
 
@@ -148,14 +150,15 @@ export const usePaginatedUnapprovedPostsQuery = () => {
 
 export const usePaginatedPostQuery = (postId: string) => {
   const communityId = useSelectedCommunity();
+  const [sortCommentsBy, setSortCommentsBy] = useState<string>('totalLikes');
 
   const postVariables: GetPostVariables = {
     communityId: communityId!,
     postId,
     // TODO: Connect sorting to UI
     sortCommentsBy: {
-      property: 'creationTimestamp',
-      direction: Direction.ASC,
+      property: sortCommentsBy,
+      direction: Direction.DESC,
     },
     commentsLimit: COMMENT_PAGE_LIMIT,
   };
@@ -167,6 +170,7 @@ export const usePaginatedPostQuery = (postId: string) => {
     {
       variables: postVariables,
       skip: !communityId,
+      fetchPolicy: 'cache-and-network',
     }
   );
 
@@ -209,5 +213,11 @@ export const usePaginatedPostQuery = (postId: string) => {
     (e.target as HTMLIonInfiniteScrollElement).complete();
   };
 
-  return { ...useQueryVariables, hasMoreComments, fetchMoreComments };
+  return {
+    ...useQueryVariables,
+    hasMoreComments,
+    fetchMoreComments,
+    sortCommentsBy,
+    setSortCommentsBy,
+  };
 };

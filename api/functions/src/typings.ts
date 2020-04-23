@@ -46,6 +46,7 @@ export interface Post {
   totalComments: number;
   comments: Comment[];
   communityId?: string;
+  imageRef?: string;
 }
 
 export interface Community {

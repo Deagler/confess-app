@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface RequestFirebaseLink_requestFirebaseLoginLink {
-  __typename: "PostUpdatedResponse" | "AttemptSignupResponse" | "CommentUpdatedResponse" | "ApprovePostResponse" | "RejectPostResponse" | "LoginResponse";
+  __typename: "LinkRequestedResponse";
   code: string;
   success: boolean;
   message: string;

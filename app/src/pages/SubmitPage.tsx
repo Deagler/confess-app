@@ -24,6 +24,7 @@ import {
   IonCol,
   IonCardContent,
   IonIcon,
+  IonImg,
 } from '@ionic/react';
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
@@ -39,7 +40,7 @@ import { informationCircleOutline } from 'ionicons/icons';
 import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
-
+import { uploadImageToCloudStorage } from '../common/firebase/cloudStorage';
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -51,25 +52,40 @@ interface SubmitFormProps {
   setSelectedChannel(channel?: string): void;
   title?: string;
   setTitle(title?: string): void;
+  image?: File;
+  setImage(image?: File): void;
   confessionText?: string;
   setConfessionText(text?: string): void;
   authorAlias?: string;
   setAuthorAlias(alias?: string): void;
   onDisplayRules(): void;
+  imageURL?: string;
+  setImageURL(url?: string): void;
 }
 
 const SubmitForm: React.FC<SubmitFormProps> = ({
   setSelectedChannel,
   setTitle,
   title,
+  setImage,
   setConfessionText,
   confessionText,
   authorAlias,
   setAuthorAlias,
   onDisplayRules,
+  imageURL,
+  setImageURL,
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
+
+  const imageUploadHandler = (event: any) => {
+    const file: File = event.target.files[0];
+    setImage(file);
+
+    const url: string = URL.createObjectURL(file);
+    setImageURL(url);
+  };
 
   return (
     <>
@@ -110,6 +126,21 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
           />
         </IonItem>
         <IonItem>
+          <IonLabel position="stacked">Image (optional)</IonLabel>
+          <input
+            id="img"
+            type="file"
+            onChange={imageUploadHandler}
+            accept="image/*"
+          />
+          {imageURL && (
+            <IonImg
+              style={{ width: '300px', height: '300px' }}
+              src={imageURL}
+            />
+          )}
+        </IonItem>
+        <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>
           <IonTextarea
             rows={10}
@@ -148,6 +179,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   // the apollo hook useMutation could be used to make the request
   const [selectedChannel, setSelectedChannel] = useState<string>();
   const [title, setTitle] = useState<string>();
+  const [image, setImage] = useState<File>();
+  const [imageURL, setImageURL] = useState<string>();
   const [confessionText, setConfessionText] = useState<string>();
   const [authorAlias, setAuthorAlias] = useState<string>();
   const [successToastVisible, setSuccessToastVisible] = useState<boolean>(
@@ -160,13 +193,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     SubmitPostForApproval,
     SubmitPostForApprovalVariables
   >(SUBMIT_POST_FOR_APPROVAL);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<Error>();
 
-  const handleSubmit = async (
-    channelId: string,
-    postTitle: string,
-    content: string,
-    authorAliasInput?: string
-  ) => {
+  const handleSubmit = async () => {
     if (!communityId) {
       console.error('failed to submit post: communityId is not set');
       return;
@@ -174,13 +204,22 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     // TODO: add input validation
     try {
+      setUploadError(undefined);
+      setUploadLoading(true);
+      let uploadKey: string | null = null;
+      if (image) {
+        uploadKey = await uploadImageToCloudStorage(image);
+      }
+      setUploadLoading(false);
+
       await submitPostForApproval({
         variables: {
           communityId,
-          channelId,
-          title: postTitle,
-          content,
-          authorAlias: authorAliasInput || '',
+          channelId: selectedChannel!,
+          title: title!,
+          content: confessionText!,
+          authorAlias: authorAlias || '',
+          imageRef: uploadKey,
         },
       });
 
@@ -189,7 +228,8 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setAuthorAlias(undefined);
       setTitle(undefined);
       setSelectedChannel(undefined);
-
+      setImage(undefined);
+      setImageURL(undefined);
       // close modal
       setSubmitShowModal(false);
 
@@ -197,17 +237,21 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       setSuccessToastVisible(true);
       firebaseAnalytics.logEvent('submit_post', {
         communityId,
-        channelId,
+        channelId: selectedChannel,
         title,
-        content,
-        authorAlias: authorAliasInput || '',
+        content: confessionText,
+        authorAlias,
       });
       history.goBack();
       return;
     } catch (e) {
+      console.error(e);
+      setUploadLoading(false);
+      setUploadError(e);
+      setSubmitShowModal(false);
       firebaseAnalytics.logEvent('exception', {
         description: `submit_page/${e.message}`,
-        channelId,
+        channelId: selectedChannel,
         communityId,
       });
     }
@@ -221,14 +265,16 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         duration={2000}
         onDidDismiss={() => setSuccessToastVisible(false)}
       />
-      <IonToast isOpen={!!error} message={error?.message} duration={2000} />
+      <IonToast
+        isOpen={!!error || !!uploadError}
+        message={error?.message || uploadError?.message}
+        duration={2000}
+      />
       <SubmissionRulesModal
         isOpen={showSubmitModal}
         onDidDismiss={() => setSubmitShowModal(false)}
-        loadingSubmit={loading}
-        onSubmit={() =>
-          handleSubmit(selectedChannel!, title!, confessionText!, authorAlias)
-        }
+        loadingSubmit={loading || uploadLoading}
+        onSubmit={handleSubmit}
       />
       <SubmissionRulesModal
         isOpen={showInfoOnlyModal}
@@ -253,7 +299,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
       </IonHeader>
       <IonContent>
         <div className="contentContainer">
-          <h4 className="ion-hide-lg-down ion-margin-top">
+          <h4 className="ion-hide-lg-down ion-margin-top ion-margin-horizontal">
             <strong>Create a new confession</strong>
           </h4>
           <IonCard className="ion-hide-lg-down">
@@ -263,6 +309,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                 setSelectedChannel={setSelectedChannel}
                 setTitle={setTitle}
                 title={title}
+                setImage={setImage}
+                image={image}
+                imageURL={imageURL}
+                setImageURL={setImageURL}
                 setConfessionText={setConfessionText}
                 confessionText={confessionText}
                 authorAlias={authorAlias}
@@ -292,7 +342,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                       color="primary"
                       expand="block"
                     >
-                      {loading ? <IonSpinner /> : 'Submit'}
+                      {loading || uploadLoading ? <IonSpinner /> : 'Submit'}
                     </IonButton>
                   </IonCol>
                 </IonRow>
@@ -305,6 +355,10 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
               setSelectedChannel={setSelectedChannel}
               setTitle={setTitle}
               title={title}
+              setImage={setImage}
+              image={image}
+              imageURL={imageURL}
+              setImageURL={setImageURL}
               setConfessionText={setConfessionText}
               confessionText={confessionText}
               authorAlias={authorAlias}

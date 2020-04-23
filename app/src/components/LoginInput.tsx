@@ -44,6 +44,7 @@ export const LoginInput: React.FC<{}> = () => {
   const handleLogin = async (inputEmail) => {
     try {
       await requestFirebaseLink({ variables: { userEmail: inputEmail } });
+      localStorage.setItem('emailForSignIn', inputEmail);
     } catch (e) {
       setLoginEmail('');
       setLoginError(e.message);

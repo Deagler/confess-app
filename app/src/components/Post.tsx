@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonGrid,
   IonRow,
@@ -16,6 +16,7 @@ import {
 } from '@ionic/react';
 import { heart, chatbox } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
+import MaterialUILink from '@material-ui/core/Link';
 import moment from 'moment';
 
 import { truncateString, buildLink } from '../utils';
@@ -30,6 +31,10 @@ import { useSelectedCommunity } from '../customHooks/location';
 import ShareButton from './ShareButton';
 import { css } from 'glamor';
 import { firebaseAnalytics } from '../services/firebase';
+import { Chip } from '@material-ui/core';
+import { GET_COMMUNITY_CHANNELS } from '../common/graphql/communities';
+import { GetCommunityChannels } from '../types/GetCommunityChannels';
+import { getDownloadUrl } from '../common/firebase/cloudStorage';
 
 export interface PostData {
   id: string;
@@ -42,6 +47,9 @@ export interface PostData {
   isLikedByUser: boolean | null;
   isOriginalPoster: boolean;
   authorAlias?: string | null;
+  channelId: string;
+  showChannel: boolean;
+  imageRef?: string | null;
 }
 
 export interface PostProps extends PostData {
@@ -59,6 +67,12 @@ const topBorderCSS = css({
   borderTop: 'solid 5px var(--ion-color-primary)',
 });
 
+const headerSubtitleCSS = css({
+  display: 'flex',
+  flex: '1',
+  width: '100%',
+});
+
 const highlightAuthorCSS = css({
   fontWeight: 'bold !important',
   color: 'var(--ion-color-primary)',
@@ -74,21 +88,47 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
     authorAlias,
     totalLikes,
     totalComments,
+    channelId,
     onCommentClick,
     isLikedByUser,
     isOriginalPoster,
     collapsable,
+    showChannel,
+    imageRef,
   } = props;
+
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
   });
+
   const userLoggedIn = !!localUserQuery.data?.localUser;
   const userHasCommunity = !!localUserQuery.data?.localUser?.community;
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [imageURL, setImageURL] = useState<string>();
+  useEffect(() => {
+    if (imageRef) {
+      getDownloadUrl(imageRef)
+        .then((url) => setImageURL(url))
+        .catch((e) => console.error(e));
+    }
+  }, [imageRef]);
+
   const [serverToggleLike, serverLikeInfo] = useMutation(
     SERVER_TOGGLE_LIKE_POST
   );
+
   const communityId = useSelectedCommunity();
+  const communityChannels = useQuery<GetCommunityChannels>(
+    GET_COMMUNITY_CHANNELS,
+    {
+      variables: { communityId },
+      skip: !communityId,
+    }
+  );
+
+  const postChannel = communityChannels.data?.community?.channels?.find(
+    (val) => val?.id == channelId
+  );
 
   const handleLikeButtonClick = async (postId: string) => {
     if (serverLikeInfo.loading) {
@@ -129,39 +169,62 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         message={serverLikeInfo.error?.message}
         duration={2000}
       />
+
       <IonCard
         className="ion-margin"
         {...css(isOriginalPoster && topBorderCSS)}
       >
         <Link to={buildLink(`/posts/${id}`, communityId)} className="Link">
           <IonCardHeader>
-            <IonCardSubtitle>
-              {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
-            </IonCardSubtitle>
+            <div {...headerSubtitleCSS}>
+              <IonCardSubtitle>
+                {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
+              </IonCardSubtitle>
+
+              <div style={{ flex: 1 }} />
+
+              {showChannel && (
+                <Chip
+                  disabled={!postChannel}
+                  size="small"
+                  label={postChannel?.name || 'Loading...'}
+                />
+              )}
+            </div>
+
             <IonCardTitle {...textColorCSS}>{title}</IonCardTitle>
             <IonCardSubtitle>
               {moment.unix(creationTimestamp).fromNow()}
             </IonCardSubtitle>
           </IonCardHeader>
+
           <IonCardContent {...textColorCSS}>
+            {imageRef && <img src={imageURL} alt="post content" />}
             <p>
               {expanded || !collapsable
                 ? content
                 : truncateString(content, MAX_CONTENT_LENGTH)}
+              {collapsable && content.length > MAX_CONTENT_LENGTH && (
+                <MaterialUILink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setExpanded(!expanded);
+                  }}
+                >
+                  {expanded ? '\nSee Less' : 'See More'}
+                </MaterialUILink>
+              )}
+            </p>
+          </IonCardContent>
+
+          <IonCardContent {...textColorCSS}>
+            <p {...css(isOriginalPoster && highlightAuthorCSS)}>
+              ~ {authorAlias || 'Anonymous'}
+              {isOriginalPoster && ' (Your Confession)'}
             </p>
           </IonCardContent>
         </Link>
-        {collapsable && content.length > MAX_CONTENT_LENGTH && (
-          <IonButton fill="clear" onClick={() => setExpanded(!expanded)}>
-            {expanded ? 'See Less' : 'See More'}
-          </IonButton>
-        )}
-        <IonCardContent {...textColorCSS}>
-          <p {...css(isOriginalPoster && highlightAuthorCSS)}>
-            ~ {authorAlias || 'Anonymous'}
-            {isOriginalPoster && ' (Your Confession)'}
-          </p>
-        </IonCardContent>
 
         <IonItemDivider color="white" />
 

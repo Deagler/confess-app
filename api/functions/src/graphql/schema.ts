@@ -91,6 +91,7 @@ const typeDefs = gql`
     channelId: String!
     title: String!
     content: String!
+    imageRef: String
 
     moderationStatus: ModerationStatus!
     moderationInfo: ModerationInfo
@@ -155,6 +156,12 @@ const typeDefs = gql`
     message: String!
   }
 
+  type LinkRequestedResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type Mutation {
     submitPostForApproval(
       communityId: ID!
@@ -162,6 +169,7 @@ const typeDefs = gql`
       title: String!
       content: String!
       authorAlias: String
+      imageRef: String
     ): PostUpdatedResponse
 
     attemptSignUp(displayName: String!): AttemptSignupResponse
@@ -193,6 +201,8 @@ const typeDefs = gql`
       postId: ID!
       commentId: ID!
     ): CommentUpdatedResponse
+
+    requestFirebaseLoginLink(userEmail: String!): LinkRequestedResponse
   }
 `;
 
