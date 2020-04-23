@@ -24,7 +24,6 @@ import {
   IonCol,
   IonCardContent,
   IonIcon,
-  IonImg,
 } from '@ionic/react';
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
@@ -98,14 +97,14 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 
   const closeButton = css({
     position: 'absolute',
-    top: '15px',
-    right: '35px',
-    color: '#f1f1f1',
+    top: '20px',
+    right: '20px',
+    color: 'var(--ion-color-danger)',
     fontSize: '40px',
     fontWeight: 'bold',
     transition: '0.3s',
     ':hover': {
-      color: '#bbb',
+      color: 'var(--ion-color-danger-tint)',
       textDecoration: 'none',
       cursor: 'pointer',
     },
@@ -114,17 +113,8 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   const imagePreview = css({
     animationName: 'zoom',
     animationDuration: '0.6s',
-    display: 'block',
-    width: '300px',
-  });
-
-  const model = css({
-    margin: '0',
-    padding: '2rem 1.5rem',
-    zIndex: '1' /* Sit on top */,
-    width: '100%' /* Full width */,
-    height: '100%' /* Full height */,
-    overflow: 'auto' /* Enable scroll if needed */,
+    paddingBottom: '20px',
+    margin: 'auto',
   });
 
   return (
@@ -133,6 +123,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
         isOpen={!!alertMessage}
         message={alertMessage}
         duration={2000}
+        onDidDismiss={() => setAlertMessage(undefined)}
       />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonList>
@@ -184,19 +175,20 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
                 accept="image/*"
               />
             </div>
+          </IonRow>
+          <IonRow className="ion-align-self-center">
             {imageURL && (
-              <div id="myModal" {...model}>
+              <div>
                 <span
                   {...closeButton}
-                  onClick={(e) => {
-                    // setRemoveTrigger(true);
+                  onClick={() => {
                     setImage(undefined);
                     setImageURL(undefined);
                   }}
                 >
                   &times;
                 </span>
-                <IonImg {...imagePreview} src={imageURL} />
+                <img {...imagePreview} src={imageURL} alt="upload preview" />
               </div>
             )}
           </IonRow>
