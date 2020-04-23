@@ -12,13 +12,12 @@ import {
 import React, { useState } from 'react';
 import { css } from 'glamor';
 import { backgroundColor } from '../../theme/global';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { AttemptSignup } from '../../types/AttemptSignup';
 import { ATTEMPT_SIGNUP } from '../../common/graphql/auth';
 import { GET_LOCAL_USER } from '../../common/graphql/localState';
 import { authPageCSS, authCenterCardCSS } from './authCSS';
 import { navigateToFeed, LoginSuccessCard } from './AuthCallbackPage';
-import { GetLocalUser } from '../../types/GetLocalUser';
 import { TextField } from '@material-ui/core';
 import { firebaseAnalytics } from '../../services/firebase';
 
@@ -103,14 +102,6 @@ const SignUpPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
   );
 
-  const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
-    variables: {
-      disableSafeMode: true,
-    },
-    fetchPolicy: 'no-cache',
-  });
-  console.log('localUser');
-  console.log(localUserQuery);
   return (
     <IonPage {...css(backgroundColor, authPageCSS)}>
       <div className="ion-text-center">
