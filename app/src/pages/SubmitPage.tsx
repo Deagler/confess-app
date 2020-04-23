@@ -82,9 +82,17 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
   const [alertMessage, setAlertMessage] = useState<string>();
-  async function imageUploadHandler(event: any) {
+
+  const imageUploadHandler = (event: any) => {
     const file: File = event.target.files[0];
-    if (file?.size < 5242880) {
+
+    if (!file) {
+      setAlertMessage('No file selected, please try again.');
+      return;
+    }
+
+    // check file size
+    if (file.size < 5242880) {
       setImage(file);
       const url: string = URL.createObjectURL(file);
       setImageURL(url);
@@ -93,7 +101,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
         'Image exceeds maximum file size of 5 MB. Please try again with a smaller image.'
       );
     }
-  }
+  };
 
   const closeButton = css({
     position: 'absolute',
