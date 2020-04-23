@@ -54,9 +54,9 @@ const SubmissionRulesModal: React.FC<SubmissionRulesModalProps> = ({
         <ol>
           <li>All confessions will be posted anonymously.</li>
           <li>
-            Submitted confessions deemed detrimental to the confess community
-            will not be posted. Such confessions may include, but are not
-            limited to:
+            Submitted confessions deemed detrimental to the Confess community
+            will be removed. Such confessions may include, but are not limited
+            to:
           </li>
           <ol type="a">
             <li>Hate speech towards any group or community.</li>
@@ -77,12 +77,8 @@ const SubmissionRulesModal: React.FC<SubmissionRulesModalProps> = ({
             confessions.
           </li>
           <li>
-            The moderation team is not responsible or affiliated with any
-            confessions posted.
-          </li>
-          <li>
-            The moderation team is not responsible for the community’s reaction
-            to your confessions.
+            Confess is not responsible for the community’s reaction to your
+            confessions.
           </li>
         </ol>
       </div>

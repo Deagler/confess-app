@@ -41,6 +41,8 @@ import { useSelectedCommunityQuery } from '../customHooks/community';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
 import { uploadImageToCloudStorage } from '../common/firebase/cloudStorage';
+import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
+import { buildLink } from '../utils';
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -145,7 +147,7 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
           <IonTextarea
             rows={10}
             required={true}
-            placeholder="Enter your confession. Make sure to follow the rules, all posts are moderated before they can be seen. "
+            placeholder="Enter your confession. Make sure to follow the rules, your confession will show up instantly. "
             onIonChange={(e) => setConfessionText(e.detail.value!)}
             value={confessionText}
             spellCheck={true}
@@ -221,6 +223,18 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
           authorAlias: authorAlias || '',
           imageRef: uploadKey,
         },
+        refetchQueries: [
+          {
+            query: GET_COMMUNITY_POSTS,
+            variables: {
+              channelId: null,
+              id: communityId,
+              limit: 5,
+              sortBy: { property: 'postNumber', direction: 'DESC' },
+            },
+          },
+        ],
+        awaitRefetchQueries: true,
       });
 
       // success
@@ -242,7 +256,9 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
         content: confessionText,
         authorAlias,
       });
-      history.goBack();
+
+      history.push(buildLink('/posts', communityId));
+
       return;
     } catch (e) {
       console.error(e);
@@ -261,7 +277,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
     <IonPage {...appPageCSS}>
       <IonToast
         isOpen={successToastVisible}
-        message="Post submitted for approval"
+        message="Post submitted!"
         duration={2000}
         onDidDismiss={() => setSuccessToastVisible(false)}
       />
@@ -327,7 +343,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                   <IonCol>
                     <IonButton
                       onClick={() => {
-                        history.goBack();
+                        history.push(buildLink('/posts', communityId));
                       }}
                       color="danger"
                       expand="block"
@@ -342,7 +358,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
                       color="primary"
                       expand="block"
                     >
-                      {loading || uploadLoading ? <IonSpinner /> : 'Submit'}
+                      Submit
                     </IonButton>
                   </IonCol>
                 </IonRow>
