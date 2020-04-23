@@ -7,7 +7,6 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById, GetUserById_user } from '../../../types/GetUserById';
-import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../../utils';
 import { GET_LOCAL_USER } from '../localState';
 
 function persistAuthState(apolloCache, authState) {

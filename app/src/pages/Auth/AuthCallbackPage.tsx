@@ -18,6 +18,7 @@ import { css } from 'glamor';
 import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../../common/graphql/auth';
 import { authPageCSS, authCenterCardCSS } from './authCSS';
 import { AttemptLoginWithEmailLink } from '../../types/AttemptLoginWithEmailLink';
+import { firebaseAnalytics } from '../../services/firebase';
 
 enum LOGIN_CARD_STATE {
   SHOW_LOGGING_IN,
@@ -67,7 +68,12 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
           emailLink,
         },
       });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      firebaseAnalytics.logEvent('exception', {
+        description: e,
+      });
+    }
   };
 
   const attemptLoginCallback = useCallback(attemptLogin, []);
