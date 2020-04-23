@@ -27,7 +27,7 @@ import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { buildLink } from '../utils';
-
+import { useSelectedChannel } from '../customHooks/location';
 const menuCSS = css({
   borderRight: '0',
   '@media(min-width:992px)': {
@@ -72,7 +72,7 @@ const Menu: React.FC<{}> = () => {
   const isAdmin = localUserQuery?.data?.localUser?.isAdmin;
   const userFromSelectedComm: boolean =
     communityId === localUserQuery.data?.localUser?.community?.id;
-
+  const channelId = useSelectedChannel();
   return (
     <React.Fragment>
       <IonMenu
@@ -96,7 +96,7 @@ const Menu: React.FC<{}> = () => {
               >
                 <IonButton
                   expand="block"
-                  routerLink={buildLink('/submit', communityId)}
+                  routerLink={buildLink('/submit', communityId, channelId)}
                   routerDirection="forward"
                   className="ion-margin-bottom ion-hide-lg-down"
                   disabled={
