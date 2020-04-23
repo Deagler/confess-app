@@ -37,29 +37,49 @@ async function submitPostForApproval(
 
   const communityPosts = communityRef.collection('posts');
 
-  const newPost: Partial<Post> = {
-    creationTimestamp: moment().unix(),
-    title,
-    content,
-    channelId,
-    authorAlias,
-    authorRef: userRef,
-    moderationStatus: ModerationStatus.PENDING,
-    moderationInfo: null,
-    totalComments: 0,
-    totalLikes: 0,
-    likeRefs: [],
-    imageRef,
-  };
   const newPostRef = communityPosts.doc();
-  await newPostRef.set(newPost);
-  newPost.id = newPostRef.id;
+
+  await firestore.runTransaction(
+    (t) =>
+      t
+        .getAll<FirebaseFirestore.DocumentData>(newPostRef, communityRef)
+        .then((docs) => {
+          const communityDoc = docs[1];
+
+          const newPost: Partial<Post> = {
+            creationTimestamp: moment().unix(),
+            title,
+            content,
+            channelId,
+            authorAlias,
+            authorRef: userRef,
+            moderationStatus: ModerationStatus.APPROVED,
+            moderationInfo: null,
+            totalComments: 0,
+            totalLikes: 0,
+            likeRefs: [],
+            imageRef,
+            postNumber: communityDoc.data()?.totalApprovedPosts + 1,
+          };
+
+          t.set(newPostRef, newPost);
+          t.update(communityRef, {
+            totalApprovedPosts: admin.firestore.FieldValue.increment(1),
+          });
+          return Promise.resolve();
+        }),
+    {
+      maxAttempts: 5,
+    }
+  );
+
+  const newPostData = addIdToDoc(await newPostRef.get());
 
   return {
     code: 200,
-    message: 'Post submitted for approval.',
+    message: 'Post submitted.',
     success: true,
-    post: newPost,
+    post: newPostData,
   };
 }
 
@@ -85,30 +105,34 @@ async function approvePost(_: any, { communityId, postId }, context: any) {
     },
   };
 
-  await firestore.runTransaction((t) =>
-    t
-      .getAll<FirebaseFirestore.DocumentData>(postRef, communityRef)
-      .then((docs) => {
-        const postDoc = docs[0];
-        const communityDoc = docs[1];
+  await firestore.runTransaction(
+    (t) =>
+      t
+        .getAll<FirebaseFirestore.DocumentData>(postRef, communityRef)
+        .then((docs) => {
+          const postDoc = docs[0];
+          const communityDoc = docs[1];
 
-        if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
-          throw new UserInputError(
-            `post ${postRef.id} has already been moderated`
+          if (postDoc.data()?.moderationStatus !== ModerationStatus.PENDING) {
+            throw new UserInputError(
+              `post ${postRef.id} has already been moderated`
+            );
+          }
+
+          t.set(
+            postRef,
+            { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
+            { merge: true }
           );
-        }
-
-        t.set(
-          postRef,
-          { postNumber: communityDoc.data()?.totalApprovedPosts + 1 },
-          { merge: true }
-        );
-        t.update(communityRef, {
-          totalApprovedPosts: admin.firestore.FieldValue.increment(1),
-        });
-        t.update(postRef, patch);
-        return Promise.resolve();
-      })
+          t.update(communityRef, {
+            totalApprovedPosts: admin.firestore.FieldValue.increment(1),
+          });
+          t.update(postRef, patch);
+          return Promise.resolve();
+        }),
+    {
+      maxAttempts: 5,
+    }
   );
 
   // success
