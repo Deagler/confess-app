@@ -9,7 +9,6 @@ import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { User } from '../../typings';
 import { IsSupportedEmailTLD, IsValidEmailFormat } from '../../utils/emails';
-import { addIdToDoc } from '../resolvers/utils';
 
 import { validateDisplayName } from '../common/validation';
 const usersCollection = firebaseApp.firestore().collection('users');
@@ -26,11 +25,6 @@ async function getCommunityForEmailDomain(emailDomain) {
   return !communityDoc.empty ? communityDoc.docs[0].ref : null;
 }
 
-/** Temporary until Auth is moved to Serverside completely. */
-const supportedEmailTLDS = ['.ac.nz', '.edu.au', '.edu'];
-function IsSupportedEmailTLD(emailToValidate: string): boolean {
-  if (!emailToValidate) {
-    return false;
 async function requestFirebaseLoginLink(_: any, { userEmail }, context: any) {
   if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
     throw new ApolloError(

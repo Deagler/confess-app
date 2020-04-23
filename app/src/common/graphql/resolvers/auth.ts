@@ -115,44 +115,6 @@ async function attemptLogin(_, __, { cache, client }) {
   return resp;
 }
 
-async function requestFirebaseLoginLink(_, { userEmail }, { cache, client }) {
-  firebaseAnalytics.logEvent('login_requested', {
-    email: userEmail,
-  });
-
-  if (!IsSupportedEmailTLD(userEmail) || !IsValidEmailFormat(userEmail)) {
-    throw new ApolloError({
-      errorMessage:
-        'Invalid Email. Sorry, we only support .ac.nz, .edu.au and .edu emails right now!',
-    });
-  }
-
-  const actionCodeSettings = {
-    // URL must be whitelisted in the Firebase Console.
-    url: `${window.location.origin}/callback`,
-    handleCodeInApp: true,
-  };
-
-  try {
-    await firebaseApp
-      .auth()
-      .sendSignInLinkToEmail(userEmail, actionCodeSettings);
-
-    localStorage.setItem('emailForSignIn', userEmail);
-    return {
-      code: 'auth/link_requested',
-      success: true,
-      message: 'Click the link in your e-mail to sign in!',
-      __typename: 'MutationResponse',
-    };
-  } catch (e) {
-    throw new ApolloError({
-      errorMessage:
-        'An error occurred while logging in. Our team has been notified.',
-    });
-  }
-}
-
 async function attemptLoginWithEmailLink(
   _,
   { userEmail, emailLink },
