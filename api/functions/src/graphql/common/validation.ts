@@ -16,7 +16,7 @@ export async function validateDisplayName(displayName) {
     !displayNameRemoveSpace.trim() ||
     !displayNameRemoveSpace.match(/^[0-9a-zA-Z_.-]+$/)
   ) {
-    throw new UserInputError('Invalid display name');
+    throw new UserInputError('Invalid display name. No whitespace allowed.');
   } else if (!(await IsDisplayNameUnique(displayNameRemoveSpace))) {
     throw new UserInputError('This display name is not available');
   } else if (
@@ -24,11 +24,11 @@ export async function validateDisplayName(displayName) {
     displayNameRemoveSpace.length < 3
   ) {
     throw new UserInputError(
-      'The length of display has to be with in 3 to 24 characters'
+      'Your display name has to be between 3 to 24 characters'
     );
   } else if (!/[a-zA-Z]/.test(displayNameRemoveSpace)) {
     throw new UserInputError(
-      'The display name has to contain at least one letter'
+      'Your display name has to contain at least one letter'
     );
   }
 }
