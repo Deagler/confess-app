@@ -22,6 +22,17 @@ import RejectPostModal from '../components/RejectPostModal';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
 import { getDownloadUrl } from '../common/firebase/cloudStorage';
+import { css } from 'glamor';
+
+const imageContainer = css({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '20px',
+});
+
+const image = css({
+  margin: 'auto',
+});
 
 export interface PostRequestProps {
   id: string;
@@ -50,11 +61,17 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
   >(APPROVE_POST);
 
   const [imageURL, setImageURL] = useState<string>();
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   useEffect(() => {
     if (imageRef) {
+      setImageLoading(true);
       getDownloadUrl(imageRef)
         .then((url) => setImageURL(url))
-        .catch((e) => console.error(e));
+        .then(() => setImageLoading(false))
+        .catch((e) => {
+          console.error(e);
+          setImageLoading(false);
+        });
     }
   }, [imageRef]);
 
@@ -102,7 +119,10 @@ const PostRequest: React.FC<PostRequestProps> = (props: PostRequestProps) => {
         </IonCardHeader>
 
         <IonCardContent>
-          {imageRef && <img src={imageURL} alt="post content" />}
+          <div {...imageContainer}>
+            {imageLoading && <IonSpinner />}
+            {imageURL && <img src={imageURL} alt="post content" {...image} />}
+          </div>
           <p>{content}</p>
         </IonCardContent>
         <IonCardContent>~ {authorAlias || 'Anonymous'}</IonCardContent>

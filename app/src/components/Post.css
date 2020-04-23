@@ -17,3 +17,21 @@ ion-card-content {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.collapsed-image-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  max-height: 500px;
+  margin-bottom: 20px;
+}
+
+.expanded-image-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.post-image {
+  margin: auto;
+}

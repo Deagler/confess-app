@@ -24,7 +24,6 @@ import {
   IonCol,
   IonCardContent,
   IonIcon,
-  IonImg,
 } from '@ionic/react';
 import './SubmitPage.css';
 import { useMutation } from '@apollo/react-hooks';
@@ -43,6 +42,8 @@ import { firebaseAnalytics } from '../services/firebase';
 import { uploadImageToCloudStorage } from '../common/firebase/cloudStorage';
 import { GET_COMMUNITY_POSTS } from '../common/graphql/community';
 import { buildLink } from '../utils';
+import { css } from 'glamor';
+
 const channelInterfaceOptions = {
   header: 'Channel',
   subHeader: 'Select the channel',
@@ -80,17 +81,58 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
 }) => {
   const { data, loading, error } = useSelectedCommunityQuery();
   const channels = data?.community?.channels && data.community!.channels;
+  const [alertMessage, setAlertMessage] = useState<string>();
 
   const imageUploadHandler = (event: any) => {
     const file: File = event.target.files[0];
-    setImage(file);
 
-    const url: string = URL.createObjectURL(file);
-    setImageURL(url);
+    if (!file) {
+      setAlertMessage('No file selected, please try again.');
+      return;
+    }
+
+    // check file size
+    if (file.size < 5242880) {
+      setImage(file);
+      const url: string = URL.createObjectURL(file);
+      setImageURL(url);
+    } else {
+      setAlertMessage(
+        'Image exceeds maximum file size of 5 MB. Please try again with a smaller image.'
+      );
+    }
   };
+
+  const closeButton = css({
+    position: 'absolute',
+    top: '20px',
+    right: '20px',
+    color: 'var(--ion-color-danger)',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    transition: '0.3s',
+    ':hover': {
+      color: 'var(--ion-color-danger-tint)',
+      textDecoration: 'none',
+      cursor: 'pointer',
+    },
+  });
+
+  const imagePreview = css({
+    animationName: 'zoom',
+    animationDuration: '0.6s',
+    paddingBottom: '20px',
+    margin: 'auto',
+  });
 
   return (
     <>
+      <IonToast
+        isOpen={!!alertMessage}
+        message={alertMessage}
+        duration={2000}
+        onDidDismiss={() => setAlertMessage(undefined)}
+      />
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonList>
         <IonItem>
@@ -128,19 +170,36 @@ const SubmitForm: React.FC<SubmitFormProps> = ({
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="stacked">Image (optional)</IonLabel>
-          <input
-            id="img"
-            type="file"
-            onChange={imageUploadHandler}
-            accept="image/*"
-          />
-          {imageURL && (
-            <IonImg
-              style={{ width: '300px', height: '300px' }}
-              src={imageURL}
-            />
-          )}
+          <IonRow>
+            <IonLabel position="stacked">Image (optional)</IonLabel>
+          </IonRow>
+          <IonRow>
+            <div className="upload-btn-wrapper">
+              <button className="btn">Upload a file</button>
+              <input
+                type="file"
+                name="myfile"
+                onChange={imageUploadHandler}
+                accept="image/*"
+              />
+            </div>
+          </IonRow>
+          <IonRow className="ion-align-self-center">
+            {imageURL && (
+              <div>
+                <span
+                  {...closeButton}
+                  onClick={() => {
+                    setImage(undefined);
+                    setImageURL(undefined);
+                  }}
+                >
+                  &times;
+                </span>
+                <img {...imagePreview} src={imageURL} alt="upload preview" />
+              </div>
+            )}
+          </IonRow>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Your Confession</IonLabel>
