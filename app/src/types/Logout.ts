@@ -7,17 +7,11 @@
 // GraphQL mutation operation: Logout
 // ====================================================
 
-export interface Logout_doFirebaseLogout_authState {
-  __typename: "AuthState";
-  accessToken: string;
-}
-
 export interface Logout_doFirebaseLogout {
   __typename: "LoginResponse";
   code: string;
   success: boolean;
   message: string;
-  authState: Logout_doFirebaseLogout_authState | null;
 }
 
 export interface Logout {

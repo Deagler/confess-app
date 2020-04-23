@@ -1,11 +1,10 @@
 import { gql } from 'apollo-boost';
 
 export const GET_USER_BY_ID = gql`
-  query GetUserById($id: ID!) {
-    user(id: $id) {
+  query GetUserById($id: ID!, $disableSafeMode: Boolean = false) {
+    user(id: $id, disableSafeMode: $disableSafeMode) {
       id
-      firstName
-      lastName
+      displayName
       communityUsername
       email
       community {

@@ -16,9 +16,6 @@ const LOGOUT_MUTATION = gql`
       code
       success
       message
-      authState {
-        accessToken
-      }
     }
   }
 `;

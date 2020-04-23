@@ -18,8 +18,7 @@ export interface GetUserById_user_community {
 export interface GetUserById_user {
   __typename: "User";
   id: string;
-  firstName: string;
-  lastName: string;
+  displayName: string | null;
   communityUsername: string;
   email: string;
   community: GetUserById_user_community | null;
@@ -33,4 +32,5 @@ export interface GetUserById {
 
 export interface GetUserByIdVariables {
   id: string;
+  disableSafeMode?: boolean | null;
 }

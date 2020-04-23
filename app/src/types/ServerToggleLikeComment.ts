@@ -16,8 +16,7 @@ export interface ServerToggleLikeComment_toggleLikeComment_comment_author_commun
 export interface ServerToggleLikeComment_toggleLikeComment_comment_author {
   __typename: "User";
   id: string;
-  firstName: string;
-  lastName: string;
+  displayName: string | null;
   communityUsername: string;
   community: ServerToggleLikeComment_toggleLikeComment_comment_author_community | null;
 }

@@ -16,8 +16,7 @@ export interface ToggleStarComment_toggleStarComment_comment_author_community {
 export interface ToggleStarComment_toggleStarComment_comment_author {
   __typename: "User";
   id: string;
-  firstName: string;
-  lastName: string;
+  displayName: string | null;
   communityUsername: string;
   community: ToggleStarComment_toggleStarComment_comment_author_community | null;
   starCount: number | null;

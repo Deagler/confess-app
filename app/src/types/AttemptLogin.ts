@@ -7,7 +7,7 @@
 // GraphQL mutation operation: AttemptLogin
 // ====================================================
 
-export interface AttemptLogin_attemptLoginWithEmailLink {
+export interface AttemptLogin_attemptLogin {
   __typename: "LoginResponse";
   code: string;
   success: boolean;
@@ -15,10 +15,5 @@ export interface AttemptLogin_attemptLoginWithEmailLink {
 }
 
 export interface AttemptLogin {
-  attemptLoginWithEmailLink: AttemptLogin_attemptLoginWithEmailLink | null;
-}
-
-export interface AttemptLoginVariables {
-  userEmail: string;
-  emailLink: string;
+  attemptLogin: AttemptLogin_attemptLogin | null;
 }

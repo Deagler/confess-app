@@ -1,6 +1,7 @@
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import { firebaseApp } from '../../firebase';
 import { Comment, Community, Post, User } from '../../typings';
+import { fillCriticalFieldsOnUser } from '../../utils/users';
 import {
   verifyComment,
   verifyCommunity,
@@ -27,10 +28,20 @@ export const queryResolvers = {
 
     return postWithId;
   },
-  async user(_: null, args: { id: string }) {
+  async user(_: null, args: { id: string; disableSafeMode: boolean }) {
     const user = await firestore.doc(`users/${args.id}`).get();
 
-    return addIdToDoc(user) as User | undefined;
+    let userData = addIdToDoc(user) as User | undefined;
+
+    if (!userData) {
+      return undefined;
+    }
+
+    if (!args.disableSafeMode) {
+      userData = fillCriticalFieldsOnUser(userData);
+    }
+
+    return userData;
   },
   async community(_: null, args: { id: string }) {
     const { communityDoc } = await verifyCommunity(args.id, false);

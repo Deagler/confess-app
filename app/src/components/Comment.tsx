@@ -24,8 +24,7 @@ import { useSelectedCommunity } from '../customHooks/location';
 import { css } from 'glamor';
 import { firebaseAnalytics, firebaseApp } from '../services/firebase';
 import { Tooltip } from '@material-ui/core';
-import { GetUserById, GetUserByIdVariables } from '../types/GetUserById';
-import { GET_USER_BY_ID } from '../common/graphql/users';
+import { GetPostComments_post_comments_items_author } from '../types/GetPostComments';
 
 export interface CommentData {
   id: string;
@@ -41,7 +40,7 @@ export interface CommentProps extends CommentData {
   onReply: (author: string) => void;
   postIdForComment: string | undefined;
   isOriginalPoster?: boolean;
-  authorId?: string | null;
+  author?: GetPostComments_post_comments_items_author;
 }
 
 const timeLabelContainer = css({
@@ -58,7 +57,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const {
     id,
     content,
-    authorId,
+    author,
     onReply,
     creationTimestamp,
     totalLikes,
@@ -68,16 +67,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
     isStarred,
   } = props;
 
-  const getAuthorQuery = useQuery<GetUserById, GetUserByIdVariables>(
-    GET_USER_BY_ID,
-    { variables: { id: authorId! }, skip: !authorId }
-  );
-
-  const author = getAuthorQuery.data?.user;
-
-  const authorDisplayName = author
-    ? `${author.firstName} ${author.lastName}`
-    : 'unknown';
+  const authorDisplayName = author ? `${author.displayName}` : 'Anonymous';
   const authorCommunity = author?.community?.abbreviation ?? '';
 
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
@@ -172,16 +162,8 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   return (
     <>
       <IonToast
-        isOpen={
-          !!serverLikeInfo.error ||
-          !!toggleStarInfo.error ||
-          !!getAuthorQuery.error
-        }
-        message={
-          serverLikeInfo.error?.message ||
-          toggleStarInfo.error?.message ||
-          getAuthorQuery.error?.message
-        }
+        isOpen={!!serverLikeInfo.error || !!toggleStarInfo.error}
+        message={serverLikeInfo.error?.message || toggleStarInfo.error?.message}
         duration={2000}
       />
       <IonItem
@@ -290,7 +272,8 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                       expand="full"
                       onClick={handleStar}
                       disabled={
-                        toggleStarInfo.loading || currentUser?.uid === authorId
+                        toggleStarInfo.loading ||
+                        currentUser?.uid === author?.id
                       }
                     >
                       <IonIcon color="warning" icon={star} />

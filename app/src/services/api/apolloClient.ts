@@ -53,8 +53,7 @@ async function writeInitialData() {
         localUser {
           id
           communityUsername
-          firstName
-          lastName
+          displayName
           email
           community {
             id
