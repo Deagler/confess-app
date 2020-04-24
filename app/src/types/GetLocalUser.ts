@@ -28,3 +28,7 @@ export interface GetLocalUser_localUser {
 export interface GetLocalUser {
   localUser: GetLocalUser_localUser | null;
 }
+
+export interface GetLocalUserVariables {
+  disableSafeMode?: boolean | null;
+}

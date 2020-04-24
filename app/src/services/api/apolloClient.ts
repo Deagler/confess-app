@@ -46,7 +46,7 @@ export const refreshApolloAuthentication = () => {
 async function writeInitialData() {
   cache.writeQuery({
     query: gql`
-      query getLocalState {
+      query GetLocalState {
         authState {
           accessToken
         }

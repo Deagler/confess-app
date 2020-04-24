@@ -7,17 +7,11 @@ import {
 } from 'apollo-boost';
 import { GET_USER_BY_ID } from '../users';
 import { GetUserById, GetUserById_user } from '../../../types/GetUserById';
-import { GET_LOCAL_USER } from '../localState';
+import { GET_LOCAL_USER, GET_AUTH_STATE } from '../localState';
 
 function persistAuthState(apolloCache, authState) {
   apolloCache.writeQuery({
-    query: gql`
-      query getAuthState {
-        authState {
-          accessToken
-        }
-      }
-    `,
+    query: GET_AUTH_STATE,
     data: {
       authState,
     },
@@ -29,7 +23,7 @@ function persistAuthState(apolloCache, authState) {
 function persistLoginInfo(apolloCache, loginInfo) {
   apolloCache.writeQuery({
     query: gql`
-      query getLoginInfo {
+      query GetLoginInfo {
         loginInfo {
           code
           success

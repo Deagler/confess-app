@@ -4,31 +4,31 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getLocalState
+// GraphQL query operation: GetLocalState
 // ====================================================
 
-export interface getLocalState_authState {
+export interface GetLocalState_authState {
   __typename: "AuthState";
   accessToken: string;
 }
 
-export interface getLocalState_localUser_community {
+export interface GetLocalState_localUser_community {
   __typename: "Community";
   id: string;
   name: string;
   abbreviation: string;
 }
 
-export interface getLocalState_localUser {
+export interface GetLocalState_localUser {
   __typename: "User";
   id: string;
   communityUsername: string;
   displayName: string | null;
   email: string;
-  community: getLocalState_localUser_community | null;
+  community: GetLocalState_localUser_community | null;
 }
 
-export interface getLocalState {
-  authState: getLocalState_authState | null;
-  localUser: getLocalState_localUser | null;
+export interface GetLocalState {
+  authState: GetLocalState_authState | null;
+  localUser: GetLocalState_localUser | null;
 }
