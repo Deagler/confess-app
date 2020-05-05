@@ -3,7 +3,7 @@ import React from 'react';
 import { css } from 'glamor';
 import { LoginInput } from './LoginInput';
 import { AppLogo } from './AppLogo';
-import { useShouldBlockMenu } from '../utils/menus';
+import { useShouldBlockMenu } from '../customHooks/menus';
 import { LocalUserDetail } from './LocalUserDetail';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';

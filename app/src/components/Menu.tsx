@@ -21,13 +21,17 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { LogoutButton } from './LogoutButton';
 import { css } from 'glamor';
 import { AppLogo } from './AppLogo';
-import { useShouldBlockMenu, useShouldBlockConfess } from '../utils/menus';
+import {
+  useShouldBlockMenu,
+  useShouldBlockConfess,
+} from '../customHooks/menus';
 import { appPageCSS, backgroundColor } from '../theme/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { buildLink } from '../utils';
 import { useSelectedChannel } from '../customHooks/location';
+
 const menuCSS = css({
   borderRight: '0',
   '@media(min-width:992px)': {
