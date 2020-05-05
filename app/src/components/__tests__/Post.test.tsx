@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Post, { PostProps } from './Post';
+import Post, { PostProps } from '../Post';
 import { MemoryRouter } from 'react-router-dom';
-import { wrapWithApolloProvider } from '../utils/testing';
+import { wrapWithApolloProvider } from '../../utils/testing';
 
 const props: PostProps = {
   id: 'id',
@@ -21,7 +21,7 @@ const props: PostProps = {
   channelId: 'mockChannel',
 };
 
-jest.mock('../services/firebase', () => {
+jest.mock('../../services/firebase', () => {
   return {
     firebaseAnalytics: {
       logEvent: () => {},

@@ -22,12 +22,12 @@ import {
 import LandingPost from '../components/LandingPost';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 import { GET_LANDING_POSTS } from '../common/graphql/landingPosts';
 import { GetLandingPosts } from '../types/GetLandingPosts';
 import CommunityList from '../components/CommunityList';
 
-const containerClass = css(
+const container = css(
   {
     maxWidth: '1000px',
     margin: 'auto',
@@ -36,7 +36,7 @@ const containerClass = css(
   backgroundColor
 );
 
-const chipClass = css({
+const chip = css({
   backgroundColor: 'transparent',
   pointerEvents: 'none',
 });
@@ -45,7 +45,7 @@ const loginInput = css({
   maxWidth: '300px',
 });
 
-const secondaryHero = css({
+const secondRow = css({
   display: 'flex',
   maxHeight: '500px',
 });
@@ -64,7 +64,7 @@ const LandingPage: React.FC = () => {
     <IonPage id="landing-page">
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonContent {...backgroundColor}>
-        <div {...containerClass} className=" ion-align-self-center">
+        <div {...container} className=" ion-align-self-center">
           <IonToolbar>
             <IonItem {...backgroundColor} slot="start" lines="none">
               <IonIcon icon={chatbox} color="primary" size="large" />
@@ -98,19 +98,19 @@ const LandingPage: React.FC = () => {
             </IonRow>
 
             <IonRow className="ion-margin-top ion-justify-content-center">
-              <IonChip {...chipClass}>
+              <IonChip {...chip}>
                 <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Confessions</IonLabel>
               </IonChip>
-              <IonChip {...chipClass}>
+              <IonChip {...chip}>
                 <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Memes</IonLabel>
               </IonChip>
-              <IonChip {...chipClass}>
+              <IonChip {...chip}>
                 <IonIcon color="primary" icon={checkmarkCircleSharp} />
                 <IonLabel>Emotions</IonLabel>
               </IonChip>
-              <IonChip {...chipClass}>
+              <IonChip {...chip}>
                 <IonLabel style={{ fontWeight: 'bold' }}>
                   All in one place.
                 </IonLabel>
@@ -120,7 +120,7 @@ const LandingPage: React.FC = () => {
 
           <IonItemDivider {...backgroundColor} />
           <IonGrid className="ion-text-center">
-            <IonRow {...secondaryHero}>
+            <IonRow {...secondRow}>
               <IonCol size-md="4" size-sm="12">
                 <IonRow>
                   <IonCol>

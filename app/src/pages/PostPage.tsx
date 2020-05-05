@@ -25,7 +25,7 @@ import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
 import update from 'immutability-helper';
 import PostSkeleton from '../components/PostSkeleton';
 import { usePaginatedPostQuery } from '../customHooks/pagination';
-import { appPageCSS } from '../theme/global';
+import { appPage } from '../styles/global';
 import {
   useSelectedCommunity,
   useSelectedChannel,
@@ -83,7 +83,7 @@ const Postpage: React.FC = () => {
   };
 
   return (
-    <IonPage {...appPageCSS}>
+    <IonPage {...appPage}>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
       <IonHeader className="ion-hide-lg-up">
         <IonToolbar>

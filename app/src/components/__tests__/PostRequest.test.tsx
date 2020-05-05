@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import PostRequest, { PostRequestProps } from './PostRequest';
-import { wrapWithApolloProvider, wrapWithRouter } from '../utils/testing';
+import PostRequest, { PostRequestProps } from '../PostRequest';
+import { wrapWithApolloProvider, wrapWithRouter } from '../../utils/testing';
 import moment from 'moment';
 
 const props: PostRequestProps = {
@@ -13,7 +13,7 @@ const props: PostRequestProps = {
   onModeration: () => {},
 };
 
-jest.mock('../services/firebase', () => {
+jest.mock('../../services/firebase', () => {
   return {
     firebaseAnalytics: {
       logEvent: () => {},

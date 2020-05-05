@@ -19,7 +19,7 @@ import { RouteComponentProps } from 'react-router';
 import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
-import { appPageCSS } from '../theme/global';
+import { appPage } from '../styles/global';
 import { chatbox } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
@@ -68,7 +68,7 @@ const FeedPage: React.FC<RouteComponentProps> = ({ history }) => {
     communityId === localUserQuery.data?.localUser?.community?.id;
 
   return (
-    <IonPage {...appPageCSS}>
+    <IonPage {...appPage}>
       <IonHeader id="header" className="ion-hide-lg-up">
         <IonToolbar>
           <IonButtons slot="start">

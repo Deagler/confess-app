@@ -1,7 +1,7 @@
 import { css } from 'glamor';
 import { IonSpinner } from '@ionic/react';
 import React from 'react';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 
 const loadingContainer = css(
   {

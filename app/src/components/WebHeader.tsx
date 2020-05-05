@@ -3,13 +3,14 @@ import React from 'react';
 import { css } from 'glamor';
 import { LoginInput } from './LoginInput';
 import { AppLogo } from './AppLogo';
-import { useShouldBlockMenu } from '../utils/menus';
+import { useShouldBlockMenu } from '../customHooks/menus';
 import { LocalUserDetail } from './LocalUserDetail';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
+import { appLogo } from '../styles/app';
 
 const webHeader = css(
   {
@@ -38,11 +39,6 @@ const spinnerContainer = css({
   zIndex: 9999999,
 });
 
-const appLogoCSS = css({
-  backgroundColor: 'transparent',
-  '--background': 'transparent',
-});
-
 export const WebHeader: React.FC<{}> = () => {
   const localUserQuery = useQuery<GetLocalUser>(GET_LOCAL_USER, {
     fetchPolicy: 'network-only',
@@ -59,7 +55,7 @@ export const WebHeader: React.FC<{}> = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="4">
-            <IonToolbar {...appLogoCSS}>
+            <IonToolbar {...appLogo}>
               <AppLogo />
             </IonToolbar>
           </IonCol>

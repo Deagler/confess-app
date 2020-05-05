@@ -9,7 +9,7 @@ import {
   IonCard,
 } from '@ionic/react';
 import { school, arrowForwardOutline } from 'ionicons/icons';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 import { GET_COMMUNITIES } from '../common/graphql/communities';
 import { GetCommunities } from '../types/GetCommunities';
 import { useQuery } from '@apollo/react-hooks';

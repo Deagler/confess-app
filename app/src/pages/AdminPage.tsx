@@ -16,7 +16,7 @@ import PostRequest from '../components/PostRequest';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedUnapprovedPostsQuery } from '../customHooks/pagination';
 import update from 'immutability-helper';
-import { appPageCSS } from '../theme/global';
+import { appPage } from '../styles/global';
 
 const AdminPage: React.FC = () => {
   const {
@@ -44,7 +44,7 @@ const AdminPage: React.FC = () => {
   return (
     <>
       <IonToast isOpen={!!error} message={error?.message} duration={2000} />
-      <IonPage {...appPageCSS}>
+      <IonPage {...appPage}>
         <IonHeader className="ion-hide-lg-up">
           <IonToolbar>
             <IonButtons slot="start">

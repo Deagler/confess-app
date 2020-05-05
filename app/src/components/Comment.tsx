@@ -11,7 +11,6 @@ import {
 import React from 'react';
 import { timeOutline, heart, chatbox, star } from 'ionicons/icons';
 import moment from 'moment';
-import './Comment.css';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { GetLocalUser } from '../types/GetLocalUser';
@@ -51,6 +50,12 @@ const timeLabelContainer = css({
     position: 'absolute',
     right: '10px',
   },
+});
+
+const text = css({
+  marginLeft: '20px',
+  fontSize: '14px',
+  whiteSpace: 'pre-line',
 });
 
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
@@ -200,13 +205,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           </IonRow>
           <IonRow>
             <IonCol>
-              <p>{content}</p>
+              <p {...text}>{content}</p>
             </IonCol>
           </IonRow>
           {isStarred && (
             <IonRow>
               <IonCol>
-                <p>
+                <p {...text}>
                   <em>
                     The Original Poster has marked this comment as helpful.
                   </em>
