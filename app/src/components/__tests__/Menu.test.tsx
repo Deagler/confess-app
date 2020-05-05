@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Menu from './Menu';
+import Menu from '../Menu';
 import { MockedProvider } from '@apollo/react-testing';
-import { GET_COMMUNITIES } from '../common/graphql/communities';
+import { GET_COMMUNITIES } from '../../common/graphql/communities';
 
 const mocks = [
   {
@@ -30,7 +30,7 @@ const mocks = [
   },
 ];
 
-jest.mock('../services/firebase', () => {
+jest.mock('../../services/firebase', () => {
   return {
     firebaseAnalytics: {
       logEvent: () => {},
