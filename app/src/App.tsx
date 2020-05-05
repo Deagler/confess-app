@@ -29,7 +29,7 @@ import { firebaseApp, firebaseAnalytics } from './services/firebase';
 import { FullPageLoader } from './components/FullPageLoader';
 import { WebHeader } from './components/WebHeader';
 import { css } from 'glamor';
-import { AppRouter } from './AppRouter';
+import { AppRouter } from './routing/AppRouter';
 import {
   useMediaQuery,
   createMuiTheme,
