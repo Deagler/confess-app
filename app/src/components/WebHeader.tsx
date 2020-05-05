@@ -10,6 +10,7 @@ import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
 import { backgroundColor } from '../styles/global';
+import { appLogo } from '../styles/app';
 
 const webHeader = css(
   {
@@ -36,11 +37,6 @@ const spinnerContainer = css({
   height: '100%',
   width: '250px',
   zIndex: 9999999,
-});
-
-const appLogo = css({
-  backgroundColor: 'transparent',
-  '--background': 'transparent',
 });
 
 export const WebHeader: React.FC<{}> = () => {

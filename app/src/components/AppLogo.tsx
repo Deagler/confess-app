@@ -1,12 +1,7 @@
 import { IonItem, IonIcon, IonLabel } from '@ionic/react';
 import React from 'react';
 import { chatbox } from 'ionicons/icons';
-import { css } from 'glamor';
-
-const appLogo = css({
-  backgroundColor: 'transparent',
-  '--background': 'transparent',
-});
+import { appLogo } from '../styles/app';
 
 export const AppLogo: React.FC<any> = () => {
   return (
