@@ -1,14 +1,14 @@
 import { Switch, Route, Redirect } from 'react-router';
 import React from 'react';
 import { IonRouterOutlet } from '@ionic/react';
-import AuthCallbackPage from '../pages/Auth/AuthCallbackPage';
+import AuthCallbackPage from '../pages/AuthCallbackPage';
 import LandingPage from '../pages/LandingPage';
 import FeedPage from '../pages/FeedPage';
 import SecureRoute from '../components/SecureRoute';
 import AdminPage from '../pages/AdminPage';
 import SubmitPage from '../pages/SubmitPage';
 import Postpage from '../pages/PostPage';
-import SignUpPage from '../pages/Auth/SignupPage';
+import SignUpPage from '../pages/SignupPage';
 
 export const AppRouter: React.FC<{
   userLoggedIn: boolean;

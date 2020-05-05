@@ -10,15 +10,15 @@ import {
 
 import { RouteComponentProps } from 'react-router';
 
-import { SubmittableEmailInput } from '../../components/SubmittableEmailInput';
+import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
-import { backgroundColor } from '../../theme/global';
+import { backgroundColor } from '../theme/global';
 import { css } from 'glamor';
-import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../../common/graphql/auth';
-import { authPageCSS, authCenterCardCSS } from './authCSS';
-import { AttemptLoginWithEmailLink } from '../../types/AttemptLoginWithEmailLink';
-import { firebaseAnalytics } from '../../services/firebase';
+import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../common/graphql/auth';
+import { authPage, authCenterCard } from '../styles/auth';
+import { AttemptLoginWithEmailLink } from '../types/AttemptLoginWithEmailLink';
+import { firebaseAnalytics } from '../services/firebase';
 
 enum LOGIN_CARD_STATE {
   SHOW_LOGGING_IN,
@@ -88,10 +88,10 @@ const AuthCallbackPage: React.FC<RouteComponentProps> = ({ history }) => {
   }, [attemptLoginCallback]);
 
   return (
-    <IonPage {...css(backgroundColor, authPageCSS)}>
+    <IonPage {...css(backgroundColor, authPage)}>
       <div className="ion-text-center">
         <h4 className="ion-padding-top">You're almost in!</h4>
-        <IonCard {...authCenterCardCSS}>
+        <IonCard {...authCenterCard}>
           {renderAppropriateLoginCard(
             loginCardState,
             attemptLoginInfo,

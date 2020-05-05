@@ -1,6 +1,6 @@
 import { css } from 'glamor';
 
-export const authPageCSS = css({
+export const authPage = css({
   height: '100vh',
   width: '100wh',
   justifyContent: 'center',
@@ -8,7 +8,7 @@ export const authPageCSS = css({
   alignItems: 'center',
 });
 
-export const authCenterCardCSS = css({
+export const authCenterCard = css({
   '@media(min-width:992px)': {
     width: '500px',
   },
