@@ -25,7 +25,7 @@ import {
   useShouldBlockMenu,
   useShouldBlockConfess,
 } from '../customHooks/menus';
-import { appPageCSS, backgroundColor } from '../theme/global';
+import { appPageCSS, backgroundColor } from '../styles/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';

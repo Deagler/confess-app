@@ -17,7 +17,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
 /* Theme variables */
-import './theme/variables.css';
+import './styles/variables.css';
 
 import Menu from './components/Menu';
 import { ApolloProvider } from '@apollo/react-hooks';

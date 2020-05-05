@@ -9,7 +9,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
 import { GET_LOCAL_USER } from '../common/graphql/localState';
 import { LogoutButton } from './LogoutButton';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 
 const webHeader = css(
   {

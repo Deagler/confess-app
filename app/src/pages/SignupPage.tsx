@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { css } from 'glamor';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 import { useMutation } from '@apollo/react-hooks';
 import { AttemptSignup } from '../types/AttemptSignup';
 import { ATTEMPT_SIGNUP } from '../common/graphql/auth';

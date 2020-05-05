@@ -16,7 +16,7 @@ import PostRequest from '../components/PostRequest';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedUnapprovedPostsQuery } from '../customHooks/pagination';
 import update from 'immutability-helper';
-import { appPageCSS } from '../theme/global';
+import { appPageCSS } from '../styles/global';
 
 const AdminPage: React.FC = () => {
   const {

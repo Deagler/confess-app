@@ -22,7 +22,7 @@ import {
 import LandingPost from '../components/LandingPost';
 import { LoginInput } from '../components/LoginInput';
 import { css } from 'glamor';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 import { GET_LANDING_POSTS } from '../common/graphql/landingPosts';
 import { GetLandingPosts } from '../types/GetLandingPosts';
 import CommunityList from '../components/CommunityList';

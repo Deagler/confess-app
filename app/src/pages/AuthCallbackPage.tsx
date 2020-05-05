@@ -13,7 +13,7 @@ import { RouteComponentProps } from 'react-router';
 import { SubmittableEmailInput } from '../components/SubmittableEmailInput';
 import { useMutation } from '@apollo/react-hooks';
 import { Checkmark } from 'react-checkmark';
-import { backgroundColor } from '../theme/global';
+import { backgroundColor } from '../styles/global';
 import { css } from 'glamor';
 import { ATTEMPT_LOGIN_WITH_EMAIL_LINK } from '../common/graphql/auth';
 import { authPage, authCenterCard } from '../styles/auth';

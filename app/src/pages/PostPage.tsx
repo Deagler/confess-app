@@ -25,7 +25,7 @@ import { SubmitComment_submitComment_comment } from '../types/SubmitComment';
 import update from 'immutability-helper';
 import PostSkeleton from '../components/PostSkeleton';
 import { usePaginatedPostQuery } from '../customHooks/pagination';
-import { appPageCSS } from '../theme/global';
+import { appPageCSS } from '../styles/global';
 import {
   useSelectedCommunity,
   useSelectedChannel,

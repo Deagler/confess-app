@@ -19,7 +19,7 @@ import { RouteComponentProps } from 'react-router';
 import './Page.css';
 import FeedSkeleton from '../components/FeedSkeleton';
 import { usePaginatedFeedQuery } from '../customHooks/pagination';
-import { appPageCSS } from '../theme/global';
+import { appPageCSS } from '../styles/global';
 import { chatbox } from 'ionicons/icons';
 import { useQuery } from '@apollo/react-hooks';
 import { GetLocalUser } from '../types/GetLocalUser';
