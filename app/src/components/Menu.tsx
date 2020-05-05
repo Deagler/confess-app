@@ -25,14 +25,14 @@ import {
   useShouldBlockMenu,
   useShouldBlockConfess,
 } from '../customHooks/menus';
-import { appPageCSS, backgroundColor } from '../styles/global';
+import { appPage, backgroundColor } from '../styles/global';
 import { chatbox, shieldCheckmark } from 'ionicons/icons';
 import ButtonDisabledTooltip from './ButtonDisabledTooltip';
 import { useSelectedCommunity } from '../customHooks/location';
 import { buildLink } from '../utils';
 import { useSelectedChannel } from '../customHooks/location';
 
-const menuCSS = css({
+const menu = css({
   borderRight: '0',
   '@media(min-width:992px)': {
     maxWidth: '300px',
@@ -80,7 +80,7 @@ const Menu: React.FC<{}> = () => {
   return (
     <React.Fragment>
       <IonMenu
-        {...css(menuCSS, appPageCSS)}
+        {...css(menu, appPage)}
         contentId="main"
         type="overlay"
         disabled={shouldBlockMenu}

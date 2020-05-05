@@ -60,21 +60,21 @@ export interface PostProps extends PostData {
 
 const MAX_CONTENT_LENGTH: number = 600;
 
-const textColorCSS = css({
+const textColor = css({
   color: 'var(--ion-text-color)',
 });
 
-const topBorderCSS = css({
+const topBorder = css({
   borderTop: 'solid 5px var(--ion-color-primary)',
 });
 
-const headerSubtitleCSS = css({
+const headerSubtitle = css({
   display: 'flex',
   flex: '1',
   width: '100%',
 });
 
-const highlightAuthorCSS = css({
+const highlightAuthor = css({
   fontWeight: 'bold !important',
   color: 'var(--ion-color-primary)',
 });
@@ -177,13 +177,10 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         duration={2000}
       />
 
-      <IonCard
-        className="ion-margin"
-        {...css(isOriginalPoster && topBorderCSS)}
-      >
+      <IonCard className="ion-margin" {...css(isOriginalPoster && topBorder)}>
         <Link to={buildLink(`/posts/${id}`, communityId)} className="Link">
           <IonCardHeader>
-            <div {...headerSubtitleCSS}>
+            <div {...headerSubtitle}>
               <IonCardSubtitle>
                 {postNumber ? `#${postNumber}` : `Post ID: ${id}`}
               </IonCardSubtitle>
@@ -199,13 +196,13 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               )}
             </div>
 
-            <IonCardTitle {...textColorCSS}>{title}</IonCardTitle>
+            <IonCardTitle {...textColor}>{title}</IonCardTitle>
             <IonCardSubtitle>
               {moment.unix(creationTimestamp).fromNow()}
             </IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent {...textColorCSS}>
+          <IonCardContent {...textColor}>
             <div
               className={
                 collapsable
@@ -236,8 +233,8 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
             </p>
           </IonCardContent>
 
-          <IonCardContent {...textColorCSS}>
-            <p {...css(isOriginalPoster && highlightAuthorCSS)}>
+          <IonCardContent {...textColor}>
+            <p {...css(isOriginalPoster && highlightAuthor)}>
               ~ {authorAlias || 'Anonymous'}
               {isOriginalPoster && ' (Your Confession)'}
             </p>

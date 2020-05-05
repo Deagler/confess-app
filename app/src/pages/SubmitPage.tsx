@@ -24,7 +24,7 @@ import {
   SubmitPostForApproval,
   SubmitPostForApprovalVariables,
 } from '../types/SubmitPostForApproval';
-import { appPageCSS } from '../styles/global';
+import { appPage } from '../styles/global';
 import SubmissionRulesModal from '../components/SubmissionRulesModal';
 import { useSelectedCommunity } from '../customHooks/location';
 import { firebaseAnalytics } from '../services/firebase';
@@ -130,7 +130,7 @@ const SubmitPage: React.FC<RouteComponentProps> = ({ history }) => {
   };
 
   return (
-    <IonPage {...appPageCSS}>
+    <IonPage {...appPage}>
       <IonToast
         isOpen={successToastVisible}
         message="Post submitted!"

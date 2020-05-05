@@ -38,7 +38,7 @@ const spinnerContainer = css({
   zIndex: 9999999,
 });
 
-const appLogoCSS = css({
+const appLogo = css({
   backgroundColor: 'transparent',
   '--background': 'transparent',
 });
@@ -59,7 +59,7 @@ export const WebHeader: React.FC<{}> = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="4">
-            <IonToolbar {...appLogoCSS}>
+            <IonToolbar {...appLogo}>
               <AppLogo />
             </IonToolbar>
           </IonCol>

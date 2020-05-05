@@ -11,7 +11,7 @@ export const backgroundColor = css({
   },
 });
 
-export const appPageCSS = css(
+export const appPage = css(
   {
     '@media(min-width:992px)': {
       marginTop: '82px',
