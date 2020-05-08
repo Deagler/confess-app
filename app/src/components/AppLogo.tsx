@@ -3,7 +3,7 @@ import React from 'react';
 import { chatbox } from 'ionicons/icons';
 import { appLogo } from '../styles/app';
 
-export const AppLogo: React.FC<any> = () => {
+export const AppLogo: React.FC<{}> = () => {
   return (
     <IonItem {...appLogo} slot="start" lines="none">
       <IonIcon icon={chatbox} color="primary" size="large" />
