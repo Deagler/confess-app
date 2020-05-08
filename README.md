@@ -5,6 +5,10 @@
 
 ## Confess Overview
 Confess is a web application for sharing and consuming high-quality thoughts, feelings, and memes with your peers anonymously and exclusively.
+![Confess LandingPage](confessPreview/landingPage.png?raw=true "landing")
+![Confess PostPage](confessPreview/postPage.png?raw=true "post")
+![Confess RegisterPage](confessPreview/mobileOverview.png?raw=true "register")
+![Confess CommentPage](confessPreview/mobileComment.png?raw=true "comment")
 
 ## Features
 
@@ -56,7 +60,7 @@ Ionic and Material-UI are used as we developed a cross-platform mobile and deskt
 
 Firebase is a cloud-based database hosting service. It is to store and retrieve data in real time. - [Firebase Docs](https://firebase.google.com)
 
-Apollo is used for state and cache management, it provides consistent API across the platform for all clients. - [Apollo](https://www.apollographql.com/docs)
+Apollo is used for state and cache management, it provides consistent API across the platform for all clients. - [Apollo_Docs](https://www.apollographql.com/docs)
 
 Using GraphQL, the page can obtain all of this data with a single query to a single endpoint.
 
