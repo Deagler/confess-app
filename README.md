@@ -5,8 +5,11 @@
 
 ## Confess Overview
 Confess is a web application for sharing and consuming high-quality thoughts, feelings, and memes with your peers anonymously and exclusively.
+ 
+ Desktop and Mobile View:
 ![Confess LandingPage](confessPreview/landingPage.png?raw=true "landing")
 ![Confess PostPage](confessPreview/postPage.png?raw=true "post")
+ 
 ![Confess RegisterPage](confessPreview/mobileOverview.png?raw=true "register")
 ![Confess CommentPage](confessPreview/mobileComment.png?raw=true "comment")
 
@@ -45,7 +48,7 @@ npm run start
 
 ## Test
 
-  Run tests
+  Run tests. The tests cover initial rendering of components, new component created on submission, component state change, page loading test, login and logout workflow test etc.
 
 ```bash
 npm test
@@ -62,7 +65,7 @@ Firebase is a cloud-based database hosting service. It is to store and retrieve 
 
 Apollo is used for state and cache management, it provides consistent API across the platform for all clients. - [Apollo_Docs](https://www.apollographql.com/docs)
 
-Using GraphQL, the page can obtain all of this data with a single query to a single endpoint.
+Using GraphQL, the page can obtain all of this data with a single query to a single endpoint. - [GraphQL Docs](https://graphql.org/learn/)
 
 Using Jest for testing purpose. - [Jest_Docs](https://jestjs.io/en/)
 
