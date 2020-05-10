@@ -30,7 +30,7 @@ $ git clone https://github.com/Deagler/confess-app.git
 ```bash
 $ npm install
 ```
-  Config
+  Config:
 
   copy content inside .env.example file to .env file under api and app directory, please notice that ``GOOGLE_APPLICATION_CREDENTIALS``needs to be    downloaded to local machine.
 
@@ -48,7 +48,7 @@ npm run start
   Run tests
 
 ```bash
-npm run test
+npm test
 ```
 
 
@@ -63,5 +63,8 @@ Firebase is a cloud-based database hosting service. It is to store and retrieve 
 Apollo is used for state and cache management, it provides consistent API across the platform for all clients. - [Apollo_Docs](https://www.apollographql.com/docs)
 
 Using GraphQL, the page can obtain all of this data with a single query to a single endpoint.
+
+Using Jest for testing purpose. - [Jest_Docs](https://jestjs.io/en/)
+
 
 
