@@ -51,7 +51,7 @@ npm run start
   Run tests. The tests cover initial rendering of components, new component created on submission, component state change, page loading test, login and logout workflow test etc.
 
 ```bash
-npm test
+npm test --watchAll
 ```
 
 
