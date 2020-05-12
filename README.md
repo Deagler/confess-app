@@ -102,3 +102,5 @@ Using Jest for testing purpose. - [Jest_Docs](https://jestjs.io/en/)
 ### CSS-in-JS
 Glamor shares most common attributes of other inline style / css-in-js systems - [Galmor docs](https://www.gatsbyjs.org/docs/glamor/)
 
+## Documentation
+To see more documentations, please refer to [Wiki](https://github.com/Deagler/confess-app/wiki)
