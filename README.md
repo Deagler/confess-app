@@ -66,6 +66,9 @@ Ionic and Material-UI are used as external component libraries to create a cross
 ### Typescript
 TypeScript is a transpiled language. It simplifies JavaScript code, making it easier to read and debug. 
 
+### React hook 
+Hooks allow to reuse stateful logic without changing component hierarchy.
+
 ### Firebase, Firestore and cloud function
 Firebase is a cloud-based database hosting service. It is to store and retrieve data in real time.
 
@@ -88,9 +91,9 @@ Apollo server can integrate with Express so that we can build our own schema. - 
 GraphQL provides a query layer and can simplify fetching operations for Firebase clients. 
 
 Using GraphQL, the page can obtain all of this data with a single query to a single endpoint. 
-A GraphQL query is used to read or fetch values while a mutation is used to write or post values. GraphQL query will get exactly what you want and not addtional attributes on the object. Therefore, we can restrict data that should be fetched from the server. GraphQL is strongly typed and the queries are based on fields and their associated data types. Resolves will return GraphQL queries into data. This type system catches many errors and requires no manual checks.
+A GraphQL query is used to read or fetch values while a mutation is used to write or post values. GraphQL query will get exactly what you want and not addtional attributes on the object. Therefore, we can restrict data that should be fetched from the server. GraphQL is strongly typed and the queries are based on fields and their associated data types. This type system catches many errors and requires no manual checks.
 
-For example, in order to query all the posts(feed) under a community, we define a community object with a ``PostConnection`` property and it will return an array of posts. Because ``PostConnection`` is a child of community, we can use the parent community to then query the posts collection for all the posts with that community ID. - [GraphQL Docs](https://graphql.org/learn/)
+Resolves will return GraphQL queries into data. For example, in order to query all the posts(feed) under a community, we define a community object with a ``PostConnection`` property and it will return an array of posts. Because ``PostConnection`` is a child of community, we can use the parent community to then query the posts collection for all the posts with that community ID. - [GraphQL Docs](https://graphql.org/learn/)
 
 ### Jest
 
