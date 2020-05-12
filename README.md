@@ -54,20 +54,48 @@ npm run start
 npm test --watchAll
 ```
 
-
 ## Technology Overview
+
+### Lerna
 
 Lerna allows to build libraries and apps in a single repo without forcing us to publish to npm or other registries. They can find package dependencies by analyzing package. json files located at each project's root folder.
 
-Ionic and Material-UI are used as we developed a cross-platform mobile and desktop compatiable website. - [Ionic Docs](https://ionicframework.com/docs)
+### Ionic-react and material UI
+Ionic and Material-UI are used as external component libraries to create a cross-platform mobile and desktop compatiable website. - [Ionic Docs](https://ionicframework.com/docs)
 
-Firebase is a cloud-based database hosting service. It is to store and retrieve data in real time. - [Firebase Docs](https://firebase.google.com)
+### Typescript
+TypeScript is a transpiled language. It simplifies JavaScript code, making it easier to read and debug. 
 
-Apollo is used for state and cache management, it provides consistent API across the platform for all clients. - [Apollo_Docs](https://www.apollographql.com/docs)
+### Firebase, Firestore and cloud function
+Firebase is a cloud-based database hosting service. It is to store and retrieve data in real time.
 
-Using GraphQL, the page can obtain all of this data with a single query to a single endpoint. - [GraphQL Docs](https://graphql.org/learn/)
+Firebase Authentication provides an easy way to authenicate sign in users, confess uses email link to authenticate users.
+
+Firebase cloud-storage allows image uploaded by users to be stored on the server side.
+
+Firebase cloud functions triggers when the event provider generates an event that matches the function's conditions. For instance, a new user attempts to sign in with email link then the cloud function will call onCreate() to register that user for the first time. 
+
+Analytics is deployed to watch event log.- [Firebase Docs](https://firebase.google.com)
+
+### Express and node.js
+Express on node.js build API, combining the library with cloud functions we have deployed a severless platform. (a serverless vendor is charged based on usage).
+
+### Apollo client, Apollo server, GraphQL
+Apollo client is used for state and cache management, it provides consistent API across the platform for all clients. On the client, caches can prevent multiple queries from being called when not necessary. If the request is in the cache for that client, the request does not need to be called.
+
+Apollo server can integrate with Express so that we can build our own schema. - [Apollo_Docs](https://www.apollographql.com/docs)
+
+GraphQL provides a query layer and can simplify fetching operations for Firebase clients. 
+
+Using GraphQL, the page can obtain all of this data with a single query to a single endpoint. 
+A GraphQL query is used to read or fetch values while a mutation is used to write or post values. GraphQL query will get exactly what you want and not addtional attributes on the object. Therefore, we can restrict data that should be fetched from the server. GraphQL is strongly typed and the queries are based on fields and their associated data types. Resolves will return GraphQL queries into data. This type system catches many errors and requires no manual checks.
+
+For example, in order to query all the posts(feed) under a community, we define a community object with a ``PostConnection`` property and it will return an array of posts. Because ``PostConnection`` is a child of community, we can use the parent community to then query the posts collection for all the posts with that community ID. - [GraphQL Docs](https://graphql.org/learn/)
+
+### Jest
 
 Using Jest for testing purpose. - [Jest_Docs](https://jestjs.io/en/)
 
-
+### CSS-in-JS
+Glamor shares most common attributes of other inline style / css-in-js systems - [Galmor docs](https://www.gatsbyjs.org/docs/glamor/)
 
