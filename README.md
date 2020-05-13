@@ -57,50 +57,51 @@ npm test --watchAll
 ## Technology Overview
 
 ### Lerna
-
-Lerna allows to build libraries and apps in a single repo without forcing us to publish to npm or other registries. They can find package dependencies by analyzing package. json files located at each project's root folder.
+Lerna manages multiple packages (`app`, `api`) in a mono repository. Lerna simplifies installing dependencies and starting applications across multiple local packages. [Lerna](https://lerna.js.org/)
 
 ### Ionic-react and material UI
 Ionic and Material-UI are used as external component libraries to create a cross-platform mobile and desktop compatiable website. - [Ionic Docs](https://ionicframework.com/docs)
 
 ### Typescript
-TypeScript is a transpiled language. It simplifies JavaScript code, making it easier to read and debug. 
+Typescript offers static typing on top of traditional Javascript. Simple errors can be caught earlier in the development process.
 
 ### React hook 
 Hooks allow to reuse stateful logic without changing component hierarchy.
 
-### Firebase, Firestore and cloud function
-Firebase is a cloud-based database hosting service. It is to store and retrieve data in real time.
+### Firebase
+Firebase is a simple cloud hosting service.
 
-Firebase Authentication provides an easy way to authenicate sign in users, confess uses email link to authenticate users.
+Firestore is a highly scalable, NoSQL database with real time semantics.
 
-Firebase cloud-storage allows image uploaded by users to be stored on the server side.
+Firebase Authentication provides the mechanism for email based, passwordless authentication.
 
-Firebase cloud functions triggers when the event provider generates an event that matches the function's conditions. For instance, a new user attempts to sign in with email link then the cloud function will call onCreate() to register that user for the first time. 
+Firebase Storage provides a platform where user image uploads can be stored and served.
 
-Analytics is deployed to watch event log.- [Firebase Docs](https://firebase.google.com)
+Firebase Functions trigger on requests to the Confess API and spin up an Express.js server.
 
-### Express and node.js
-Express on node.js build API, combining the library with cloud functions we have deployed a severless platform. (a serverless vendor is charged based on usage).
+Firebase Analytics are used to analyse user activity and to log errors. 
+
+[Firebase Docs](https://firebase.google.com)
+
+### Express and Node.js
+An express server is executed serverlessly using Firebase Functions, providing scalability and a pay-as-you-use structure.
 
 ### Apollo client, Apollo server, GraphQL
-Apollo client is used for state and cache management, it provides consistent API across the platform for all clients. On the client, caches can prevent multiple queries from being called when not necessary. If the request is in the cache for that client, the request does not need to be called.
+Apollo client is used for local state and cache management; it provides consistent API across the platform for all clients. On the client, caching can prevent redundant queries by serving the result from the cache instead of from the server.
 
-Apollo server can integrate with Express so that we can build our own schema. - [Apollo_Docs](https://www.apollographql.com/docs)
+Apollo-server integrates with express to support our GraphQL schema - [Apollo_Docs](https://www.apollographql.com/docs)
 
-GraphQL provides a query layer and can simplify fetching operations for Firebase clients. 
+GraphQL provides a query layer and that simplifies and provides customisability to query clients.
 
-Using GraphQL, the page can obtain all of this data with a single query to a single endpoint. 
-A GraphQL query is used to read or fetch values while a mutation is used to write or post values. GraphQL query will get exactly what you want and not addtional attributes on the object. Therefore, we can restrict data that should be fetched from the server. GraphQL is strongly typed and the queries are based on fields and their associated data types. This type system catches many errors and requires no manual checks.
+A GraphQL query is used to read or fetch values while a mutation is used to write or post values. GraphQL queries can be tailored to only request the exact data needed. GraphQL is strongly typed, useful for catching errors early in the development process.
 
-Resolves will return GraphQL queries into data. For example, in order to query all the posts(feed) under a community, we define a community object with a ``PostConnection`` property and it will return an array of posts. Because ``PostConnection`` is a child of community, we can use the parent community to then query the posts collection for all the posts with that community ID. - [GraphQL Docs](https://graphql.org/learn/)
+[GraphQL Docs](https://graphql.org/learn/)
 
 ### Jest
-
-Using Jest for testing purpose. - [Jest_Docs](https://jestjs.io/en/)
+The Jest testing framework is used to test the functionality and presentation of React components. - [Jest_Docs](https://jestjs.io/en/)
 
 ### CSS-in-JS
 Glamor shares most common attributes of other inline style / css-in-js systems - [Galmor docs](https://www.gatsbyjs.org/docs/glamor/)
 
 ## Documentation
-To see more documentations, please refer to [Wiki](https://github.com/Deagler/confess-app/wiki)
+For further documentation, please refer to the [Wiki](https://github.com/Deagler/confess-app/wiki)
