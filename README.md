@@ -25,33 +25,28 @@ Confess is a web application for sharing and consuming high-quality thoughts, fe
   * Sort posts by popularity, most recent, and controversy 
 
 ## Quick Start
-   Create the app:
+### Clone the repository
 ```bash
 $ git clone https://github.com/Deagler/confess-app.git
 ```
-  Install dependencies:
+
+### Install dependencies
 ```bash
 $ npm install
 ```
-  Config:
+### Configuration
+Environment files `app/.env`, `api/functions/.env` and `api/functions/.runtimeconfig.json` need to be created, following their examples in the same folder.
+  
+Note: `GOOGLE_APPLICATION_CREDENTIALS` refers to a JSON credentials file that needs to be downloaded from the Firebase console.
 
-  copy content inside .env.example file to .env file under api and app directory, please notice that ``GOOGLE_APPLICATION_CREDENTIALS``needs to be    downloaded to local machine.
-
-  copy content inside .runtimeconfig.example.json to .runtimeconfig.json
-
-
-  Start the server:
-
+### Start the server
 ```bash
 npm run start
 ```
 
 ## Test
-
-  Run tests. The tests cover initial rendering of components, new component created on submission, component state change, page loading test, login and logout workflow test etc.
-
 ```bash
-npm test --watchAll
+cd app && npm test --watchAll
 ```
 
 ## Technology Overview
@@ -101,7 +96,7 @@ A GraphQL query is used to read or fetch values while a mutation is used to writ
 The Jest testing framework is used to test the functionality and presentation of React components. - [Jest_Docs](https://jestjs.io/en/)
 
 ### CSS-in-JS
-Glamor shares most common attributes of other inline style / css-in-js systems - [Galmor docs](https://www.gatsbyjs.org/docs/glamor/)
+Glamor shares most common attributes of other inline style / css-in-js systems - [Glamor docs](https://www.gatsbyjs.org/docs/glamor/)
 
 ## Documentation
 For further documentation, please refer to the [Wiki](https://github.com/Deagler/confess-app/wiki)
