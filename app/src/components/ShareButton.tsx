@@ -56,6 +56,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ title, target }) => {
         onDidDismiss={() => setToastVisible(false)}
       />
       <IonButton
+        data-testid="share-button"
         fill="clear"
         expand="full"
         color="primary"
