@@ -23,7 +23,7 @@ const channelInterfaceOptions = {
   message: 'The post will be found in the selected channel',
 };
 
-interface SubmitFormProps {
+export interface SubmitFormProps {
   selectedChannel?: string;
   setSelectedChannel(channel?: string): void;
   title?: string;
