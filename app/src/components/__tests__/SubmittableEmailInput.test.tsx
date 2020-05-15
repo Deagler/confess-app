@@ -28,12 +28,10 @@ test('renders without crashing', () => {
 });
 
 test('renders loading element', () => {
-  props.loading = true;
-
   const { getByTestId } = render(
     <MockedProvider>
       <MemoryRouter>
-        <SubmittableEmailInput {...props} />
+        <SubmittableEmailInput {...props} loading={true} />
       </MemoryRouter>
     </MockedProvider>
   );
