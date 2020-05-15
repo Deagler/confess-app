@@ -19,14 +19,23 @@ const inputBoxStyling = css({
   margin: '0px 4px',
 });
 
-export const SubmittableEmailInput: React.FC<{
+export interface SubmittableEmailInputProps {
   email?: string;
   setEmail: any;
   placeholderText: string;
   loading: boolean;
   submit: any;
   submitText: string;
-}> = ({ email, setEmail, placeholderText, loading, submit, submitText }) => {
+}
+
+export const SubmittableEmailInput: React.FC<SubmittableEmailInputProps> = ({
+  email,
+  setEmail,
+  placeholderText,
+  loading,
+  submit,
+  submitText,
+}) => {
   const submitButtonDisabled = !email || !IsValidEmailFormat(email) || loading;
 
   return (
@@ -55,7 +64,11 @@ export const SubmittableEmailInput: React.FC<{
 
         <div>
           <IonButton disabled={submitButtonDisabled} fill="solid" type="submit">
-            {loading ? <IonSpinner /> : submitText}
+            {loading ? (
+              <IonSpinner data-testid="email-submit-spinner" />
+            ) : (
+              submitText
+            )}
           </IonButton>
         </div>
       </div>
