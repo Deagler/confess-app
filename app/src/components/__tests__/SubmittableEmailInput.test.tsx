@@ -3,11 +3,7 @@ import {
   SubmittableEmailInputProps,
   SubmittableEmailInput,
 } from '../SubmittableEmailInput';
-import {
-  render,
-  findAllByPlaceholderText,
-  prettyDOM,
-} from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import React from 'react';
 
