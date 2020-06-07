@@ -1,9 +1,11 @@
-# Confess
+# Confess ([confess.co.nz](https://confess.co.nz))
 
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 ![confess-ci](https://github.com/Deagler/confess-app/workflows/confess-ci/badge.svg)
 
 Confess is a web application for sharing and consuming high-quality thoughts, feelings, and memes with your peers anonymously and exclusively.
+
+If you just want to check out Confess without setting it up, visit [confess.co.nz](https://confess.co.nz) now!
 
 ## Screenshots
 
