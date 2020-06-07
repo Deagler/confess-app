@@ -51,7 +51,13 @@ firebase functions:config:set confess.appurl="App URL/Domain e.g: https://confes
 9. Update `api\.firebaserc` with your Firebase project id
 10. Enable Passwordless Login on your project in the Auth section of the Firebase console.
 11. Create the following three DB collections on your project `communities`, `landingPosts` and `users`
-12. Contact us if you need help.
+12. Create a community object like this:
+![Community Object](https://i.imgur.com/DMOIB8H.png)
+
+Here is an example of a channel for the `channels` array
+![Channel Object](https://i.imgur.com/X4TfbRT.png)
+
+13. Contact us if you need help.
 
 ### Local
 
