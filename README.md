@@ -48,8 +48,29 @@ npm run start
 ```bash
 cd app && npm test --watchAll
 ```
+# Environment Setup
 
-## Technology Overview
+## Firebase
+
+1. Setup a firebase account
+2. Setup a firebase project (React web app)
+3. Update firebaseConfig with your credentials in `app\src\services\firebase\index.ts`
+4. Specify the path to `GOOGLE_APPLICATION_CREDENTIALS` in `api\functions\.env` (see `api\functions\.env.example`)
+5. You may need to set `GOOGLE_APPLICATION_CREDENTIALS` as an OS Environment Variable as well - as described [here](https://firebase.google.com/docs/admin/setup#initialize-sdk)
+6. Setup `api\functions\.runtimeconfig.json` using `api\functions\.runtimeconfig.example.json`. Make sure you use the appropriate localhost URL here when running locally. (You will need a [SendGrid Account](https://sendgrid.com/)) 
+7. You will need to manually deploy the firebase functions config using the instructions [here](https://firebase.google.com/docs/functions/config-env#set_environment_configuration_for_your_project) 
+e.g:
+
+ `firebase functions:config:set confess.appurl="App URL/Domain e.g: https://confess.co.nz" sendgrid.apikey="Send Grid API Key"`
+
+ 8. Activate a Firestore database and update the URL in `api\functions\src\firebase.ts`
+ 9. Update `api\.firebaserc` with your Firebase project id
+ 10. Enable Passwordless Login on your project in the Auth section of the Firebase console.
+ 11. Create the following three DB collections on your project `communities`, `landingPosts` and `users`
+ 12. Contact us if you need help 
+
+
+# Technology Overview
 
 ### Lerna
 Lerna manages multiple packages (`app`, `api`) in a mono repository. Lerna simplifies installing dependencies and starting applications across multiple local packages. [Lerna](https://lerna.js.org/)
