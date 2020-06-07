@@ -41,14 +41,15 @@ Due to Confess' integration with several third party cloud services (Firebase su
 6. Setup `api\functions\.runtimeconfig.json` using `api\functions\.runtimeconfig.example.json`. Make sure you use the appropriate localhost URL here when running locally. (You will need a [SendGrid Account](https://sendgrid.com/)), You will also need to create and retrieve an [API key](https://sendgrid.com/docs/ui/account-and-settings/api-keys/#creating-an-api-key).
 7. You will need to manually deploy the firebase functions config using the instructions [here](https://firebase.google.com/docs/functions/config-env#set_environment_configuration_for_your_project) 
 e.g:
+```
+firebase functions:config:set confess.appurl="App URL/Domain e.g: https://confess.co.nz" sendgrid.apikey="Send Grid API Key"
+```
 
- `firebase functions:config:set confess.appurl="App URL/Domain e.g: https://confess.co.nz" sendgrid.apikey="Send Grid API Key"`
-
- 8. Activate a Firestore database and update the URL in `api\functions\src\firebase.ts`
- 9. Update `api\.firebaserc` with your Firebase project id
- 10. Enable Passwordless Login on your project in the Auth section of the Firebase console.
- 11. Create the following three DB collections on your project `communities`, `landingPosts` and `users`
- 12. Contact us if you need help Sukhans to complete
+8. Activate a Firestore database and update the URL in `api\functions\src\firebase.ts`
+9. Update `api\.firebaserc` with your Firebase project id
+10. Enable Passwordless Login on your project in the Auth section of the Firebase console.
+11. Create the following three DB collections on your project `communities`, `landingPosts` and `users`
+12. Contact us if you need help.
 
 ### Local
 
